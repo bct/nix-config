@@ -9,7 +9,7 @@
     # inputs.hardware.nixosModules.common-ssd
 
     # You can also split up your configuration and import pieces of it here:
-    # ./users.nix
+    ./users.nix
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
@@ -52,40 +52,51 @@
     };
   };
 
-  # FIXME: Add the rest of your current configuration
+  networking.hostName = "spectator";
 
-  # TODO: Set your hostname
-  networking.hostName = "your-hostname";
+  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
+  boot.loader.grub.enable = false;
 
-  # TODO: This is just an example, be sure to use whatever bootloader you prefer
-  boot.loader.systemd-boot.enable = true;
+  # if you have a Raspberry Pi 2 or 3, pick this:
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
-  users.users = {
-    # FIXME: Replace with your username
-    your-username = {
-      # TODO: You can set an initial password for your user.
-      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
-      initialPassword = "correcthorsebatterystaple";
-      isNormalUser = true;
-      openssh.authorizedKeys.keys = [
-        # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
-      ];
-      # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-      extraGroups = [ "wheel" ];
-    };
-  };
+  # A bunch of boot parameters needed for optimal runtime on RPi 3b+
+  boot.kernelParams = ["cma=256M"];
+  boot.loader.raspberryPi.enable = true;
+  boot.loader.raspberryPi.version = 3;
+  boot.loader.raspberryPi.uboot.enable = true;
+  boot.loader.raspberryPi.firmwareConfig = ''
+    gpu_mem=256
+  '';
+
+  hardware.enableRedistributableFirmware = true;
+
+  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+  # Preserve space by sacrificing history
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 30d";
+  boot.cleanTmpDir = true;
+
+  time.timeZone = "America/Edmonton";
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    vim
+    libraspberrypi
+    git
+  ];
 
   # This setups a SSH server. Very important if you're setting up a headless system.
   # Feel free to remove if you don't need it.
   services.openssh = {
     enable = true;
-    # Forbid root login through SSH.
     permitRootLogin = "no";
-    # Use keys only. Remove if you want to SSH using password (not recommended)
     passwordAuthentication = false;
   };
+
+  security.sudo.wheelNeedsPassword = false;
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "22.11";
