@@ -13,6 +13,9 @@
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
+
+    # Import home-manager's NixOS module
+    inputs.home-manager.nixosModules.home-manager
   ];
 
   nixpkgs = {
@@ -97,6 +100,14 @@
   };
 
   security.sudo.wheelNeedsPassword = false;
+
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; };
+    users = {
+      # Import your home-manager configuration
+      bct = import ../home-manager/bct;
+    };
+  };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "22.11";
