@@ -10,6 +10,7 @@
 
     # You can also split up your configuration and import pieces of it here:
     ./users.nix
+    ./spectator/home-assistant.nix
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
@@ -81,6 +82,9 @@
   nix.gc.options = "--delete-older-than 30d";
   boot.cleanTmpDir = true;
 
+  # add some swap to try to speed up nixos-rebuild
+  swapDevices = [ { device = "/var/lib/swapfile"; size = 1*1024; } ];
+
   time.timeZone = "America/Edmonton";
 
   # List packages installed in system profile. To search, run:
@@ -100,6 +104,9 @@
   };
 
   security.sudo.wheelNeedsPassword = false;
+
+  # Disable the firewall altogether.
+  networking.firewall.enable = false;
 
   home-manager = {
     extraSpecialArgs = { inherit inputs; };

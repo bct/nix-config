@@ -1,4 +1,8 @@
 { inputs, lib, config, pkgs, ... }: {
+   users.groups = {
+     bct = { };
+   };
+
    users.users = {
     bct = {
       isNormalUser = true;
