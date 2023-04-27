@@ -7,6 +7,8 @@
       "met"
       "radio_browser"
 
+      "default_config"
+
       "octoprint"
       "kodi"
       "zha"
