@@ -2,15 +2,16 @@
   services.home-assistant = {
     enable = true;
 
+    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
     extraComponents = [
-      # Components required to complete the onboarding
-      "met"
-      "radio_browser"
-
       "default_config"
+      "met"
+      "mqtt"
 
       "octoprint"
       "kodi"
+
+      # Zigbee
       "zha"
 
       # Printer
@@ -24,4 +25,12 @@
       default_config = {};
     };
   };
+
+  services.mosquitto = {
+    enable = true;
+  };
+
+  environment.systemPackages = with pkgs; [
+    rtl-sdr
+  ];
 }
