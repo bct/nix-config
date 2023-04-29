@@ -28,6 +28,11 @@
 
   services.mosquitto = {
     enable = true;
+
+    listeners = [
+      # use the defaults because i don't know what i want yet
+      {}
+    ];
   };
 
   environment.systemPackages = with pkgs; [
