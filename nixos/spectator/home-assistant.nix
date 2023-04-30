@@ -10,6 +10,7 @@
 
       "octoprint"
       "kodi"
+      "volumio"
 
       # Zigbee
       "zha"
