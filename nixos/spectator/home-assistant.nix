@@ -32,8 +32,13 @@
     enable = true;
 
     listeners = [
-      # use the defaults because i don't know what i want yet
-      {}
+      {
+        users = {
+          hass = {
+            password = "hass";
+          };
+        };
+      }
     ];
   };
 
