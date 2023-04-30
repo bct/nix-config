@@ -7,6 +7,7 @@
       "default_config"
       "met"
       "mqtt"
+      "backup"
 
       "octoprint"
       "kodi"
