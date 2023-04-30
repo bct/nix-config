@@ -37,6 +37,9 @@
           hass = {
             password = "hass";
           };
+          octopi = {
+            password = "octopi";
+          };
         };
       }
     ];
