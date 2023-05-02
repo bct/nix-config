@@ -3,6 +3,7 @@
 
 { outputs, pkgs, ... }: {
   imports = [
+    ./base
     ./vim.nix
   ];
 
@@ -39,11 +40,6 @@
       # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
     };
-  };
-
-  home = {
-    username = "bct";
-    homeDirectory = "/home/bct";
   };
 
   home.packages = [
@@ -141,36 +137,6 @@
     '';
   };
 
-  programs.git = {
-    enable = true;
-    userName = "Brendan Taylor";
-    userEmail = "bct@diffeq.com";
-
-    aliases = {
-      cobu = "!git checkout -b \${1:-tmp} && git bru \${2:-origin}";
-      lol = "log --graph --pretty=format:\"%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cr)%Creset %C(green)%ce%Creset %s\"";
-      lola = "log --graph --all --pretty=format:\"%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cr)%Creset %C(green)%ce%Creset %s\"";
-    };
-
-    extraConfig = {
-      init.defaultBranch = "master";
-      rebase.autosquash = true;
-    };
-
-    ignores = [
-      ".*.s[a-w][a-z]"
-      ".s[a-w][a-z]"
-    ];
-  };
-
-  programs.readline = {
-    enable = true;
-    variables = {
-      editing-mode = "vi";
-      keymap = "vi";
-    };
-  };
-
   systemd.user.mounts.bulk = {
     Unit = {
       Description = "Mount /bulk";
@@ -210,9 +176,6 @@
   home.file.".config/chromium-flags.conf".text = ''
     --force-device-scale-factor=1.5
   '';
-
-  # Enable home-manager and git
-  programs.home-manager.enable = true;
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";

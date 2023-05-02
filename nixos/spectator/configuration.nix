@@ -9,8 +9,8 @@
     # inputs.hardware.nixosModules.common-ssd
 
     # You can also split up your configuration and import pieces of it here:
-    ./users.nix
-    ./spectator/home-assistant.nix
+    ../users.nix
+    ./home-assistant.nix
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
@@ -112,7 +112,7 @@
     extraSpecialArgs = { inherit inputs; };
     users = {
       # Import your home-manager configuration
-      bct = import ../home-manager/bct;
+      bct = import ../../home-manager/base;
     };
   };
 
