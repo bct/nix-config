@@ -49,7 +49,7 @@
   home.packages = [
     # xmonad, xmobar, and supporting packages
     pkgs.xmobar
-    (pkgs.nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+    (pkgs.unstable.nerdfonts.override { fonts = [ "UbuntuMono" ]; })
     pkgs.ubuntu_font_family
 
     # backlight control
