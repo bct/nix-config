@@ -12,6 +12,7 @@
       "octoprint"
       "kodi"
       "volumio"
+      "openweathermap"
 
       # Zigbee
       "zha"
