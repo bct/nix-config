@@ -46,6 +46,27 @@
     ];
   };
 
+  services.borgmatic = {
+    enable = true;
+
+    source_directories = [
+      "/var/lib/hass"
+    ];
+
+    repositories = [
+      "ssh://borg@borg.domus.diffeq.com/srv/borg/spectator/"
+    ];
+
+    settings = {
+      retention = {
+        keep_daily = 7;
+        keep_weekly = 4;
+        keep_monthly = 6;
+        keep_yearly = 1;
+      };
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     rtl-sdr
   ];
