@@ -66,8 +66,4 @@
       };
     };
   };
-
-  environment.systemPackages = with pkgs; [
-    rtl-sdr
-  ];
 }

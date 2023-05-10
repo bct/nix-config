@@ -93,6 +93,9 @@
     vim
     libraspberrypi
     git
+
+    rtl-sdr
+    rtlamr
   ];
 
   # This setups a SSH server. Very important if you're setting up a headless system.
