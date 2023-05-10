@@ -49,15 +49,17 @@
   services.borgmatic = {
     enable = true;
 
-    source_directories = [
-      "/var/lib/hass"
-    ];
-
-    repositories = [
-      "ssh://borg@borg.domus.diffeq.com/srv/borg/spectator/"
-    ];
-
     settings = {
+      location = {
+        source_directories = [
+          "/var/lib/hass"
+        ];
+
+        repositories = [
+          "ssh://borg@borg.domus.diffeq.com/srv/borg/spectator/"
+        ];
+      };
+
       retention = {
         keep_daily = 7;
         keep_weekly = 4;
