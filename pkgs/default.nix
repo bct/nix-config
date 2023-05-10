@@ -15,4 +15,6 @@
     };
   in
     pkgs.callPackage "${hoonLsp}/default.nix" {};
+
+  rtlamr = pkgs.callPackage ./rtlamr { };
 }
