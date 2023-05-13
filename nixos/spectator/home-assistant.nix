@@ -26,6 +26,14 @@
       # Includes dependencies for a basic setup
       # https://www.home-assistant.io/integrations/default_config/
       default_config = {};
+
+      recorder = {
+        # commit less frequently to reduce wear on the SD card
+        commit_interval = 30;
+
+        # keep data around for longer
+        purge_keep_days = 30;
+      };
     };
   };
 
