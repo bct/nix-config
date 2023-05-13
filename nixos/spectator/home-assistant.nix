@@ -22,6 +22,11 @@
       "ipp"
     ];
 
+    extraPackages = python3Packages: with python3Packages; [
+      # enable a mysql connector that allows us to store the db password in a file
+      mysqlclient
+    ];
+
     config = {
       # Includes dependencies for a basic setup
       # https://www.home-assistant.io/integrations/default_config/
