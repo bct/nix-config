@@ -11,6 +11,10 @@
     home-manager.url = "github:nix-community/home-manager/release-22.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Agenix
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.darwin.follows = "";
+
     # TODO: Add any other flake you might need
     # hardware.url = "github:nixos/nixos-hardware";
 
@@ -19,7 +23,7 @@
     # nix-colors.url = "github:misterio77/nix-colors";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, agenix, ... }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -46,8 +50,11 @@
       nixosConfigurations = {
         spectator = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
-          # > Our main nixos configuration file <
-          modules = [ ./nixos/spectator/configuration.nix ];
+          modules = [
+            # > Our main nixos configuration file <
+            ./nixos/spectator/configuration.nix
+            agenix.nixosModules.default
+          ];
         };
       };
 
