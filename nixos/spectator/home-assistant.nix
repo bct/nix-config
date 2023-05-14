@@ -61,29 +61,6 @@
     ];
   };
 
-  services.borgmatic = {
-    enable = true;
-
-    settings = {
-      location = {
-        source_directories = [
-          "/var/lib/hass"
-        ];
-
-        repositories = [
-          "ssh://borg@borg.domus.diffeq.com/srv/borg/spectator/"
-        ];
-      };
-
-      retention = {
-        keep_daily = 7;
-        keep_weekly = 4;
-        keep_monthly = 6;
-        keep_yearly = 1;
-      };
-    };
-  };
-
   age.secrets = {
     home-assistant-my-cnf = {
       file = ../../secrets/home-assistant-my-cnf.age;
