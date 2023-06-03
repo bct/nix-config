@@ -30,6 +30,4 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
-  # high-resolution display
-  hardware.video.hidpi.enable = lib.mkDefault true;
 }

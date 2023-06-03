@@ -84,7 +84,7 @@
   # Preserve space by sacrificing history
   nix.gc.automatic = true;
   nix.gc.options = "--delete-older-than 30d";
-  boot.cleanTmpDir = true;
+  boot.tmp.cleanOnBoot = true;
 
   # add some swap to try to speed up nixos-rebuild
   swapDevices = [ { device = "/var/lib/swapfile"; size = 1*1024; } ];
@@ -106,8 +106,10 @@
   # Feel free to remove if you don't need it.
   services.openssh = {
     enable = true;
-    permitRootLogin = "no";
-    passwordAuthentication = false;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+    };
   };
 
   security.sudo.wheelNeedsPassword = false;
