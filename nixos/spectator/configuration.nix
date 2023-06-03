@@ -100,6 +100,7 @@
 
     rtl-sdr
     rtlamr
+    rtlamr-collect
   ];
 
   # This setups a SSH server. Very important if you're setting up a headless system.
