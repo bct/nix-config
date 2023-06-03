@@ -37,10 +37,10 @@ topicNameToIcon name = M.findWithDefault name name iconMap
   where
     iconMap = M.fromList [
                  ("?",       " \xf128 ") -- question mark
-                ,("web",     "\xfa9e ") -- globe
+                ,("web",     "\xeb01 ") -- globe
                 ,("project", "\xf499 ") -- beaker
-                ,("mi-go",   "\xfd31 ") -- ship wheel
-                ,("office",  "\xf6a6 ") -- wireframe cube
+                ,("mi-go",   "\xf0833 ") -- ship wheel
+                ,("office",  "\xf01a7 ") -- wireframe cube
               ]
 
 myTopics :: [Topic]
