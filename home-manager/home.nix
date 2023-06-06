@@ -104,6 +104,7 @@
       xmonad = {
         enable = true;
         enableContribAndExtras = true;
+        config = ./files/xmonad.hs;
       };
     };
   };
@@ -156,7 +157,6 @@
   };
 
   # Raw configuration files
-  home.file.".xmonad/xmonad.hs".source = ./files/xmonad.hs;
   home.file.".xmobarrc".source = ./files/xmobarrc.hs;
 
   home.file.".alacritty.yml".source = ./files/alacritty.yml;
