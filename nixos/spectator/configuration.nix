@@ -97,6 +97,7 @@
     vim
     libraspberrypi
     git
+    tmux
 
     rtl-sdr
     rtlamr
