@@ -127,6 +127,44 @@
     };
   };
 
+  users.groups.rtlamr = {};
+
+  users.users = {
+    rtlamr = {
+      isSystemUser = true;
+      group = "rtlamr";
+    };
+  };
+
+  systemd.services.rtlamr-collect = {
+    description = "RTLAMR Collector";
+    environment = {
+      RTLAMR_FORMAT = "json";
+      RTLAMR_MSGTYPE = "scm";
+      RTLAMR_SERVER = "watcher.domus.diffeq.com:1234";
+      RTLAMR_FILTERID= "40010397,41946625";
+
+      # COLLECT_LOGLEVEL = "Debug";
+      COLLECT_INFLUXDB_HOSTNAME = "http://db.domus.diffeq.com:8086/";
+      # TODO: figure out how to put this in agenix
+      COLLECT_INFLUXDB_TOKEN = "rtlamr:Too8OhCh";
+      COLLECT_INFLUXDB_ORG = "arbitrary";
+      COLLECT_INFLUXDB_BUCKET = "rtlamr";
+      COLLECT_INFLUXDB_MEASUREMENT = "utilities";
+    };
+
+    wantedBy = ["multi-user.target"];
+
+    serviceConfig = {
+      WorkingDirectory = "/run/rtlamr-collect";
+      RuntimeDirectory = "rtlamr-collect";
+      ExecStart = ''/bin/sh -c "${pkgs.rtlamr}/bin/rtlamr | ${pkgs.rtlamr-collect}/bin/rtlamr-collect"'';
+      Restart = "always";
+      RestartSec = "30";
+      User = "rtlamr";
+    };
+  };
+
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "22.11";
 }
