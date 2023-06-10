@@ -146,8 +146,6 @@
 
       # COLLECT_LOGLEVEL = "Debug";
       COLLECT_INFLUXDB_HOSTNAME = "http://db.domus.diffeq.com:8086/";
-      # TODO: figure out how to put this in agenix
-      COLLECT_INFLUXDB_TOKEN = "rtlamr:Too8OhCh";
       COLLECT_INFLUXDB_ORG = "arbitrary";
       COLLECT_INFLUXDB_BUCKET = "rtlamr";
       COLLECT_INFLUXDB_MEASUREMENT = "utilities";
@@ -158,10 +156,20 @@
     serviceConfig = {
       WorkingDirectory = "/run/rtlamr-collect";
       RuntimeDirectory = "rtlamr-collect";
+      EnvironmentFile = "/run/agenix/rtlamr-collect-env";
       ExecStart = ''/bin/sh -c "${pkgs.rtlamr}/bin/rtlamr | ${pkgs.rtlamr-collect}/bin/rtlamr-collect"'';
       Restart = "always";
       RestartSec = "30";
       User = "rtlamr";
+    };
+  };
+
+  age.secrets = {
+    rtlamr-collect-env = {
+      file = ../../secrets/rtlamr-collect-env.age;
+      owner = "rtlamr";
+      group = "rtlamr";
+      mode = "600";
     };
   };
 

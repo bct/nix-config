@@ -4,4 +4,5 @@ let
 in
   {
     "home-assistant-my-cnf.age".publicKeys = [ bct-cimmeria spectator ];
+    "rtlamr-collect-env.age".publicKeys = [ bct-cimmeria spectator ];
   }
