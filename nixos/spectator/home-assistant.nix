@@ -83,6 +83,8 @@
 
         db_url = "mysql://home_assistant@db.domus.diffeq.com/home_assistant?charset=utf8mb4&read_default_file=/run/agenix/home-assistant-my-cnf";
       };
+
+      "automation ui" = "!include automations.yaml";
     };
   };
 
