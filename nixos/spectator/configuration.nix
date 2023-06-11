@@ -107,6 +107,8 @@
     rtlamr-collect
   ];
 
+  hardware.rtl-sdr.enable = true;
+
   # This setups a SSH server. Very important if you're setting up a headless system.
   # Feel free to remove if you don't need it.
   services.openssh = {
@@ -136,6 +138,20 @@
     rtlamr = {
       isSystemUser = true;
       group = "rtlamr";
+      extraGroups = ["plugdev"];
+    };
+  };
+
+  systemd.services.rtl_tcp = {
+    description = "rtl_tcp";
+    wantedBy = ["multi-user.target"];
+
+    serviceConfig = {
+      Type = "simple";
+      StandardOutput = "journal";
+      ExecStart = "${pkgs.rtl-sdr}/bin/rtl_tcp";
+      User = "rtlamr";
+      Group = "plugdev";
     };
   };
 
@@ -144,7 +160,7 @@
     environment = {
       RTLAMR_FORMAT = "json";
       RTLAMR_MSGTYPE = "scm";
-      RTLAMR_SERVER = "watcher.domus.diffeq.com:1234";
+      RTLAMR_SERVER = "localhost:1234";
       RTLAMR_FILTERID= "40010397,41946625";
 
       # COLLECT_LOGLEVEL = "Debug";
@@ -155,6 +171,8 @@
     };
 
     wantedBy = ["multi-user.target"];
+    bindsTo = ["rtl_tcp.service"];
+    after = ["rtl_tcp.service"];
 
     serviceConfig = {
       WorkingDirectory = "/run/rtlamr-collect";
