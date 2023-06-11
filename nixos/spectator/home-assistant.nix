@@ -12,6 +12,7 @@
       "octoprint"
       "kodi"
       "volumio"
+      "dlna_dmr"
       "openweathermap"
 
       # Zigbee
