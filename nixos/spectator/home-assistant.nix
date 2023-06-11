@@ -69,6 +69,11 @@
       # https://www.home-assistant.io/integrations/default_config/
       default_config = {};
 
+      homeassistant = {
+        time_zone = "America/Edmonton";
+        country = "CA";
+      };
+
       recorder = {
         # commit less frequently to reduce wear on the SD card
         commit_interval = 30;
