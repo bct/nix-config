@@ -14,6 +14,7 @@
       "volumio"
       "dlna_dmr"
       "openweathermap"
+      "esphome"
 
       # Zigbee
       "zha"
