@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ config, pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     rtl-sdr
     rtlamr
@@ -52,7 +52,7 @@
     serviceConfig = {
       WorkingDirectory = "/run/rtlamr-collect";
       RuntimeDirectory = "rtlamr-collect";
-      EnvironmentFile = "/run/agenix/rtlamr-collect-env";
+      EnvironmentFile = config.age.secrets.rtlamr-collect-env.path;
       ExecStart = ''/bin/sh -c "${pkgs.rtlamr}/bin/rtlamr | ${pkgs.rtlamr-collect}/bin/rtlamr-collect"'';
       Restart = "always";
       RestartSec = "30";

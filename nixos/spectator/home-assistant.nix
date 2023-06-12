@@ -81,7 +81,7 @@
         # keep data around for longer
         purge_keep_days = 30;
 
-        db_url = "mysql://home_assistant@db.domus.diffeq.com/home_assistant?charset=utf8mb4&read_default_file=/run/agenix/home-assistant-my-cnf";
+        db_url = "mysql://home_assistant@db.domus.diffeq.com/home_assistant?charset=utf8mb4&read_default_file=${config.age.secrets.home-assistant-my-cnf.path}";
       };
 
       "automation ui" = "!include automations.yaml";
