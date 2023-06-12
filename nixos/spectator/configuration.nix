@@ -1,7 +1,7 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 
-{ inputs, outputs, lib, config, pkgs, ... }: {
+args@{ inputs, outputs, lib, config, pkgs, ... }: {
   # You can import other NixOS modules here
   imports = [
     # If you want to use modules from other flakes (such as nixos-hardware):
@@ -18,6 +18,8 @@
 
     # Import home-manager's NixOS module
     inputs.home-manager.nixosModules.home-manager
+
+    (import ../raspberry-pi.nix (args // {rpiBoard = "3b+";}))
   ];
 
   nixpkgs = {
@@ -63,35 +65,10 @@
 
   networking.hostName = "spectator";
 
-  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
-  boot.loader.grub.enable = false;
-
-  # if you have a Raspberry Pi 2 or 3, pick this:
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # A bunch of boot parameters needed for optimal runtime on RPi 3b+
-  boot.kernelParams = ["cma=256M"];
-  boot.loader.raspberryPi.enable = true;
-  boot.loader.raspberryPi.version = 3;
-  boot.loader.raspberryPi.uboot.enable = true;
-  boot.loader.raspberryPi.firmwareConfig = ''
-    gpu_mem=256
-  '';
-
-  hardware.enableRedistributableFirmware = true;
-
   networking.networkmanager = {
     enable = true;
     unmanaged = ["wlan0"];
   };
-
-  # Preserve space by sacrificing history
-  nix.gc.automatic = true;
-  nix.gc.options = "--delete-older-than 30d";
-  boot.tmp.cleanOnBoot = true;
-
-  # add some swap to try to speed up nixos-rebuild
-  swapDevices = [ { device = "/var/lib/swapfile"; size = 1*1024; } ];
 
   time.timeZone = "America/Edmonton";
 
@@ -99,7 +76,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim
-    libraspberrypi
     git
     tmux
   ];
