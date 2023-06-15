@@ -73,8 +73,8 @@
   };
 
   home.shellAliases = {
-    aoeu = "setxkbmap us";
-    asdf = "setxkbmap dvorak";
+    aoeu = "setxkbmap -layout us";
+    asdf = "setxkbmap -layout us -variant dvorak";
 
     ls = "ls --color=auto";
     grep = "grep --color=auto";
