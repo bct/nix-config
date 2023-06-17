@@ -97,7 +97,7 @@
       /usr/lib/xdg-desktop-portal-gtk &
       systemctl --user start xdg-desktop-portal &
 
-      setxkbmap dvorak
+      setxkbmap -layout us -variant dvorak
     '';
 
     windowManager = {
