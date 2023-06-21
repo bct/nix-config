@@ -42,6 +42,13 @@
         in import ./pkgs { inherit pkgs; }
       );
 
+      # Devshell for working on configs
+      # Acessible through 'nix develop' or 'nix-shell' (legacy)
+      devShells = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in import ./shell.nix { inherit pkgs; }
+      );
+
       # Your custom packages and modifications, exported as overlays
       overlays = import ./overlays { inherit inputs; };
 
