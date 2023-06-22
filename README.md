@@ -26,3 +26,8 @@ On NixOS, add this line to `configuration.nix`:
 Now you can build a VM with your host's config:
 
     nixos-rebuild build-vm --flake .#hostname
+
+## Builing a Raspberry Pi installation image
+
+    nix develop
+    nixos-generate -f sd-aarch64-installer --flake .#rpiInstaller

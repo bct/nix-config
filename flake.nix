@@ -58,9 +58,22 @@
         spectator = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
           modules = [
-            # > Our main nixos configuration file <
             ./nixos/spectator/configuration.nix
             agenix.nixosModules.default
+          ];
+        };
+
+        stereo = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
+          modules = [
+            ./nixos/stereo/configuration.nix
+          ];
+        };
+
+        rpiInstaller = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
+          modules = [
+            ./nixos/rpiInstaller.nix
           ];
         };
       };
