@@ -1,6 +1,7 @@
 { lib, pkgs, rpiBoard, ... }:
 
 assert lib.asserts.assertOneOf "rpiBoard" rpiBoard [
+  "3b"
   "3b+"
 ];
 

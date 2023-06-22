@@ -5,4 +5,12 @@ args@{ inputs, outputs, lib, config, pkgs, ... }: {
 
   nixpkgs.hostPlatform = "aarch64-linux";
   system.stateVersion = "23.05";
+
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+    };
+  };
 }
