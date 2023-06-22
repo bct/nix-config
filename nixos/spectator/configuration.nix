@@ -95,6 +95,9 @@ args@{ inputs, outputs, lib, config, pkgs, ... }: {
   # Disable the firewall altogether.
   networking.firewall.enable = false;
 
+  # do not allow /etc/passwd & /etc/group to be edited outside configuration.nix
+  users.mutableUsers = false;
+
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     users = {
