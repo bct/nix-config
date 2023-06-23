@@ -77,6 +77,7 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
     git
     tmux
 
+    alsa-utils
     cifs-utils
   ];
 
