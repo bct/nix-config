@@ -106,7 +106,10 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
 
   services.gonic = {
     enable = true;
-    settings = options.services.gonic.settings.default // {
+    settings = {
+      listen-addr = "0.0.0.0:4747";
+      cache-path = "/var/cache/gonic";
+
       music-path = ["/mnt/beets"];
       podcast-path = "/var/empty";
       scan-interval = 60; # minutes
