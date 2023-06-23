@@ -40,6 +40,14 @@ There's a `compressImage` option that might allow us to avoid this step.
 
 ## Installing on a new device
 
+SSH in as bct.
+
+    ssh-keygen
+
 Add bct's SSH public key to git.domus.diffeq.com.
 
     git clone git@git.domus.diffeq.com:nix-config.git
+
+    cd nix-config
+
+    sudo nixos-rebuild switch --flake .#<target>
