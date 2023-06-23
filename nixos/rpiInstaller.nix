@@ -6,6 +6,11 @@ args@{ inputs, outputs, lib, config, pkgs, ... }: {
   nixpkgs.hostPlatform = "aarch64-linux";
   system.stateVersion = "23.05";
 
+  environment.systemPackages = [
+    pkgs.vim
+    pkgs.git
+  ];
+
   services.openssh = {
     enable = true;
     settings = {
