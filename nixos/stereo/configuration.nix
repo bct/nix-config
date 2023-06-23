@@ -90,8 +90,6 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
     };
   };
 
-  security.sudo.wheelNeedsPassword = false;
-
   # Disable the firewall altogether.
   networking.firewall.enable = false;
 

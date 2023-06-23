@@ -27,7 +27,7 @@ Now you can build a VM with your host's config:
 
     nixos-rebuild build-vm --flake .#hostname
 
-## Builing a Raspberry Pi installation image
+## Building a Raspberry Pi installation image
 
     nix develop
     nixos-generate -f sd-aarch64-installer --flake .#rpiInstaller
@@ -36,4 +36,10 @@ To uncompress the image:
 
     nix shell nixpkgs#zstd -c unzstd -o <output>.img <input>.img.zst
 
-There's a `compressImage` option that might allow us to avoid this step, but I'm not sure how to enable it.
+There's a `compressImage` option that might allow us to avoid this step.
+
+## Installing on a new device
+
+Add bct's SSH public key to git.domus.diffeq.com.
+
+    git clone git@git.domus.diffeq.com:nix-config.git
