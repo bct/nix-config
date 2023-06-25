@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -euo pipefail
+
+HOST="$1"
+HOST_SHORT="${HOST%%.*}"
+TARGET_DIR="$HOME/mnt/$HOST_SHORT"
+
+mkdir -p $TARGET_DIR
+sshfs $HOST:/home/bct $TARGET_DIR
