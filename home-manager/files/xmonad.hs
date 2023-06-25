@@ -37,16 +37,16 @@ topicNameToIcon name = M.findWithDefault name name iconMap
   where
     -- https://www.nerdfonts.com/cheat-sheet
     iconMap = M.fromList [
-                 ("?",       " \xf128 ") -- question mark
-                ,("web",     "\xeb01 ")  -- globe
-                ,("project", "\xf499 ")  -- beaker
-                ,("mi-go",   "\xf0833 ") -- ship wheel
-                ,("office",  "\xf01a7 ") -- wireframe cube
-                ,("kino",    "\xf008 ")  -- film
+                 ("?",               " \xf128 ") -- question mark
+                ,("\xeb01  web",     "\xeb01 ")  -- globe
+                ,("project",         "\xf499 ")  -- beaker
+                ,("mi-go",           "\xf0833 ") -- ship wheel
+                ,("office",          "\xf01a7 ") -- wireframe cube
+                ,("\xf008  kino",    "\xf008 ")  -- film
               ]
 
 myTopics :: [Topic]
-myTopics = ["?", "web", "project", "mi-go", "office", "kino"]
+myTopics = ["?", "\xeb01  web", "project", "mi-go", "office", "\xf008  kino"]
 
 myTopicConfig :: TopicConfig
 myTopicConfig = TopicConfig
@@ -60,11 +60,11 @@ myTopicConfig = TopicConfig
 
     , topicActions = M.fromList $
         [
-          ("?",          spawnShell >>
-                         spawn "alacritty -e htop")
-        , ("mi-go",      spawn "alacritty -e ssh mi-go.domus.diffeq.com")
-        , ("web",        spawn "chromium")
-        , ("project",     spawnShell >*> 5)
+          ("?",            spawnShell >>
+                           spawn "alacritty -e htop")
+        , ("mi-go",        spawn "alacritty -e ssh mi-go.domus.diffeq.com")
+        , ("\xeb01  web",  spawn "chromium")
+        , ("project",      spawnShell >*> 5)
         ]
     }
 
@@ -75,7 +75,7 @@ myLayout = webWorkspace $ (tiled ||| Mirror tiled ||| Full)
     ratio   = 1/2   -- Default proportion of screen occupied by master pane
     delta   = 3/100 -- Percent of screen to increment by when resizing panes
 
-    webWorkspace = onWorkspace "web" tabbed
+    webWorkspace = onWorkspace "\xeb01  web" tabbed
     tabbed   = tabbedAlways shrinkText tabTheme
     tabTheme = def { fontName = "xft:Ubuntu Mono:pixelsize=18" }
 
@@ -134,9 +134,7 @@ myXmobarPP = def
     renameLayout "Spacing Tabbed Simplest" = "Tabbed"
     renameLayout x = x
 
-gsconfig2 colorizer = (buildDefaultGSConfig colorizer) { gs_cellheight = 30, gs_cellwidth = 100 }
-
-gsConfig = (buildDefaultGSConfig colorizer) { gs_navigate = myNavigator }
+gsConfig = (buildDefaultGSConfig colorizer) { gs_navigate = myNavigator, gs_font = "xft:UbuntuMono Nerd Font:pixelsize=18" }
   where
     myNavigator :: TwoD a (Maybe a)
     myNavigator = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
@@ -163,8 +161,9 @@ gsConfig = (buildDefaultGSConfig colorizer) { gs_navigate = myNavigator }
     stringSumMod :: String -> Int -> Int
     stringSumMod s m = mod (sum $ map ord s) m
 
+    -- gruvbox
     backgrounds :: [String]
-    backgrounds = ["282828", "cc241d", "98971a", "d79921", "458588", "b16286", "689d6a", "a89984"]
+    backgrounds = ["282828", "cc241d", "98971a", "d79921", "458588", "b16286", "689d6a"]
 
 wsgrid = gridselect gsConfig <=< asks $ map (\x -> (x,x)) . workspaces . config
 
