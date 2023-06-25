@@ -35,16 +35,18 @@ import qualified XMonad.StackSet as SS
 topicNameToIcon :: String -> String
 topicNameToIcon name = M.findWithDefault name name iconMap
   where
+    -- https://www.nerdfonts.com/cheat-sheet
     iconMap = M.fromList [
                  ("?",       " \xf128 ") -- question mark
-                ,("web",     "\xeb01 ") -- globe
-                ,("project", "\xf499 ") -- beaker
+                ,("web",     "\xeb01 ")  -- globe
+                ,("project", "\xf499 ")  -- beaker
                 ,("mi-go",   "\xf0833 ") -- ship wheel
                 ,("office",  "\xf01a7 ") -- wireframe cube
+                ,("kino",    "\xf008 ")  -- film
               ]
 
 myTopics :: [Topic]
-myTopics = ["?", "web", "project", "mi-go", "office"]
+myTopics = ["?", "web", "project", "mi-go", "office", "kino"]
 
 myTopicConfig :: TopicConfig
 myTopicConfig = TopicConfig
