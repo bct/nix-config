@@ -51,6 +51,9 @@
 
       let mapleader = '-'      " use a leader key that's convenient for dvorak
 
+      " <c-^> means 'Edit the alternate file' (i.e. go back to previous file)
+      nnoremap <leader><leader> <c-^>
+
       " ==== lightline ====
       let g:lightline#lsp#indicator_info = "\uf129"
       let g:lightline#lsp#indicator_warnings = "\uf071 "
