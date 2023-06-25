@@ -3,7 +3,7 @@
 
 { outputs, pkgs, ... }: {
   imports = [
-    ./base
+    ../base
     ./vim.nix
   ];
 
