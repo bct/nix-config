@@ -64,6 +64,11 @@
 
   fonts.fontconfig.enable = true;
 
+  home.sessionPath = [
+    "$HOME/.local/share/gem/ruby/3.0.0/bin"
+    "$HOME/bin"
+  ];
+
   home.sessionVariables = {
     EDITOR = "vim";
     LANG = "en_CA.utf8";
@@ -127,12 +132,8 @@
           ;;
       esac
 
-      set -o vi
-
       # make ^L work
       bind -m vi-insert 'Control-l: clear-screen'
-
-      export PATH=$PATH:/home/bct/.local/share/gem/ruby/3.0.0/bin
 
       export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels''${NIX_PATH:+:$NIX_PATH}
     '';
