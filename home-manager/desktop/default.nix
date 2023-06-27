@@ -178,6 +178,8 @@
     --force-device-scale-factor=1.5
   '';
 
+  home.file."bin/mount-host".source = ./files/bin/mount-host;
+
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
