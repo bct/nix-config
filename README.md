@@ -6,6 +6,10 @@ To apply a home configuration:
 
     home-manager switch --flake .#username@hostname
 
+To build a package in ./pkgs:
+
+    nix build .#package-name
+
 ## Building ARM64 on x86\_64
 
 On Arch, install these packages:
