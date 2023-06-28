@@ -7,4 +7,4 @@ HOST_SHORT="${HOST%%.*}"
 TARGET_DIR="$HOME/mnt/$HOST_SHORT"
 
 mkdir -p $TARGET_DIR
-sshfs $HOST:/home/bct $TARGET_DIR
+sshfs $HOST:/home/bct $TARGET_DIR -o reconnect
