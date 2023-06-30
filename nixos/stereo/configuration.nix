@@ -1,16 +1,13 @@
 args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
   imports = [
-    ../users.nix
+    ../common/nix.nix
+    ../common/headless.nix
+
     ./hardware-configuration.nix
-    inputs.home-manager.nixosModules.home-manager
   ];
 
   nixpkgs = {
     overlays = [
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-
       # fix for kernel build failure:
       #
       #     modprobe: FATAL: Module ahci not found in directory
@@ -31,28 +28,6 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
         deviceTree.applyOverlays = prev.callPackage ./apply-overlays-dtmerge.nix { };
       })
     ];
-    # Configure your nixpkgs instance
-    config = {
-      # Disable if you don't want unfree packages
-      allowUnfree = true;
-    };
-  };
-
-  nix = {
-    # This will add each flake input as a registry
-    # To make nix3 commands consistent with your flake
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
-
-    # This will additionally add your inputs to the system's legacy channels
-    # Making legacy nix commands consistent as well, awesome!
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
-
-    settings = {
-      # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
-      # Deduplicate and optimize nix store
-      auto-optimise-store = true;
-    };
   };
 
   networking.hostName = "stereo";
@@ -65,34 +40,10 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
   time.timeZone = "America/Edmonton";
 
   environment.systemPackages = with pkgs; [
-    vim
-    git
-    tmux
-
-    alsa-utils
     cifs-utils
   ];
 
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
-    };
-  };
-
   networking.firewall.enable = false;
-
-  # do not allow /etc/passwd & /etc/group to be edited outside configuration.nix
-  users.mutableUsers = false;
-
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    users = {
-      # Import your home-manager configuration
-      bct = import ../../home-manager/base;
-    };
-  };
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
