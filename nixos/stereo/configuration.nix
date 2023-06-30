@@ -6,7 +6,7 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
     ./hardware-configuration.nix
 
     ../hardware/raspberry-pi
-    ../hardware/raspberry-pi/hifiberry-dac-plus
+    ../hardware/raspberry-pi/hifiberry-dac-plus.nix
   ];
 
   networking.hostName = "stereo";
