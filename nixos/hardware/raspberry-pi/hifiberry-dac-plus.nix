@@ -38,7 +38,7 @@
           super.makeModulesClosure (x // { allowMissing = true; });
       })
 
-      # fdtoverlay does not support the DTS overlay file I'm using below
+      # fdtoverlay does not support the DTS overlay file I'm using above
       # (it exits with FDT_ERR_NOTFOUND)
       # https://github.com/raspberrypi/firmware/issues/1718
       #
