@@ -96,6 +96,8 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
       music-path = ["/mnt/beets"];
       podcast-path = "/var/empty";
       scan-interval = 60; # minutes
+
+      jukebox-enabled = true;
     };
   };
 
