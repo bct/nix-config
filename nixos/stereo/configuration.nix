@@ -4,6 +4,8 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
     ../common/headless.nix
 
     ./hardware-configuration.nix
+
+    ../hardware/raspberry-pi
   ];
 
   nixpkgs = {
@@ -45,10 +47,6 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
 
   networking.firewall.enable = false;
 
-  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
-  boot.loader.grub.enable = false;
-  boot.loader.generic-extlinux-compatible.enable = true;
-
    # We need to use the vendor kernel, mainline doesn't have a driver for the HifiBerry DAC+.
   boot.kernelPackages = pkgs.linuxPackages_rpi3;
 
@@ -57,11 +55,6 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
   #
   # Fortunately I don't need wifi.
   boot.blacklistedKernelModules = [ "brcmfmac" ];
-
-  hardware.enableRedistributableFirmware = true;
-
-  # add some swap to try to speed up nixos-rebuild
-  swapDevices = [ { device = "/var/lib/swapfile"; size = 1*1024; } ];
 
   hardware.deviceTree = {
     enable = true;

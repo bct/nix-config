@@ -17,7 +17,7 @@ args@{ inputs, outputs, lib, config, pkgs, ... }: {
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
 
-    (import ../raspberry-pi.nix (args // {rpiBoard = "3b+";}))
+    ../hardware/raspberry-pi
   ];
 
   networking.hostName = "spectator";
