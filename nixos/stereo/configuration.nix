@@ -1,41 +1,35 @@
-# This is your system's configuration file.
-# Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
-
 args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
-  # You can import other NixOS modules here
   imports = [
-    # If you want to use modules from other flakes (such as nixos-hardware):
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
-
-    # You can also split up your configuration and import pieces of it here:
     ../users.nix
-
-    # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
-
-    # Import home-manager's NixOS module
     inputs.home-manager.nixosModules.home-manager
-
-    (import ../raspberry-pi.nix (args // {rpiBoard = "3b";}))
   ];
 
   nixpkgs = {
-    # You can add overlays here
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
 
-      # If you want to use overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
+      # fix for kernel build failure:
+      #
+      #     modprobe: FATAL: Module ahci not found in directory
+      #
+      # https://github.com/NixOS/nixpkgs/issues/154163
+      (final: super: {
+        makeModulesClosure = x:
+          super.makeModulesClosure (x // { allowMissing = true; });
+      })
 
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
+      # fdtoverlay does not support the DTS overlay file I'm using below
+      # (it exits with FDT_ERR_NOTFOUND)
+      # https://github.com/raspberrypi/firmware/issues/1718
+      #
+      # we'll use dtmerge instead.
+      # https://github.com/NixOS/nixos-hardware/blob/master/raspberry-pi/4/pkgs-overlays.nix
+      (_final: prev: {
+        deviceTree.applyOverlays = prev.callPackage ./apply-overlays-dtmerge.nix { };
+      })
     ];
     # Configure your nixpkgs instance
     config = {
@@ -70,8 +64,6 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
 
   time.timeZone = "America/Edmonton";
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim
     git
@@ -81,8 +73,6 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
     cifs-utils
   ];
 
-  # This setups a SSH server. Very important if you're setting up a headless system.
-  # Feel free to remove if you don't need it.
   services.openssh = {
     enable = true;
     settings = {
@@ -91,7 +81,6 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
     };
   };
 
-  # Disable the firewall altogether.
   networking.firewall.enable = false;
 
   # do not allow /etc/passwd & /etc/group to be edited outside configuration.nix
@@ -104,6 +93,42 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
       bct = import ../../home-manager/base;
     };
   };
+
+  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
+  boot.loader.grub.enable = false;
+
+   # We need to use the vendor kernel, mainline doesn't have a driver for the HifiBerry DAC+.
+  boot.kernelPackages = pkgs.linuxPackages_rpi3;
+
+  # The vendor kernel won't boot if this module loads:
+  # https://github.com/NixOS/nixpkgs/issues/200326
+  #
+  # Fortunately I don't need wifi.
+  boot.blacklistedKernelModules = [ "brcmfmac" ];
+
+  # A bunch of boot parameters needed for optimal runtime on RPi 3b+
+  boot.kernelParams = ["cma=256M"];
+  boot.loader.raspberryPi.version = 3;
+  boot.loader.raspberryPi.uboot.enable = true;
+  boot.loader.generic-extlinux-compatible.enable = true;
+
+  hardware.enableRedistributableFirmware = true;
+
+  # add some swap to try to speed up nixos-rebuild
+  swapDevices = [ { device = "/var/lib/swapfile"; size = 1*1024; } ];
+
+  hardware.deviceTree = {
+    enable = true;
+    overlays = [
+      {
+        name = "hifiberry-dacplus";
+        dtsFile = ./hifiberry-dacplus-overlay.dts;
+      }
+    ];
+  };
+
+  # grant myself access to the sound card.
+  users.users.bct.extraGroups = ["audio"];
 
   services.gonic = {
     enable = true;
