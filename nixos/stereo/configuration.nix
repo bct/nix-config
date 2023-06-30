@@ -130,6 +130,12 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
   # grant myself access to the sound card.
   users.users.bct.extraGroups = ["audio"];
 
+  sound.enable = true;
+  sound.extraConfig = ''
+    defaults.pcm.!card 1
+    defaults.ctl.!card 1
+  '';
+
   services.gonic = {
     enable = true;
     settings = {
