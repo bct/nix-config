@@ -47,6 +47,7 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
+  boot.loader.generic-extlinux-compatible.enable = true;
 
    # We need to use the vendor kernel, mainline doesn't have a driver for the HifiBerry DAC+.
   boot.kernelPackages = pkgs.linuxPackages_rpi3;
@@ -56,12 +57,6 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
   #
   # Fortunately I don't need wifi.
   boot.blacklistedKernelModules = [ "brcmfmac" ];
-
-  # A bunch of boot parameters needed for optimal runtime on RPi 3b+
-  boot.kernelParams = ["cma=256M"];
-  boot.loader.raspberryPi.version = 3;
-  boot.loader.raspberryPi.uboot.enable = true;
-  boot.loader.generic-extlinux-compatible.enable = true;
 
   hardware.enableRedistributableFirmware = true;
 
