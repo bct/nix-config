@@ -40,8 +40,12 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
       scan-interval = 60; # minutes
 
       jukebox-enabled = true;
+      jukebox-mpv-extra-args = "--audio-device=alsa/default:CARD=sndrpihifiberry";
     };
   };
+  systemd.services.gonic.serviceConfig.SupplementaryGroups = ["audio"];
+  systemd.services.gonic.serviceConfig.DeviceAllow = "char-alsa rw";
+  systemd.services.gonic.serviceConfig.PrivateDevices = lib.mkForce false;
 
   fileSystems."/mnt/beets" = {
     device = "//mi-go.domus.diffeq.com/beets";
