@@ -20,12 +20,14 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
 
   environment.systemPackages = with pkgs; [
     cifs-utils
+
+    onkyo-ri-send-command
   ];
 
   networking.firewall.enable = false;
 
   # grant myself access to the sound card.
-  users.users.bct.extraGroups = ["audio"];
+  users.users.bct.extraGroups = ["audio" "gpio"];
 
   services.gonic = {
     enable = true;
@@ -49,6 +51,14 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
     in ["${automount_opts},guest"];
+  };
+
+  services.udev.extraRules = ''
+    KERNEL=="gpiochip*", MODE:="0660", GROUP:="gpio"
+  '';
+
+  users.groups = {
+    gpio = {};
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
