@@ -10,6 +10,7 @@
     pkgs.nodePackages.pyright
     pkgs.nil
     pkgs.hoonLanguageServer
+    pkgs.gopls
   ];
 
   programs.neovim = {
