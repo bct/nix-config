@@ -86,6 +86,29 @@
       };
 
       "automation ui" = "!include automations.yaml";
+      "script ui" = "!include scripts.yaml";
+
+      rest_command = {
+        stereo_power_toggle = {
+          url = "http://stereo.domus.diffeq.com:4646/ssap/power";
+          method = "POST";
+        };
+
+        stereo_line_1 = {
+          url = "http://stereo.domus.diffeq.com:4646/ssap/line-1";
+          method = "POST";
+        };
+
+        stereo_volume_up = {
+          url = "http://stereo.domus.diffeq.com:4646/ssap/volume-up";
+          method = "POST";
+        };
+
+        stereo_volume_down = {
+          url = "http://stereo.domus.diffeq.com:4646/ssap/volume-down";
+          method = "POST";
+        };
+      };
     };
   };
 
