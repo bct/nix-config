@@ -1,4 +1,4 @@
-args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
+{ lib, pkgs, ... }: {
   imports = [
     ../common/nix.nix
     ../common/headless.nix
@@ -46,6 +46,24 @@ args@{ inputs, outputs, lib, config, pkgs, options, ... }: {
   systemd.services.gonic.serviceConfig.SupplementaryGroups = ["audio"];
   systemd.services.gonic.serviceConfig.DeviceAllow = "char-alsa rw";
   systemd.services.gonic.serviceConfig.PrivateDevices = lib.mkForce false;
+
+  systemd.services.subsonic-action-proxy = {
+    description = "subsonic-action-proxy";
+    after = ["network.target"];
+    wantedBy = ["multi-user.target"];
+
+    serviceConfig = {
+      ExecStart = ''${pkgs.subsonic-action-proxy}/bin/subsonic-action-proxy \
+        -listen-addr 0.0.0.0:4646 \
+        -subsonic-addr http://localhost:4747/ \
+        -jukebox-set-command \
+          '/bin/sh -c "${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0xd9; \
+                       ${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0x20"'
+      '';
+      DynamicUser = true;
+      SupplementaryGroups = ["gpio"];
+    };
+  };
 
   fileSystems."/mnt/beets" = {
     device = "//mi-go.domus.diffeq.com/beets";
