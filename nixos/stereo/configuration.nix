@@ -53,12 +53,18 @@
     wantedBy = ["multi-user.target"];
 
     serviceConfig = {
-      ExecStart = ''${pkgs.subsonic-action-proxy}/bin/subsonic-action-proxy \
-        -listen-addr 0.0.0.0:4646 \
-        -subsonic-addr http://localhost:4747/ \
-        -jukebox-set-command \
-          "${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0 26 0xd9 0x20"
-      '';
+      ExecStart = let
+        onkyo-ri = riCmds: "${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0 26 ${riCmds}";
+      in
+        ''${pkgs.subsonic-action-proxy}/bin/subsonic-action-proxy \
+          -listen-addr 0.0.0.0:4646 \
+          -subsonic-addr http://localhost:4747/ \
+          -jukebox-set-command "${onkyo-ri "0xd9 0x20"}" \
+          -add-rpc "/ssap/power ${onkyo-ri "0x4"}" \
+          -add-rpc "/ssap/line-1 ${onkyo-ri "0x20"}" \
+          -add-rpc "/ssap/volume-up ${onkyo-ri "0x203 0x203 0x203 0x203 0x203"}" \
+          -add-rpc "/ssap/volume-down ${onkyo-ri "0x303 0x303 0x303 0x303 0x303"}"
+        '';
       DynamicUser = true;
       SupplementaryGroups = ["gpio"];
     };

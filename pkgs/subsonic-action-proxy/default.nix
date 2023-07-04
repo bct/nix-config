@@ -5,13 +5,13 @@
 
 pkgs.buildGoModule rec {
   pname = "subsonic-action-proxy";
-  version = "19693984119451b5cbaeb1f0c54460d2f81f4b18";
+  version = "87b1282a58acda855d1702d307ffc97a596749ad";
 
   src = fetchFromGitHub {
     owner = "bct";
     repo = "subsonic-action-proxy";
     rev = version;
-    sha256 = "0i8xr66ax37vy4g2xlyghbfk0v4dncylbnlz3sz68x253340n66c";
+    sha256 = "0gqa69879dlvgmzk6b0cz5cazp0al18bn8kvap698d6mw5fhqx5x";
   };
 
   vendorHash = "sha256-oXy9rgCRpuNHsqLW2sRylUamjPjOcHjC66noG4koLXk=";
