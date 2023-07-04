@@ -19,8 +19,8 @@
   onkyo-ri-send-command = let pkg = pkgs.fetchFromGitHub {
       owner  = "bct";
       repo   = "onkyo-ri-send-command";
-      rev    = "31dfc17c83fcf1d59c01b7ffaa2ccf832c7d8c45";
-      sha256 = "1hs93a8ssy0bad3j589yfg7rpm5lnansxab5c111w03abl9gsr2z";
+      rev    = "bb662ef1d45357db0f205c0b8b8acf460b1bdae1";
+      sha256 = "0d6mr08d1gvpghd440sgi3j0cz4xsrdcickdnv28in21xpj34a5z";
     };
   in
     pkgs.callPackage "${pkg}/default.nix" {};

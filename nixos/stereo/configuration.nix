@@ -57,8 +57,7 @@
         -listen-addr 0.0.0.0:4646 \
         -subsonic-addr http://localhost:4747/ \
         -jukebox-set-command \
-          '/bin/sh -c "${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0xd9; \
-                       ${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0x20"'
+          "${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0 26 0xd9 0x20"
       '';
       DynamicUser = true;
       SupplementaryGroups = ["gpio"];
