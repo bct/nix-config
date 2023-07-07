@@ -70,6 +70,13 @@
           ];
         };
 
+        s3-proxy = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./nixos/s3-proxy/configuration.nix
+          ];
+        };
+
         headless-image-rpi = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
