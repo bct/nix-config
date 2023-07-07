@@ -34,13 +34,18 @@ Now you can build a VM with your host's config:
 ## Building a Raspberry Pi installation image
 
     nix develop
-    nixos-generate -f sd-aarch64-installer --flake .#rpiInstaller
+    nixos-generate -f sd-aarch64-installer --flake .#headless-image-rpi
 
 To uncompress the image:
 
     nix shell nixpkgs#zstd -c unzstd -o <output>.img <input>.img.zst
 
 There's a `compressImage` option that might allow us to avoid this step.
+
+## Building an ISO
+
+    nix develop
+    nixos-generate -f iso --flake .#headless-image-cloud-x86_64
 
 ## Installing on a new device
 

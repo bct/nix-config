@@ -70,10 +70,17 @@
           ];
         };
 
-        rpiInstaller = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
+        headless-image-rpi = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
           modules = [
-            ./nixos/rpiInstaller.nix
+            ./nixos/headless-images/rpi.nix
+          ];
+        };
+
+        headless-image-cloud-x86_64 = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./nixos/headless-images/cloud-x86_64.nix
           ];
         };
       };

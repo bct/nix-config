@@ -1,7 +1,7 @@
 args@{ inputs, outputs, lib, config, pkgs, ... }: {
   imports = [
-    ./common/nix.nix
-    ./common/headless.nix
+    ../common/nix.nix
+    ../common/headless.nix
   ];
 
   nixpkgs.hostPlatform = "aarch64-linux";
