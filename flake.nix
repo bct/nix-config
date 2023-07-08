@@ -74,6 +74,7 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./nixos/s3-proxy/configuration.nix
+            agenix.nixosModules.default
           ];
         };
 
