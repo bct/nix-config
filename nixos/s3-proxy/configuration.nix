@@ -61,6 +61,7 @@
       reverse_proxy [fc00::f1]:9001
     '';
 
+    # unfortunately I'm not sure how to get a wildcard certificate, since it needs DNS support
     virtualHosts."s3.escam.biz" = {
       serverAliases = [ "mosfet-novpet.s3.escam.biz" ];
       extraConfig = ''
