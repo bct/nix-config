@@ -1,9 +1,37 @@
-{ config, ... }: {
+args@{ config, ... }: {
   imports = [
     ../common/nix.nix
     ../common/headless.nix
 
     ./hardware-configuration.nix
+
+    (
+      import ./minio-instance.nix (
+        args
+        // {
+          containerName = "minio-escam-biz";
+          minioDomain = "s3.escam.biz";
+          buckets = [ "mosfet-novpet" ];
+          hostAddress6 = "fc00::1";
+          containerAddress6 = "fc00::f1";
+          rootCredentialsPath = config.age.secrets.s3-proxy-minio-root-credentials.path;
+        }
+      )
+    )
+
+    (
+      import ./minio-instance.nix (
+        args
+        // {
+          containerName = "minio-diffeq-com";
+          minioDomain = "s3.diffeq.com";
+          buckets = [ "zardoz" ];
+          hostAddress6 = "fc00::2";
+          containerAddress6 = "fc00::f2";
+          rootCredentialsPath = config.age.secrets.s3-proxy-minio-root-credentials.path;
+        }
+      )
+    )
   ];
 
   boot.loader.grub.device = "/dev/vda";
@@ -25,60 +53,6 @@
     externalInterface = "ens3";
     # Lazy IPv6 connectivity for the container
     enableIPv6 = true;
-  };
-
-  containers.minio-escam-biz = {
-    autoStart = true;
-    privateNetwork = true;
-
-    bindMounts = {
-      "/tmp/minio-root-credentials" = {
-        hostPath = config.age.secrets.s3-proxy-minio-root-credentials.path;
-        isReadOnly = true;
-     };
-    };
-
-    hostAddress6 = "fc00::1";
-    localAddress6 = "fc00::f1";
-
-    config = { config, pkgs, ... }: {
-      system.stateVersion = "23.05";
-
-      networking.firewall.allowedTCPPorts = [ 9000 9001 ];
-
-      services.minio = {
-        enable = true;
-        rootCredentialsFile = "/tmp/minio-root-credentials";
-      };
-      systemd.services.minio.environment.MINIO_DOMAIN = "s3.escam.biz";
-    };
-  };
-
-  services.caddy = {
-    enable = true;
-
-    virtualHosts."console.s3.escam.biz".extraConfig = ''
-      reverse_proxy [fc00::f1]:9001
-    '';
-
-    # unfortunately I'm not sure how to get a wildcard certificate, since it needs DNS support
-    virtualHosts."s3.escam.biz" = {
-      serverAliases = [ "mosfet-novpet.s3.escam.biz" ];
-      extraConfig = ''
-        reverse_proxy [fc00::f1]:9000
-      '';
-    };
-
-    virtualHosts."console.s3.diffeq.com".extraConfig = ''
-      reverse_proxy [fc00::f2]:9001
-    '';
-
-    virtualHosts."s3.diffeq.com" = {
-      serverAliases = [ "zardoz.s3.diffeq.com" ];
-      extraConfig = ''
-        reverse_proxy [fc00::f2]:9000
-      '';
-    };
   };
 
   age.secrets = {
