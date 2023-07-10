@@ -39,7 +39,7 @@
     virtualHosts.${minioDomain} = {
       serverAliases = map (bucket: "${bucket}.${minioDomain}") buckets;
       extraConfig = ''
-        reverse_proxy [fc00::f1]:9000
+        reverse_proxy [${containerAddress6}]:9000
       '';
     };
   };
