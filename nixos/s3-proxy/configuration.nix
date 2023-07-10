@@ -25,7 +25,7 @@ args@{ config, ... }: {
         // {
           containerName = "minio-diffeq-com";
           minioDomain = "s3.diffeq.com";
-          buckets = [ "zardoz" ];
+          buckets = [ "zardoz" "middel-salbyt" ];
           hostAddress6 = "fc00::2";
           containerAddress6 = "fc00::f2";
           rootCredentialsPath = config.age.secrets.s3-proxy-minio-root-credentials.path;
