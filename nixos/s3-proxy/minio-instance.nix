@@ -24,7 +24,13 @@
         enable = true;
         rootCredentialsFile = "/tmp/minio-root-credentials";
       };
-      systemd.services.minio.environment.MINIO_DOMAIN = minioDomain;
+      systemd.services.minio.environment = {
+        MINIO_DOMAIN = minioDomain;
+
+        # avoid exposing our console URL.
+        # it dosen't really matter and it's easy to guess but /shrug
+        MINIO_BROWSER_REDIRECT_URL = "https://aws.amazon.com/s3/";
+      };
     };
   };
 
