@@ -109,7 +109,10 @@
       xmonad = {
         enable = true;
         enableContribAndExtras = true;
-        config = ./files/xmonad.hs;
+        config = ./files/xmonad/xmonad.hs;
+        libFiles = {
+          "Workspaces.hs" = ./files/xmonad/Workspaces.hs;
+        };
       };
     };
   };

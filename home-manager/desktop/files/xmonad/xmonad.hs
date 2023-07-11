@@ -32,41 +32,7 @@ import Data.Char (ord)
 import qualified Data.Map as M
 import qualified XMonad.StackSet as SS
 
-topicNameToIcon :: String -> String
-topicNameToIcon name = M.findWithDefault name name iconMap
-  where
-    -- https://www.nerdfonts.com/cheat-sheet
-    iconMap = M.fromList [
-                 ("?",               " \xf128 ") -- question mark
-                ,("\xeb01  web",     "\xeb01 ")  -- globe
-                ,("project",         "\xf499 ")  -- beaker
-                ,("mi-go",           "\xf0833 ") -- ship wheel
-                ,("office",          "\xf01a7 ") -- wireframe cube
-                ,("\xf008  kino",    "\xf008 ")  -- film
-              ]
-
-myTopics :: [Topic]
-myTopics = ["?", "\xeb01  web", "project", "mi-go", "office", "\xf008  kino"]
-
-myTopicConfig :: TopicConfig
-myTopicConfig = TopicConfig
-    { topicDirs = M.fromList $
-        [ ("project",   "projects")
-        ]
-
-    , defaultTopicAction = const spawnShell
-
-    , defaultTopic = "project"
-
-    , topicActions = M.fromList $
-        [
-          ("?",            spawnShell >>
-                           spawn "alacritty -e htop")
-        , ("mi-go",        spawn "alacritty -e ssh mi-go.domus.diffeq.com")
-        , ("\xeb01  web",  spawn "chromium")
-        , ("project",      spawnShell >*> 5)
-        ]
-    }
+import qualified Workspaces
 
 myLayout = webWorkspace $ (tiled ||| Mirror tiled ||| Full)
   where
@@ -75,7 +41,7 @@ myLayout = webWorkspace $ (tiled ||| Mirror tiled ||| Full)
     ratio   = 1/2   -- Default proportion of screen occupied by master pane
     delta   = 3/100 -- Percent of screen to increment by when resizing panes
 
-    webWorkspace = onWorkspace "\xeb01  web" tabbed
+    webWorkspace = onWorkspace Workspaces.web tabbed
     tabbed   = tabbedAlways shrinkText tabTheme
     tabTheme = def { fontName = "xft:Ubuntu Mono:pixelsize=18" }
 
@@ -101,10 +67,10 @@ myXmobarPP :: PP
 myXmobarPP = def
     { ppSep = ""
     -- workspaces
-    , ppCurrent = yellow . wrap " " "" . topicNameToIcon
-    , ppHidden = beige . wrap " " "" . topicNameToIcon
-    , ppHiddenNoWindows = gray . wrap " " "" . topicNameToIcon
-    , ppUrgent = red.wrap (yellow "!") (yellow "!") . topicNameToIcon
+    , ppCurrent = yellow . wrap " " "" . Workspaces.topicNameToIcon
+    , ppHidden = beige . wrap " " "" . Workspaces.topicNameToIcon
+    , ppHiddenNoWindows = gray . wrap " " "" . Workspaces.topicNameToIcon
+    , ppUrgent = red.wrap (yellow "!") (yellow "!") . Workspaces.topicNameToIcon
 
     -- layout
     -- the prefix here is weird because i don't know how to add a suffix to the workspaces
@@ -168,16 +134,8 @@ gsConfig = (buildDefaultGSConfig colorizer) { gs_navigate = myNavigator, gs_font
 wsgrid = gridselect gsConfig <=< asks $ map (\x -> (x,x)) . workspaces . config
 
 -- gridSelectWorkspace reorders the workspaces which is incredibly annoying
-promptedGoto  = wsgrid >>= flip whenJust (switchTopic myTopicConfig)
+promptedGoto  = wsgrid >>= flip whenJust (switchTopic Workspaces.topicConfig)
 promptedShift = wsgrid >>= \x -> whenJust x $ \y -> windows (SS.greedyView y . SS.shift y)
-
-spawnShell :: X ()
-spawnShell = currentTopicDir myTopicConfig >>= spawnShellIn
-
-spawnShellIn :: Dir -> X ()
-spawnShellIn dir = do
-  t <- asks (terminal . config)
-  spawnHere $ "cd " ++ dir ++ " && " ++ t
 
 main :: IO ()
 main = xmonad
@@ -187,7 +145,7 @@ main = xmonad
 
 myConfig = def
     { terminal = "alacritty"
-    , workspaces = myTopics
+    , workspaces = Workspaces.topics
     , layoutHook = smartSpacingWithEdge 10 $ smartBorders $ myLayout
     , manageHook = myManageHook
     -- fix Java apps, e.g. the Arduino IDE
@@ -209,7 +167,7 @@ myConfig = def
     , ("M-S-t", promptedShift)
 
       -- Launch the action for the current topic
-    , ("M-a", currentTopicAction myTopicConfig)
+    , ("M-a", currentTopicAction Workspaces.topicConfig)
 
     -- Push window back into tiling
     , ("M-g", withFocused $ windows . SS.sink)
