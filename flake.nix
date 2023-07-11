@@ -15,6 +15,8 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.darwin.follows = "";
 
+    deploy-rs.url = "github:serokell/deploy-rs";
+
     # TODO: Add any other flake you might need
     # hardware.url = "github:nixos/nixos-hardware";
 
@@ -23,7 +25,7 @@
     # nix-colors.url = "github:misterio77/nix-colors";
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, agenix, deploy-rs, ... }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -78,18 +80,29 @@
           ];
         };
 
-        headless-image-rpi = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./nixos/headless-images/rpi.nix
-          ];
-        };
+        # commenting these out becuase they fail "nix flake check"
+#        headless-image-rpi = nixpkgs.lib.nixosSystem {
+#          specialArgs = { inherit inputs outputs; };
+#          modules = [
+#            ./nixos/headless-images/rpi.nix
+#          ];
+#        };
+#
+#        headless-image-cloud-x86_64 = nixpkgs.lib.nixosSystem {
+#          specialArgs = { inherit inputs outputs; };
+#          modules = [
+#            ./nixos/headless-images/cloud-x86_64.nix
+#          ];
+#        };
+      };
 
-        headless-image-cloud-x86_64 = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./nixos/headless-images/cloud-x86_64.nix
-          ];
+      deploy.nodes.s3-proxy = {
+        hostname = "s3-proxy.diffeq.com";
+        user = "root";
+        remoteBuild = true;
+
+        profiles.system = {
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.s3-proxy;
         };
       };
 
@@ -103,5 +116,7 @@
            modules = [ ./home-manager/desktop ];
         };
       };
+
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 }
