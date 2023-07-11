@@ -5,6 +5,15 @@
     inputs.home-manager.nixosModules.home-manager
   ];
 
+  # Preserve space by sacrificing history
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 30d";
+  boot.tmp.cleanOnBoot = true;
+
+  # allow users in group "wheel" to deploy using deploy-rs
+  nix.settings.trusted-users = [ "@wheel" ];
+
+  # install a base set of packages
   environment.systemPackages = with pkgs; [
     vim
     git

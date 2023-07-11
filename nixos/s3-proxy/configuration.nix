@@ -41,9 +41,6 @@ args@{ config, ... }: {
 
   time.timeZone = "Etc/UTC";
 
-  # allow users in group "wheel" to deploy using deploy-rs
-  nix.settings.trusted-users = [ "@wheel" ];
-
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   system.stateVersion = "23.05";
