@@ -20,6 +20,11 @@
     tmux
   ];
 
+  # don't install nano and perl
+  environment.defaultPackages = [ pkgs.rsync pkgs.strace ];
+
+  environment.variables.EDITOR = "vim";
+
   services.openssh = {
     enable = true;
     settings = {
