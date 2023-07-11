@@ -99,7 +99,6 @@
       deploy.nodes.s3-proxy = {
         hostname = "s3-proxy.diffeq.com";
         user = "root";
-        remoteBuild = true;
 
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.s3-proxy;

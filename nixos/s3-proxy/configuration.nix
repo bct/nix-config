@@ -41,7 +41,8 @@ args@{ config, ... }: {
 
   time.timeZone = "Etc/UTC";
 
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
+  # allow users in group "wheel" to deploy using deploy-rs
+  nix.settings.trusted-users = [ "@wheel" ];
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
