@@ -60,3 +60,7 @@ Add bct's SSH public key to git.domus.diffeq.com.
     cd nix-config
 
     sudo nixos-rebuild switch --flake .#<target>
+
+## deploy-rs
+
+    nix-run github:serokell/deploy-rs .#<target>
