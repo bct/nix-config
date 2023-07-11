@@ -1,6 +1,6 @@
 # Enable SSH with public key authentication.
 # Set up a user who can log in via SSH.
-{ inputs, pkgs, ... }: {
+{ inputs, lib, pkgs, ... }: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
   ];
@@ -28,7 +28,7 @@
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin = "no";
+      PermitRootLogin = lib.mkForce "no";
       PasswordAuthentication = false;
     };
   };

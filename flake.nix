@@ -15,7 +15,12 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.darwin.follows = "";
 
+    # deploy-rs
     deploy-rs.url = "github:serokell/deploy-rs";
+
+    # nixos-generators
+    nixos-generators.url = "github:nix-community/nixos-generators";
+    nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
 
     # TODO: Add any other flake you might need
     # hardware.url = "github:nixos/nixos-hardware";
@@ -25,7 +30,7 @@
     # nix-colors.url = "github:misterio77/nix-colors";
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, deploy-rs, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, agenix, deploy-rs, nixos-generators, ... }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -42,7 +47,28 @@
       packages = forAllSystems (system:
         let pkgs = nixpkgs.legacyPackages.${system};
         in import ./pkgs { inherit pkgs; }
-      );
+      ) // {
+        # is it correct that this is only other the one system?
+        x86_64-linux = {
+          headless-image-rpi = nixos-generators.nixosGenerate {
+            system = "aarch64-linux";
+            format = "sd-aarch64-installer";
+            specialArgs = { inherit inputs outputs; };
+            modules = [
+              ./nixos/headless-images/rpi.nix
+            ];
+          };
+
+          headless-image-cloud-x86_64 = nixos-generators.nixosGenerate {
+            system = "x86_64-linux";
+            format = "iso";
+            specialArgs = { inherit inputs outputs; };
+            modules = [
+              ./nixos/headless-images/cloud-x86_64.nix
+            ];
+          };
+        };
+      };
 
       # Devshell for working on configs
       # Acessible through 'nix develop' or 'nix-shell' (legacy)
@@ -79,21 +105,6 @@
             agenix.nixosModules.default
           ];
         };
-
-        # commenting these out becuase they fail "nix flake check"
-#        headless-image-rpi = nixpkgs.lib.nixosSystem {
-#          specialArgs = { inherit inputs outputs; };
-#          modules = [
-#            ./nixos/headless-images/rpi.nix
-#          ];
-#        };
-#
-#        headless-image-cloud-x86_64 = nixpkgs.lib.nixosSystem {
-#          specialArgs = { inherit inputs outputs; };
-#          modules = [
-#            ./nixos/headless-images/cloud-x86_64.nix
-#          ];
-#        };
       };
 
       deploy.nodes.s3-proxy = {
