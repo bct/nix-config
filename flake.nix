@@ -86,7 +86,7 @@
         spectator = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
           modules = [
-            ./nixos/spectator/configuration.nix
+            ./nixos/lan/spectator/configuration.nix
             agenix.nixosModules.default
           ];
         };
@@ -94,16 +94,34 @@
         stereo = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
           modules = [
-            ./nixos/stereo/configuration.nix
+            ./nixos/lan/stereo/configuration.nix
           ];
         };
 
         s3-proxy = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./nixos/s3-proxy/configuration.nix
+            ./nixos/cloud/s3-proxy/configuration.nix
             agenix.nixosModules.default
           ];
+        };
+      };
+
+      deploy.nodes.spectator = {
+        hostname = "spectator.domus.diffeq.com";
+        user = "root";
+
+        profiles.system = {
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.spectator;
+        };
+      };
+
+      deploy.nodes.stereo = {
+        hostname = "stereo.domus.diffeq.com";
+        user = "root";
+
+        profiles.system = {
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.stereo;
         };
       };
 

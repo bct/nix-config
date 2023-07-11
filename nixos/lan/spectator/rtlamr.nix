@@ -62,7 +62,7 @@
 
   age.secrets = {
     rtlamr-collect-env = {
-      file = ../../secrets/rtlamr-collect-env.age;
+      file = ../../../secrets/rtlamr-collect-env.age;
       owner = "rtlamr";
       group = "rtlamr";
       mode = "600";

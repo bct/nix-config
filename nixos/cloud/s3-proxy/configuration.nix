@@ -1,7 +1,7 @@
 args@{ config, ... }: {
   imports = [
-    ../common/nix.nix
-    ../common/headless.nix
+    ../../common/nix.nix
+    ../../common/headless.nix
 
     ./hardware-configuration.nix
 
@@ -55,7 +55,7 @@ args@{ config, ... }: {
 
   age.secrets = {
     s3-proxy-minio-root-credentials = {
-      file = ../../secrets/s3-proxy-minio-root-credentials.age;
+      file = ../../../secrets/s3-proxy-minio-root-credentials.age;
       mode = "600";
     };
   };

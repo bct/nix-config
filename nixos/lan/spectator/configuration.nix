@@ -8,8 +8,8 @@ args@{ inputs, outputs, lib, config, pkgs, ... }: {
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
 
-    ../common/nix.nix
-    ../common/headless.nix
+    ../../common/nix.nix
+    ../../common/headless.nix
 
     ./home-assistant.nix
     ./rtlamr.nix
@@ -17,7 +17,7 @@ args@{ inputs, outputs, lib, config, pkgs, ... }: {
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
 
-    ../hardware/raspberry-pi
+    ../../hardware/raspberry-pi
   ];
 
   networking.hostName = "spectator";

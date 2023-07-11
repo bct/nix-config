@@ -131,7 +131,7 @@
 
   age.secrets = {
     home-assistant-my-cnf = {
-      file = ../../secrets/home-assistant-my-cnf.age;
+      file = ../../../secrets/home-assistant-my-cnf.age;
       owner = "hass";
       group = "hass";
       mode = "600";
