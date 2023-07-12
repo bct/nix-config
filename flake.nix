@@ -84,26 +84,18 @@
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
         spectator = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
-          modules = [
-            ./nixos/lan/spectator/configuration.nix
-            agenix.nixosModules.default
-          ];
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/lan/spectator/configuration.nix ];
         };
 
         stereo = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
-          modules = [
-            ./nixos/lan/stereo/configuration.nix
-          ];
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/lan/stereo/configuration.nix ];
         };
 
         s3-proxy = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./nixos/cloud/s3-proxy/configuration.nix
-            agenix.nixosModules.default
-          ];
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/cloud/s3-proxy/configuration.nix ];
         };
       };
 

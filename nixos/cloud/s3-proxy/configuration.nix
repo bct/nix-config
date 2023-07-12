@@ -1,7 +1,9 @@
-args@{ config, ... }: {
+args@{ self, inputs, config, ... }: {
   imports = [
-    ../../common/nix.nix
-    ../../common/headless.nix
+    inputs.agenix.nixosModules.default
+
+    "${self}/nixos/common/nix.nix"
+    "${self}/nixos/common/headless.nix"
 
     ./hardware-configuration.nix
 

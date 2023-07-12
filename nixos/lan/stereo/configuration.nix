@@ -1,12 +1,12 @@
-{ lib, pkgs, ... }: {
+{ self, lib, pkgs, ... }: {
   imports = [
-    ../../common/nix.nix
-    ../../common/headless.nix
+    "${self}/nixos/common/nix.nix"
+    "${self}/nixos/common/headless.nix"
+
+    "${self}/nixos/hardware/raspberry-pi"
+    "${self}/nixos/hardware/raspberry-pi/hifiberry-dac-plus.nix"
 
     ./hardware-configuration.nix
-
-    ../../hardware/raspberry-pi
-    ../../hardware/raspberry-pi/hifiberry-dac-plus.nix
   ];
 
   networking.hostName = "stereo";
