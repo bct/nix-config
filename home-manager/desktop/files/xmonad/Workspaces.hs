@@ -8,6 +8,7 @@ import XMonad.Actions.TopicSpace
 import qualified Data.Map as M
 
 -- icons
+-- https://www.nerdfonts.com/cheat-sheet
 iconQuestionMark :: String
 iconQuestionMark = "\xf128"
 
@@ -26,6 +27,9 @@ iconWireframeCube = "\xf01a7"
 iconFilm :: String
 iconFilm = "\xf008"
 
+iconMail :: String
+iconMail = "\xf01ee"
+
 -- topic names
 --
 -- this is a hack, would really prefer not to include the icon in the topic
@@ -36,8 +40,8 @@ project = iconBeaker ++ "  project"
 miGo :: String
 miGo = iconShipWheel ++ "  mi-go"
 
-office :: String
-office = iconWireframeCube ++ "  office"
+slicer :: String
+slicer = iconWireframeCube ++ "  slicer"
 
 web :: String
 web = iconGlobe ++ "  web"
@@ -45,22 +49,25 @@ web = iconGlobe ++ "  web"
 kino ::String
 kino = iconFilm ++ "  kino"
 
+mail :: String
+mail = iconMail ++ "  mail"
+
 topicNameToIcon :: String -> String
 topicNameToIcon name = M.findWithDefault name name iconMap ++ " "
   where
-    -- https://www.nerdfonts.com/cheat-sheet
     iconMap :: M.Map String String
     iconMap = M.fromList [
                  ("?",     " " ++ iconQuestionMark)
                 ,(web,     iconGlobe)
                 ,(project, iconBeaker)  -- beaker
                 ,(miGo,    iconShipWheel) -- ship wheel
-                ,(office,  iconWireframeCube) -- wireframe cube
+                ,(slicer,  iconWireframeCube) -- wireframe cube
                 ,(kino,    iconFilm)  -- film
+                ,(mail,    iconMail)  -- nf-md-email
               ]
 
 topics :: [Topic]
-topics = ["?", web, project, miGo, office, kino]
+topics = ["?", web, project, miGo, slicer, mail, kino]
 
 topicConfig :: TopicConfig
 topicConfig = TopicConfig
@@ -79,6 +86,7 @@ topicConfig = TopicConfig
         , (miGo,           spawn "alacritty -e ssh mi-go.domus.diffeq.com")
         , (web,            spawn "chromium")
         , (project,        spawnShell >*> 5)
+        , (mail,           spawn "alacritty -e ssh mail.domus.diffeq.com")
         ]
     }
 
