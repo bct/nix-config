@@ -45,7 +45,7 @@ There's a `compressImage` option that might allow us to avoid this step.
 
     nix build .#headless-image-cloud-x86_64-iso
 
-## Installing on a new device
+## Installing on a new Raspberry Pi
 
 SSH in as bct.
 
@@ -58,6 +58,18 @@ Add bct's SSH public key to git.domus.diffeq.com.
     cd nix-config
 
     sudo nixos-rebuild switch --flake .#<target>
+
+## Installing on a VPS
+
+Boot from the ISO.
+
+Partition and mount the disk as described in the manual.
+
+Create and mount a swapfile if you want.
+
+rsync nix-config to the host
+
+    sudo nixos-install --no-root-passwd --flake .#<target>
 
 ## deploy-rs
 

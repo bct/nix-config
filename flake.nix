@@ -95,6 +95,11 @@
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
+        notes = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/cloud/notes/configuration.nix ];
+        };
+
         spectator = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/lan/spectator/configuration.nix ];
@@ -135,6 +140,15 @@
 
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.s3-proxy;
+        };
+      };
+
+      deploy.nodes.notes = {
+        hostname = "108.61.72.102";
+        user = "root";
+
+        profiles.system = {
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.notes;
         };
       };
 
