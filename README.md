@@ -43,7 +43,7 @@ There's a `compressImage` option that might allow us to avoid this step.
 
 ## Building an ISO
 
-    nix build .#headless-image-cloud-x86_64
+    nix build .#headless-image-cloud-x86_64-iso
 
 ## Installing on a new device
 
