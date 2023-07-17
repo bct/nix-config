@@ -36,11 +36,6 @@ args@{ self, inputs, config, ... }: {
     )
   ];
 
-  # I set up this server with a swap partition rather than a swap file.
-  # TODO: fix that.
-  hardware.vultr.useSwapFile = false;
-  swapDevices = [ { device = "/dev/disk/by-uuid/60f6edd2-5215-45bb-b516-b4ae671af208"; } ];
-
   networking.hostName = "s3-proxy";
 
   time.timeZone = "Etc/UTC";
