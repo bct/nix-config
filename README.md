@@ -73,4 +73,4 @@ rsync nix-config to the host
 
 ## deploy-rs
 
-    nix-run github:serokell/deploy-rs .#<target>
+    nix run github:serokell/deploy-rs .#<target>
