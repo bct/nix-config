@@ -5,10 +5,8 @@
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
 
-    ./hardware-configuration.nix
+    "${self}/nixos/hardware/vultr"
   ];
-
-  boot.loader.grub.device = "/dev/vda";
 
   networking.hostName = "notes";
 

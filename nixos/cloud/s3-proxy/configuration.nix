@@ -5,7 +5,7 @@ args@{ self, inputs, config, ... }: {
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
 
-    ./hardware-configuration.nix
+    "${self}/nixos/hardware/vultr"
 
     (
       import ./minio-instance.nix (
@@ -36,10 +36,12 @@ args@{ self, inputs, config, ... }: {
     )
   ];
 
-  boot.loader.grub.device = "/dev/vda";
+  # I set up this server with a swap partition rather than a swap file.
+  # TODO: fix that.
+  hardware.vultr.useSwapFile = false;
+  swapDevices = [ { device = "/dev/disk/by-uuid/60f6edd2-5215-45bb-b516-b4ae671af208"; } ];
 
   networking.hostName = "s3-proxy";
-  networking.networkmanager.enable = true;
 
   time.timeZone = "Etc/UTC";
 
