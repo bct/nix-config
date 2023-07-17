@@ -69,7 +69,7 @@
       reverse_proxy /dav/* localhost:3456
     '';
 
-    virtualHosts."nixos-notes.diffeq.com".extraConfig = ''
+    virtualHosts."notes.diffeq.com".extraConfig = ''
       reverse_proxy localhost:3000
     '';
   };

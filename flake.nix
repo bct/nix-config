@@ -144,7 +144,7 @@
       };
 
       deploy.nodes.notes = {
-        hostname = "nixos-notes.diffeq.com";
+        hostname = "notes.diffeq.com";
         user = "root";
 
         profiles.system = {
