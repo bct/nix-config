@@ -9,4 +9,5 @@ in
     "rtlamr-collect-env.age".publicKeys = [ bct-cimmeria spectator ];
     "s3-proxy-minio-root-credentials.age".publicKeys = [ bct-cimmeria s3-proxy ];
     "notes-wireguard-key.age".publicKeys = [ bct-cimmeria notes ];
+    "notes-borg-ssh-key.age".publicKeys = [ bct-cimmeria notes ];
   }
