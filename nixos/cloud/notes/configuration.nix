@@ -81,7 +81,7 @@
     # this seems like the easiest way for root to dump the database during backups.
     authentication = ''
       # TYPE  DATABASE        USER            ADDRESS                 METHOD
-      local   all             all                                     peer map=root
+      local   all             postgres                                peer map=root
     '';
     identMap = ''
       # MAPNAME       SYSTEM-USERNAME PG-USERNAME
