@@ -1,5 +1,7 @@
-args@{ self, inputs, config, pkgs, ... }: {
+{ self, inputs, config, pkgs, ... }: {
   imports = [
+    inputs.agenix.nixosModules.default
+
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
 
@@ -14,12 +16,44 @@ args@{ self, inputs, config, pkgs, ... }: {
 
   system.stateVersion = "23.05";
 
+#  boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
+
+  systemd.network = {
+    netdevs."10-wg0" = {
+      netdevConfig = {
+        Kind = "wireguard";
+        Name = "wg0";
+      };
+      wireguardConfig = {
+        ListenPort = 51820;
+        PrivateKeyFile = config.age.secrets.notes-wireguard-key.path;
+      };
+      wireguardPeers = [{
+        wireguardPeerConfig = {
+          # conductum
+          PublicKey = "fBOs8h31Jce8FH0eeeKWLvtXNSD7a6PkQoYiJtoOxUo=";
+          AllowedIPs = [ "192.168.9.1/32" "192.168.0.0/16" ];
+        };
+      }];
+    };
+
+    networks.wg0 = {
+      matchConfig.Name = "wg0";
+      address = ["192.168.9.3/16"];
+
+      # use the home router for DNS, so that we resolve borg.domus.diffeq.com to
+      # its VPN IP.
+      dns = ["192.168.9.1"];
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     # for the "vikunja" cli tool
     vikunja-api
   ];
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedUDPPorts = [ 51820 ];
 
   services.caddy = {
     enable = true;
@@ -87,6 +121,15 @@ args@{ self, inputs, config, pkgs, ... }: {
         user = "wiki-js";
         host = "/run/postgresql";
       };
+    };
+  };
+
+  age.secrets = {
+    notes-wireguard-key = {
+      file = ../../../secrets/notes-wireguard-key.age;
+      owner = "systemd-network";
+      group = "systemd-network";
+      mode = "600";
     };
   };
 }
