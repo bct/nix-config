@@ -14,7 +14,18 @@
 
   system.stateVersion = "23.05";
 
-#  boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
+  nixpkgs = {
+    overlays = [
+      # workaround: add pg_dump, pg_restore, psql to borgmatic's PATH
+      # this is temporary until we've upgraded past 1.7.13:
+      # https://projects.torsion.org/borgmatic-collective/borgmatic/issues/678
+      (_final: prev: {
+        borgmatic = prev.borgmatic.overrideAttrs (old: {
+          propagatedBuildInputs = old.propagatedBuildInputs ++ [config.services.postgresql.package];
+        });
+      })
+    ];
+  };
 
   systemd.network = {
     netdevs."20-wg0" = {
@@ -154,6 +165,11 @@
 
           # dump each database to a separate file.
           format = "custom";
+
+          # TODO: enable these once we no longer need the workaround overlay.
+          #pg_dump_command = "${config.services.postgresql.package}/bin/pg_dump";
+          #pg_restore_command = "${config.services.postgresql.package}/bin/pg_restore";
+          #psql_command = "${config.services.postgresql.package}/bin/psql";
         }
       ];
 
