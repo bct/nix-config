@@ -11,9 +11,12 @@
 
   networking.hostName = "stereo";
 
-  networking.networkmanager = {
+  systemd.network = {
     enable = true;
-    unmanaged = ["wlan0"];
+    networks."10-lan" = {
+      matchConfig.Type = "ether";
+      networkConfig.DHCP = "yes";
+    };
   };
 
   time.timeZone = "America/Edmonton";
