@@ -114,41 +114,45 @@
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/cloud/s3-proxy/configuration.nix ];
         };
+
+        viator = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/cloud/viator/configuration.nix ];
+        };
       };
 
-      deploy.nodes.spectator = {
-        hostname = "spectator.domus.diffeq.com";
-        user = "root";
-
-        profiles.system = {
+      deploy = let
+        mkNode = { hostname, path }: {
+          inherit hostname;
+          user = "root";
+          profiles.system.path = path;
+        };
+      in {
+        # -- lan hosts --
+        nodes.spectator = mkNode {
+          hostname = "spectator.domus.diffeq.com";
           path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.spectator;
         };
-      };
 
-      deploy.nodes.stereo = {
-        hostname = "stereo.domus.diffeq.com";
-        user = "root";
-
-        profiles.system = {
+        nodes.stereo = mkNode {
+          hostname = "stereo.domus.diffeq.com";
           path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.stereo;
         };
-      };
 
-      deploy.nodes.s3-proxy = {
-        hostname = "s3-proxy.diffeq.com";
-        user = "root";
+        # -- cloud hosts --
+        nodes.notes = mkNode {
+          hostname = "notes.diffeq.com";
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.notes;
+        };
 
-        profiles.system = {
+        nodes.s3-proxy = mkNode {
+          hostname = "s3-proxy.diffeq.com";
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.s3-proxy;
         };
-      };
 
-      deploy.nodes.notes = {
-        hostname = "notes.diffeq.com";
-        user = "root";
-
-        profiles.system = {
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.notes;
+        nodes.viator = mkNode {
+          hostname = "66.135.19.196";
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.viator;
         };
       };
 
