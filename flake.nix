@@ -151,7 +151,7 @@
         };
 
         nodes.viator = mkNode {
-          hostname = "66.135.19.196";
+          hostname = "viator.diffeq.com";
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.viator;
         };
       };

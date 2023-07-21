@@ -1,4 +1,4 @@
-args@{ self, inputs, config, ... }: {
+{ self, inputs, config, pkgs, ... }: {
   imports = [
     inputs.agenix.nixosModules.default
 
@@ -12,7 +12,79 @@ args@{ self, inputs, config, ... }: {
 
   time.timeZone = "Etc/UTC";
 
-  #networking.firewall.allowedTCPPorts = [ 80 443 ];
-
   system.stateVersion = "23.05";
+
+  networking.nat = {
+    enable = true;
+    internalInterfaces = ["wg0"];
+    externalInterface = "ens3";
+  };
+
+  networking.firewall.allowedUDPPorts = [ 51820 ];
+
+  environment.systemPackages = with pkgs; [
+    wireguard-tools
+  ];
+
+  systemd.network = {
+    netdevs."20-wg0" = {
+      netdevConfig = {
+        Kind = "wireguard";
+        Name = "wg0";
+      };
+      wireguardConfig = {
+        ListenPort = 51820;
+        PrivateKeyFile = config.age.secrets.viator-wireguard-key.path;
+      };
+      wireguardPeers = [
+        # router
+        {
+          wireguardPeerConfig.PublicKey = "pZ8XBJYx9gWz7emqNDkmBF+BMQ9IW9ESHCfZEj75VHw=";
+          wireguardPeerConfig.AllowedIPs = [ "192.168.8.1/32" "192.168.0.0/16" ];
+        }
+
+        # Galaxy A52 5G (2023)
+        {
+          wireguardPeerConfig.PublicKey = "rOiHdUBgYlUYXyohifWCwyyrG9XusIHQsId9OcsZJGE=";
+          wireguardPeerConfig.AllowedIPs = [ "192.168.8.2/32" ];
+        }
+
+        # cimmeria
+        {
+          wireguardPeerConfig.PublicKey = "Dr++eMTOCnbCFsCsOxTEMxornygk0hVOwlaUGww9fkk=";
+          wireguardPeerConfig.AllowedIPs = [ "192.168.8.4/32" ];
+        }
+      ];
+    };
+
+    networks."20-wg0" = {
+      matchConfig.Name = "wg0";
+      address = ["192.168.8.3/16"];
+
+      # use the home router for DNS.
+      dns = ["192.168.8.1"];
+      domains = ["~domus.diffeq.com"];
+    };
+  };
+
+  age.secrets = {
+    viator-wireguard-key = {
+      file = ../../../secrets/viator-wireguard-key.age;
+      owner = "systemd-network";
+      group = "systemd-network";
+      mode = "600";
+    };
+  };
+
+  systemd.services.imap-jump-socat = {
+    description = "Forwards IMAP via socat";
+
+    after = ["network.target"];
+    wantedBy = ["multi-user.target"];
+
+    serviceConfig = {
+      ExecStart = "${pkgs.socat}/bin/socat TCP-LISTEN:993,fork TCP:mail.domus.diffeq.com:993";
+      Restart = "always";
+    };
+  };
 }
