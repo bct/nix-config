@@ -1,6 +1,6 @@
 {
   # Based on the "minimal" config from https://github.com/Misterio77/nix-starter-configs
-  description = "Your new nix config";
+  description = "bct's nix config";
 
   inputs = {
     # Nixpkgs
@@ -35,52 +35,23 @@
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
         "aarch64-linux"
-        "i686-linux"
         "x86_64-linux"
-        "aarch64-darwin"
-        "x86_64-darwin"
+
+        # other systems that I'm not using right now:
+        # "i686-linux"
+        # "aarch64-darwin"
+        # "x86_64-darwin"
       ];
     in
     {
       # Your custom packages
       # Acessible through 'nix build', 'nix shell', etc
       packages = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./pkgs { inherit pkgs; }
-      ) // {
-        # is it correct that this is only other the one system?
-        x86_64-linux = {
-          headless-image-rpi = nixos-generators.nixosGenerate {
-            system = "aarch64-linux";
-            format = "sd-aarch64-installer";
-            specialArgs = { inherit inputs outputs; };
-            modules = [
-              ./nixos/headless-images/rpi.nix
-            ];
-          };
-
-          headless-image-cloud-x86_64-iso = nixos-generators.nixosGenerate {
-            system = "x86_64-linux";
-            format = "iso";
-            specialArgs = { inherit inputs outputs; };
-            modules = [
-              ./nixos/headless-images/cloud-x86_64.nix
-            ];
-          };
-
-          # NOTE: this is not working yet
-          headless-image-cloud-x86_64 = nixos-generators.nixosGenerate {
-            system = "x86_64-linux";
-            format = "raw";
-            specialArgs = { inherit inputs outputs; };
-            modules = [
-              "${nixpkgs}/nixos/modules/profiles/headless.nix"
-              "${nixpkgs}/nixos/modules/profiles/qemu-guest.nix"
-              ./nixos/headless-images/cloud-x86_64.nix
-            ];
-          };
-        };
-      };
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          generators = import ./generators { inherit inputs outputs nixpkgs nixos-generators; };
+        in import ./pkgs { inherit pkgs; } // generators
+      );
 
       # Devshell for working on configs
       # Acessible through 'nix develop' or 'nix-shell' (legacy)
