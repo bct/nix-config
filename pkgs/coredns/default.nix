@@ -2,8 +2,8 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
-, externalPlugins ? []
-, vendorSha256 ? "sha256-3wa2x/dOmbosnKq9kcxAIny+3VG8t65FCEEu7VhImjU="
+, externalPlugins ? [ "wgsd" ]
+, vendorSha256 ? "sha256-K2s1MrS8Ot5LFh4ZbtTtYxdYla5rUYSZ/RQ/UgA52hw="
 }:
 
 let
@@ -30,6 +30,7 @@ in buildGoModule rec {
     for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do echo $plugin >> plugin.cfg; done
     for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
     go generate
+    go mod vendor
   '';
 
   # Copy over the lockfiles as well, because the source

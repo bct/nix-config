@@ -20,10 +20,11 @@
     externalInterface = "ens3";
   };
 
-  networking.firewall.allowedUDPPorts = [ 51820 ];
+  networking.firewall.allowedUDPPorts = [ 53 51820 ];
 
   environment.systemPackages = with pkgs; [
     wireguard-tools
+    coredns
   ];
 
   systemd.network = {
