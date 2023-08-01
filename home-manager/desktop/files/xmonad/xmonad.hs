@@ -15,6 +15,8 @@ import XMonad.Actions.TopicSpace
 import XMonad.Actions.SpawnOn (spawnHere, shellPromptHere, spawnOn)
 import XMonad.Actions.Volume
 
+import XMonad.Actions.PhysicalScreens
+
 import XMonad.Layout.Spacing (smartSpacingWithEdge)
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Tabbed
@@ -169,9 +171,19 @@ myConfig = def
     -- Push window back into tiling
     , ("M-g", withFocused $ windows . SS.sink)
 
+     -- Move monitor focus left/right
+    , ("M-o", onPrevNeighbour def SS.view)
+    , ("M-e", onNextNeighbour def SS.view)
+
+    -- Move window to left/right monitor
+    , ("M-S-o", onPrevNeighbour def SS.shift)
+    , ("M-S-e", onNextNeighbour def SS.shift)
+
+    -- Adjust brightness
     , ("<XF86MonBrightnessUp>", spawn "light -T 3")
     , ("<XF86MonBrightnessDown>", spawn "light -T 0.33")
 
+    -- Adjust volume
     , ("<XF86AudioLowerVolume>", lowerVolume 3 >> return ())
     , ("<XF86AudioRaiseVolume>", raiseVolume 3 >> return ())
     , ("<XF86AudioMute>", toggleMute    >> return ())
