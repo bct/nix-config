@@ -3,8 +3,6 @@ import XMonad
 import XMonad.Util.EZConfig
 import XMonad.Util.Ungrab
 
-import XMonad.Hooks.EwmhDesktops
-
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
@@ -139,7 +137,6 @@ promptedShift = wsgrid >>= \x -> whenJust x $ \y -> windows (SS.greedyView y . S
 
 main :: IO ()
 main = xmonad
-     . ewmh
      . withEasySB (statusBarProp "xmobar" (pure myXmobarPP)) defToggleStrutsKey
      $ myConfig
 
