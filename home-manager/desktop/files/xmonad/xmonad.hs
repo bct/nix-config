@@ -4,6 +4,7 @@ import XMonad.Util.EZConfig
 import XMonad.Util.Ungrab
 
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.SetWMName
@@ -137,19 +138,11 @@ wsgrid = gridselect gsConfig <=< asks $ map (\x -> (x,x)) . workspaces . config
 promptedGoto  = wsgrid >>= flip whenJust (switchTopic Workspaces.topicConfig)
 promptedShift = wsgrid >>= \x -> whenJust x $ \y -> windows (SS.greedyView y . SS.shift y)
 
-main :: IO ()
-main = xmonad
-     . withEasySB (statusBarProp "xmobar" (pure myXmobarPP)) defToggleStrutsKey
-     $ myConfig
-
-myConfig = def
+myConfig = ewmh $ def
     { terminal = "alacritty"
     , workspaces = Workspaces.topics
     , layoutHook = smartSpacingWithEdge 10 $ smartBorders $ myLayout
     , manageHook = myManageHook
-    -- fix Java apps, e.g. the Arduino IDE
-    -- https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-SetWMName.html
-    , startupHook = setWMName "LG3D"
     }
   `additionalKeysP`
     [
@@ -188,3 +181,17 @@ myConfig = def
     , ("<XF86AudioRaiseVolume>", raiseVolume 3 >> return ())
     , ("<XF86AudioMute>", toggleMute    >> return ())
     ]
+
+main :: IO ()
+main = xmonad
+     . withEasySB (statusBarProp "xmobar" (pure myXmobarPP)) defToggleStrutsKey
+     $ myConfig
+        {
+          -- fix Java apps, e.g. the Arduino IDE
+          -- https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-SetWMName.html
+          --
+          -- this has to happen here so that it overrides the WM name that
+          -- "ewmh" sets up
+          -- https://wiki.haskell.org/Xmonad/Frequently_asked_questions#Using_SetWMName_with_EwmhDesktops
+          startupHook = startupHook myConfig >> setWMName "LG3D"
+        }
