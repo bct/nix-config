@@ -1,4 +1,4 @@
-{ self,jconfig, pkgs, ... }:
+{ self, config, pkgs, ... }:
 
 {
   imports =
@@ -32,12 +32,25 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
+  services.xserver.displayManager.defaultSession = "default";
+  services.xserver.displayManager.session = [
+    {
+      manage = "desktop";
+      name = "default";
+      start = ''exec $HOME/.xsession'';
+    }
+  ];
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.bct = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" ];
     packages = with pkgs; [
       chromium
+      mpv
+
+      cura
+      freecad
     ];
   };
 
@@ -45,11 +58,20 @@
     vim
     git
     wget
+
+    home-manager
+
+    sshfs
   ];
 
   networking.firewall.enable = false;
 
   environment.variables.EDITOR = "vim";
+
+  systemd.tmpfiles.rules = [
+    # create the /bulk mountpoint
+    "d /bulk 0755 bct users"
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -59,4 +81,3 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 }
-

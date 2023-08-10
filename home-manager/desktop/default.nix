@@ -42,24 +42,28 @@
     };
   };
 
-  home.packages = [
+  home.packages = with pkgs; [
     # xmonad, xmobar, and supporting packages
-    pkgs.xmobar
-    (pkgs.nerdfonts.override { fonts = [ "UbuntuMono" ]; })
-    pkgs.ubuntu_font_family
+    xmobar
 
-    # backlight control
-    pkgs.light
+    # things used by xmonad config:
+    (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+    ubuntu_font_family
+
+    alacritty
+    dmenu
+    light
 
     # utilities
-    pkgs.silver-searcher
+    htop
+    silver-searcher
 
     # screen locking
-    pkgs.xss-lock
+    xss-lock
     # would like to have sxlock too but it's unpackaged
 
     # background
-    pkgs.feh
+    feh
   ];
 
   fonts.fontconfig.enable = true;
