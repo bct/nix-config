@@ -95,6 +95,11 @@
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
+        cimmeria = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/cimmeria/configuration.nix ];
+        };
+
         notes = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/cloud/notes/configuration.nix ];
