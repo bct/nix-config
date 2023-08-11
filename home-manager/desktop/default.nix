@@ -57,6 +57,7 @@
     # utilities
     htop
     silver-searcher
+    ruby
 
     # screen locking
     xss-lock
