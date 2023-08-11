@@ -43,7 +43,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.bct = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "networkmanager" ];
+    extraGroups = [ "wheel" "audio" "networkmanager" "video" ];
     packages = with pkgs; [
       chromium
       mpv
@@ -70,9 +70,24 @@
     sof-firmware
   ];
 
+  services.udev.extraRules = ''
+    # Suspend the system when battery level drops to 5% or lower
+    SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl suspend"
+
+    # USBtinyISP: https://learn.adafruit.com/usbtinyisp/avrdude
+    SUBSYSTEMS=="usb", ATTR{product}=="USBtiny", ATTR{idVendor}=="1781", ATTR{idProduct}=="0c9f", GROUP="users", MODE="0666"
+
+    # Give the "video" group access to the backlight
+    ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video $sys$devpath/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w $sys$devpath/brightness"
+  '';
+
+
   networking.firewall.enable = false;
 
   environment.variables.EDITOR = "vim";
+
+  # power management
+  services.tlp.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
