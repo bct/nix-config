@@ -27,7 +27,6 @@
   services.printing.enable = true;
 
   sound.enable = true;
-  # hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
@@ -44,7 +43,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.bct = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "audio" "networkmanager" ];
     packages = with pkgs; [
       chromium
       mpv
@@ -64,14 +63,16 @@
     sshfs
   ];
 
+  hardware.firmware = with pkgs; [
+    # I'm not sure this is necessary. I added it when I was debugging audio
+    # (total silence, ultimately caused by Windows "fast boot"), and I don't
+    # feel like testing without it at the moment.
+    sof-firmware
+  ];
+
   networking.firewall.enable = false;
 
   environment.variables.EDITOR = "vim";
-
-  systemd.tmpfiles.rules = [
-    # create the /bulk mountpoint
-    "d /bulk 0755 bct users"
-  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
