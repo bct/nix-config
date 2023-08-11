@@ -40,6 +40,10 @@
     }
   ];
 
+  # "For the sandboxed apps to work correctly, desktop integration portals need to be installed."
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.bct = {
     isNormalUser = true;
@@ -48,8 +52,10 @@
       chromium
       mpv
 
-      cura
+      cura5
       freecad
+
+      ansible
     ];
   };
 

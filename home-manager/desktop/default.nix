@@ -102,11 +102,6 @@
 
       # set minimum brightness higher than 0
       light -N 0.1
-
-      /usr/lib/xdg-desktop-portal-gtk &
-      systemctl --user start xdg-desktop-portal &
-
-      setxkbmap -layout us -variant dvorak
     '';
 
     windowManager = {
