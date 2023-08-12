@@ -78,8 +78,10 @@
     EDITOR = "vim";
     LANG = "en_CA.utf8";
 
-    # nix needs this (on Arch)
-    LOCALE_ARCHIVE = "/usr/lib/locale/locale-archive";
+    # scale browser UIs.
+    # maybe I should figure out how to scale the UI more generally?
+    CHROME_EXTRA_FLAGS = "--force-device-scale-factor=1.5";
+    BRAVE_FLAGS = "--force-device-scale-factor=1.5";
   };
 
   home.shellAliases = {
@@ -169,16 +171,6 @@
     # 2022-08-06 many hosts (e.g. mi-go) don't have alacritty terminfo
     Host *
       SetEnv TERM=xterm-256color
-  '';
-
-  # scale browser UIs.
-  # maybe I should figure out how to scale the UI more generally?
-  home.file.".config/brave-flags.conf".text = ''
-    --force-device-scale-factor=1.5
-  '';
-
-  home.file.".config/chromium-flags.conf".text = ''
-    --force-device-scale-factor=1.5
   '';
 
   home.file."bin/mount-host".source = ./files/bin/mount-host;
