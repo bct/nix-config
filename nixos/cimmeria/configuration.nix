@@ -12,6 +12,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.kernel.sysctl = {
+    # work around my network's weird MTU issues
+    "net.ipv4.tcp_mtu_probing" = 1;
+  };
+
   networking.hostName = "cimmeria";
   networking.networkmanager.enable = true;
 
@@ -62,6 +67,7 @@
       freecad
 
       ansible
+      nmap
 
       # for "strings"
       binutils
