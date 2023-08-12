@@ -26,6 +26,10 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Enable printer discovery.
+  services.avahi.enable = true;
+  services.avahi.nssmdns = true;
+
   sound.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -51,11 +55,16 @@
     packages = with pkgs; [
       chromium
       mpv
+      epdfview
+      libreoffice
 
       cura5
       freecad
 
       ansible
+
+      # for "strings"
+      binutils
     ];
   };
 
@@ -67,6 +76,8 @@
     home-manager
 
     sshfs
+    exfat
+    ntfs3g
   ];
 
   hardware.firmware = with pkgs; [
@@ -87,6 +98,9 @@
     ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video $sys$devpath/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w $sys$devpath/brightness"
   '';
 
+  # automount removeable storage
+  services.devmon.enable = true;
+  programs.udevil.enable = true;
 
   networking.firewall.enable = false;
 
