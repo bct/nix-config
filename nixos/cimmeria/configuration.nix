@@ -59,6 +59,7 @@
     extraGroups = [ "wheel" "audio" "networkmanager" "video" ];
     packages = with pkgs; [
       chromium
+      brave
       mpv
       epdfview
       libreoffice
