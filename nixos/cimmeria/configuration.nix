@@ -85,6 +85,9 @@
     sshfs
     exfat
     ntfs3g
+
+    # killall, etc.
+    psmisc
   ];
 
   hardware.firmware = with pkgs; [
