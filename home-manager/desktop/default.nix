@@ -61,7 +61,7 @@
 
     # screen locking
     xss-lock
-    # would like to have sxlock too but it's unpackaged
+    sxlock
 
     # background
     feh
