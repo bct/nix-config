@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./packages.nix
+  ];
+
   boot.kernel.sysctl = {
     # work around my network's weird MTU issues
     "net.ipv4.tcp_mtu_probing" = 1;
@@ -42,42 +46,10 @@
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.bct = {
     isNormalUser = true;
     extraGroups = [ "wheel" "audio" "networkmanager" "video" ];
-    packages = with pkgs; [
-      chromium
-      brave
-      mpv
-      epdfview
-      libreoffice
-
-      cura5
-      freecad
-
-      ansible
-      nmap
-
-      # for "strings"
-      binutils
-    ];
   };
-
-  environment.systemPackages = with pkgs; [
-    vim
-    git
-    wget
-
-    home-manager
-
-    sshfs
-    exfat
-    ntfs3g
-
-    # killall, etc.
-    psmisc
-  ];
 
   # Allow users to mount removeable storage.
   services.devmon.enable = true;
