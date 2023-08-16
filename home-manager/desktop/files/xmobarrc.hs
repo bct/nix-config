@@ -22,7 +22,7 @@ Config { overrideRedirect = False
                         , "--onc",  "#282828,#ebdbb2" -- On colour
                         , "--offc", "#282828,#ebdbb2" -- Off colour
                       ]
-                    , Run Network "wlan0"
+                    , Run Network "wlp2s0"
                       [
                       ] 50
                     , Run Network "wg0"
