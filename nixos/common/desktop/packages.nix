@@ -32,6 +32,6 @@
     # for "strings"
     binutils
 
-    androidStudioPackages.canary
+    unstable.androidStudioPackages.canary
   ];
 }
