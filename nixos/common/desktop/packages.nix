@@ -33,5 +33,6 @@
     binutils
 
     unstable.androidStudioPackages.canary
+    gcc # Android Studio needs cc.
   ];
 }
