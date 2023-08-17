@@ -48,8 +48,10 @@
 
   users.users.bct = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "networkmanager" "video" ];
+    extraGroups = [ "wheel" "audio" "networkmanager" "video" "adbusers" ];
   };
+
+  programs.adb.enable = true;
 
   # Allow users to mount removeable storage.
   services.devmon.enable = true;
