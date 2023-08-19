@@ -9,6 +9,7 @@
       "${self}/nixos/common/desktop"
 
       ./borgmatic.nix
+      ./wireguard.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
