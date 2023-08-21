@@ -25,6 +25,7 @@
 
     cura5
     freecad
+    openscad
 
     ansible
     nmap
