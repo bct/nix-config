@@ -17,9 +17,27 @@
     };
   };
 
+  # "systemd will dynamically create device units for all kernel devices that
+  # are marked with the "systemd" udev tag"
+  #
+  # we could add SYMLINK+=rtl2838 here so that the systemd config below could
+  # use a saner device unit name.
+  services.udev.extraRules = ''
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", TAG+="systemd"
+  '';
+
   systemd.services.rtl_tcp = {
     description = "rtl_tcp";
     wantedBy = ["multi-user.target"];
+
+    # wait until USB has been fully initialized - otherwise the dongle isn't
+    # available in time.
+    #
+    # device unit name identified with:
+    #
+    #     sudo systemctl --all --full -t device
+    requires = ["sys-devices-platform-soc-3f980000.usb-usb1-1\\x2d1-1\\x2d1.3-1\\x2d1.3:1.0.device"];
+    after = ["sys-devices-platform-soc-3f980000.usb-usb1-1\\x2d1-1\\x2d1.3-1\\x2d1.3:1.0.device"];
 
     serviceConfig = {
       Type = "simple";
@@ -48,6 +66,7 @@
     wantedBy = ["multi-user.target"];
     bindsTo = ["rtl_tcp.service"];
     after = ["rtl_tcp.service"];
+    partOf = ["rtl_tcp.service"];
 
     serviceConfig = {
       WorkingDirectory = "/run/rtlamr-collect";
