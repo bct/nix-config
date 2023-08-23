@@ -2,8 +2,8 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
-, externalPlugins ? [ "wgsd" ]
-, vendorSha256 ? "sha256-K2s1MrS8Ot5LFh4ZbtTtYxdYla5rUYSZ/RQ/UgA52hw="
+, externalPlugins ? []
+, vendorSha256 ? "sha256-3wa2x/dOmbosnKq9kcxAIny+3VG8t65FCEEu7VhImjU="
 }:
 
 let

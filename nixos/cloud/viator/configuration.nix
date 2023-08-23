@@ -24,7 +24,6 @@
 
   environment.systemPackages = with pkgs; [
     wireguard-tools
-    coredns
   ];
 
   systemd.network = {
@@ -88,4 +87,25 @@
       Restart = "always";
     };
   };
+
+  services.coredns = {
+    enable = true;
+
+    config = ''
+      .:53 {
+        bind ens3
+        debug
+        wgsd diffeq.com. wg0
+      }
+    '';
+
+    package = pkgs.coredns.override {
+      externalPlugins = [ "wgsd" ];
+      vendorSha256 = "sha256-K2s1MrS8Ot5LFh4ZbtTtYxdYla5rUYSZ/RQ/UgA52hw=";
+    };
+  };
+
+  # wgsd needs cap_net_admin to read the wireguard peers
+  systemd.services.coredns.serviceConfig.CapabilityBoundingSet = pkgs.lib.mkForce "cap_net_bind_service cap_net_admin";
+  systemd.services.coredns.serviceConfig.AmbientCapabilities = pkgs.lib.mkForce "cap_net_bind_service cap_net_admin";
 }
