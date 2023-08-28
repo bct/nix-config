@@ -49,6 +49,6 @@ Config { overrideRedirect = False
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%XMonadLog% }{ <fc=#282828,#ebdbb2> %CYEG% | %load% | %battery% | %alsa:default:Master% | %wlan0% %wg0% </fc> %date% "
+       , template = "%XMonadLog% }{ <fc=#282828,#ebdbb2> %CYEG% | %load% | %battery% | %alsa:default:Master% | %wlp2s0% %wg0% </fc> %date% "
        , verbose = True
      }
