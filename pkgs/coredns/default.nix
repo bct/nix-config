@@ -7,11 +7,8 @@
 }:
 
 let
-  availableExternalPlugins = import ./external-plugins.nix;
-  generatePluginEntry = name: src: "${name}:${src}";
-  getPlugin = name: generatePluginEntry name availableExternalPlugins."${name}";
-  attrsToPlugins = attrs: builtins.map (x: getPlugin x) attrs;
-  attrsToSources = attrs: builtins.map (x: availableExternalPlugins."${x}") attrs;
+  attrsToPlugins = attrs: builtins.map (x: "${x.name}:${x.repo}") attrs;
+  attrsToSources = attrs: builtins.map (x: "${x.repo}@${x.version}") attrs;
 in buildGoModule rec {
   pname = "coredns";
   version = "1.10.0";

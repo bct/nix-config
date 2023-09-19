@@ -100,7 +100,9 @@
     '';
 
     package = pkgs.coredns.override {
-      externalPlugins = [ "wgsd" ];
+      externalPlugins = [
+        {name = "wgsd"; repo = "github.com/jwhited/wgsd"; version = "v0.3.5";}
+      ];
       vendorSha256 = "sha256-K2s1MrS8Ot5LFh4ZbtTtYxdYla5rUYSZ/RQ/UgA52hw=";
     };
   };
