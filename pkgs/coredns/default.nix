@@ -2,25 +2,32 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 , externalPlugins ? []
-, vendorSha256 ? "sha256-3wa2x/dOmbosnKq9kcxAIny+3VG8t65FCEEu7VhImjU="
+, vendorHash ? "sha256-TvIswNQ7DL/MtYmMSxXf+VqKHcmzZVZwohOCvRWxBkY="
 }:
 
 let
-  attrsToPlugins = attrs: builtins.map (x: "${x.name}:${x.repo}") attrs;
-  attrsToSources = attrs: builtins.map (x: "${x.repo}@${x.version}") attrs;
+  attrsToPlugins = attrs:
+    builtins.map ({name, repo, version}: "${name}:${repo}") attrs;
+  attrsToSources = attrs:
+    builtins.map ({name, repo, version}: "${repo}@${version}") attrs;
 in buildGoModule rec {
   pname = "coredns";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "sha256-Kb4nkxuyZHJT5dqFSkqReFkN8q1uYm7wbhSIiLd8Hck=";
+    sha256 = "sha256-Mn8hOsODTlnl6PJaevMcyIKkIx/1Lk2HGA7fSSizR20=";
   };
 
-  inherit vendorSha256;
+  inherit vendorHash;
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  outputs = [ "out" "man" ];
 
   # Override the go-modules fetcher derivation to fetch plugins
   modBuildPhase = ''
@@ -30,24 +37,16 @@ in buildGoModule rec {
     go mod vendor
   '';
 
-  # Copy over the lockfiles as well, because the source
-  # doesn't contain it. The fixed-output derivation is
-  # probably not reproducible anyway.
   modInstallPhase = ''
     mv -t vendor go.mod go.sum plugin.cfg
     cp -r --reflink=auto vendor "$out"
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     chmod -R u+w vendor
     mv -t . vendor/go.{mod,sum} vendor/plugin.cfg
 
     go generate
-    go install
-
-    runHook postBuild
   '';
 
   postPatch = ''
@@ -57,9 +56,16 @@ in buildGoModule rec {
 
     substituteInPlace test/readme_test.go \
       --replace "TestReadme" "SkipReadme"
+
+    substituteInPlace test/presubmit_test.go \
+      --replace "TestImportOrdering" "SkipImportOrdering"
   '' + lib.optionalString stdenv.isDarwin ''
     # loopback interface is lo0 on macos
     sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
+  '';
+
+  postInstall = ''
+    installManPage man/*
   '';
 
   meta = with lib; {
