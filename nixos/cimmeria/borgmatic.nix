@@ -47,4 +47,6 @@
       };
     };
   };
+
+  systemd.services.borgmatic.unitConfig.ConditionACPower = "";
 }
