@@ -51,7 +51,6 @@
   in
     pkgs.callPackage "${pkg}/default.nix" {};
 
-  coredns = pkgs.callPackage ./coredns { };
   rtlamr = pkgs.callPackage ./rtlamr { };
   rtlamr-collect = pkgs.callPackage ./rtlamr-collect { };
   subsonic-action-proxy = pkgs.callPackage ./subsonic-action-proxy { };
