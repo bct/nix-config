@@ -84,6 +84,10 @@
 
     virtualHosts."diffeq.com".extraConfig = ''
       root * /srv/diffeq.com
+
+      # I don't have any content at /, so just redirect to my about page
+      redir / /bct temporary
+
       # https://caddy.community/t/how-to-serve-html-files-without-showing-the-html-extension/16766/3
       try_files {path}.html
       encode gzip
