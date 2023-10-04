@@ -51,6 +51,7 @@
   in
     pkgs.callPackage "${pkg}/default.nix" {};
 
+  goatcounter = pkgs.callPackage ./goatcounter { };
   rtlamr = pkgs.callPackage ./rtlamr { };
   rtlamr-collect = pkgs.callPackage ./rtlamr-collect { };
   subsonic-action-proxy = pkgs.callPackage ./subsonic-action-proxy { };
