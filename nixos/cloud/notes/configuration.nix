@@ -81,6 +81,14 @@
     virtualHosts."notes.diffeq.com".extraConfig = ''
       reverse_proxy localhost:3000
     '';
+
+    virtualHosts."diffeq.com".extraConfig = ''
+      root * /srv/diffeq.com
+      # https://caddy.community/t/how-to-serve-html-files-without-showing-the-html-extension/16766/3
+      try_files {path}.html
+      encode gzip
+      file_server
+    '';
   };
 
   services.postgresql = {
