@@ -60,6 +60,8 @@
   environment.systemPackages = with pkgs; [
     # for the "vikunja" cli tool
     vikunja-api
+
+    goatcounter
   ];
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
@@ -80,6 +82,13 @@
 
     virtualHosts."notes.diffeq.com".extraConfig = ''
       reverse_proxy localhost:3000
+    '';
+
+    virtualHosts."m.diffeq.com".extraConfig = ''
+      reverse_proxy localhost:4000 {
+        # https://github.com/arp242/goatcounter/issues/647#issuecomment-1345559928
+        header_down Set-Cookie "^(.*HttpOnly;) (SameSite=None)$" "$1 Secure; $2"
+      }
     '';
 
     virtualHosts."diffeq.com".extraConfig = ''
@@ -110,7 +119,7 @@
       root            postgres        postgres
     '';
 
-    ensureDatabases = [ "vikunja" "wiki" ];
+    ensureDatabases = [ "vikunja" "wiki" "goatcounter" ];
 
     ensureUsers = [
       {
@@ -124,6 +133,13 @@
         name = "wiki-js";
         ensurePermissions = {
           "DATABASE wiki" = "ALL PRIVILEGES";
+        };
+      }
+
+      {
+        name = "goatcounter";
+        ensurePermissions = {
+          "DATABASE goatcounter" = "ALL PRIVILEGES";
         };
       }
     ];
@@ -155,6 +171,18 @@
         user = "wiki-js";
         host = "/run/postgresql";
       };
+    };
+  };
+
+  systemd.services.goatcounter = {
+    wantedBy = ["multi-user.target"];
+    after = ["network.target" "postgresql.service"];
+
+    serviceConfig = {
+      Type = "simple";
+      DynamicUser = true;
+      ExecStart = "${pkgs.goatcounter}/bin/goatcounter serve -listen localhost:4000 -db 'postgresql+host=/run/postgresql' -tls http";
+      Restart = "always";
     };
   };
 
