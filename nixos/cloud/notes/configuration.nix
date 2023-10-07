@@ -196,6 +196,9 @@
 
       PrivateDevices = true;
       PrivateUsers = true;
+
+      CapabilityBoundingSet = "";
+      RestrictNamespaces = true;
     };
   };
 
