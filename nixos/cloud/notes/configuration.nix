@@ -181,8 +181,21 @@
     serviceConfig = {
       Type = "simple";
       DynamicUser = true;
-      ExecStart = "${pkgs.goatcounter}/bin/goatcounter serve -listen localhost:4000 -db 'postgresql+host=/run/postgresql' -tls http";
+      # if we don't pass -email-from then it tries to look up the current
+      # username, which doesn't work due to the chroot etc. below
+      ExecStart = "${pkgs.goatcounter}/bin/goatcounter serve -listen 127.0.0.1:4000 -db 'postgresql+host=/run/postgresql' -tls http -email-from goatcounter@m.diffeq.com";
       Restart = "always";
+
+      RuntimeDirectory = "goatcounter";
+      RootDirectory = "/run/goatcounter";
+      ReadWritePaths = "";
+      BindReadOnlyPaths = [
+        "/run/postgresql/"
+        builtins.storeDir
+      ];
+
+      PrivateDevices = true;
+      PrivateUsers = true;
     };
   };
 
