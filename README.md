@@ -41,23 +41,11 @@ To uncompress the image:
 
 There's a `compressImage` option that might allow us to avoid this step.
 
+Burn this image to an SD card (using e.g. `cp` or `pv`). Boot it and use `deploy-rs` to deploy your configuration.
+
 ## Building an ISO
 
     nix build .#headless-image-cloud-x86_64-iso
-
-## Installing on a new Raspberry Pi
-
-SSH in as bct.
-
-    ssh-keygen
-
-Add bct's SSH public key to git.domus.diffeq.com.
-
-    git clone git@git.domus.diffeq.com:nix-config.git
-
-    cd nix-config
-
-    sudo nixos-rebuild switch --flake .#<target>
 
 ## Installing on a VPS
 
