@@ -28,6 +28,11 @@
       fsType = "ext4";
     };
 
+  fileSystems."/mnt/windows" =
+    { device = "/dev/disk/by-uuid/00784C04784BF746";
+      fsType = "ntfs";
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/23e6dc13-ad40-4bb3-9335-cdaa23256d13"; }
     ];
