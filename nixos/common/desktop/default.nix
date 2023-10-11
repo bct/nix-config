@@ -27,6 +27,10 @@
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
 
+  # Enable scanner
+  # TODO: this isn't working yet
+  hardware.sane.enable = true;
+
   sound.enable = true;
 
   # Enable X and lightdm.
@@ -48,7 +52,7 @@
 
   users.users.bct = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "networkmanager" "video" "adbusers" ];
+    extraGroups = [ "wheel" "audio" "networkmanager" "video" "adbusers" "lp" "scanner" ];
   };
 
   programs.adb.enable = true;

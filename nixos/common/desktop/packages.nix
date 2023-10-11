@@ -37,5 +37,9 @@
     gcc # Android Studio needs cc.
 
     gimp
+
+    sane-backends
+    sane-airscan
+    xsane
   ];
 }
