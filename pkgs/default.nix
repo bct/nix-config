@@ -42,6 +42,15 @@
   in
     pkgs.callPackage "${hoonLsp}/default.nix" {};
 
+  hoon-crib = let repo = pkgs.fetchFromGitHub {
+      owner  = "bct";
+      repo   = "hoon-crib";
+      rev    = "d0e372e2a232450fb2e156f33511808a11aee012";
+      sha256 = "sha256-eVnEQ4FQv4qICRn31+yCnemFrL43jAzS6dW0am+iFo0=";
+    };
+  in
+    pkgs.callPackage "${repo}/default.nix" {};
+
   onkyo-ri-send-command = let pkg = pkgs.fetchFromGitHub {
       owner  = "bct";
       repo   = "onkyo-ri-send-command";

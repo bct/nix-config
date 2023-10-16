@@ -41,5 +41,7 @@
     sane-backends
     sane-airscan
     xsane
+
+    hoon-crib
   ];
 }
