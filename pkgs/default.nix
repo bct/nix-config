@@ -1,7 +1,7 @@
 # Custom packages, that can be defined similarly to ones from nixpkgs
 # You can build them using 'nix build .#example' or (legacy) 'nix-build -A example'
 
-{ pkgs ? (import ../nixpkgs.nix) { } }: {
+{ pkgs ? (import ../nixpkgs.nix) { } }: rec {
   # cura 5 is not officially packaged yet. this is taken from
   # https://github.com/NixOS/nixpkgs/issues/186570#issuecomment-1627797219
   cura5 = (
@@ -61,6 +61,14 @@
     pkgs.callPackage "${pkg}/default.nix" {};
 
   goatcounter = pkgs.callPackage ./goatcounter { };
+
+  pollymc-unwrapped = pkgs.qt6Packages.callPackage ./pollymc {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+  };
+  pollymc = pkgs.qt6Packages.callPackage ./pollymc/wrapper.nix {
+    inherit pollymc-unwrapped;
+  };
+
   rtlamr = pkgs.callPackage ./rtlamr { };
   rtlamr-collect = pkgs.callPackage ./rtlamr-collect { };
   subsonic-action-proxy = pkgs.callPackage ./subsonic-action-proxy { };
