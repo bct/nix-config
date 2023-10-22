@@ -10,6 +10,7 @@
 
       ./borgmatic.nix
       ./wireguard.nix
+      ./packages.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
