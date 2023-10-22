@@ -80,12 +80,20 @@
         commit_interval = 30;
 
         # keep data around for longer
-        purge_keep_days = 30;
+        purge_keep_days = 60;
 
+        # use remote mariadb
         db_url = "mysql://home_assistant@db.domus.diffeq.com/home_assistant?charset=utf8mb4&read_default_file=${config.age.secrets.home-assistant-my-cnf.path}";
+
+        # wait up to 5 minutes for the database to come up.
+        # e.g. if there's a power outage it takes TrueNAS some time to bring
+        # the joils back up.
+        db_max_retries = 30;
+        db_retry_wait = 10;
       };
 
       "automation ui" = "!include automations.yaml";
+      "scene ui" = "!include scenes.yaml";
       "script ui" = "!include scripts.yaml";
 
       rest_command = {
