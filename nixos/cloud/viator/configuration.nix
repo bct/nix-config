@@ -103,7 +103,7 @@
       externalPlugins = [
         {name = "wgsd"; repo = "github.com/jwhited/wgsd"; version = "v0.3.5";}
       ];
-      vendorHash = "sha256-NAEjt6DoQsRdPvWRecJNTIy6+F9thTrSElZaRcRyU+8=";
+      vendorHash = "sha256-VZS79vEOTNdT4G8GhVbVXWrkqPMKwmprIlTQvIus7Wo=";
     };
   };
 
