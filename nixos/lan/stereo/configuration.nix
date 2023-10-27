@@ -19,6 +19,11 @@
     };
   };
 
+  # avoid writing logs to disk, try to save the SD card
+  services.journald.extraConfig = ''
+    Storage=volatile
+  '';
+
   time.timeZone = "America/Edmonton";
 
   environment.systemPackages = with pkgs; [
