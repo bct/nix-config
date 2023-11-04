@@ -23,15 +23,19 @@
     epdfview
     libreoffice
 
+    # 3d printing
     cura5
     freecad
     openscad
 
     ansible
-    nmap
 
     # for "strings"
     binutils
+
+    # other utilities
+    nmap
+    file
 
     unstable.androidStudioPackages.canary
     gcc # Android Studio needs cc.
@@ -43,5 +47,10 @@
     xsane
 
     hoon-crib
+
+    # archivers
+    p7zip
+    unzip
+    unrar
   ];
 }
