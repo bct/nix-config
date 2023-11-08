@@ -50,12 +50,10 @@
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
-  users.users.bct = {
+  users.users.brendan = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "networkmanager" "video" "adbusers" "lp" "scanner" ];
+    extraGroups = [ "wheel" "audio" "networkmanager" "video" "lp" "scanner" ];
   };
-
-  programs.adb.enable = true;
 
   # Allow users to mount removeable storage.
   services.devmon.enable = true;

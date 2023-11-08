@@ -2,8 +2,8 @@
   imports = [];
 
   home = {
-    username = "bct";
-    homeDirectory = "/home/bct";
+    username = "brendan";
+    homeDirectory = "/home/brendan";
   };
 
   # Enable home-manager and git
@@ -11,7 +11,7 @@
   programs.git = {
     enable = true;
     userName = "Brendan Taylor";
-    userEmail = "bct@diffeq.com";
+    userEmail = "brendan@artificial.agency";
 
     extraConfig = {
       init.defaultBranch = "master";
@@ -49,5 +49,5 @@
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "22.11";
+  home.stateVersion = "23.05";
 }

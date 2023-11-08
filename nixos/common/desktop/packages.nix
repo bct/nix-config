@@ -16,19 +16,10 @@
     psmisc
   ];
 
-  users.users.bct.packages = with pkgs; [
+  users.users.brendan.packages = with pkgs; [
     chromium
-    brave
     mpv
     epdfview
-    libreoffice
-
-    # 3d printing
-    cura5
-    freecad
-    openscad
-
-    ansible
 
     # for "strings"
     binutils
@@ -36,17 +27,6 @@
     # other utilities
     nmap
     file
-
-    unstable.androidStudioPackages.canary
-    gcc # Android Studio needs cc.
-
-    gimp
-
-    sane-backends
-    sane-airscan
-    xsane
-
-    hoon-crib
 
     # archivers
     p7zip

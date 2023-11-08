@@ -122,7 +122,7 @@
     enable = true;
     historyControl = ["ignoredups"];
     initExtra = ''
-      . /home/bct/.nix-profile/share/git/contrib/completion/git-prompt.sh
+      . ~/.nix-profile/share/git/contrib/completion/git-prompt.sh
 
       # bct@cimmeria:~/projects/nixfiles (master) $
       PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\] $(__git_ps1 "(%s)")\$ '
@@ -141,24 +141,6 @@
 
       export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels''${NIX_PATH:+:$NIX_PATH}
     '';
-  };
-
-  systemd.user.mounts.bulk = {
-    Unit = {
-      Description = "Mount /bulk";
-      After = [ "network-online.target" ];
-      Wants = [ "network-online.target" ];
-    };
-
-    Install = { WantedBy = [ "default.target" ]; };
-
-    Mount = {
-      What = "mi-go.domus.diffeq.com:/mnt/bulk/media";
-      Where = "/bulk";
-      Type = "fuse.sshfs";
-      Options = "_netdev,reconnect,ServerAliveInterval=30,ServerAliveCountMax=5,x-systemd.automount";
-      TimeoutSec = 60;
-    };
   };
 
   # Raw configuration files
@@ -187,5 +169,5 @@
   # changes in each release.
   #
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "22.11";
+  home.stateVersion = "23.05";
 }

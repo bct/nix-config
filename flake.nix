@@ -71,6 +71,11 @@
           modules = [ ./nixos/cimmeria/configuration.nix ];
         };
 
+        dunwich = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/dunwich/configuration.nix ];
+        };
+
         notes = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/cloud/notes/configuration.nix ];
@@ -136,6 +141,13 @@
       # Available through 'home-manager --flake .#your-username@your-hostname'
       homeConfigurations = {
         "bct@cimmeria" = home-manager.lib.homeManagerConfiguration {
+           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+           extraSpecialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
+           # > Our main home-manager configuration file <
+           modules = [ ./home-manager/desktop ];
+        };
+
+        "brendan@dunwich" = home-manager.lib.homeManagerConfiguration {
            pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
            extraSpecialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
            # > Our main home-manager configuration file <
