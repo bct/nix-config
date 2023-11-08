@@ -1,7 +1,7 @@
 # Custom packages, that can be defined similarly to ones from nixpkgs
 # You can build them using 'nix build .#example' or (legacy) 'nix-build -A example'
 
-{ pkgs ? (import ../nixpkgs.nix) { } }: rec {
+{ pkgs, pkgs-unstable }: rec {
   # cura 5 is not officially packaged yet. this is taken from
   # https://github.com/NixOS/nixpkgs/issues/186570#issuecomment-1627797219
   cura5 = (
@@ -63,7 +63,7 @@
   airsonic-refix = pkgs.callPackage ./airsonic-refix { };
   goatcounter = pkgs.callPackage ./goatcounter { };
 
-  pipenv = pkgs.callPackage ./pipenv { };
+  pipenv = pkgs.callPackage ./pipenv { python3 = pkgs-unstable.python3; };
   pollymc-unwrapped = pkgs.qt6Packages.callPackage ./pollymc {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
