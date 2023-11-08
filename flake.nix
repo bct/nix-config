@@ -30,7 +30,7 @@
     # nix-colors.url = "github:misterio77/nix-colors";
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, deploy-rs, nixos-generators, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, agenix, deploy-rs, nixos-generators, ... }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -49,8 +49,9 @@
       packages = forAllSystems (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
+          pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
           generators = import ./generators { inherit inputs outputs nixpkgs nixos-generators; };
-        in import ./pkgs { inherit pkgs; } // generators
+        in import ./pkgs { inherit pkgs pkgs-unstable; } // generators
       );
 
       # Devshell for working on configs
