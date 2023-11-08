@@ -65,6 +65,10 @@
 
     # background
     feh
+
+    slack
+    _1password
+    _1password-gui
   ];
 
   fonts.fontconfig.enable = true;
