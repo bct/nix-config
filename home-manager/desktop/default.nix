@@ -70,6 +70,7 @@
     _1password
     _1password-gui
 
+    python311
     pipenv
   ];
 
