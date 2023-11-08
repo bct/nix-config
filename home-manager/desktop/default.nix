@@ -69,6 +69,8 @@
     slack
     _1password
     _1password-gui
+
+    pipenv
   ];
 
   fonts.fontconfig.enable = true;
