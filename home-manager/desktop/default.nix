@@ -72,6 +72,8 @@
 
     python311
     pipenv
+
+    scrot
   ];
 
   fonts.fontconfig.enable = true;

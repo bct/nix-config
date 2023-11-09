@@ -100,7 +100,17 @@
         lightline-vim
         nvim-lspconfig
         nvim-lightline-lsp
+        vim-isort
       ]; # Only loaded if programs.neovim.extraConfig is set
+
+      withPython3 = true;
+
+      extraPackages = [
+        (pkgs.python3.withPackages (ps: with ps; [
+          black
+          flake8
+        ]))
+      ];
 
     vimAlias = true;
   };
