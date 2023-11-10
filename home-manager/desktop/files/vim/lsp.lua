@@ -66,7 +66,7 @@ require'lspconfig'.pyright.setup{
       pythonPath = "/home/brendan/.local/share/virtualenvs/py-QrVFw7Jf/bin/python",
       analysis = {
         autoSearchPaths = true,
-        diagnosticMode = "openFilesOnly",
+        diagnosticMode = "workspace",
         useLibraryCodeForTypes = true
       }
     }
