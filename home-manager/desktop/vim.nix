@@ -24,7 +24,7 @@
     extraConfig = lib.fileContents ./files/vim/extra-config.vim;
 
     plugins = with pkgs.vimPlugins;
-     [
+      [
         gruvbox-community
         bufexplorer
         lightline-vim
@@ -55,14 +55,14 @@
         vim-isort
       ]; # Only loaded if programs.neovim.extraConfig is set
 
-      withPython3 = true;
+    withPython3 = true;
 
-      extraPackages = [
-        (pkgs.python3.withPackages (ps: with ps; [
-          black
-          flake8
-        ]))
-      ];
+    extraPackages = [
+      (pkgs.python3.withPackages (ps: with ps; [
+        black
+        flake8
+      ]))
+    ];
 
     vimAlias = true;
   };
