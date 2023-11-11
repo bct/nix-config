@@ -1,6 +1,7 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
-{
+let cfgPersonal = config.personal;
+in {
   environment.systemPackages = with pkgs; [
     vim
     git
@@ -16,7 +17,7 @@
     psmisc
   ];
 
-  users.users.brendan.packages = with pkgs; [
+  users.users.${cfgPersonal.user}.packages = with pkgs; [
     chromium
     mpv
     epdfview
