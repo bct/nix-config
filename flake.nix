@@ -148,6 +148,9 @@
             {
               personal.user = "bct";
               personal.email = "bct@diffeq.com";
+
+              # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
+              home.stateVersion = "22.11";
             }
             ./home-manager/desktop
           ];
@@ -160,6 +163,9 @@
             {
               personal.user = "brendan";
               personal.email = "brendan@artificial.agency";
+
+              # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
+              home.stateVersion = "23.05";
             }
             ./home-manager/desktop
           ];
