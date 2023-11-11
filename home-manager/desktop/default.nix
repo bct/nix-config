@@ -122,7 +122,7 @@
     enable = true;
     historyControl = ["ignoredups"];
     initExtra = ''
-      . /home/bct/.nix-profile/share/git/contrib/completion/git-prompt.sh
+      . ~/.nix-profile/share/git/contrib/completion/git-prompt.sh
 
       # bct@cimmeria:~/projects/nixfiles (master) $
       PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\] $(__git_ps1 "(%s)")\$ '

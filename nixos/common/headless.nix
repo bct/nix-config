@@ -58,7 +58,15 @@
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     users = {
-      bct = import ../../home-manager/base;
+      bct = {
+        imports = [
+          {
+            personal.user = "bct";
+            personal.email = "bct@diffeq.com";
+          }
+          ../../home-manager/base
+        ];
+      };
     };
   };
 }

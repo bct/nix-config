@@ -136,10 +136,15 @@
       # Available through 'home-manager --flake .#your-username@your-hostname'
       homeConfigurations = {
         "bct@cimmeria" = home-manager.lib.homeManagerConfiguration {
-           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-           extraSpecialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
-           # > Our main home-manager configuration file <
-           modules = [ ./home-manager/desktop ];
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [
+            {
+              personal.user = "bct";
+              personal.email = "bct@diffeq.com";
+            }
+            ./home-manager/desktop
+          ];
         };
       };
 

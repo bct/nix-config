@@ -6,7 +6,6 @@ in {
     ./packages.nix
   ];
 
-
   options = {
      personal = {
        user = lib.mkOption {
