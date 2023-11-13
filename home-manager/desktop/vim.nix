@@ -10,7 +10,7 @@
     pkgs.ripgrep
 
     # LSP servers
-    pkgs.nodePackages.pyright
+    pkgs.unstable.nodePackages.pyright
     pkgs.nil
     pkgs.hoonLanguageServer
     pkgs.gopls
