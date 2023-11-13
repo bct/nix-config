@@ -70,6 +70,8 @@
     _1password
     _1password-gui
 
+    vscode
+
     python311
     pipenv
     awscli2
