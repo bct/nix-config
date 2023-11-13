@@ -24,11 +24,6 @@ in {
     epdfview
     libreoffice
 
-    # 3d printing
-    cura5
-    freecad
-    openscad
-
     ansible
 
     # for "strings"
