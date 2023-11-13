@@ -144,16 +144,7 @@
         "bct@cimmeria" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            {
-              personal.user = "bct";
-              personal.email = "bct@diffeq.com";
-
-              # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-              home.stateVersion = "22.11";
-            }
-            ./home-manager/desktop
-          ];
+          modules = [./home-manager/cimmeria];
         };
 
         "brendan@dunwich" = home-manager.lib.homeManagerConfiguration {

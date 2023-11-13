@@ -156,8 +156,6 @@
   };
 
   # Raw configuration files
-  home.file.".xmobarrc".source = ./files/xmobarrc.hs;
-
   home.file.".alacritty.yml".source = ./files/alacritty.yml;
 
   home.file.".ssh/config".text = ''

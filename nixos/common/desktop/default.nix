@@ -56,17 +56,10 @@ in {
       }
     ];
 
-    # Get AppImages (cura) working.
-    # "For the sandboxed apps to work correctly, desktop integration portals need to be installed."
-    xdg.portal.enable = true;
-    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
     users.users.${cfgPersonal.user} = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "audio" "networkmanager" "video" "adbusers" "lp" "scanner" ];
+      extraGroups = [ "wheel" "audio" "networkmanager" "video" "lp" "scanner" ];
     };
-
-    programs.adb.enable = true;
 
     # Allow users to mount removeable storage.
     services.devmon.enable = true;
