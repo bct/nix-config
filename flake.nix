@@ -143,6 +143,8 @@
               personal.user = "bct";
               personal.email = "bct@diffeq.com";
 
+              home.file.".xmobarrc".source = ./home-manager/cimmeria/files/xmobarrc.hs;
+
               # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
               home.stateVersion = "22.11";
             }
