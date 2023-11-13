@@ -11,6 +11,8 @@
       ./borgmatic.nix
       ./wireguard.nix
       ./packages.nix
+
+      "${self}/nixos/common/desktop/projects/android.nix"
     ];
 
   personal.user = "bct";

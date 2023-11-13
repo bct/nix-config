@@ -38,9 +38,6 @@ in {
     nmap
     file
 
-    unstable.androidStudioPackages.canary
-    gcc # Android Studio needs cc.
-
     gimp
 
     sane-backends
