@@ -7,8 +7,6 @@
 
       "${self}/nixos/common/nix.nix"
       "${self}/nixos/common/desktop"
-
-      ./packages.nix
     ];
 
   personal.user = "brendan";
