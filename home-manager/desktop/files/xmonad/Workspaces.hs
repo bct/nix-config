@@ -72,7 +72,7 @@ topics = ["?", web, project, miGo, slicer, mail, kino]
 topicConfig :: TopicConfig
 topicConfig = TopicConfig
     { topicDirs = M.fromList $
-        [ (project,   "projects")
+        [ (project,   "aa/src")
         ]
 
     , defaultTopicAction = const spawnShell
@@ -83,10 +83,10 @@ topicConfig = TopicConfig
         [
           ("?",            spawnShell >>
                            spawn "alacritty -e htop")
-        , (miGo,           spawn "alacritty -e ssh mi-go.domus.diffeq.com")
+        , (miGo,           spawn "alacritty -e ssh bct@mi-go.domus.diffeq.com")
         , (web,            spawn "chromium")
         , (project,        spawnShell >*> 5)
-        , (mail,           spawn "alacritty -e ssh mail.domus.diffeq.com")
+        , (mail,           spawn "alacritty -e ssh bct@mail.domus.diffeq.com")
         ]
     }
 
