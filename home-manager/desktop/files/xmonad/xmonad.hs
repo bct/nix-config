@@ -23,6 +23,8 @@ import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Tabbed
 import XMonad.Layout.PerWorkspace
 
+import XMonad.Operations (restart)
+
 import XMonad.Util.Loggers
 
 import Control.Monad ((<=<))
@@ -180,6 +182,9 @@ myConfig = ewmh $ def
     , ("<XF86AudioLowerVolume>", lowerVolume 3 >> return ())
     , ("<XF86AudioRaiseVolume>", raiseVolume 3 >> return ())
     , ("<XF86AudioMute>", toggleMute    >> return ())
+
+    -- Restart, but do not recompile. Maintain the existing window state.
+    , ("M-q", restart "xmonad" True)
     ]
 
 main :: IO ()
