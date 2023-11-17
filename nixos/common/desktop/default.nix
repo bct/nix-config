@@ -31,6 +31,12 @@ in {
 
     environment.variables.EDITOR = "vim";
 
+    # Delete old generations to save space.
+    nix.gc = {
+      automatic = true;
+      options = "--delete-older-than 7d";
+    };
+
     # Enable CUPS.
     services.printing.enable = true;
 
