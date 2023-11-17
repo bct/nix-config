@@ -130,6 +130,13 @@
     };
   };
 
+  home.pointerCursor = {
+    package = pkgs.unstable.hackneyed;
+    name = "Hackneyed";
+    size = 48;
+    x11.enable = true;
+  };
+
   programs.bash = {
     enable = true;
     historyControl = ["ignoredups"];
