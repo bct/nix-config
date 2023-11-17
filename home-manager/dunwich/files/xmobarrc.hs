@@ -1,8 +1,8 @@
 Config { overrideRedirect = False
-       , font = "UbuntuMono Nerd Font 14"
+       , font = "UbuntuMono Nerd Font 18"
        , bgColor = "#282828"
        , fgColor = "#ebdbb2"
-       , position = Top
+       , position = TopH 25
        , commands = [ Run Weather "CYEG"
                       [ "--template", "<weather> <tempC>°C"
                       ] 36000
@@ -22,7 +22,7 @@ Config { overrideRedirect = False
                         , "--onc",  "#282828,#ebdbb2" -- On colour
                         , "--offc", "#282828,#ebdbb2" -- Off colour
                       ]
-                    , Run Network "wlp2s0"
+                    , Run Network "wlp0s20f3"
                       [
                       ] 50
                     , Run Network "wg0"
@@ -49,6 +49,6 @@ Config { overrideRedirect = False
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%XMonadLog% }{ <fc=#282828,#ebdbb2> %CYEG% | %load% | %battery% | %alsa:default:Master% | %wlp2s0% %wg0% </fc> %date% "
+       , template = "%XMonadLog% }{ <fc=#282828,#ebdbb2> %CYEG% | %load% | %battery% | %alsa:sofhdadsp:Master% | %wlp0s20f3% %wg0% </fc> %date% "
        , verbose = True
      }
