@@ -185,6 +185,9 @@ myConfig = ewmh $ def
 
     -- Restart, but do not recompile. Maintain the existing window state.
     , ("M-q", restart "xmonad" True)
+
+    -- Lock the screen
+    , ("M-S-l", spawn "sxlock")
     ]
 
 main :: IO ()
