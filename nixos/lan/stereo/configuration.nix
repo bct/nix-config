@@ -7,6 +7,8 @@
     "${self}/nixos/hardware/raspberry-pi/hifiberry-dac-plus.nix"
 
     ./hardware-configuration.nix
+
+    "${self}/nixos/modules/airsonic-refix"
   ];
 
   networking.hostName = "stereo";
@@ -95,6 +97,8 @@
   users.groups = {
     gpio = {};
   };
+
+  services.airsonic-refix.enable = true;
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";
