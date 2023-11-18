@@ -8,7 +8,7 @@
   networking.wg-quick.interfaces = {
     wg0 = {
       autostart = false;
-      address = [ "192.168.8.4/32" ];
+      address = [ "192.168.8.5/32" ];
       dns = [ "192.168.8.1" ];
 
       # run manually:

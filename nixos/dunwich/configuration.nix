@@ -7,6 +7,8 @@
 
       "${self}/nixos/common/nix.nix"
       "${self}/nixos/common/desktop"
+
+      ./wireguard.nix
     ];
 
   personal.user = "brendan";
