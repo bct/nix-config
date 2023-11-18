@@ -60,6 +60,7 @@
   in
     pkgs.callPackage "${pkg}/default.nix" {};
 
+  airsonic-refix = pkgs.callPackage ./airsonic-refix { };
   goatcounter = pkgs.callPackage ./goatcounter { };
 
   pollymc-unwrapped = pkgs.qt6Packages.callPackage ./pollymc {
