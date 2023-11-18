@@ -1,7 +1,14 @@
 { stdenv, fetchFromGitHub, fetchYarnDeps, fixup_yarn_lock, nodejs }:
 
-# I couldn't get mkYarnPackage working (some strangeness with vue-demi imports)
-# This is cribbed from https://github.com/NixOS/nixpkgs/blob/25b33e9c7040986ba1b3ae4c8873543f88b57258/pkgs/applications/misc/tandoor-recipes/frontend.nix
+# I can't use mkYarnPackage here because it calls "yarn install" with
+# "--ignore-scripts". the vue-demi library won't work unless its postinstall
+# script is run.
+#
+# mkYarnModules has an ignoreScripts argument, but it isn't exposed on
+# mkYarnPackage.
+#
+# This approach is cribbed from:
+# https://github.com/NixOS/nixpkgs/blob/25b33e9c7040986ba1b3ae4c8873543f88b57258/pkgs/applications/misc/tandoor-recipes/frontend.nix
 stdenv.mkDerivation rec {
   pname = "airsonic-refix";
   version = "bc4920fa57a20236ad7eef6f4483e50726b845c6";
