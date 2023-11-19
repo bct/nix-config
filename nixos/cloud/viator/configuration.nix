@@ -6,6 +6,8 @@
     "${self}/nixos/common/headless.nix"
 
     "${self}/nixos/hardware/vultr"
+
+    ./coredns-wgsd.nix
   ];
 
   networking.hostName = "viator";
@@ -20,7 +22,7 @@
     externalInterface = "ens3";
   };
 
-  networking.firewall.allowedUDPPorts = [ 53 51820 ];
+  networking.firewall.allowedUDPPorts = [ 51820 ];
 
   environment.systemPackages = with pkgs; [
     wireguard-tools
@@ -93,27 +95,4 @@
       Restart = "always";
     };
   };
-
-  services.coredns = {
-    enable = true;
-
-    config = ''
-      .:53 {
-        bind ens3
-        debug
-        wgsd diffeq.com. wg0
-      }
-    '';
-
-    package = pkgs.unstable.coredns.override {
-      externalPlugins = [
-        {name = "wgsd"; repo = "github.com/jwhited/wgsd"; version = "v0.3.5";}
-      ];
-      vendorHash = "sha256-VZS79vEOTNdT4G8GhVbVXWrkqPMKwmprIlTQvIus7Wo=";
-    };
-  };
-
-  # wgsd needs cap_net_admin to read the wireguard peers
-  systemd.services.coredns.serviceConfig.CapabilityBoundingSet = pkgs.lib.mkForce "cap_net_bind_service cap_net_admin";
-  systemd.services.coredns.serviceConfig.AmbientCapabilities = pkgs.lib.mkForce "cap_net_bind_service cap_net_admin";
 }
