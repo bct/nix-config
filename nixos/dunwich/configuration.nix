@@ -1,4 +1,4 @@
-{ self, pkgs, ... }:
+{ self, ... }:
 
 {
   imports =
@@ -8,7 +8,7 @@
       "${self}/nixos/common/nix.nix"
       "${self}/nixos/common/desktop"
 
-      ./wireguard.nix
+      "${self}/nixos/modules/wireguard-via-wgsd.nix"
     ];
 
   personal.user = "brendan";
@@ -19,6 +19,8 @@
 
   networking.hostName = "dunwich";
   networking.firewall.enable = false;
+
+  services.wireguard-via-wgsd.address = "192.168.8.18/32";
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
