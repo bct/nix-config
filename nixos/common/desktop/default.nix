@@ -7,13 +7,13 @@ in {
   ];
 
   options = {
-     personal = {
-       user = lib.mkOption {
-         type = lib.types.str;
-         description = "Username for the primary user.";
-       };
-     };
-   };
+    personal = {
+      user = lib.mkOption {
+        type = lib.types.str;
+        description = "Username for the primary user.";
+      };
+    };
+  };
 
   config = {
     boot.kernel.sysctl = {

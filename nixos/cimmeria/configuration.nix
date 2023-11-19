@@ -8,8 +8,9 @@
       "${self}/nixos/common/nix.nix"
       "${self}/nixos/common/desktop"
 
+      "${self}/nixos/modules/wireguard-via-wgsd.nix"
+
       ./borgmatic.nix
-      ./wireguard.nix
 
       "${self}/nixos/common/desktop/projects/android.nix"
       "${self}/nixos/common/desktop/projects/3d-print.nix"
@@ -23,6 +24,8 @@
 
   networking.hostName = "cimmeria";
   networking.firewall.enable = false;
+
+  services.wireguard-via-wgsd.address = "192.168.8.17/32";
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
