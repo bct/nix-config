@@ -74,4 +74,5 @@
   rtlamr-collect = pkgs.callPackage ./rtlamr-collect { };
   subsonic-action-proxy = pkgs.callPackage ./subsonic-action-proxy { };
   sxlock = pkgs.callPackage ./sxlock { };
+  wgsd = pkgs.callPackage ./wgsd { };
 }
