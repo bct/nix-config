@@ -54,6 +54,12 @@
           wireguardPeerConfig.PublicKey = "Dr++eMTOCnbCFsCsOxTEMxornygk0hVOwlaUGww9fkk=";
           wireguardPeerConfig.AllowedIPs = [ "192.168.8.4/32" ];
         }
+
+        # dunwich
+        {
+          wireguardPeerConfig.PublicKey = "JHMq4bUoPeJ2LqoHkOvhvEtiYooegA7/2XXwl7604zQ=";
+          wireguardPeerConfig.AllowedIPs = [ "192.168.8.5/32" ];
+        }
       ];
     };
 
