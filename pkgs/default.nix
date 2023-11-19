@@ -60,6 +60,7 @@
   in
     pkgs.callPackage "${pkg}/default.nix" {};
 
+  airsonic-refix = pkgs.callPackage ./airsonic-refix { };
   goatcounter = pkgs.callPackage ./goatcounter { };
 
   pipenv = pkgs.callPackage ./pipenv { python3 = pkgs-unstable.python3; };
@@ -74,4 +75,5 @@
   rtlamr-collect = pkgs.callPackage ./rtlamr-collect { };
   subsonic-action-proxy = pkgs.callPackage ./subsonic-action-proxy { };
   sxlock = pkgs.callPackage ./sxlock { };
+  wgsd = pkgs.callPackage ./wgsd { };
 }
