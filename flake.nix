@@ -72,6 +72,11 @@
           modules = [ ./nixos/cimmeria/configuration.nix ];
         };
 
+        dunwich = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/dunwich/configuration.nix ];
+        };
+
         notes = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/cloud/notes/configuration.nix ];
@@ -140,6 +145,12 @@
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [./home-manager/cimmeria];
+        };
+
+        "brendan@dunwich" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [./home-manager/dunwich];
         };
       };
 
