@@ -65,18 +65,6 @@
 
     # background
     feh
-
-    slack
-    _1password
-    _1password-gui
-
-    vscode
-
-    python311
-    pipenv
-    awscli2
-
-    scrot
   ];
 
   fonts.fontconfig.enable = true;
