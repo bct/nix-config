@@ -10,6 +10,15 @@
 
   home.packages = with pkgs; [
     pollymc
+
+    brave
+    libreoffice
+
+    ansible
+
+    gimp
+
+    hoon-crib
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

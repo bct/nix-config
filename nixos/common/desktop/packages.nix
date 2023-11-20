@@ -19,12 +19,8 @@ in {
 
   users.users.${cfgPersonal.user}.packages = with pkgs; [
     chromium
-    brave
     mpv
     epdfview
-    libreoffice
-
-    ansible
 
     # for "strings"
     binutils
@@ -33,13 +29,9 @@ in {
     nmap
     file
 
-    gimp
-
     sane-backends
     sane-airscan
     xsane
-
-    hoon-crib
 
     # archivers
     p7zip
