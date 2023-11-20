@@ -23,7 +23,17 @@
     extraLuaConfig = lib.fileContents ./files/vim/init.lua;
     extraConfig = lib.fileContents ./files/vim/extra-config.vim;
 
-    plugins = with pkgs.vimPlugins;
+    plugins = let
+      black-nvim = pkgs.vimUtils.buildVimPlugin {
+          name = "black-nvim";
+          src = pkgs.fetchFromGitHub {
+            owner = "averms";
+            repo = "black-nvim";
+            rev = "8fb3efc562b67269e6f31f8653297f826534fa4b";
+            sha256 = "sha256-pbbbkRD4ZFxTupmdNe1UYpI7tN6//GXUMll/jeCSUAg=";
+          };
+        };
+        in with pkgs.vimPlugins;
       [
         gruvbox-community
         bufexplorer
@@ -53,15 +63,14 @@
 
         # python
         vim-isort
+        black-nvim
       ]; # Only loaded if programs.neovim.extraConfig is set
 
     withPython3 = true;
 
-    extraPackages = [
-      (pkgs.python3.withPackages (ps: with ps; [
-        black
-        flake8
-      ]))
+    extraPython3Packages = ps: with ps; [
+      black
+      flake8
     ];
 
     vimAlias = true;

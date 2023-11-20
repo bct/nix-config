@@ -101,4 +101,4 @@ cmp.setup {
 
 -- Auto formatting
 vim.api.nvim_create_autocmd({"BufWritePre"}, {pattern = {"*.py"}, command = ":Isort"})
-vim.api.nvim_create_autocmd({"BufWritePre"}, {pattern = {"*.py"}, command = ":%!black -q -"})
+vim.api.nvim_create_autocmd({"BufWritePre"}, {pattern = {"*.py"}, command = ":call BlackSync()"})
