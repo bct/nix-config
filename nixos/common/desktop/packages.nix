@@ -29,10 +29,6 @@ in {
     nmap
     file
 
-    sane-backends
-    sane-airscan
-    xsane
-
     # archivers
     p7zip
     unzip
