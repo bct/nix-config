@@ -15,6 +15,7 @@
     pkgs.hoonLanguageServer
     pkgs.gopls
     pkgs.terraform-ls
+    pkgs.nodePackages.typescript-language-server
   ];
 
   programs.neovim = {

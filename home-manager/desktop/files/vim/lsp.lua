@@ -82,3 +82,6 @@ require'lspconfig'.sorbet.setup{
 
 -- terraform
 require'lspconfig'.terraformls.setup{}
+
+-- typescript
+require'lspconfig'.tsserver.setup{}
