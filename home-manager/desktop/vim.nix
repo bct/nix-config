@@ -14,6 +14,7 @@
     pkgs.nil
     pkgs.hoonLanguageServer
     pkgs.gopls
+    pkgs.terraform-ls
   ];
 
   programs.neovim = {
@@ -64,6 +65,9 @@
         # python
         vim-isort
         black-nvim
+
+        # terraform
+        vim-terraform
       ]; # Only loaded if programs.neovim.extraConfig is set
 
     withPython3 = true;

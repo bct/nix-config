@@ -21,9 +21,8 @@
 
     scrot
 
-    terraform
-    terraformer
-    terraforming
+    unstable.terraform
+    unstable.terraformer
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

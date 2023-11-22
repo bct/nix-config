@@ -79,3 +79,6 @@ require'lspconfig'.sorbet.setup{
   on_attach = on_attach,
   cmd = { "srb", "tc", "--lsp", "--disable-watchman" }
 }
+
+-- terraform
+require'lspconfig'.terraformls.setup{}
