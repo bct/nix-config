@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
   imports = [
     ../desktop
   ];
@@ -19,6 +19,8 @@
     gimp
 
     hoon-crib
+
+    inputs.deploy-rs.packages.x86_64-linux.deploy-rs
   ];
 
   systemd.user.mounts.bulk = {
