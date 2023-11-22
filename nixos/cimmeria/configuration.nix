@@ -27,6 +27,14 @@
 
   services.wireguard-via-wgsd.address = "192.168.8.17/32";
 
+  nix.settings = {
+    # don't garbage collect outputs that are only needed at build-time
+    keep-outputs = true;
+
+    # don't garbage collect intermediate derivations
+    keep-derivations = true;
+  };
+
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
