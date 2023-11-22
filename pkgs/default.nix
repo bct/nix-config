@@ -76,4 +76,7 @@
   subsonic-action-proxy = pkgs.callPackage ./subsonic-action-proxy { };
   sxlock = pkgs.callPackage ./sxlock { };
   wgsd = pkgs.callPackage ./wgsd { };
+
+
+  aws2-wrap = pkgs.callPackage ./aws2-wrap { };
 }
