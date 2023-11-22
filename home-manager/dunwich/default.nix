@@ -20,6 +20,10 @@
     awscli2
 
     scrot
+
+    terraform
+    terraformer
+    terraforming
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
