@@ -81,7 +81,13 @@ require'lspconfig'.sorbet.setup{
 }
 
 -- terraform
-require'lspconfig'.terraformls.setup{}
+require'lspconfig'.terraformls.setup{
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
 
 -- typescript
-require'lspconfig'.tsserver.setup{}
+require'lspconfig'.tsserver.setup{
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
