@@ -1,0 +1,5 @@
+# result symlinks created by "deploy --keep-result"
+.deploy-gc
+
+# "nix build" output
+result
