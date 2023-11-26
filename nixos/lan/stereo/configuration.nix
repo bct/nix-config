@@ -108,7 +108,7 @@
 
   services.acme-zoneedit = {
     enable = true;
-    hostname = "stereo.domus.diffeq.com";
+    hostnames = ["stereo.domus.diffeq.com"];
     email = "s+acme@diffeq.com";
     credentialsFile = config.age.secrets.zoneedit.path;
   };

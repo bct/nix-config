@@ -13,15 +13,22 @@ let
 in {
   options.services.acme-zoneedit = {
     enable = lib.mkEnableOption "acme-zoneedit";
-    hostname = lib.mkOption {
-      type = lib.types.str;
+
+    hostnames = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = lib.mdDoc "Hostnames to request certificates for.";
     };
+
     credentialsFile = lib.mkOption {
       type = lib.types.path;
+      description = lib.mdDoc "Path to a file containing ZoneEdit credentials (ZONEEDIT_ID and ZONEEDIT_TOKEN).";
     };
+
     email = lib.mkOption {
       type = lib.types.str;
+      description = lib.mdDoc "Email address to use when requsting certificates";
     };
+
     group = lib.mkOption {
       type = lib.types.str;
       default = "acme";
@@ -31,26 +38,39 @@ in {
 
   config = lib.mkIf cfg.enable {
     security.acme.acceptTerms = true;
-    security.acme.certs.${cfg.hostname} = {
-      email = cfg.email;
-      group = cfg.group;
 
-      # set DNS TXT records by exec-ing acme-zoneedit.sh
-      # (configured below)
-      dnsProvider = "exec";
-      credentialsFile = cfg.credentialsFile;
+    security.acme.certs = builtins.listToAttrs (map (hostname: {
+      name = hostname;
+      value = {
+        email = cfg.email;
+        group = cfg.group;
 
-      # the nameserver internal to the network thinks it owns domus.diffeq.com.
-      # use an external nameserver that will query the real world instead.
-      dnsResolver = "8.8.8.8";
-    };
+        # set DNS TXT records by exec-ing acme-zoneedit.sh
+        # (configured below)
+        dnsProvider = "exec";
+        credentialsFile = cfg.credentialsFile;
+
+        # the nameserver internal to the network thinks it owns domus.diffeq.com.
+        # use an external nameserver that will query the real world instead.
+        dnsResolver = "8.8.8.8";
+      };
+    }) cfg.hostnames);
 
     # configure the "exec" DNS provider
-    systemd.services."acme-${cfg.hostname}".environment = {
-      EXEC_PATH = "${acme-zoneedit-sh}/bin/acme-zoneedit.sh";
-      EXEC_PROPAGATION_TIMEOUT = "600";
-    };
+    systemd.services = builtins.listToAttrs (map (hostname: {
+      name = "acme-${hostname}";
+      value = {
+        environment = {
+          EXEC_PATH = "${acme-zoneedit-sh}/bin/acme-zoneedit.sh";
+          EXEC_PROPAGATION_TIMEOUT = "600";
+        };
+      };
+    }) cfg.hostnames);
 
+    # ns19.zoneedit.com doesn't respond on IPv6. if this host prefers IPv6
+    # addresses then lego will complain that it wasn't able to get a response
+    # from the authoritative nameserver.
+    # as a hack we set it up to prefer IPv4 addresses.
     environment.etc."gai.conf".text = ''
        label  ::1/128       0
        label  ::/0          1

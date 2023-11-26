@@ -5,7 +5,7 @@
 
   services.acme-zoneedit = {
     enable = true;
-    hostname = "spectator.domus.diffeq.com";
+    hostnames = ["spectator.domus.diffeq.com"];
     email = "s+acme@diffeq.com";
     group = "hass";
     credentialsFile = config.age.secrets.zoneedit.path;
