@@ -8,6 +8,7 @@ let
   # -- lan
   spectator = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHwG+kqbUaFI2xwHZO76CrQh5+YnElQsjB6DOWNtMc1e";
   stereo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+0o3CDs78/NW73QxiZ4gJtXgZ5U+NAu8o9lNhzmLwl";
+  yuurei = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINqIJgMjI1OWLvn6eOrlsF0TG8jFu6SYkzq85VODtUbP";
 
   # -- cloud
   s3-proxy = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG/edQPh5lgflnMjVHAHhRDNNmmusQxm7MHU2QE7kiyV";
@@ -33,5 +34,5 @@ in
     "notes-borg-ssh-key.age".publicKeys = [ bct-cimmeria notes ];
 
     # ZoneEdit API key for creating TXT records for ACME
-    "zoneedit.age".publicKeys = [ bct-cimmeria spectator stereo ];
+    "zoneedit.age".publicKeys = [ bct-cimmeria spectator stereo yuurei ];
   }
