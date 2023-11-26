@@ -1,4 +1,16 @@
-{ inputs, lib, config, pkgs, ... }: {
+{ self, config, pkgs, ... }: {
+  imports = [
+    "${self}/nixos/modules/acme-zoneedit"
+  ];
+
+  services.acme-zoneedit = {
+    enable = true;
+    hostname = "spectator.domus.diffeq.com";
+    email = "s+acme@diffeq.com";
+    group = "hass";
+    credentialsFile = config.age.secrets.zoneedit.path;
+  };
+
   services.home-assistant = {
     enable = true;
 
@@ -11,7 +23,6 @@
 
       "octoprint"
       "kodi"
-      "volumio"
       "dlna_dmr"
       "openweathermap"
       "esphome"
@@ -65,7 +76,9 @@
       mysqlclient
     ];
 
-    config = {
+    config = let
+      sslDirectory = "${config.security.acme.certs."spectator.domus.diffeq.com".directory}";
+    in {
       # Includes dependencies for a basic setup
       # https://www.home-assistant.io/integrations/default_config/
       default_config = {};
@@ -73,6 +86,11 @@
       homeassistant = {
         time_zone = "America/Edmonton";
         country = "CA";
+      };
+
+      http = {
+        ssl_certificate = "${sslDirectory}/fullchain.pem";
+        ssl_key = "${sslDirectory}/key.pem";
       };
 
       recorder = {
@@ -142,6 +160,13 @@
       file = ../../../secrets/home-assistant-my-cnf.age;
       owner = "hass";
       group = "hass";
+      mode = "600";
+    };
+
+    zoneedit = {
+      file = ../../../secrets/zoneedit.age;
+      owner = "acme";
+      group = "acme";
       mode = "600";
     };
   };

@@ -22,12 +22,18 @@ in {
     email = lib.mkOption {
       type = lib.types.str;
     };
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "acme";
+      description = lib.mdDoc "Group running the ACME client.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     security.acme.acceptTerms = true;
     security.acme.certs.${cfg.hostname} = {
       email = cfg.email;
+      group = cfg.group;
 
       # set DNS TXT records by exec-ing acme-zoneedit.sh
       # (configured below)
