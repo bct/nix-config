@@ -1,4 +1,4 @@
-{ self, pkgs, ... }:
+{ self, pkgs, config, ... }:
 
 {
   imports =
@@ -96,6 +96,14 @@
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
+  };
+
+  virtualisation.docker = {
+    enable = true;
+  };
+
+  users.users.${config.personal.user} = {
+    extraGroups = [ "docker" ];
   };
 
   # This value determines the NixOS release from which the default
