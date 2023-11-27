@@ -98,7 +98,3 @@ cmp.setup {
     { name = 'nvim_lsp' },
   },
 }
-
--- Auto formatting
-vim.api.nvim_create_autocmd({"BufWritePre"}, {pattern = {"*.py"}, command = ":Isort"})
-vim.api.nvim_create_autocmd({"BufWritePre"}, {pattern = {"*.py"}, command = ":call BlackSync()"})
