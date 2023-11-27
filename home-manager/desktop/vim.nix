@@ -9,6 +9,9 @@
     # for telescope
     pkgs.ripgrep
 
+    # formatters
+    pkgs.nodePackages.prettier
+
     # LSP servers
     pkgs.unstable.nodePackages.pyright
     pkgs.nil
@@ -25,17 +28,7 @@
     extraLuaConfig = lib.fileContents ./files/vim/init.lua;
     extraConfig = lib.fileContents ./files/vim/extra-config.vim;
 
-    plugins = let
-      black-nvim = pkgs.vimUtils.buildVimPlugin {
-          name = "black-nvim";
-          src = pkgs.fetchFromGitHub {
-            owner = "averms";
-            repo = "black-nvim";
-            rev = "8fb3efc562b67269e6f31f8653297f826534fa4b";
-            sha256 = "sha256-pbbbkRD4ZFxTupmdNe1UYpI7tN6//GXUMll/jeCSUAg=";
-          };
-        };
-        in with pkgs.vimPlugins;
+    plugins = with pkgs.vimPlugins;
       [
         gruvbox-community
         bufexplorer
@@ -53,6 +46,36 @@
         nvim-lspconfig
         nvim-lightline-lsp
 
+        # formatting
+        {
+          plugin = pkgs.unstable.vimPlugins.conform-nvim;
+          type = "lua";
+          config = ''
+            require("conform").setup({
+              formatters = {
+                black = { command = "${pkgs.black}/bin/black" },
+                isort = { command = "${pkgs.isort}/bin/isort" },
+                prettier = { command = "${pkgs.nodePackages.prettier}/bin/prettier" },
+              },
+              formatters_by_ft = {
+                -- run isort, then black
+                python = { "isort", "black" },
+              },
+              format_on_save = {
+                -- These options will be passed to conform.format()
+                timeout_ms = 500,
+                lsp_fallback = true,
+              },
+            })
+
+            local jsLangs = {"javascript", "json", "typescript", "typescriptreact"}
+            for _, lang in ipairs(jsLangs)
+            do
+              require("conform").formatters_by_ft[lang] = { "prettier"}
+            end
+          '';
+        }
+
         # git
         vim-fugitive
 
@@ -63,10 +86,6 @@
         # hoon
         hoon-vim
 
-        # python
-        vim-isort
-        black-nvim
-
         # terraform
         vim-terraform
       ]; # Only loaded if programs.neovim.extraConfig is set
@@ -74,12 +93,12 @@
     withPython3 = true;
 
     extraPython3Packages = ps: with ps; [
-      black
       flake8
     ];
 
     vimAlias = true;
   };
 
+  # TODO: programs.neovim.runtime."lsp.lua" ?
   home.file.".config/nvim/lua/lsp.lua".source = ./files/vim/lsp.lua;
 }
