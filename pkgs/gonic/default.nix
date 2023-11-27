@@ -13,11 +13,11 @@
 
 buildGo121Module rec {
   pname = "gonic";
-  version = "0.16.1";
+  version = "707ebe1a499e1b8a5a2e97e9347d90aa7be643dc";
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = pname;
-    rev = "v${version}";
+    rev = "${version}";
     sha256 = "sha256-WkkuskGuvKq59qJJqkjvEBx+THDQtU/K0SuLYimxF9w=";
   };
 
