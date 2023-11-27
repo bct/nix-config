@@ -67,6 +67,7 @@
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
+        # -- desktops
         cimmeria = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/cimmeria/configuration.nix ];
@@ -77,11 +78,7 @@
           modules = [ ./nixos/dunwich/configuration.nix ];
         };
 
-        notes = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/cloud/notes/configuration.nix ];
-        };
-
+        # -- LAN hosts
         spectator = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/lan/spectator/configuration.nix ];
@@ -90,6 +87,17 @@
         stereo = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/lan/stereo/configuration.nix ];
+        };
+
+        yuurei = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/lan/yuurei/configuration.nix ];
+        };
+
+        # -- cloud hosts
+        notes = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/cloud/notes/configuration.nix ];
         };
 
         s3-proxy = nixpkgs.lib.nixosSystem {
@@ -119,6 +127,11 @@
         nodes.stereo = mkNode {
           hostname = "stereo.domus.diffeq.com";
           path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.stereo;
+        };
+
+        nodes.yuurei = mkNode {
+          hostname = "yuurei.domus.diffeq.com";
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.yuurei;
         };
 
         # -- cloud hosts --

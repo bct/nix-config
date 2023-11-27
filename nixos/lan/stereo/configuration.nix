@@ -1,5 +1,7 @@
-{ self, lib, pkgs, ... }: {
+{ self, config, inputs, lib, pkgs, ... }: {
   imports = [
+    inputs.agenix.nixosModules.default
+
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
 
@@ -9,6 +11,7 @@
     ./hardware-configuration.nix
 
     "${self}/nixos/modules/airsonic-refix"
+    "${self}/nixos/modules/acme-zoneedit"
   ];
 
   networking.hostName = "stereo";
@@ -45,15 +48,19 @@
       listen-addr = "0.0.0.0:4747";
       cache-path = "/var/cache/gonic";
 
+      playlists-path = "/var/lib/gonic";
       music-path = ["/mnt/beets"];
       podcast-path = "/var/empty";
       scan-interval = 60; # minutes
 
       jukebox-enabled = true;
       jukebox-mpv-extra-args = "--audio-device=alsa/default:CARD=sndrpihifiberry";
+
+      tls-cert = "${config.security.acme.certs."stereo.domus.diffeq.com".directory}/fullchain.pem";
+      tls-key = "${config.security.acme.certs."stereo.domus.diffeq.com".directory}/key.pem";
     };
   };
-  systemd.services.gonic.serviceConfig.SupplementaryGroups = ["audio"];
+  systemd.services.gonic.serviceConfig.SupplementaryGroups = ["audio" "acme"];
   systemd.services.gonic.serviceConfig.DeviceAllow = "char-alsa rw";
   systemd.services.gonic.serviceConfig.PrivateDevices = lib.mkForce false;
 
@@ -68,7 +75,7 @@
       in
         ''${pkgs.subsonic-action-proxy}/bin/subsonic-action-proxy \
           -listen-addr 0.0.0.0:4646 \
-          -subsonic-addr http://localhost:4747/ \
+          -subsonic-addr https://stereo.domus.diffeq.com:4747/ \
           -jukebox-set-command "${onkyo-ri "0xd9 0x20"}" \
           -add-rpc "/ssap/power ${onkyo-ri "0x4"}" \
           -add-rpc "/ssap/line-1 ${onkyo-ri "0x20"}" \
@@ -99,6 +106,22 @@
   };
 
   services.airsonic-refix.enable = true;
+
+  services.acme-zoneedit = {
+    enable = true;
+    hostnames = ["stereo.domus.diffeq.com"];
+    email = "s+acme@diffeq.com";
+    credentialsFile = config.age.secrets.zoneedit.path;
+  };
+
+  age.secrets = {
+    zoneedit = {
+      file = ../../../secrets/zoneedit.age;
+      owner = "acme";
+      group = "acme";
+      mode = "600";
+    };
+  };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";

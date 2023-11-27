@@ -4,7 +4,7 @@ let
   cfg = config.services.airsonic-refix;
   env-js = pkgs.writeTextDir "env.js" ''
     window.env = {
-      SERVER_URL: "http://stereo.domus.diffeq.com:4747",
+      SERVER_URL: "https://stereo.domus.diffeq.com:4747",
     }
   '';
   airsonicRefixWithEnv = pkgs.buildEnv {
@@ -17,6 +17,8 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    users.users.nginx.extraGroups = [ "acme" ];
+
     services.nginx = {
       enable = true;
       recommendedGzipSettings = true;
@@ -24,6 +26,9 @@ in {
       virtualHosts."stereo.domus.diffeq.com" = {
         default = true;
         root = airsonicRefixWithEnv;
+
+        addSSL = true;
+        useACMEHost = "stereo.domus.diffeq.com";
 
         locations = {
           "/" = {

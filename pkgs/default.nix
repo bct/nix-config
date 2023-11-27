@@ -62,6 +62,7 @@
 
   airsonic-refix = pkgs.callPackage ./airsonic-refix { };
   goatcounter = pkgs.callPackage ./goatcounter { };
+  gonic = pkgs.callPackage ./gonic { buildGo121Module = pkgs-unstable.buildGo121Module; };
 
   pipenv = pkgs.callPackage ./pipenv { python3 = pkgs-unstable.python3; };
   pollymc-unwrapped = pkgs.qt6Packages.callPackage ./pollymc {
