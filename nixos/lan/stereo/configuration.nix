@@ -48,6 +48,7 @@
       listen-addr = "0.0.0.0:4747";
       cache-path = "/var/cache/gonic";
 
+      playlists-path = "/var/lib/gonic";
       music-path = ["/mnt/beets"];
       podcast-path = "/var/empty";
       scan-interval = 60; # minutes
