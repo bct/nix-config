@@ -27,7 +27,9 @@ in {
 
     i18n.defaultLocale = "en_CA.UTF-8";
     console.keyMap = "dvorak";
-    services.xserver.layout = "dvorak";
+
+    services.xserver.layout = "us";
+    services.xserver.xkbVariant = "dvorak";
 
     environment.variables.EDITOR = "vim";
 
