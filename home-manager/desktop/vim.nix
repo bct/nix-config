@@ -18,6 +18,7 @@
     pkgs.hoonLanguageServer
     pkgs.gopls
     pkgs.terraform-ls
+    pkgs.nodePackages.vscode-langservers-extracted
     pkgs.nodePackages.typescript-language-server
   ];
 

@@ -87,6 +87,11 @@ require'lspconfig'.terraformls.setup{
 }
 
 -- typescript
+require'lspconfig'.eslint.setup{
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
+
 require'lspconfig'.tsserver.setup{
   capabilities = capabilities,
   on_attach = on_attach,
