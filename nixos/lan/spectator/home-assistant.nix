@@ -35,42 +35,6 @@
       "ipp"
     ];
 
-    # the nixpkgs version of yarl segfaults on arm. fix taken from:
-    # https://github.com/gaelreyrol/nixos-config/commit/90d44c0dffab34edbf5fa45f6371749476a7cb9d
-    package = pkgs.home-assistant.override {
-      # https://github.com/NixOS/nixpkgs/pull/234880
-      packageOverrides = self: super: {
-        aiohttp = super.aiohttp.overrideAttrs (oldAttrs: {
-          patches = [
-            (pkgs.fetchpatch {
-              url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
-              hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
-            })
-          ];
-        });
-        uvloop = super.uvloop.overridePythonAttrs (oldAttrs: {
-          disabledTestPaths = oldAttrs.disabledTestPaths ++ [
-            "tests/test_regr1.py"
-          ];
-        });
-        yarl = super.yarl.overrideAttrs (oldAttrs: rec {
-          version = "1.9.2";
-          src = pkgs.fetchPypi {
-            inherit (oldAttrs) pname;
-            inherit version;
-            hash = "sha256-BKudS59YfAbYAcKr/pMXt3zfmWxlqQ1ehOzEUBCCNXE=";
-          };
-          disabledTests = [ ];
-        });
-        snitun = super.snitun.overridePythonAttrs (oldAtts: {
-          doCheck = false;
-        });
-        zigpy-znp = super.zigpy-znp.overridePythonAttrs (oldAtts: {
-          doCheck = false;
-        });
-      };
-    };
-
     extraPackages = python3Packages: with python3Packages; [
       # enable a mysql connector that allows us to store the db password in a file
       mysqlclient
