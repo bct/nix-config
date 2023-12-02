@@ -8,28 +8,7 @@ import XMonad.Actions.TopicSpace
 import qualified Data.Map as M
 import Data.Maybe (mapMaybe)
 
-type ExtraWorkspace = (String, String, Maybe String, Maybe (X ()))
-
-extraWorkspaces :: [ExtraWorkspace]
-extraWorkspaces = [
-  -- icon, name, dir, action
-  -- https://www.nerdfonts.com/cheat-sheet
-
-    -- beaker
-    ("\xf499", "project", Just "projects", Just $ spawnShell >*> 5)
-
-   -- ship wheel
-  , ("\xf0833", "mi-go", Nothing, Just $ spawn "alacritty -e ssh bct@mi-go.domus.diffeq.com")
-
-    -- nf-md-email
-  , ("\xf01ee", "mail", Nothing, Just $ spawn "alacritty -e ssh bct@mail.domus.diffeq.com")
-
-    -- wireframe cube
-  , ("\xf01a7", "slicer", Nothing, Just $ spawn "cura")
-
-    -- film
-  , ("\xf008", "kino", Nothing, Nothing)
-  ]
+import ExtraWorkspaces (ExtraWorkspace, extraWorkspaces)
 
 web :: String
 web = "web"

@@ -7,6 +7,7 @@
       config = ./files/xmonad.hs;
       libFiles = {
         "Workspaces.hs" = ./files/Workspaces.hs;
+        "ExtraWorkspaces.hs" = ./files/ExtraWorkspaces.hs;
       };
     };
   };
