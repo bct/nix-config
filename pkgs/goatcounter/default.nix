@@ -15,7 +15,7 @@
      sha256 = "sha256-LzZNUZDgMFy6CYzfc57YNPJY8O5xROZLSFm85GCZIFM";
    };
 
-   vendorSha256 = "sha256-u+AXkAoaV3YrHyhpRjNT2CiyDO6gkM3lidgyEQNvGso=";
+   vendorHash = "sha256-u+AXkAoaV3YrHyhpRjNT2CiyDO6gkM3lidgyEQNvGso=";
 
    modRoot = ".";
 
