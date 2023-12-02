@@ -134,7 +134,7 @@ gsConfig = (buildDefaultGSConfig colorizer) { gs_navigate = myNavigator, gs_font
     backgrounds :: [String]
     backgrounds = ["282828", "cc241d", "98971a", "d79921", "458588", "b16286", "689d6a"]
 
-wsgrid = gridselect gsConfig <=< asks $ map (\x -> (x,x)) . workspaces . config
+wsgrid = gridselect gsConfig <=< asks $ map (\x -> (Workspaces.topicNameWithIconPrefix(x),x)) . workspaces . config
 
 -- gridSelectWorkspace reorders the workspaces which is incredibly annoying
 promptedGoto  = wsgrid >>= flip whenJust (switchTopic Workspaces.topicConfig)

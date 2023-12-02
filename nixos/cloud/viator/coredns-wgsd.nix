@@ -12,7 +12,7 @@
       }
     '';
 
-    package = pkgs.unstable.coredns.override {
+    package = pkgs.coredns.override {
       externalPlugins = [
         {name = "wgsd"; repo = "github.com/jwhited/wgsd"; version = "v0.3.5";}
       ];

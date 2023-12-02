@@ -6,6 +6,7 @@
   personal.user = "brendan";
   personal.email = "brendan@artificial.agency";
 
+  personal.xmonad.extraWorkspaces = ./files/ExtraWorkspaces.hs;
   home.file.".xmobarrc".source = ./files/xmobarrc.hs;
 
   home.packages = with pkgs; [

@@ -45,7 +45,9 @@
       # we'll use dtmerge instead.
       # https://github.com/NixOS/nixos-hardware/blob/master/raspberry-pi/4/pkgs-overlays.nix
       (_final: prev: {
-        deviceTree.applyOverlays = prev.callPackage ./apply-overlays-dtmerge.nix { };
+        deviceTree = prev.deviceTree // {
+          applyOverlays = prev.callPackage ./apply-overlays-dtmerge.nix { };
+        };
       })
     ];
   };

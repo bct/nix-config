@@ -14,19 +14,6 @@
 
   system.stateVersion = "23.05";
 
-  nixpkgs = {
-    overlays = [
-      # workaround: add pg_dump, pg_restore, psql to borgmatic's PATH
-      # this is temporary until we've upgraded past 1.7.13:
-      # https://projects.torsion.org/borgmatic-collective/borgmatic/issues/678
-      (_final: prev: {
-        borgmatic = prev.borgmatic.overrideAttrs (old: {
-          propagatedBuildInputs = old.propagatedBuildInputs ++ [config.services.postgresql.package];
-        });
-      })
-    ];
-  };
-
   systemd.network = {
     netdevs."20-wg0" = {
       netdevConfig = {
@@ -205,16 +192,19 @@
   services.borgmatic = {
     enable = true;
     settings = {
-      location.source_directories = [
+      repositories = [
+        {
+          label = "borg.domus.diffeq.com";
+          path = "ssh://borg@borg.domus.diffeq.com/srv/borg/notes.diffeq.com/";
+        }
+      ];
+
+      source_directories = [
         "/var/lib/vikunja"
         "/var/lib/wiki-js"
       ];
 
-      location.repositories = [
-        "ssh://borg@borg.domus.diffeq.com/srv/borg/notes.diffeq.com/"
-      ];
-
-      hooks.postgresql_databases = [
+      postgresql_databases = [
         {
           name = "all";
           username = "postgres";
@@ -222,23 +212,21 @@
           # dump each database to a separate file.
           format = "custom";
 
-          # TODO: enable these once we no longer need the workaround overlay.
-          #pg_dump_command = "${config.services.postgresql.package}/bin/pg_dump";
-          #pg_restore_command = "${config.services.postgresql.package}/bin/pg_restore";
-          #psql_command = "${config.services.postgresql.package}/bin/psql";
+          pg_dump_command = "${config.services.postgresql.package}/bin/pg_dump";
+          pg_restore_command = "${config.services.postgresql.package}/bin/pg_restore";
+          psql_command = "${config.services.postgresql.package}/bin/psql";
         }
       ];
 
-      storage.ssh_command = "ssh -i ${config.age.secrets.notes-borg-ssh-key.path}";
+      ssh_command = "ssh -i ${config.age.secrets.notes-borg-ssh-key.path}";
 
-      retention = {
-        keep_daily = 7;
-        keep_weekly = 4;
-        keep_monthly = 6;
-        keep_yearly = 1;
-      };
+      # retention
+      keep_daily = 7;
+      keep_weekly = 4;
+      keep_monthly = 6;
+      keep_yearly = 1;
 
-      hooks.ntfy = {
+      ntfy = {
         topic = "doog4maechoh";
         fail = {
           title = "[notes] borgmatic failed";

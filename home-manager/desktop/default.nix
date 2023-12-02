@@ -4,6 +4,7 @@
 { outputs, pkgs, ... }: {
   imports = [
     ../base
+    ../modules/xmonad
     ./vim.nix
   ];
 
@@ -43,16 +44,9 @@
   };
 
   home.packages = with pkgs; [
-    # xmonad, xmobar, and supporting packages
-    xmobar
-
-    # things used by xmonad config:
-    (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
-    ubuntu_font_family
-
+    # terminal
     alacritty
-    dmenu
-    light
+    ubuntu_font_family
 
     # utilities
     htop
@@ -103,19 +97,8 @@
       xset dpms 0 120 180 &
 
       # set minimum brightness higher than 0
-      light -N 0.1
+      ${pkgs.light}/bin/light -N 0.1
     '';
-
-    windowManager = {
-      xmonad = {
-        enable = true;
-        enableContribAndExtras = true;
-        config = ./files/xmonad/xmonad.hs;
-        libFiles = {
-          "Workspaces.hs" = ./files/xmonad/Workspaces.hs;
-        };
-      };
-    };
   };
 
   home.pointerCursor = {
