@@ -31,26 +31,23 @@ iconMail :: String
 iconMail = "\xf01ee"
 
 -- topic names
---
--- this is a hack, would really prefer not to include the icon in the topic
--- name, but it's the easiest way to get icons in the gridselect.
 project :: String
-project = iconBeaker ++ "  project"
+project = "project"
 
 miGo :: String
-miGo = iconShipWheel ++ "  mi-go"
+miGo = "mi-go"
 
 slicer :: String
-slicer = iconWireframeCube ++ "  slicer"
+slicer = "slicer"
 
 web :: String
-web = iconGlobe ++ "  web"
+web = "web"
 
 kino ::String
-kino = iconFilm ++ "  kino"
+kino = "kino"
 
 mail :: String
-mail = iconMail ++ "  mail"
+mail = "mail"
 
 topicNameToIcon :: String -> String
 topicNameToIcon name = M.findWithDefault name name iconMap ++ " "
@@ -65,6 +62,9 @@ topicNameToIcon name = M.findWithDefault name name iconMap ++ " "
                 ,(kino,    iconFilm)  -- film
                 ,(mail,    iconMail)  -- nf-md-email
               ]
+
+topicNameWithIconPrefix :: String -> String
+topicNameWithIconPrefix name = (topicNameToIcon name) ++ " " ++ name
 
 topics :: [Topic]
 topics = ["?", web, project, miGo, slicer, mail, kino]
