@@ -1,25 +1,37 @@
-{ pkgs, ... }:
-{
-  xsession.windowManager = {
-    xmonad = {
-      enable = true;
-      enableContribAndExtras = true;
-      config = ./files/xmonad.hs;
-      libFiles = {
-        "Workspaces.hs" = ./files/Workspaces.hs;
-        "ExtraWorkspaces.hs" = ./files/ExtraWorkspaces.hs;
+{ lib, config, pkgs, ... }:
+
+let cfgPersonal = config.personal;
+in {
+  options = {
+    personal.xmonad = {
+      extraWorkspaces = lib.mkOption {
+        type = lib.types.path;
       };
     };
   };
 
-  home.packages = with pkgs; [
-    xmobar
+  config = {
+    xsession.windowManager = {
+      xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+        config = ./files/xmonad.hs;
+        libFiles = {
+          "Workspaces.hs" = ./files/Workspaces.hs;
+          "ExtraWorkspaces.hs" = cfgPersonal.xmonad.extraWorkspaces;
+        };
+      };
+    };
 
-    (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
-    ubuntu_font_family
+    home.packages = with pkgs; [
+      xmobar
 
-    alacritty
-    dmenu
-    light
-  ];
+      (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+      ubuntu_font_family
+
+      alacritty
+      dmenu
+      light
+    ];
+  };
 }

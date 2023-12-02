@@ -6,6 +6,7 @@
   personal.user = "bct";
   personal.email = "bct@diffeq.com";
 
+  personal.xmonad.extraWorkspaces = ./files/ExtraWorkspaces.hs;
   home.file.".xmobarrc".source = ./files/xmobarrc.hs;
 
   home.packages = with pkgs; [
