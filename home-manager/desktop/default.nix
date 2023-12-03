@@ -5,6 +5,7 @@
   imports = [
     ../base
 
+    ../modules/dunst
     ../modules/rofi
     ../modules/vim
     ../modules/xmonad
