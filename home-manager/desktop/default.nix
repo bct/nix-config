@@ -110,7 +110,11 @@
   programs.bash = {
     enable = true;
     historyControl = ["ignoredups"];
+
     initExtra = ''
+      # autojump
+      eval "$(${pkgs.z-lua}/bin/z --init bash)"
+
       . ~/.nix-profile/share/git/contrib/completion/git-prompt.sh
 
       # bct@cimmeria:~/projects/nixfiles (master) $
