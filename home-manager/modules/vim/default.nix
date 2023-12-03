@@ -26,8 +26,8 @@
     enable = true;
 
     # a helpful reference for config: https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
-    extraLuaConfig = lib.fileContents ./files/vim/init.lua;
-    extraConfig = lib.fileContents ./files/vim/extra-config.vim;
+    extraLuaConfig = lib.fileContents ./files/init.lua;
+    extraConfig = lib.fileContents ./files/extra-config.vim;
 
     plugins = with pkgs.vimPlugins;
       [
@@ -101,5 +101,5 @@
   };
 
   # TODO: programs.neovim.runtime."lsp.lua" ?
-  home.file.".config/nvim/lua/lsp.lua".source = ./files/vim/lsp.lua;
+  home.file.".config/nvim/lua/lsp.lua".source = ./files/lsp.lua;
 }

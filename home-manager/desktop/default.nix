@@ -4,8 +4,9 @@
 { outputs, pkgs, ... }: {
   imports = [
     ../base
+
+    ../modules/vim
     ../modules/xmonad
-    ./vim.nix
   ];
 
   nixpkgs = {
