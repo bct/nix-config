@@ -1,4 +1,4 @@
-{ self, ... }:
+{ self, pkgs, config, ... }:
 
 {
   imports =
@@ -30,10 +30,19 @@
 
   sound.extraConfig = ''
     defaults.pcm.!card 1
+    defaults.ctl.!card 1
   '';
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+
+  services.udev.extraRules = ''
+    # Suspend the system when battery level drops to 5% or lower
+    SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl suspend"
+
+    # Give the "video" group access to the backlight
+    ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video $sys$devpath/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w $sys$devpath/brightness"
+  '';
 
   hardware.opengl = {
     enable = true;
@@ -87,6 +96,21 @@
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
+  };
+
+  networking.hosts = {
+    "127.0.0.1" = [
+      "bagel.local.artificial.agency"
+      "admin.local.artificial.agency"
+    ];
+  };
+
+  virtualisation.docker = {
+    enable = true;
+  };
+
+  users.users.${config.personal.user} = {
+    extraGroups = [ "docker" ];
   };
 
   # This value determines the NixOS release from which the default
