@@ -115,6 +115,11 @@
       # autojump
       eval "$(${pkgs.z-lua}/bin/z --init bash)"
 
+      # go to the root of the current repository
+      r() {
+        cd "$(git rev-parse --show-toplevel 2>/dev/null)"
+      }
+
       . ~/.nix-profile/share/git/contrib/completion/git-prompt.sh
 
       # bct@cimmeria:~/projects/nixfiles (master) $
