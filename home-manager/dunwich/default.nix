@@ -9,6 +9,13 @@
   personal.xmonad.extraWorkspaces = ./files/ExtraWorkspaces.hs;
   home.file.".xmobarrc".source = ./files/xmobarrc.hs;
 
+  home.pointerCursor = {
+    package = pkgs.unstable.hackneyed;
+    name = "Hackneyed";
+    size = 48;
+    x11.enable = true;
+  };
+
   home.packages = with pkgs; [
     slack
     _1password
