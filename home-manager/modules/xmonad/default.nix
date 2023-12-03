@@ -26,9 +26,6 @@ in {
     home.packages = with pkgs; [
       xmobar
 
-      (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
-      ubuntu_font_family
-
       alacritty
       dmenu
       light
