@@ -8,6 +8,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.UrgencyHook
 
 import XMonad.Actions.CycleWS (toggleWS)
 
@@ -73,7 +74,7 @@ myXmobarPP = def
     , ppCurrent = yellow . wrap " " "" . Workspaces.topicNameToIcon
     , ppHidden = beige . wrap " " "" . Workspaces.topicNameToIcon
     , ppHiddenNoWindows = gray . wrap " " "" . Workspaces.topicNameToIcon
-    , ppUrgent = red.wrap (yellow "!") (yellow "!") . Workspaces.topicNameToIcon
+    , ppUrgent = red.wrap (yellow "!") "" . Workspaces.topicNameToIcon
 
     -- layout
     -- the prefix here is weird because i don't know how to add a suffix to the workspaces
@@ -89,7 +90,7 @@ myXmobarPP = def
     beige, yellow, red, gray :: String -> String
     beige = xmobarColor "#ebdbb2" ""
     yellow = xmobarColor "#fabd2f" ""
-    red = xmobarColor "#ff5555" ""
+    red = xmobarColor "#cc241d" ""
     gray = xmobarColor "#928374" ""
     beigeOnBlue = xmobarColor "#ebdbb2" "#458588"
     darkGreyToBlue = xmobarColor "#282828" "#458588"
@@ -193,6 +194,7 @@ myConfig = ewmh $ def
 main :: IO ()
 main = xmonad
      . withEasySB (statusBarProp "xmobar" (pure myXmobarPP)) defToggleStrutsKey
+     $ withUrgencyHook NoUrgencyHook
      $ myConfig
         {
           -- fix Java apps, e.g. the Arduino IDE

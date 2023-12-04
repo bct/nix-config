@@ -33,6 +33,19 @@
     unstable.terraformer
   ];
 
+  # set the urgent flag on Slack when it sends a notification
+  # https://gist.github.com/andreycizov/738f80a16c9e401d6a9e77b863e67066
+  services.dunst.settings.slack = let
+    setUrgent = pkgs.writeScript "dunst-set-urgent" ''
+      ${pkgs.wmctrl}/bin/wmctrl -r $1 -b add,demands_attention
+    '';
+  in {
+    appname = "Slack";
+    summary = "*";
+
+    script = toString setUrgent;
+  };
+
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "23.05";
 }
