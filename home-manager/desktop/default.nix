@@ -65,6 +65,9 @@
 
     # background
     feh
+
+    # media
+    supersonic
   ];
 
   fonts.fontconfig.enable = true;
