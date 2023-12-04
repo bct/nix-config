@@ -28,6 +28,7 @@
   # power management
   services.tlp.enable = true;
 
+  hardware.pulseaudio.enable = true;
   sound.extraConfig = ''
     defaults.pcm.!card 1
     defaults.ctl.!card 1
