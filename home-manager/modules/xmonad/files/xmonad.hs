@@ -74,6 +74,7 @@ myXmobarPP = def
     , ppCurrent = yellow . wrap " " "" . Workspaces.topicNameToIcon
     , ppHidden = beige . wrap " " "" . Workspaces.topicNameToIcon
     , ppHiddenNoWindows = gray . wrap " " "" . Workspaces.topicNameToIcon
+    , ppVisible = blue . wrap " " "" . Workspaces.topicNameToIcon
     , ppUrgent = red.wrap (yellow "!") "" . Workspaces.topicNameToIcon
 
     -- layout
@@ -89,6 +90,7 @@ myXmobarPP = def
     -- see https://github.com/morhetz/gruvbox for colour list
     beige, yellow, red, gray :: String -> String
     beige = xmobarColor "#ebdbb2" ""
+    blue = xmobarColor "#83a598" ""
     yellow = xmobarColor "#fabd2f" ""
     red = xmobarColor "#cc241d" ""
     gray = xmobarColor "#928374" ""
