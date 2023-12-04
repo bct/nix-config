@@ -14,4 +14,10 @@ extraWorkspaces = [
 
     -- nf-md-nix
   , ("\xf313", "nix", Just "personal/nix-config", Nothing)
+
+    -- nf-md-email
+  , ("\xf01ee", "mail", Nothing, Just $ spawn "chromium --new-window mail.google.com")
+
+    -- nf-md-slack
+  , ("\xf04b1", "slack", Nothing, Just $ spawn "slack")
   ]
