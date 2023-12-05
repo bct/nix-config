@@ -186,6 +186,11 @@ myConfig = ewmh $ def
     , ("<XF86AudioRaiseVolume>", raiseVolume 3 >> return ())
     , ("<XF86AudioMute>", toggleMute    >> return ())
 
+    -- Media player controls
+    , ("<XF86AudioPlay>", spawn "playerctl play-pause")
+    , ("<XF86AudioPrev>", spawn "playerctl previous")
+    , ("<XF86AudioNext>", spawn "playerctl next")
+
     -- Restart, but do not recompile. Maintain the existing window state.
     , ("M-q", restart "xmonad" True)
 

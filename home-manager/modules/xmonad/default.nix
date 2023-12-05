@@ -29,6 +29,8 @@ in {
       alacritty
       dmenu
       light
+
+      playerctl
     ];
   };
 }
