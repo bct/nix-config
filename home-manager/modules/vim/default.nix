@@ -122,6 +122,15 @@
         # git
         vim-fugitive
 
+        {
+          plugin = which-key-nvim;
+          type = "lua";
+          config = ''
+            require("which-key").setup {
+            }
+          '';
+        }
+
         # -- language-specific
         # nix
         vim-nix
