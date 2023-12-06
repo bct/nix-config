@@ -11,7 +11,7 @@ import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 
 import XMonad.Actions.CycleWS (toggleWS)
-
+import XMonad.Actions.FloatKeys (keysMoveWindowTo)
 import XMonad.Actions.TopicSpace
 
 import XMonad.Actions.SpawnOn (spawnHere, shellPromptHere, spawnOn)
@@ -27,16 +27,25 @@ import XMonad.Layout.PerWorkspace
 import XMonad.Operations (restart)
 
 import XMonad.Util.Loggers
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.WindowProperties (Property(ClassName), hasProperty)
 
-import Control.Monad ((<=<))
+import Control.Monad ((<=<), when)
 import XMonad.Actions.GridSelect
 
 import Data.Char (ord)
+import Data.Ratio ((%))
 
 import qualified Data.Map as M
 import qualified XMonad.StackSet as SS
 
 import qualified Workspaces
+
+scratchpads :: [NamedScratchpad]
+scratchpads = [
+    NS "music" "supersonic" (className =? "Supersonic")
+        (customFloating $ SS.RationalRect (1/4) (1/4) (2/4) (2/4))
+  ]
 
 myLayout = webWorkspace $ (tiled ||| Mirror tiled ||| Full)
   where
@@ -143,11 +152,31 @@ wsgrid = gridselect gsConfig <=< asks $ map (\x -> (Workspaces.topicNameWithIcon
 promptedGoto  = wsgrid >>= flip whenJust (switchTopic Workspaces.topicConfig)
 promptedShift = wsgrid >>= \x -> whenJust x $ \y -> windows (SS.greedyView y . SS.shift y)
 
+-- https://github.com/KnairdA/nixos_home/blob/80798e3345bd4f872c8d852e74bc3dc591bcd3b2/gui/conf/xmonad.hs
+withCurrentScreen     f = withWindowSet     $ \ws -> f (SS.current ws)
+withCurrentScreenRect f = withCurrentScreen $ \s  -> f (screenRect (SS.screenDetail s))
+
+screenResolution = withCurrentScreenRect $ \r -> return (fromIntegral $ rect_width r, fromIntegral $ rect_height r)
+
+doMyThing :: X()
+doMyThing = withFocused handleWindow
+  where
+    handleWindow :: Window -> X()
+    handleWindow w = do shouldResize <- isMyWindow w
+                        when shouldResize $ do
+                          -- https://xmonad.haskell.narkive.com/szN8mp3p/get-width-and-height-of-current-screen
+                          (screenWidth, screenHeight) <- screenResolution
+                          keysMoveWindowTo (div screenWidth 2, div screenHeight 2) (1%2, 1%2) w
+
+    isMyWindow :: Window -> X Bool
+    isMyWindow = hasProperty (ClassName "supersonic")
+
+
 myConfig = ewmh $ def
     { terminal = "alacritty"
     , workspaces = Workspaces.topics
     , layoutHook = smartSpacingWithEdge 10 $ smartBorders $ myLayout
-    , manageHook = myManageHook
+    , manageHook = myManageHook <+> (namedScratchpadManageHook scratchpads)
     }
   `additionalKeysP`
     [
@@ -190,6 +219,8 @@ myConfig = ewmh $ def
     , ("<XF86AudioPlay>", spawn "playerctl play-pause")
     , ("<XF86AudioPrev>", spawn "playerctl previous")
     , ("<XF86AudioNext>", spawn "playerctl next")
+
+    , ("M-m", (namedScratchpadAction scratchpads "music") >> doMyThing)
 
     -- Restart, but do not recompile. Maintain the existing window state.
     , ("M-q", restart "xmonad" True)
