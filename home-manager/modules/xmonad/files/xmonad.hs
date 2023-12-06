@@ -177,6 +177,9 @@ myConfig = ewmh $ def
     , workspaces = Workspaces.topics
     , layoutHook = smartSpacingWithEdge 10 $ smartBorders $ myLayout
     , manageHook = myManageHook <+> (namedScratchpadManageHook scratchpads)
+
+    , normalBorderColor  = "#ebdbb2"
+    , focusedBorderColor = "#fe8019"
     }
   `additionalKeysP`
     [
