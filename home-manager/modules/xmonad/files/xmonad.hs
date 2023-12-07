@@ -36,6 +36,8 @@ import XMonad.Actions.GridSelect
 import Data.Char (ord)
 import Data.Ratio ((%))
 
+import Text.Printf
+
 import qualified Data.Map as M
 import qualified XMonad.StackSet as SS
 
@@ -158,18 +160,23 @@ withCurrentScreenRect f = withCurrentScreen $ \s  -> f (screenRect (SS.screenDet
 
 screenResolution = withCurrentScreenRect $ \r -> return (fromIntegral $ rect_width r, fromIntegral $ rect_height r)
 
-doMyThing :: X()
-doMyThing = withFocused handleWindow
+centreWindow :: Window -> X()
+centreWindow w = do
+  -- https://xmonad.haskell.narkive.com/szN8mp3p/get-width-and-height-of-current-screen
+  (screenWidth, screenHeight) <- screenResolution
+  spawn $ printf "dunstify %d %d" (screenWidth `div` 2) (screenHeight `div` 2)
+  keysMoveWindowTo (screenWidth `div` 2, screenHeight `div` 2) (1%2, 1%2) w
+
+fixupFloatingWindowForCurrentDisplay :: X()
+fixupFloatingWindowForCurrentDisplay = withFocused fixupWindow
   where
-    handleWindow :: Window -> X()
-    handleWindow w = do shouldResize <- isMyWindow w
-                        when shouldResize $ do
-                          -- https://xmonad.haskell.narkive.com/szN8mp3p/get-width-and-height-of-current-screen
-                          (screenWidth, screenHeight) <- screenResolution
-                          keysMoveWindowTo (div screenWidth 2, div screenHeight 2) (1%2, 1%2) w
+    fixupWindow :: Window -> X()
+    fixupWindow w = do shouldResize <- isMyWindow w
+                       -- only do the move/resize when the scratchpad got toggled _on_, not off
+                       when shouldResize $ centreWindow w
 
     isMyWindow :: Window -> X Bool
-    isMyWindow = hasProperty (ClassName "supersonic")
+    isMyWindow = hasProperty (ClassName "Supersonic")
 
 
 myConfig = ewmh $ def
@@ -223,7 +230,8 @@ myConfig = ewmh $ def
     , ("<XF86AudioPrev>", spawn "playerctl previous")
     , ("<XF86AudioNext>", spawn "playerctl next")
 
-    , ("M-m", (namedScratchpadAction scratchpads "music") >> doMyThing)
+    , ("M-m", (namedScratchpadAction scratchpads "music") >> fixupFloatingWindowForCurrentDisplay)
+    , ("M-c", withFocused $ centreWindow)
 
     -- Restart, but do not recompile. Maintain the existing window state.
     , ("M-q", restart "xmonad" True)
