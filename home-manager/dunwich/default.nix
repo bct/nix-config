@@ -12,7 +12,7 @@
   home.pointerCursor = {
     package = pkgs.unstable.hackneyed;
     name = "Hackneyed";
-    size = 48;
+    size = 24;
     x11.enable = true;
   };
 
