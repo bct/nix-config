@@ -74,6 +74,8 @@
 
   rtlamr = pkgs.callPackage ./rtlamr { };
   rtlamr-collect = pkgs.callPackage ./rtlamr-collect { };
+  speedtest_exporter = pkgs.callPackage ./speedtest_exporter { };
+  starlink_exporter = pkgs.callPackage ./starlink_exporter { };
   subsonic-action-proxy = pkgs.callPackage ./subsonic-action-proxy { };
   sxlock = pkgs.callPackage ./sxlock { };
   wgsd = pkgs.callPackage ./wgsd { };
