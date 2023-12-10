@@ -178,6 +178,24 @@
             device = "\${2}";
           };
         }
+        # more disk metrics?
+        { match = ''servers\.(.*)\.geom_stat.(.*)-(.*)\.(.*)'';
+          match_type = "regex";
+          name = "truenas_geom_stat_\${2}";
+          labels = {
+            hostname = "\${1}";
+            device = "\${3}";
+            op = "\${4}";
+          };
+        }
+        { match = ''servers\.(.*)\.geom_stat.(.*)-(.*)'';
+          match_type = "regex";
+          name = "truenas_geom_stat_\${2}";
+          labels = {
+            hostname = "\${1}";
+            device = "\${3}";
+          };
+        }
         # cpu and nfs metrics mapping
         { match = ''servers\.(.*)\.(.*)-(.*)\.(.*)'';
           match_type = "regex";
