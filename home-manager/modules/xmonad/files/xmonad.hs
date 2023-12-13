@@ -164,7 +164,6 @@ centreWindow :: Window -> X()
 centreWindow w = do
   -- https://xmonad.haskell.narkive.com/szN8mp3p/get-width-and-height-of-current-screen
   (screenWidth, screenHeight) <- screenResolution
-  spawn $ printf "dunstify %d %d" (screenWidth `div` 2) (screenHeight `div` 2)
   keysMoveWindowTo (screenWidth `div` 2, screenHeight `div` 2) (1%2, 1%2) w
 
 fixupFloatingWindowForCurrentDisplay :: X()

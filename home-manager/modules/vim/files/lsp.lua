@@ -63,7 +63,7 @@ require'lspconfig'.pyright.setup{
   on_attach = on_attach,
   settings = {
     python = {
-      pythonPath = "/home/brendan/.local/share/virtualenvs/py-QrVFw7Jf/bin/python",
+      pythonPath = "/home/brendan/aa/src/py/.venv/bin/python",
       analysis = {
         autoSearchPaths = true,
         diagnosticMode = "workspace",
