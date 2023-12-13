@@ -42,11 +42,11 @@
   services.prometheus = {
     enable = true;
     # temporarily reduce retention so that early experimental data ages out.
-#    retentionTime = "365d";
-    retentionTime = "7d";
+    retentionTime = "365d";
     scrapeConfigs = [
       {
         job_name = "starlink";
+        scrape_interval = "5s";
         static_configs = [
           { targets = ["localhost:9817"]; }
         ];
@@ -61,6 +61,7 @@
       }
       {
         job_name = "graphite";
+        scrape_interval = "15s";
         static_configs = [
           { targets = ["localhost:9108"]; }
         ];
