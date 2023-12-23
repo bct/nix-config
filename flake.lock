@@ -20,6 +20,27 @@
         "type": "github"
       }
     },
+    "airsonic-refix-jukebox": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1702908665,
+        "narHash": "sha256-JSIYIC80KcJxJyOTyNh1xvDM2AOFIhhBYFI2YQrfsd0=",
+        "owner": "bct",
+        "repo": "airsonic-refix-jukebox",
+        "rev": "e5de05c273e67c93002b5c44ac8a6556dff9ef1a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bct",
+        "repo": "airsonic-refix-jukebox",
+        "type": "github"
+      }
+    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -201,11 +222,27 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "airsonic-refix-jukebox": "airsonic-refix-jukebox",
         "deploy-rs": "deploy-rs",
         "home-manager": "home-manager_2",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1689347949,
+        "narHash": "sha256-12tWmuL2zgBgZkdoB6qXZsgJEH9LR3oUgpaQq2RbI80=",
+        "owner": "nix-systems",
+        "repo": "default-linux",
+        "rev": "31732fcf5e8fea42e59c2488ad31a0e651500f68",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default-linux",
+        "type": "github"
       }
     },
     "utils": {

@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ config, inputs, lib, pkgs, ... }:
 
 let
   cfg = config.services.airsonic-refix;
@@ -10,6 +10,13 @@ let
   airsonicRefixWithEnv = pkgs.buildEnv {
     name = "airsonic-refix-env";
     paths = [ pkgs.airsonic-refix env-js ];
+  };
+  airsonicRefixJukeboxWithEnv = pkgs.buildEnv {
+    name = "airsonic-refix-jukebox-env";
+    paths = [
+      inputs.airsonic-refix-jukebox.packages.x86_64-linux.default
+      env-js
+    ];
   };
 in {
   options.services.airsonic-refix = {
@@ -25,7 +32,7 @@ in {
 
       virtualHosts."stereo.domus.diffeq.com" = {
         default = true;
-        root = airsonicRefixWithEnv;
+        root = airsonicRefixJukeboxWithEnv;
 
         addSSL = true;
         useACMEHost = "stereo.domus.diffeq.com";
