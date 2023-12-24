@@ -11,6 +11,7 @@
   ];
 
   networking.hostName = "yuurei";
+  networking.useNetworkd = true;
 
   time.timeZone = "Etc/UTC";
 
