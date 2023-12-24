@@ -23,8 +23,11 @@
 
     swapDevices = lib.mkIf config.hardware.vultr.useSwapFile [ { device = "/var/lib/swapfile"; size = 1*1024; } ];
 
+    networking.useNetworkd = true;
+
     systemd.network = {
       enable = true;
+
       networks."10-lan" = {
         matchConfig.Name = "ens3";
         networkConfig.DHCP = "yes";
