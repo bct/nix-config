@@ -3,11 +3,11 @@
 {
   # Packages that should be installed to the user profile.
   home.packages = let
-    pyright = pkgs.nodePackages.pyright.override {
-      version = "1.1.339";
+    pyright = pkgs.nodePackages.pyright.override rec {
+      version = "1.1.347";
       src = pkgs.fetchurl {
-        url = "https://registry.npmjs.org/pyright/-/pyright-1.1.339.tgz";
-        sha256 = "sha256-/QLQfeF5RMSYVHpswoNNrM0pVAA3/hImDlIbKU2kJ+0=";
+        url = "https://registry.npmjs.org/pyright/-/pyright-${version}.tgz";
+        sha256 = "sha256-Ie1TsCjIZLSKdmBaJwk5o7JG0Pqtwr6qz9iuJZd8Odw=";
       };
     };
   in [
