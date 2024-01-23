@@ -13,10 +13,13 @@
 
     # Agenix
     agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+    agenix.inputs.home-manager.follows = "home-manager";
     agenix.inputs.darwin.follows = "";
 
     # deploy-rs
     deploy-rs.url = "github:serokell/deploy-rs";
+    deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
 
     # nixos-generators
     nixos-generators.url = "github:nix-community/nixos-generators";
