@@ -26,6 +26,7 @@
     python311
     pipenv
     awscli2
+    skopeo
 
     scrot
 
