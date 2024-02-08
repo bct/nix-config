@@ -26,12 +26,12 @@
     python311
     pipenv
     awscli2
-    skopeo
 
     scrot
 
     unstable.terraform
-    unstable.terraformer
+
+    prismlauncher
   ];
 
   # set the urgent flag on Slack when it sends a notification
