@@ -4,7 +4,18 @@ set -euo pipefail
 
 HOST="$1"
 HOST_SHORT="${HOST%%.*}"
+
+declare -rA REMOTE_USER_BY_HOST_SHORT=(
+  ["fever-dreams"]="root"
+)
+
+declare -rA REMOTE_DIR_BY_HOST_SHORT=(
+  ["fever-dreams"]="/userdata"
+)
+
+REMOTE_USER="${REMOTE_USER_BY_HOST_SHORT[$HOST_SHORT]:-bct}"
+REMOTE_DIR="${REMOTE_DIR_BY_HOST_SHORT[$HOST_SHORT]:-/home/bct}"
 TARGET_DIR="$HOME/mnt/$HOST_SHORT"
 
 mkdir -p $TARGET_DIR
-sshfs $HOST:/home/bct $TARGET_DIR -o reconnect
+sshfs $REMOTE_USER@$HOST:$REMOTE_DIR $TARGET_DIR -o reconnect
