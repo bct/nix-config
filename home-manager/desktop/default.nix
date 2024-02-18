@@ -92,6 +92,9 @@
 
     ls = "ls --color=auto";
     grep = "grep --color=auto";
+
+    wg-up = "sudo systemctl start wg-quick-wg0.service";
+    wg-down = "sudo systemctl stop wg-quick-wg0.service";
   };
 
   xsession = {
