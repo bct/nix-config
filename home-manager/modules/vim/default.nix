@@ -123,6 +123,7 @@
             for _, lang in ipairs(jsLangs)
             do
               require("conform").formatters_by_ft[lang] = { "prettier"}
+              require("conform").format { async = true, lsp_fallback = true }
             end
           '';
         }
