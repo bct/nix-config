@@ -236,7 +236,7 @@ myConfig = ewmh $ def
     , ("M-q", restart "xmonad" True)
 
     -- Lock the screen
-    , ("M-S-l", spawn "sxlock")
+    , ("M-S-l", spawn "loginctl lock-session")
     ]
 
 main :: IO ()
