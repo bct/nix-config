@@ -22,6 +22,10 @@
     hoon-crib
 
     inputs.deploy-rs.packages.x86_64-linux.deploy-rs
+
+    wine
+    winetricks
+    vulkan-tools
   ];
 
   systemd.user.mounts.bulk = {
