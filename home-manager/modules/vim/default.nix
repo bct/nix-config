@@ -37,8 +37,19 @@
     extraLuaConfig = lib.fileContents ./files/init.lua;
     extraConfig = lib.fileContents ./files/extra-config.vim;
 
-    plugins = with pkgs.vimPlugins;
-      [
+    plugins = with pkgs.vimPlugins; let
+      arrow-nvim = pkgs.vimUtils.buildVimPlugin {
+        pname = "arrow.nvim";
+        version = "2024-02-21";
+        src = pkgs.fetchFromGitHub {
+          owner = "otavioschwanck";
+          repo = "arrow.nvim";
+          rev = "79527117368995b81aa1a77714b49d0d7535274b";
+          sha256 = "sha256-+CG9Ox3Sct7rKszxhOuHS70UgvlrdnQzeHGivUtDU5M=";
+        };
+        meta.homepage = "https://github.com/otavioschwanck/arrow.nvim";
+      };
+    in [
         gruvbox-community
         bufexplorer
         lightline-vim
@@ -137,6 +148,17 @@
           config = ''
             require("which-key").setup {
             }
+          '';
+        }
+
+        {
+          plugin = arrow-nvim;
+          type = "lua";
+          config = ''
+            require('arrow').setup({
+              show_icons = false,
+              leader_key = ';' -- Recommended to be a single key
+            })
           '';
         }
 
