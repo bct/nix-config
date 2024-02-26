@@ -48,6 +48,7 @@
         extraGroups = [ "wheel" ];
         openssh.authorizedKeys.keys = [
           "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDAu6kY7KruzDByDYDx3k8NYe3pMxROrRxxb4rWVNfxfx5pu4Gp/fncXhK4kymxer8xbyOWBLnigHcFbdlgoIhVL7SgKGfziIrfN+cYMflKCyY5OznfPBJSD2OHiMPpQ4a/SIDrl/P6N+SqVebku4ay7N8aL62dD3xquTM5nw+3FysXsy5d1Wv/p3zt3lR3zxKYoC6gPaxUEuX7c1MRO+8VtFPge9f/Pmi2oWSjx8dKspeU83Ur/HwZfZdUSN8ABWAsV80DCI15LjlM81oyehQJBdl4AMTCApNioPPtZexYkf0UwGXh9PhMfP9cKC/dUbAfbh2eS/ReteC81G1MPPf9C3AzxDBh/k4iIarTU6pTgumSaV5rSvYxtjpxaRP4cbRKgNPu8n6XMrUM9cRL+ozBXBmqYWzuzY2QATmVadKZddx3SSoiAtakMLvASGh5RW/hDxm6td49jF4U7XB9sC3dAkRkJFSf91PYeiBgJXzNvsxGlwpJFMmv5vmDPN+HZTU= bct@cimmeria 2022-09-02"
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDH6vVNS0vZF/b3J/qSVB0Y/W/KZwPI+1fe18Gfdyd/SJ6qlD2nInJyzYajz1WYbGnXQ2Co1GM7bOmCjmkS9fizPfxFwd+AgEdtzz3+kZ4iTpB4oQMLt+8JRYZetZdTRHPks0Y9ML1FUIfuVnqb5FtlrMd9Bra8wObkQZAF9UdHcIXBIK+BHtK0uUEtL1KUgn4Dy7Z1DuH/rRSeMQM/v/sxUORMXnCPEhBQ7lYRvv39Pdygk9dHxFEZDXtHaP3cxPMESqeoo5njULgYwj6VikW3Fb7j07ImZQwHfTYJXBT5L7s28Hj2tuLDbzSc5NZOvpwNOawMUV/LwrDDseBDSZWLp/vtgUOJqWc+Igks4OuZIho4BCKXG0m89WDcUtZs/HnG8rhtoJchptBNlkV36zu1yr+0pmB7kg7YdGqqDv1n+VGterKjK8WTCtmTQvkzmszfRmjz1T9MaLz4/y8Ai5E1fHx3H0ReFR09eZYqjymazlmpbyzJAQES/DBFyvSRLsM= brendan@dunwich 2023-11-08"
         ];
       };
     };
