@@ -73,6 +73,11 @@ require'lspconfig'.pyright.setup{
   }
 }
 
+require'lspconfig'.ruff_lsp.setup{
+  capabilities = capabilities,
+  on_attach = on_attach
+}
+
 -- ruby
 require'lspconfig'.sorbet.setup{
   capabilities = capabilities,

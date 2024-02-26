@@ -25,6 +25,7 @@
     pkgs.nil
     pkgs.hoonLanguageServer
     pkgs.gopls
+    pkgs.unstable.ruff-lsp
     pkgs.terraform-ls
     pkgs.nodePackages.vscode-langservers-extracted
     pkgs.nodePackages.typescript-language-server
