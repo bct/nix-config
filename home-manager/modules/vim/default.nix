@@ -114,7 +114,9 @@
           plugin = pkgs.unstable.vimPlugins.conform-nvim;
           type = "lua";
           config = ''
-            require("conform").setup({
+            local conform = require 'conform'
+
+            conform.setup({
               formatters = {
                 black = { command = "${pkgs.black}/bin/black" },
                 isort = { command = "${pkgs.isort}/bin/isort" },
@@ -131,11 +133,12 @@
               },
             })
 
+            conform.format { async = true, lsp_fallback = true }
+
             local jsLangs = {"javascript", "json", "typescript", "typescriptreact"}
             for _, lang in ipairs(jsLangs)
             do
-              require("conform").formatters_by_ft[lang] = { "prettier"}
-              require("conform").format { async = true, lsp_fallback = true }
+              conform.formatters_by_ft[lang] = { "prettier"}
             end
           '';
         }
