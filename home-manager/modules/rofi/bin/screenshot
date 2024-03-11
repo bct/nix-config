@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
+
+set -euo pipefail
+
 rofi_command="rofi"
 
 time=$(date +%Y-%m-%d-%I-%M-%S)
-geometry=$(xrandr | head -n1 | cut -d',' -f2 | tr -d '[:blank:],current')
+geometry=$( (xrandr || true) | head -n1 | cut -d',' -f2 | tr -d '[:blank:],current')
 dir="$HOME/images/screenshots"
 file="${time}_${geometry}.png"
 
