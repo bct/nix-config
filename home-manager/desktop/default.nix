@@ -1,6 +1,3 @@
-# This is your home-manager configuration file
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-
 { outputs, pkgs, ... }: {
   imports = [
     ../base
@@ -9,6 +6,8 @@
     ../modules/rofi
     ../modules/vim
     ../modules/xmonad
+
+    ./screen-break-reminder.nix
   ];
 
   nixpkgs = {

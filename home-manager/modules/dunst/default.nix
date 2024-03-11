@@ -6,6 +6,8 @@
 
     settings = {
       global = {
+        follow = "keyboard";
+
         font = "UbuntuMono Nerd Font 18";
         frame_color = "#83a598";
 
