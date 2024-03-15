@@ -27,12 +27,12 @@
     pipenv
     awscli2
 
-    scrot
-
     unstable.terraform
 
     prismlauncher
   ];
+
+  programs.git.lfs.enable = true;
 
   # set the urgent flag on Slack when it sends a notification
   # https://gist.github.com/andreycizov/738f80a16c9e401d6a9e77b863e67066
