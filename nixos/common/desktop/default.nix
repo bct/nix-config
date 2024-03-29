@@ -47,8 +47,10 @@ in {
     services.avahi.nssmdns = true;
 
     # Enable scanner
-    # TODO: this isn't working yet
-    hardware.sane.enable = true;
+    hardware.sane = {
+      enable = true;
+      extraBackends = [ pkgs.sane-airscan ];
+    };
 
     sound.enable = true;
 
