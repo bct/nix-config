@@ -2,12 +2,9 @@
   imports = [
     ../base
 
-    ../modules/dunst
-    ../modules/rofi
     ../modules/vim
-    ../modules/xmonad
 
-    ./screen-break-reminder.nix
+    ./xorg.nix
   ];
 
   nixpkgs = {
@@ -69,8 +66,6 @@
     supersonic
   ];
 
-  fonts.fontconfig.enable = true;
-
   home.sessionPath = [
     "$HOME/.local/share/gem/ruby/3.0.0/bin"
     "$HOME/bin"
@@ -94,55 +89,6 @@
 
     wg-up = "sudo systemctl start wg-quick-wg0.service";
     wg-down = "sudo systemctl stop wg-quick-wg0.service";
-  };
-
-  xsession = let
-    # https://gist.github.com/erfanio/eec67e1a538eeef3ff72562412030b6a
-    # "adapted from xss-lock documantation"
-    # https://bitbucket.org/raymonad/xss-lock/src/1e158fb20108058dbd62bd51d8e8c003c0a48717/doc/dim-screen.sh
-    dim-screen = pkgs.writeScript "dim-screen" ''
-      #!/bin/sh
-
-      set -euo pipefail
-
-      # Brightness will be lowered to this value.
-      min_brightness=0
-
-      ###############################################################################
-
-      get_brightness() {
-          ${pkgs.light}/bin/light -G
-      }
-
-      set_brightness() {
-          ${pkgs.light}/bin/light -S $1
-      }
-
-      trap "exit 0" INT TERM
-      # kill background processes and set the brightness back to the original value
-      trap "kill \$(jobs -p); set_brightness $(get_brightness);" EXIT
-
-      set_brightness $min_brightness
-
-      sleep 2147483647 &
-      wait
-    '';
-  in {
-    enable = true;
-    initExtra = ''
-      # Dim the screen after three minutes of inactivity.
-      # Lock the screen two minutes later.
-      xset s 180 120
-
-      # hook up sxlock to the screen saver extension and systemd's login manager
-      xss-lock -n "${dim-screen}" -- sxlock &
-
-      # set desktop background
-      ~/.fehbg &
-
-      # set minimum brightness higher than 0
-      ${pkgs.light}/bin/light -N 0.1
-    '';
   };
 
   programs.bash = {
