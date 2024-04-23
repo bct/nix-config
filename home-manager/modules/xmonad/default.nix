@@ -32,5 +32,7 @@ in {
 
       playerctl
     ];
+
+    services.picom.enable = true;
   };
 }
