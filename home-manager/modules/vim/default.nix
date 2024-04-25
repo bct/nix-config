@@ -50,6 +50,18 @@
         };
         meta.homepage = "https://github.com/otavioschwanck/arrow.nvim";
       };
+
+      telescope-alternate-nvim = pkgs.vimUtils.buildVimPlugin {
+        pname = "telescope-alternate.nvim";
+        version = "2024-04-15";
+        src = pkgs.fetchFromGitHub {
+          owner = "otavioschwanck";
+          repo = "telescope-alternate.nvim";
+          rev = "2efa87d99122ee1abe8ada1a50304180a1802c34";
+          sha256 = "sha256-oit93iNRGlQhKAgsy0JgaJLkf+1miDhi3XjzE39gx7g=";
+        };
+        meta.homepage = "https://github.com/otavioschwanck/telescope-alternate.nvim";
+      };
     in [
         gruvbox-community
         bufexplorer
@@ -174,6 +186,7 @@
         }
 
         {
+          # Bookmark your files, separated by project, and quickly navigate through them.
           plugin = arrow-nvim;
           type = "lua";
           config = ''
@@ -181,6 +194,26 @@
               show_icons = false,
               leader_key = ';' -- Recommended to be a single key
             })
+          '';
+        }
+
+        {
+          # Alternate between common files using pre-defined regexp.
+          plugin = telescope-alternate-nvim;
+          type = "lua";
+          config = ''
+            require('telescope-alternate').setup({
+              mappings = {
+                { '(.*)/(.*).py', { { '[1]/tests/[2]_test.py', 'Test' } } },
+                { '(.*)/tests/(.*)_test.py', { { '[1]/[2].py', 'Original', true } } },
+              },
+              presets = { }, -- Telescope pre-defined mapping presets
+              open_only_one_with = 'current_pane',
+            })
+
+            require('telescope').load_extension('telescope-alternate')
+
+            vim.keymap.set('n', '<leader>a', ':Telescope telescope-alternate alternate_file<cr>', { desc = 'Go to [a]lternate file' })
           '';
         }
 
