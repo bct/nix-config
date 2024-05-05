@@ -8,6 +8,8 @@
     ./hardware-configuration.nix
 
     "${self}/nixos/modules/acme-zoneedit"
+
+    ./miniflux.nix
   ];
 
   networking.hostName = "yuurei";
