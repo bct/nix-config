@@ -202,10 +202,14 @@
           plugin = telescope-alternate-nvim;
           type = "lua";
           config = ''
+            local exclude_test_file = function()
+              return not string.match(vim.api.nvim_buf_get_name(0), ".*_test.py")
+            end
+
             require('telescope-alternate').setup({
               mappings = {
-                { '(.*)/(.*).py', { { '[1]/tests/[2]_test.py', 'Test' } } },
-                { '(.*)/tests/(.*)_test.py', { { '[1]/[2].py', 'Original', true } } },
+                { '(.*)/(.*).py', { { '[1]/tests/[2]_test.py', 'Test', exclude_test_file } } },
+                { '(.*)/tests/(.*)_test.py', { { '[1]/[2].py', 'Original' } } },
               },
               presets = { }, -- Telescope pre-defined mapping presets
               open_only_one_with = 'current_pane',
