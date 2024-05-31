@@ -29,6 +29,8 @@
     pkgs.terraform-ls
     pkgs.nodePackages.vscode-langservers-extracted
     pkgs.nodePackages.typescript-language-server
+    pkgs.ansible-language-server
+    pkgs.ansible-lint
   ];
 
   programs.neovim = {
