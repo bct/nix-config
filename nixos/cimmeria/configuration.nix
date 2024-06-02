@@ -35,8 +35,8 @@
     keep-derivations = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
+  # Enable touchpad support (enabled by default in most desktopManager).
+  services.libinput.enable = true;
 
   hardware.firmware = with pkgs; [
     # I'm not sure this is necessary. I added it when I was debugging audio

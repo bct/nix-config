@@ -28,8 +28,10 @@ in {
     i18n.defaultLocale = "en_CA.UTF-8";
     console.keyMap = "dvorak";
 
-    services.xserver.layout = "us";
-    services.xserver.xkbVariant = "dvorak";
+    services.xserver.xkb = {
+      layout = "us";
+      variant = "dvorak";
+    };
 
     environment.variables.EDITOR = "vim";
 
@@ -44,7 +46,7 @@ in {
 
     # Enable printer discovery.
     services.avahi.enable = true;
-    services.avahi.nssmdns = true;
+    services.avahi.nssmdns4 = true;
 
     # Enable scanner
     hardware.sane = {
@@ -57,7 +59,7 @@ in {
     # Enable X and lightdm.
     # Delegate X session configuration to home-manager.
     services.xserver.enable = true;
-    services.xserver.displayManager.defaultSession = "default";
+    services.displayManager.defaultSession = "default";
     services.xserver.displayManager.session = [
       {
         manage = "desktop";
