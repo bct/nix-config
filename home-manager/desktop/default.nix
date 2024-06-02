@@ -68,7 +68,7 @@
   ];
 
   # Raw configuration files
-  home.file.".alacritty.yml".source = ./files/alacritty.yml;
+  home.file.".alacritty.toml".source = ./files/alacritty.toml;
 
   home.file.".ssh/config".text = ''
     # 2022-08-06 many hosts (e.g. mi-go) don't have alacritty terminfo
