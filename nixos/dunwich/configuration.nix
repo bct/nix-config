@@ -119,6 +119,7 @@
     "127.0.0.1" = [
       "bagel.local.artificial.agency"
       "admin.local.artificial.agency"
+      "dashboard.local.artificial.agency"
     ];
   };
 
