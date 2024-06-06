@@ -37,6 +37,22 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 64 * 1024; # 64GB
+    }
+  ];
+
+  # the root disk
+  boot.resumeDevice = "/dev/disk/by-uuid/8a1d945c-dff0-4e0f-88f4-3df8bd66f874";
+  boot.kernelParams = [
+    "resume=UUID=8a1d945c-dff0-4e0f-88f4-3df8bd66f874"
+    # the first row of the "physical_offset" column in `sudo filefrag -v /swapfile`
+    "resume_offset=196800512"
+  ];
+
+
   services.udev.extraRules = ''
     # Suspend the system when battery level drops to 5% or lower
     SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl suspend"
