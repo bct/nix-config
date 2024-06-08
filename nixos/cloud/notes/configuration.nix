@@ -46,7 +46,7 @@
 
   environment.systemPackages = with pkgs; [
     # for the "vikunja" cli tool
-    vikunja-api
+    vikunja
 
     goatcounter
   ];
@@ -58,7 +58,7 @@
     enable = true;
 
     virtualHosts."tasks.diffeq.com".extraConfig = ''
-      root * ${pkgs.vikunja-frontend}
+      root * ${pkgs.vikunja}
       encode gzip
       file_server
 
@@ -111,23 +111,17 @@
     ensureUsers = [
       {
         name = "vikunja-api";
-        ensurePermissions = {
-          "DATABASE vikunja" = "ALL PRIVILEGES";
-        };
+        #ensurePermissions = { "DATABASE vikunja" = "ALL PRIVILEGES"; };
       }
 
       {
         name = "wiki-js";
-        ensurePermissions = {
-          "DATABASE wiki" = "ALL PRIVILEGES";
-        };
+        #ensurePermissions = { "DATABASE wiki" = "ALL PRIVILEGES"; };
       }
 
       {
         name = "goatcounter";
-        ensurePermissions = {
-          "DATABASE goatcounter" = "ALL PRIVILEGES";
-        };
+        ensureDBOwnership = true;
       }
     ];
   };
