@@ -11,6 +11,7 @@ let
   yuurei = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINqIJgMjI1OWLvn6eOrlsF0TG8jFu6SYkzq85VODtUbP";
 
   # -- cloud
+  megahost-one = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAbD0X8eQfKiG2rYYcZ6dVdRHQaRK8DrFz7YaLzHQx2";
   s3-proxy = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG/edQPh5lgflnMjVHAHhRDNNmmusQxm7MHU2QE7kiyV";
   notes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKgWQElHPbvswEcaYNUAQ1E8Kw/KL4e3H4VrGicBNxAJ";
   viator = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHEtc5zAnIK1S6p+8L/FNjYgujVqhGUUG4Y9WpYb06mO";
@@ -28,7 +29,7 @@ in
 
     # wireguard keys
     "notes-wireguard-key.age".publicKeys = [ bct-cimmeria notes ];
-    "viator-wireguard-key.age".publicKeys = [ bct-cimmeria viator ];
+    "viator-wireguard-key.age".publicKeys = [ bct-cimmeria viator megahost-one ];
 
     # SSH keys for accessing borg.domus.diffeq.com
     "notes-borg-ssh-key.age".publicKeys = [ bct-cimmeria notes ];
