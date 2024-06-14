@@ -65,7 +65,7 @@
       # Acessible through 'nix develop' or 'nix-shell' (legacy)
       devShells = forAllSystems (system:
         let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./shell.nix { inherit pkgs; }
+        in import ./shell.nix { inherit pkgs inputs; }
       );
 
       # Your custom packages and modifications, exported as overlays

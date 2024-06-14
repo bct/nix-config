@@ -3,3 +3,6 @@
 
 # "nix build" output
 result
+
+# direnv state
+.direnv/
