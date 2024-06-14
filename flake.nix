@@ -25,6 +25,10 @@
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
 
+    # disko
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
     # packages from flakes
     airsonic-refix-jukebox.url = "github:bct/airsonic-refix-jukebox";
     airsonic-refix-jukebox.inputs.nixpkgs.follows = "nixpkgs";
