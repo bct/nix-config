@@ -106,6 +106,11 @@
         };
 
         # -- cloud hosts
+        megahost-one = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit self inputs outputs; };
+          modules = [ ./nixos/cloud/megahost-one/configuration.nix ];
+        };
+
         notes = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/cloud/notes/configuration.nix ];
@@ -146,6 +151,11 @@
         };
 
         # -- cloud hosts --
+        nodes.megahost-one = mkNode {
+          hostname = "megahost-one.diffeq.com";
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.megahost-one;
+        };
+
         nodes.notes = mkNode {
           hostname = "notes.diffeq.com";
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.notes;
