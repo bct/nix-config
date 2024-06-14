@@ -12,6 +12,7 @@
 
   nix-config = pkgs.mkShell {
     nativeBuildInputs = [
+      pkgs.nixos-anywhere
       inputs.agenix.packages.x86_64-linux.agenix
       inputs.deploy-rs.packages.x86_64-linux.deploy-rs
     ];
