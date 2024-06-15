@@ -11,6 +11,7 @@
     ./disk-config.nix
     ./coredns-wgsd.nix
     ./wireguard.nix
+    ./static-site.nix
   ];
 
   # we'll configure these using disko.
