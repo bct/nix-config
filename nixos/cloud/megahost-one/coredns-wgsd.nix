@@ -1,6 +1,10 @@
 { pkgs, ... }: {
   networking.firewall.allowedUDPPorts = [ 53 ];
 
+  # set up coredns to respond to DNS requests for _wireguard._udp.diffeq.com
+  # using the plugin: https://github.com/jwhited/wgsd
+  #
+  # the plugin provides IP addresses for known wireguard peers.
   services.coredns = {
     enable = true;
 
