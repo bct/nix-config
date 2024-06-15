@@ -10,7 +10,7 @@
 
     ./disk-config.nix
 #    ./coredns-wgsd.nix
-#    ./wireguard.nix
+    ./wireguard.nix
   ];
 
   # we'll configure these using disko.
