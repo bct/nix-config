@@ -9,7 +9,7 @@
     "${self}/nixos/hardware/vultr"
 
     ./disk-config.nix
-#    ./coredns-wgsd.nix
+    ./coredns-wgsd.nix
     ./wireguard.nix
   ];
 
