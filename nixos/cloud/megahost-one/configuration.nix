@@ -1,4 +1,4 @@
-{ self, inputs, pkgs, ... }: {
+{ self, inputs, config, ... }: {
   imports = [
     inputs.agenix.nixosModules.default
     inputs.disko.nixosModules.disko
@@ -22,6 +22,7 @@
           buckets = [ "mosfet-novpet" ];
           hostAddress6 = "fc00::1";
           containerAddress6 = "fc00::f1";
+          rootCredentialsPath = config.age.secrets.s3-proxy-minio-root-credentials.path;
         }
       )
     )
@@ -34,6 +35,7 @@
           buckets = [ "zardoz" "middel-salbyt" ];
           hostAddress6 = "fc00::2";
           containerAddress6 = "fc00::f2";
+          rootCredentialsPath = config.age.secrets.s3-proxy-minio-root-credentials.path;
         }
       )
     )
@@ -46,6 +48,13 @@
   networking.hostName = "megahost-one";
 
   time.timeZone = "Etc/UTC";
+
+  age.secrets = {
+    s3-proxy-minio-root-credentials = {
+      file = ../../../secrets/s3-proxy-minio-root-credentials.age;
+      mode = "600";
+    };
+  };
 
   system.stateVersion = "24.05";
 }

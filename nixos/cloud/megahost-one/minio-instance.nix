@@ -1,4 +1,12 @@
-{ containerName, minioDomain, consoleSubdomain ? "console", buckets, hostAddress6, containerAddress6, ... }:
+{
+  containerName,
+  minioDomain,
+  consoleSubdomain ? "console",
+  buckets,
+  hostAddress6,
+  containerAddress6,
+  rootCredentialsPath
+}:
 
 {
   # set up a container to run minio
@@ -9,10 +17,23 @@
     hostAddress6 = hostAddress6;
     localAddress6 = containerAddress6;
 
+    bindMounts = {
+      "/tmp/minio-root-credentials" = {
+        hostPath = rootCredentialsPath;
+        isReadOnly = true;
+     };
+    };
+
     config = { config, pkgs, ... }: {
       system.stateVersion = "24.05";
 
       networking.firewall.allowedTCPPorts = [ 9000 9001 ];
+
+      services.minio = {
+        enable = true;
+        rootCredentialsFile = "/tmp/minio-root-credentials";
+      };
+      systemd.services.minio.environment.MINIO_DOMAIN = minioDomain;
     };
   };
 
