@@ -25,7 +25,7 @@ in
     "rtlamr-collect-env.age".publicKeys = [ bct-cimmeria spectator ];
 
     # admin username/password for minio
-    "s3-proxy-minio-root-credentials.age".publicKeys = [ bct-cimmeria s3-proxy ];
+    "s3-proxy-minio-root-credentials.age".publicKeys = [ bct-cimmeria s3-proxy megahost-one ];
 
     # wireguard keys
     "notes-wireguard-key.age".publicKeys = [ bct-cimmeria notes ];
