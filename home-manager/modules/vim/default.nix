@@ -3,6 +3,7 @@
 {
   # Packages that should be installed to the user profile.
   home.packages = let
+    # aa/src wants a specific version of pyright
     pyright = pkgs.nodePackages.pyright.override rec {
       version = "1.1.357";
       src = pkgs.fetchurl {
@@ -41,6 +42,17 @@
     extraConfig = lib.fileContents ./files/extra-config.vim;
 
     plugins = with pkgs.vimPlugins; let
+      # aa/src wants a specific version of black
+      black = pkgs.black.overridePythonAttrs (oldAttrs: rec {
+        version = "23.12.1";
+        src = pkgs.fetchPypi {
+          inherit version;
+          pname = "black";
+          hash = "sha256-TOPvFOvo2VCRiAFNlq8cRWqRDVtcv0NKCf734CSz0NU=";
+        };
+      });
+
+      # -- unpackaged plugins
       arrow-nvim = pkgs.vimUtils.buildVimPlugin {
         pname = "arrow.nvim";
         version = "2024-02-21";
@@ -136,7 +148,7 @@
 
             conform.setup({
               formatters = {
-                black = { command = "${pkgs.black}/bin/black" },
+                black = { command = "${black}/bin/black" },
                 isort = { command = "${pkgs.isort}/bin/isort" },
                 prettier = { command = "${pkgs.nodePackages.prettier}/bin/prettier" },
               },
