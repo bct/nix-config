@@ -19,7 +19,6 @@
     aoeu = "setxkbmap -layout us";
     asdf = "setxkbmap -layout us -variant dvorak";
 
-    ls = "ls --color=auto";
     grep = "grep --color=auto";
 
     wg-up = "sudo systemctl start wg-quick-wg0.service";
@@ -62,5 +61,11 @@
 
   programs.direnv = {
     enable = true;
+  };
+
+  programs.eza = {
+    enable = true;
+    icons = true;
+    git = true;
   };
 }
