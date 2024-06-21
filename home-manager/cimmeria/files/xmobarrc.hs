@@ -4,7 +4,7 @@ Config { overrideRedirect = False
        , fgColor = "#ebdbb2"
        , position = Top
        , commands = [ Run Weather "CYEG"
-                      [ "--template", "<weather> <tempC>°C"
+                      [ "--template", "<skyCondition> <tempC>°C"
                       ] 36000
 	                  , Run Load
                       [ "--template", "󰇅 <load1> <load5> <load15>"
