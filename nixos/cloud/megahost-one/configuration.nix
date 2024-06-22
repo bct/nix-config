@@ -11,6 +11,7 @@
     ./disk-config.nix
     ./coredns-wgsd.nix
     ./postgres.nix
+    ./goatcounter.nix
     ./wireguard.nix
 
     ./static-site.nix
