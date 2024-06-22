@@ -42,4 +42,7 @@ in
 
     # Miniflux admin credentials
     "miniflux-admin-credentials.age".publicKeys = [ bct-cimmeria yuurei ];
+
+    # Database passwords
+    "db/password-goatcounter.age".publicKeys = [ bct-cimmeria megahost-one ];
   }

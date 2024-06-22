@@ -10,6 +10,7 @@
 
     ./disk-config.nix
     ./coredns-wgsd.nix
+    ./postgres.nix
     ./wireguard.nix
 
     ./static-site.nix
