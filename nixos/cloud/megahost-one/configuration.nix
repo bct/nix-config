@@ -12,7 +12,8 @@
     ./coredns-wgsd.nix
     ./postgres.nix
     ./goatcounter.nix
-    ./wireguard.nix
+    ./wireguard-viator.nix
+    ./wireguard-conductum.nix
 
     ./static-site.nix
 

@@ -30,6 +30,7 @@ in
     # wireguard keys
     "notes-wireguard-key.age".publicKeys = [ bct-cimmeria notes ];
     "viator-wireguard-key.age".publicKeys = [ bct-cimmeria viator megahost-one ];
+    "wg/megahost-one-conductum.age".publicKeys = [ bct-cimmeria megahost-one ];
 
     # SSH keys for accessing borg.domus.diffeq.com
     "notes-borg-ssh-key.age".publicKeys = [ bct-cimmeria notes ];
