@@ -34,6 +34,7 @@ in
 
     # SSH keys for accessing borg.domus.diffeq.com
     "notes-borg-ssh-key.age".publicKeys = [ bct-cimmeria notes ];
+    "ssh/megahost-one-borg.age".publicKeys = [ bct-cimmeria megahost-one ];
 
     # ZoneEdit API key for creating TXT records for ACME
     "zoneedit.age".publicKeys = [ bct-cimmeria spectator stereo yuurei ];
@@ -45,5 +46,6 @@ in
     "miniflux-admin-credentials.age".publicKeys = [ bct-cimmeria yuurei ];
 
     # Database passwords
+    "db/password-megahost-postgres.age".publicKeys = [ bct-cimmeria megahost-one ];
     "db/password-goatcounter.age".publicKeys = [ bct-cimmeria megahost-one ];
   }

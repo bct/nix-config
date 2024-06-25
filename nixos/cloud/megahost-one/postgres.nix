@@ -23,6 +23,11 @@ in {
     localAddress6 = containerIp6;
 
     bindMounts = {
+      "/tmp/agenix/password-postgres" = {
+        isReadOnly = true;
+        hostPath = config.age.secrets.password-postgres.path;
+      };
+
       "/tmp/agenix/password-goatcounter" = {
         isReadOnly = true;
         hostPath = config.age.secrets.password-goatcounter.path;
@@ -47,7 +52,6 @@ in {
 
         ensureDatabases = [ "goatcounter" ];
 
-
         ensureUsers = [
           {
             name = "goatcounter";
@@ -57,6 +61,7 @@ in {
       };
 
       systemd.services.postgresql.serviceConfig.LoadCredential = [
+        "password-postgres:/tmp/agenix/password-postgres"
         "password-goatcounter:/tmp/agenix/password-goatcounter"
       ];
       systemd.services.postgresql.postStart = let
@@ -82,17 +87,14 @@ in {
         '';
       in
         lib.mkAfter ''
+          ${set-password} postgres $CREDENTIALS_DIRECTORY/password-postgres
           ${set-password} goatcounter $CREDENTIALS_DIRECTORY/password-goatcounter
         '';
       };
   };
 
   age.secrets = {
-    password-goatcounter = {
-      file = ../../../secrets/db/password-goatcounter.age;
-      owner = "root";
-      group = "root";
-      mode = "600";
-    };
+    password-postgres.file = ../../../secrets/db/password-megahost-postgres.age;
+    password-goatcounter.file = ../../../secrets/db/password-goatcounter.age;
   };
 }

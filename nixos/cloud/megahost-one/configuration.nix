@@ -42,6 +42,8 @@
         }
       )
     )
+
+    ./borgmatic.nix
   ];
 
   # we'll configure these using disko.
