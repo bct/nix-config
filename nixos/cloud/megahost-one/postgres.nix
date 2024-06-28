@@ -32,6 +32,11 @@ in {
         isReadOnly = true;
         hostPath = config.age.secrets.password-goatcounter.path;
       };
+
+      "/tmp/agenix/password-wikijs" = {
+        isReadOnly = true;
+        hostPath = config.age.secrets.password-wikijs.path;
+      };
     };
 
     config = { config, pkgs, ... }: {
@@ -50,11 +55,16 @@ in {
           host    all             all             ::/0                    md5
         '';
 
-        ensureDatabases = [ "goatcounter" ];
+        ensureDatabases = [ "goatcounter" "wiki-js" ];
 
         ensureUsers = [
           {
             name = "goatcounter";
+            ensureDBOwnership = true;
+          }
+
+          {
+            name = "wiki-js";
             ensureDBOwnership = true;
           }
         ];
@@ -63,6 +73,7 @@ in {
       systemd.services.postgresql.serviceConfig.LoadCredential = [
         "password-postgres:/tmp/agenix/password-postgres"
         "password-goatcounter:/tmp/agenix/password-goatcounter"
+        "password-wikijs:/tmp/agenix/password-wikijs"
       ];
       systemd.services.postgresql.postStart = let
         set-password = pkgs.writeScript "psql-set-password" ''
@@ -89,6 +100,7 @@ in {
         lib.mkAfter ''
           ${set-password} postgres $CREDENTIALS_DIRECTORY/password-postgres
           ${set-password} goatcounter $CREDENTIALS_DIRECTORY/password-goatcounter
+          ${set-password} wiki-js $CREDENTIALS_DIRECTORY/password-wikijs
         '';
       };
   };
@@ -96,5 +108,6 @@ in {
   age.secrets = {
     password-postgres.file = ../../../secrets/db/password-megahost-postgres.age;
     password-goatcounter.file = ../../../secrets/db/password-goatcounter.age;
+    password-wikijs.file = ../../../secrets/db/password-wikijs.age;
   };
 }

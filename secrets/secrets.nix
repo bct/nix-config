@@ -48,4 +48,5 @@ in
     # Database passwords
     "db/password-megahost-postgres.age".publicKeys = [ bct-cimmeria megahost-one ];
     "db/password-goatcounter.age".publicKeys = [ bct-cimmeria megahost-one ];
+    "db/password-wikijs.age".publicKeys = [ bct-cimmeria megahost-one ];
   }
