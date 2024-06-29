@@ -93,7 +93,7 @@ in {
           fi
 
           psql --port=${builtins.toString config.services.postgresql.settings.port} -tA <<EOF
-            ALTER USER $username WITH PASSWORD '$password';
+            ALTER USER "$username" WITH PASSWORD '$password';
           EOF
         '';
       in
