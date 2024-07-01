@@ -120,11 +120,6 @@
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/cloud/s3-proxy/configuration.nix ];
         };
-
-        viator = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/cloud/viator/configuration.nix ];
-        };
       };
 
       deploy = let
@@ -164,11 +159,6 @@
         nodes.s3-proxy = mkNode {
           hostname = "s3-proxy.diffeq.com";
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.s3-proxy;
-        };
-
-        nodes.viator = mkNode {
-          hostname = "viator.diffeq.com";
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.viator;
         };
       };
 
