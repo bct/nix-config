@@ -23,7 +23,7 @@
   services.wireguard-via-wgsd.address = "192.168.8.18/32";
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   # power management
   services.tlp.enable = true;
