@@ -147,7 +147,7 @@
         };
 
         nodes.notes = mkNode {
-          hostname = "notes.diffeq.com";
+          hostname = "tasks.diffeq.com";
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.notes;
         };
       };

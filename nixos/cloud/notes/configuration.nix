@@ -47,8 +47,6 @@
   environment.systemPackages = with pkgs; [
     # for the "vikunja" cli tool
     vikunja
-
-    goatcounter
   ];
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
@@ -69,13 +67,6 @@
 
     virtualHosts."notes.diffeq.com".extraConfig = ''
       reverse_proxy localhost:3000
-    '';
-
-    virtualHosts."m.diffeq.com".extraConfig = ''
-      reverse_proxy localhost:4000 {
-        # https://github.com/arp242/goatcounter/issues/647#issuecomment-1345559928
-        header_down Set-Cookie "^(.*HttpOnly;) (SameSite=None)$" "$1 Secure; $2"
-      }
     '';
 
     virtualHosts."diffeq.com".extraConfig = ''
@@ -106,22 +97,12 @@
       root            postgres        postgres
     '';
 
-    ensureDatabases = [ "vikunja" "wiki" "goatcounter" ];
+    ensureDatabases = [ "vikunja" ];
 
     ensureUsers = [
       {
         name = "vikunja-api";
         #ensurePermissions = { "DATABASE vikunja" = "ALL PRIVILEGES"; };
-      }
-
-      {
-        name = "wiki-js";
-        #ensurePermissions = { "DATABASE wiki" = "ALL PRIVILEGES"; };
-      }
-
-      {
-        name = "goatcounter";
-        ensureDBOwnership = true;
       }
     ];
   };
@@ -142,47 +123,6 @@
     };
   };
 
-  services.wiki-js = {
-    enable = true;
-    settings = {
-      bindIp = "127.0.0.1";
-      port = 3000;
-
-      db = {
-        user = "wiki-js";
-        host = "/run/postgresql";
-      };
-    };
-  };
-
-  systemd.services.goatcounter = {
-    wantedBy = ["multi-user.target"];
-    after = ["network.target" "postgresql.service"];
-
-    serviceConfig = {
-      Type = "simple";
-      DynamicUser = true;
-      # if we don't pass -email-from then it tries to look up the current
-      # username, which doesn't work due to the chroot etc. below
-      ExecStart = "${pkgs.goatcounter}/bin/goatcounter serve -listen 127.0.0.1:4000 -db 'postgresql+host=/run/postgresql' -tls http -email-from goatcounter@m.diffeq.com";
-      Restart = "always";
-
-      RuntimeDirectory = "goatcounter";
-      RootDirectory = "/run/goatcounter";
-      ReadWritePaths = "";
-      BindReadOnlyPaths = [
-        "/run/postgresql/"
-        builtins.storeDir
-      ];
-
-      PrivateDevices = true;
-      PrivateUsers = true;
-
-      CapabilityBoundingSet = "";
-      RestrictNamespaces = true;
-    };
-  };
-
   services.borgmatic = {
     enable = true;
     settings = {
@@ -195,7 +135,6 @@
 
       source_directories = [
         "/var/lib/vikunja"
-        "/var/lib/wiki-js"
       ];
 
       postgresql_databases = [
