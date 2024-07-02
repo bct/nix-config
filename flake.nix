@@ -115,11 +115,6 @@
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/cloud/notes/configuration.nix ];
         };
-
-        s3-proxy = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/cloud/s3-proxy/configuration.nix ];
-        };
       };
 
       deploy = let
@@ -154,11 +149,6 @@
         nodes.notes = mkNode {
           hostname = "notes.diffeq.com";
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.notes;
-        };
-
-        nodes.s3-proxy = mkNode {
-          hostname = "s3-proxy.diffeq.com";
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.s3-proxy;
         };
       };
 
