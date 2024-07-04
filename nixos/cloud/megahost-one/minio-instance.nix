@@ -1,59 +1,97 @@
-{
-  containerName,
-  minioDomain,
-  consoleSubdomain ? "console",
-  buckets,
-  hostAddress6,
-  containerAddress6,
-  rootCredentialsPath
-}:
+{ lib, config, ... }:
 
-{
-  # set up a container to run minio
-  containers.${containerName} = {
-    autoStart = true;
-    privateNetwork = true;
+with lib;
 
-    hostAddress6 = hostAddress6;
-    localAddress6 = containerAddress6;
+let
+  cfg = config.megahost.minio;
+  rootCredentialsPath = "/tmp/minio-root-credentials";
+  consoleSubdomain = "console";
+  bucketPort = 9000;
+  consolePort = 9001;
+in {
+  options.megahost.minio = {
+    enable = mkEnableOption "megahost.minio";
 
-    bindMounts = {
-      "/tmp/minio-root-credentials" = {
-        hostPath = rootCredentialsPath;
-        isReadOnly = true;
-     };
-    };
+    instances = mkOption {
+      type = types.attrsOf (types.submodule (
+        {config, options, name, ...}: {
+          options = {
+            hostAddress6 = mkOption {
+              type = types.str;
+            };
 
-    config = { config, pkgs, ... }: {
-      system.stateVersion = "24.05";
+            containerAddress6 = mkOption {
+              type = types.str;
+            };
 
-      networking.firewall.allowedTCPPorts = [ 9000 9001 ];
+            rootCredentialsPath = mkOption {
+              type = types.path;
+            };
 
-      services.minio = {
-        enable = true;
-        rootCredentialsFile = "/tmp/minio-root-credentials";
-      };
-      systemd.services.minio.environment.MINIO_DOMAIN = minioDomain;
+            minioDomain = mkOption {
+              type = types.str;
+            };
+
+            buckets = mkOption {
+              type = types.listOf types.str;
+            };
+          };
+        }
+      ));
     };
   };
 
-  # the host reverse proxies to each container.
-  services.caddy = {
-    enable = true;
+  # set up a container to run minio
+  config = lib.mkIf cfg.enable {
+    containers = lib.mapAttrs (containerName: instanceConfig: {
+      autoStart = true;
+      privateNetwork = true;
 
-    # the admin console runs on container port 9001
-    virtualHosts."${consoleSubdomain}.${minioDomain}".extraConfig = ''
-      reverse_proxy [${containerAddress6}]:9001
-    '';
+      hostAddress6 = instanceConfig.hostAddress6;
+      localAddress6 = instanceConfig.containerAddress6;
 
-    # buckets are accessible on container port 9000
-    # TODO: use the acme-zoneedit module to get a wildcard certificate, so that
-    # we don't need to explicitly list buckets here.
-    virtualHosts.${minioDomain} = {
-      serverAliases = map (bucket: "${bucket}.${minioDomain}") buckets;
-      extraConfig = ''
-        reverse_proxy [${containerAddress6}]:9000
-      '';
+      bindMounts = {
+        ${rootCredentialsPath} = {
+          hostPath = instanceConfig.rootCredentialsPath;
+          isReadOnly = true;
+        };
+      };
+
+      config = { config, pkgs, ... }: {
+        system.stateVersion = "24.05";
+
+        networking.firewall.allowedTCPPorts = [ bucketPort consolePort ];
+
+        services.minio = {
+          enable = true;
+          rootCredentialsFile = rootCredentialsPath;
+        };
+        systemd.services.minio.environment.MINIO_DOMAIN = instanceConfig.minioDomain;
+      };
+    }) cfg.instances;
+
+    # the host reverse proxies to each container.
+    services.caddy = {
+      enable = true;
+
+      virtualHosts = lib.concatMapAttrs (containerName: instanceConfig: {
+        # buckets are accessible on container port 9000
+        # TODO: use the acme-zoneedit module to get a wildcard certificate, so that
+        # we don't need to explicitly list buckets here.
+        ${instanceConfig.minioDomain} = {
+          serverAliases = map (bucket: "${bucket}.${instanceConfig.minioDomain}") instanceConfig.buckets;
+          extraConfig = ''
+            reverse_proxy [${instanceConfig.containerAddress6}]:${toString bucketPort}
+          '';
+        };
+
+        # the admin console runs on container port 9001
+        "${consoleSubdomain}.${instanceConfig.minioDomain}" = {
+          extraConfig = ''
+            reverse_proxy [${instanceConfig.containerAddress6}]:${toString consolePort}
+          '';
+        };
+      }) cfg.instances;
     };
   };
 }
