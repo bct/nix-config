@@ -27,6 +27,7 @@
     pipenv
     awscli2
     ansible
+    process-compose
 
     unstable.terraform
 
