@@ -94,12 +94,17 @@
     };
   };
 
+  # this config was copied from the NixOS wiki.
+  # sometimes when gonic tries to start it gets:
+  #     Failed to mount /mnt/beets to /run/gonic/mnt/beets: No such device
+  #
+  # this can happen even if the network is working.
   fileSystems."/mnt/beets" = {
     device = "//mi-go.domus.diffeq.com/beets";
     fsType = "cifs";
     options = let
       # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
     in ["${automount_opts},guest"];
   };
