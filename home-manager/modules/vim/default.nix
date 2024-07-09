@@ -37,6 +37,12 @@
   programs.neovim = {
     enable = true;
 
+    # neovim 0.10, so we have native snippets available
+    # have to use -unwrapped or it fails to build with:
+    #   /nix/store/klvl86nr4wj5q9r351jnq0l2nway8vkj-neovim-0.10.0/bin/nvim-python3: Permission denied
+    # https://github.com/NixOS/nixpkgs/issues/137829
+    package = pkgs.unstable.neovim-unwrapped;
+
     # a helpful reference for config: https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
     extraLuaConfig = lib.fileContents ./files/init.lua;
     extraConfig = lib.fileContents ./files/extra-config.vim;
@@ -96,6 +102,11 @@
             cmp.setup {
               completion = {
                 completeopt = 'menu,menuone,noinsert',
+              },
+              snippet = {
+                expand = function(args)
+                  vim.snippet.expand(args.body)
+                end,
               },
               mapping = cmp.mapping.preset.insert {
                 ['<C-n>'] = cmp.mapping.select_next_item(),
