@@ -7,7 +7,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers (doRectFloat)
 import XMonad.Hooks.StatusBar
-import XMonad.Hooks.StatusBar.PP
+import XMonad.Hooks.StatusBar.PP (filterOutWsPP)
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 
@@ -28,7 +28,7 @@ import XMonad.Layout.PerWorkspace
 import XMonad.Operations (restart)
 
 import XMonad.Util.Loggers
-import XMonad.Util.NamedScratchpad
+import XMonad.Util.NamedScratchpad (NamedScratchpad(NS), namedScratchpadAction, namedScratchpadManageHook, customFloating, scratchpadWorkspaceTag)
 import XMonad.Util.WindowProperties (Property(ClassName), hasProperty)
 
 import Control.Monad ((<=<), when)
@@ -84,7 +84,8 @@ myManageHook = composeAll
     ]
 
 myXmobarPP :: PP
-myXmobarPP = def
+myXmobarPP = filterOutWsPP [scratchpadWorkspaceTag] $
+  def
     { ppSep = ""
     -- workspaces
     , ppCurrent = yellow . wrap " " "" . Workspaces.topicNameToIcon
