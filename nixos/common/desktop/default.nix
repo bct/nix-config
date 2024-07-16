@@ -60,13 +60,23 @@ in {
     # Delegate X session configuration to home-manager.
     services.xserver.enable = true;
     services.displayManager.defaultSession = "default";
-    services.xserver.displayManager.session = [
-      {
-        manage = "desktop";
-        name = "default";
-        start = ''exec $HOME/.xsession'';
-      }
-    ];
+    services.xserver.displayManager = {
+      lightdm = {
+        enable = true;
+        greeters.slick = {
+          enable = true;
+          theme.name = "Adwaita-dark";
+        };
+      };
+
+      session = [
+        {
+          manage = "desktop";
+          name = "default";
+          start = ''exec $HOME/.xsession'';
+        }
+      ];
+    };
 
     users.users.${cfgPersonal.user} = {
       isNormalUser = true;
