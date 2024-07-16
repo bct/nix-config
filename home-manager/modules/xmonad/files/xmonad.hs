@@ -5,6 +5,7 @@ import XMonad.Util.Ungrab
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.ManageHelpers (doRectFloat)
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.SetWMName
@@ -76,6 +77,10 @@ myManageHook = composeAll
     , className =? "mpv"            --> doFloat
     , className =? "feh"            --> doFloat
     , title     =? "QEMU"           --> doFloat
+
+    -- float, 60% width/60% height, centred
+    , (stringProperty "WM_WINDOW_ROLE") =? "GtkFileChooserDialog"
+                                    --> doRectFloat (SS.RationalRect 0.20 0.20 0.6 0.6)
     ]
 
 myXmobarPP :: PP
