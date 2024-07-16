@@ -29,7 +29,7 @@
     ansible
     process-compose
 
-    unstable.terraform
+    terraform
 
     prismlauncher
   ];
