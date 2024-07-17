@@ -1,6 +1,7 @@
 { pkgs, ... }: {
   imports = [
     ../desktop
+    ./1password.nix
   ];
 
   personal.user = "brendan";
@@ -18,8 +19,6 @@
 
   home.packages = with pkgs; [
     slack
-    _1password
-    _1password-gui
 
     vscode
 
