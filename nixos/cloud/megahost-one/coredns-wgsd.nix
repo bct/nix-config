@@ -18,9 +18,9 @@
 
     package = pkgs.coredns.override {
       externalPlugins = [
-        {name = "wgsd"; repo = "github.com/jwhited/wgsd"; version = "v0.3.5";}
+        {name = "wgsd"; repo = "github.com/jwhited/wgsd"; version = "v0.3.6";}
       ];
-      vendorHash = "sha256-yL0OHx4nP5lCq+Wo1PzqCE5l9+5Q0wwU+xFT7v8wqkU=";
+      vendorHash = "sha256-FNnVwxPYoaYpfkm3ZPWVhjFIaEhTxMyskv0+UJO2dd0=";
     };
   };
 
