@@ -21,7 +21,7 @@
 
     hoon-crib
 
-    inputs.deploy-rs.packages.x86_64-linux.deploy-rs
+    inputs.deploy-rs.packages.${pkgs.system}.deploy-rs
 
     wine
     winetricks

@@ -1,4 +1,6 @@
-{ config, inputs, ... }: {
+{ config, inputs, pkgs, ... }: let
+  unshittifyPkgs = inputs.unshittify.packages.${pkgs.system};
+in {
   # we need to use the nixpkgs-unstable version of the nitter module.
   # we disable the default version. and then import the unstable version.
   disabledModules = [ "services/misc/nitter.nix" ];
@@ -29,7 +31,7 @@
 
   services.miniflux = {
     enable = true;
-    package = inputs.unshittify.packages.x86_64-linux.miniflux;
+    package = unshittifyPkgs.miniflux;
     config = {
       LISTEN_ADDR = "0.0.0.0:8081";
 
@@ -46,7 +48,7 @@
 
   services.nitter = {
     enable = true;
-    package = inputs.unshittify.packages.x86_64-linux.nitter;
+    package = unshittifyPkgs.nitter;
     guestAccounts = config.age.secrets.nitter-guest-accounts.path;
     server.port = 8080;
     server.hostname = "yuurei:8080";
