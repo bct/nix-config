@@ -11,7 +11,7 @@ import XMonad.Hooks.StatusBar.PP (filterOutWsPP)
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 
-import XMonad.Actions.CycleWS (toggleWS)
+import XMonad.Actions.CycleWS (toggleWS')
 import XMonad.Actions.FloatKeys (keysMoveWindowTo)
 import XMonad.Actions.TopicSpace
 
@@ -200,8 +200,8 @@ myConfig = ewmh $ def
     }
   `additionalKeysP`
     [
-      -- Switch to the previously active workspace
-      ("M-r", toggleWS)
+      -- Switch to the previously active workspace (excluding the scratchpad)
+      ("M-r", toggleWS' [scratchpadWorkspaceTag])
 
       -- Launch dmenu with a custom font
     , ("M-p", spawn "dmenu_run -fn 'Ubuntu Mono-16'")
