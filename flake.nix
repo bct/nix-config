@@ -118,37 +118,42 @@
       };
 
       deploy = let
-        mkNode = { hostname, path }: {
+        mkNode = { hostname, arch, config }: {
           inherit hostname;
           user = "root";
-          profiles.system.path = path;
+          profiles.system.path = deploy-rs.lib."${arch}".activate.nixos config;
         };
       in {
         # -- lan hosts --
         nodes.spectator = mkNode {
           hostname = "spectator.domus.diffeq.com";
-          path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.spectator;
+          arch     = "aarch64-linux";
+          config   = self.nixosConfigurations.spectator;
         };
 
         nodes.stereo = mkNode {
           hostname = "stereo.domus.diffeq.com";
-          path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.stereo;
+          arch     = "aarch64-linux";
+          config   = self.nixosConfigurations.stereo;
         };
 
         nodes.yuurei = mkNode {
           hostname = "yuurei.domus.diffeq.com";
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.yuurei;
+          arch     = "x86_64-linux";
+          config   = self.nixosConfigurations.yuurei;
         };
 
         # -- cloud hosts --
         nodes.megahost-one = mkNode {
           hostname = "megahost-one.diffeq.com";
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.megahost-one;
+          arch     = "x86_64-linux";
+          config   = self.nixosConfigurations.megahost-one;
         };
 
         nodes.notes = mkNode {
           hostname = "tasks.diffeq.com";
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.notes;
+          arch     = "x86_64-linux";
+          config   = self.nixosConfigurations.notes;
         };
       };
 
