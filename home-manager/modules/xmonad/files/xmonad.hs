@@ -46,8 +46,13 @@ import qualified Workspaces
 
 scratchpads :: [NamedScratchpad]
 scratchpads = [
-    NS "music" "supersonic" (className =? "Supersonic")
+      NS "music" "supersonic"
+        (className =? "Supersonic")
         (customFloating $ SS.RationalRect (1/4) (1/4) (2/4) (2/4))
+
+    , NS "scratch-term" "alacritty --class scratch-term"
+        (className =? "scratch-term")
+        (customFloating $ SS.RationalRect 0 (1 - 0.6) 1 0.6)
   ]
 
 myLayout = webWorkspace $ (tiled ||| Mirror tiled ||| Full)
@@ -237,6 +242,7 @@ myConfig = ewmh $ def
 
     , ("M-m", (namedScratchpadAction scratchpads "music") >> fixupFloatingWindowForCurrentDisplay)
     , ("M-c", withFocused $ centreWindow)
+    , ("M-z", namedScratchpadAction scratchpads "scratch-term")
 
     -- Restart, but do not recompile. Maintain the existing window state.
     , ("M-q", restart "xmonad" True)
