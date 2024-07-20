@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.megahost.minio;
-  rootCredentialsPath = "/tmp/minio-root-credentials";
+  cfgContainerSecrets = config.megahost.container-secrets;
   consoleSubdomain = "console";
   bucketPort = 9000;
   consolePort = 9001;
@@ -43,19 +43,20 @@ in {
 
   # set up a container to run minio
   config = lib.mkIf cfg.enable {
+    megahost.container-secrets = lib.mapAttrs (containerName: instanceConfig:
+      {
+        minioRootCredentials = {
+          hostPath = instanceConfig.rootCredentialsPath;
+        };
+      }
+    ) cfg.instances;
+
     containers = lib.mapAttrs (containerName: instanceConfig: {
       autoStart = true;
       privateNetwork = true;
 
       hostAddress6 = instanceConfig.hostAddress6;
       localAddress6 = instanceConfig.containerAddress6;
-
-      bindMounts = {
-        ${rootCredentialsPath} = {
-          hostPath = instanceConfig.rootCredentialsPath;
-          isReadOnly = true;
-        };
-      };
 
       config = { config, pkgs, ... }: {
         system.stateVersion = "24.05";
@@ -64,7 +65,7 @@ in {
 
         services.minio = {
           enable = true;
-          rootCredentialsFile = rootCredentialsPath;
+          rootCredentialsFile = cfgContainerSecrets.${containerName}.minioRootCredentials.containerPath;
         };
         systemd.services.minio.environment.MINIO_DOMAIN = instanceConfig.minioDomain;
       };

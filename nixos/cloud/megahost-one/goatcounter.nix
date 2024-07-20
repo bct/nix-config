@@ -2,6 +2,7 @@
 let
   hostIp6 = "fc00::1:1";
   containerIp6 = "fc00::1:3/7";
+  cfgContainerSecrets = config.megahost.container-secrets;
 in {
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
   networking.bridges = {
@@ -22,13 +23,6 @@ in {
     hostBridge = "br0";
     localAddress6 = containerIp6;
 
-    bindMounts = {
-      "/tmp/agenix/password-goatcounter" = {
-        isReadOnly = true;
-        hostPath = config.age.secrets.password-goatcounter.path;
-      };
-    };
-
     # note that we're not taking pkgs here - it doesn't have access to our overlays.
     # instead we're using the outer pkgs.
     # TODO: what does this all mean?
@@ -46,7 +40,7 @@ in {
           DynamicUser = true;
 
           LoadCredential = [
-            "password-goatcounter:/tmp/agenix/password-goatcounter"
+            "password-goatcounter:${cfgContainerSecrets.goatcounter.passwordGoatcounter.containerPath}"
           ];
 
           ExecStart = let
@@ -89,11 +83,12 @@ in {
   };
 
   age.secrets = {
-    password-goatcounter = {
-      file = ../../../secrets/db/password-goatcounter.age;
-      owner = "root";
-      group = "root";
-      mode = "600";
+    password-goatcounter.file = ../../../secrets/db/password-goatcounter.age;
+  };
+
+  megahost.container-secrets.goatcounter = {
+    passwordGoatcounter = {
+      hostPath = config.age.secrets.password-goatcounter.path;
     };
   };
 

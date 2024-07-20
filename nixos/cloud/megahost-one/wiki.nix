@@ -3,6 +3,7 @@
 let
   hostIp6 = "fc00::1:1";
   containerIp6 = "fc00::1:4/7";
+  cfgContainerSecrets = config.megahost.container-secrets;
 in {
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
   networking.bridges = {
@@ -22,13 +23,6 @@ in {
 
     hostBridge = "br0";
     localAddress6 = containerIp6;
-
-    bindMounts = {
-      "/tmp/agenix/password-wikijs" = {
-        isReadOnly = true;
-        hostPath = config.age.secrets.password-wikijs.path;
-      };
-    };
 
     config = { config, ... }: {
       system.stateVersion = "24.05";
@@ -52,7 +46,7 @@ in {
 
       systemd.services.wiki-js.serviceConfig = {
         LoadCredential = [
-          "password-wikijs:/tmp/agenix/password-wikijs"
+          "password-wikijs:${cfgContainerSecrets.wiki.passwordWikijs.containerPath}"
         ];
 
         ExecStart = let
@@ -67,6 +61,12 @@ in {
           '';
           in lib.mkForce "${run-wikijs}";
       };
+    };
+  };
+
+  megahost.container-secrets.wiki = {
+    passwordWikijs = {
+      hostPath = config.age.secrets.password-wikijs.path;
     };
   };
 

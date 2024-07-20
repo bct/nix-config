@@ -2,6 +2,7 @@
 let
   hostIp6 = "fc00::1:1";
   containerIp6 = "fc00::1:2/7";
+  cfgContainerSecrets = config.megahost.container-secrets;
 in {
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
   networking.bridges = {
@@ -15,29 +16,26 @@ in {
     };
   };
 
+  megahost.container-secrets.postgres = {
+    passwordPostgres = {
+      hostPath = config.age.secrets.password-postgres.path;
+    };
+
+    passwordGoatcounter = {
+      hostPath = config.age.secrets.password-goatcounter.path;
+    };
+
+    passwordWikijs = {
+      hostPath = config.age.secrets.password-wikijs.path;
+    };
+  };
+
   containers.postgres = {
     autoStart = true;
     privateNetwork = true;
 
     hostBridge = "br0";
     localAddress6 = containerIp6;
-
-    bindMounts = {
-      "/tmp/agenix/password-postgres" = {
-        isReadOnly = true;
-        hostPath = config.age.secrets.password-postgres.path;
-      };
-
-      "/tmp/agenix/password-goatcounter" = {
-        isReadOnly = true;
-        hostPath = config.age.secrets.password-goatcounter.path;
-      };
-
-      "/tmp/agenix/password-wikijs" = {
-        isReadOnly = true;
-        hostPath = config.age.secrets.password-wikijs.path;
-      };
-    };
 
     config = { config, pkgs, ... }: {
       system.stateVersion = "24.05";
@@ -71,9 +69,9 @@ in {
       };
 
       systemd.services.postgresql.serviceConfig.LoadCredential = [
-        "password-postgres:/tmp/agenix/password-postgres"
-        "password-goatcounter:/tmp/agenix/password-goatcounter"
-        "password-wikijs:/tmp/agenix/password-wikijs"
+        "password-postgres:${cfgContainerSecrets.postgres.passwordPostgres.containerPath}"
+        "password-goatcounter:${cfgContainerSecrets.postgres.passwordGoatcounter.containerPath}"
+        "password-wikijs:${cfgContainerSecrets.postgres.passwordWikijs.containerPath}"
       ];
       systemd.services.postgresql.postStart = let
         set-password = pkgs.writeScript "psql-set-password" ''
