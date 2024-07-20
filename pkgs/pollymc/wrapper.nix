@@ -15,18 +15,20 @@
 , openal
 , jdk8
 , jdk17
+, jdk21
 , gamemode
 , flite
-, mesa-demos
+, glxinfo
 , pciutils
 , udev
+, vulkan-loader
 , libusb1
 
 , msaClientID ? null
 , gamemodeSupport ? stdenv.isLinux
 , textToSpeechSupport ? stdenv.isLinux
 , controllerSupport ? stdenv.isLinux
-, jdks ? [ jdk17 jdk8 ]
+, jdks ? [ jdk21 jdk17 jdk8 ]
 , additionalLibs ? [ ]
 , additionalPrograms ? [ ]
 }:
@@ -70,6 +72,7 @@ symlinkJoin {
         glfw
         openal
         stdenv.cc.cc.lib
+        vulkan-loader # VulkanMod's lwjgl
 
         # oshi
         udev
@@ -81,7 +84,7 @@ symlinkJoin {
 
       runtimePrograms = [
         xorg.xrandr
-        mesa-demos # need glxinfo
+        glxinfo
         pciutils # need lspci
       ]
       ++ additionalPrograms;

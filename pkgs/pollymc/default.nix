@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 , cmake
 , cmark
 , Cocoa
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-DF1lxQHetDKZEpRrRZ0HQWqqMDAGNiTZoCJUARdXFSk=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja canonicalize-jars-hook ];
+  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja stripJavaArchivesHook ];
   buildInputs =
     [
       qtbase
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "pollymc";
     description = "A free, open source launcher for Minecraft";
     longDescription = ''
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
-    platforms = with platforms; linux ++ darwin;
-    changelog = "https://github.com/fn2006/PollyMC/releases/tag/${version}";
+    platforms = with lib.platforms; linux ++ darwin;
+    changelog = "https://github.com/fn2006/PollyMC/releases/tag/${finalAttrs.version}";
   };
 })
