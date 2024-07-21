@@ -6,9 +6,10 @@ let
 
   wireguardInterface = "wg0";
 
+  # this is viator.diffeq.com
   # we can't use a hostname here - it's resolved after the interface is brought
   # up, and adding the interface might have broken DNS resolution.
-  wgsdDns = "66.135.19.196:53";
+  wgsdDns = "104.156.252.101:53";
   wgsdZone = "diffeq.com";
 
   dns = "192.168.8.1";
