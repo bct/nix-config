@@ -87,6 +87,16 @@ in {
     services.devmon.enable = true;
     programs.udevil.enable = true;
 
+    security.sudo = {
+      enable = true;
+      execWheelOnly = true;
+      extraConfig = ''
+        # share sudo session across terminal sessions
+        Defaults timestamp_type=global
+        Defaults insults
+      '';
+    };
+
     # use emulation to compile aarch64 packages
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
