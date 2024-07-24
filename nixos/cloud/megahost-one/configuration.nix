@@ -32,10 +32,12 @@
   time.timeZone = "Etc/UTC";
 
   age.secrets = {
-    s3-proxy-minio-root-credentials = {
-      file = ../../../secrets/s3-proxy-minio-root-credentials.age;
-      mode = "600";
-    };
+    s3-proxy-minio-root-credentials.file =
+      ../../../secrets/s3-proxy-minio-root-credentials.age;
+
+    password-postgres.file    = ../../../secrets/db/password-megahost-postgres.age;
+    password-goatcounter.file = ../../../secrets/db/password-goatcounter.age;
+    password-wikijs.file      = ../../../secrets/db/password-wikijs.age;
   };
 
   megahost.minio = {
@@ -59,6 +61,13 @@
     };
   };
 
+  megahost.postgres = {
+    userPasswords = {
+      postgres = config.age.secrets.password-postgres.path;
+      goatcounter = config.age.secrets.password-goatcounter.path;
+      wiki-js = config.age.secrets.password-wikijs.path;
+    };
+  };
 
   system.stateVersion = "24.05";
 }
