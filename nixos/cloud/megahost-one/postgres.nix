@@ -13,6 +13,11 @@ in {
   };
 
   config = {
+    assertions = builtins.map (username: {
+        assertion = !isNull (builtins.match "[-a-z]+" username);
+        message = "username \"${username}\" does not match \"[-a-z]+\"";
+    }) (lib.attrNames cfg.userPasswords);
+
     # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
     networking.bridges = {
       br0 = {
