@@ -7,8 +7,25 @@ let
   cfg = config.megahost.postgres;
 in {
   options.megahost.postgres = {
-    userPasswords = lib.mkOption {
-      type = lib.types.attrsOf lib.types.str;
+    databases = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+    };
+
+    users = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule (
+        {config, options, name, ...}: {
+          options = {
+            passwordFile = lib.mkOption {
+              type = lib.types.str;
+            };
+
+            ensureDBOwnership = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+            };
+          };
+        }
+      ));
     };
   };
 
@@ -16,7 +33,7 @@ in {
     assertions = builtins.map (username: {
         assertion = !isNull (builtins.match "[-a-z]+" username);
         message = "username \"${username}\" does not match \"[-a-z]+\"";
-    }) (lib.attrNames cfg.userPasswords);
+    }) (lib.attrNames cfg.users);
 
     # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
     networking.bridges = {
@@ -30,9 +47,9 @@ in {
       };
     };
 
-    megahost.container-secrets.postgres = lib.concatMapAttrs (userName: hostSecretPath: {
-      "password-${userName}" = { hostPath = hostSecretPath; };
-    }) cfg.userPasswords;
+    megahost.container-secrets.postgres = lib.concatMapAttrs (userName: userConfig: {
+      "password-${userName}" = { hostPath = userConfig.passwordFile; };
+    }) cfg.users;
 
     containers.postgres = {
       autoStart = true;
@@ -57,23 +74,17 @@ in {
             host    all             all             ::/0                    md5
           '';
 
-          ensureDatabases = [ "goatcounter" "wiki-js" ];
+          ensureDatabases = cfg.databases;
 
-          ensureUsers = [
+          ensureUsers = lib.mapAttrsToList (username: userConfig:
             {
-              name = "goatcounter";
-              ensureDBOwnership = true;
-            }
-
-            {
-              name = "wiki-js";
-              ensureDBOwnership = true;
-            }
-          ];
+              name = username;
+              ensureDBOwnership = userConfig.ensureDBOwnership;
+            }) cfg.users;
         };
 
         systemd.services.postgresql.serviceConfig.LoadCredential = lib.mapAttrsToList (userName: _:
-          "password-${userName}:${cfgContainerSecrets.postgres."password-${userName}".containerPath}") cfg.userPasswords;
+          "password-${userName}:${cfgContainerSecrets.postgres."password-${userName}".containerPath}") cfg.users;
 
         systemd.services.postgresql.postStart = let
           set-all-passwords = pkgs.writeShellScript "psql-set-password" ''
@@ -102,7 +113,7 @@ in {
             done
           '';
 
-          allUsernames = lib.concatStringsSep " " (lib.attrNames cfg.userPasswords);
+          allUsernames = lib.concatStringsSep " " (lib.attrNames cfg.users);
         in
           lib.mkAfter "${set-all-passwords} ${allUsernames}";
       };

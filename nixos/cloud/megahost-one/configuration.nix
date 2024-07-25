@@ -62,10 +62,22 @@
   };
 
   megahost.postgres = {
-    userPasswords = {
-      postgres = config.age.secrets.password-postgres.path;
-      goatcounter = config.age.secrets.password-goatcounter.path;
-      wiki-js = config.age.secrets.password-wikijs.path;
+    databases = [ "goatcounter" "wiki-js" ];
+
+    users = {
+      postgres = {
+        passwordFile = config.age.secrets.password-postgres.path;
+      };
+
+      goatcounter = {
+        passwordFile = config.age.secrets.password-goatcounter.path;
+        ensureDBOwnership = true;
+      };
+
+      wiki-js = {
+        passwordFile = config.age.secrets.password-wikijs.path;
+        ensureDBOwnership = true;
+      };
     };
   };
 
