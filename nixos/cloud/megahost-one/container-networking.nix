@@ -1,13 +1,14 @@
-{ ... }:
+{ lib, config, ... }:
 
 let
-  # postgres
   hostIp6 = "fc00::1:1";
   containerIp6 = {
     postgres    = "fc00::1:2/7";
     goatcounter = "fc00::1:3/7";
     wiki        = "fc00::1:4/7";
   };
+
+  cfgMinio = config.megahost.minio;
 in {
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
   networking.bridges = {
@@ -21,18 +22,23 @@ in {
     };
   };
 
-  containers.postgres = {
-    hostBridge = "br0";
-    localAddress6 = containerIp6.postgres;
-  };
+  containers = {
+    postgres = {
+      hostBridge = "br0";
+      localAddress6 = containerIp6.postgres;
+    };
 
-  containers.goatcounter = {
-    hostBridge = "br0";
-    localAddress6 = containerIp6.goatcounter;
-  };
+    goatcounter = {
+      hostBridge = "br0";
+      localAddress6 = containerIp6.goatcounter;
+    };
 
-  containers.wiki = {
-    hostBridge = "br0";
-    localAddress6 = containerIp6.wiki;
-  };
+    wiki = {
+      hostBridge = "br0";
+      localAddress6 = containerIp6.wiki;
+    };
+  } // (lib.mapAttrs (containerName: instanceConfig: {
+    hostAddress6 = instanceConfig.hostAddress6;
+    localAddress6 = instanceConfig.containerAddress6;
+  }) cfgMinio.instances);
 }

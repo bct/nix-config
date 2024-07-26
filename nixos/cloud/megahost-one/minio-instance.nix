@@ -55,9 +55,6 @@ in {
       autoStart = true;
       privateNetwork = true;
 
-      hostAddress6 = instanceConfig.hostAddress6;
-      localAddress6 = instanceConfig.containerAddress6;
-
       config = { config, pkgs, ... }: {
         system.stateVersion = "24.05";
 
