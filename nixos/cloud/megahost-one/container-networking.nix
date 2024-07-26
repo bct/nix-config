@@ -5,21 +5,31 @@ let
   cfgMinio = config.megahost.minio;
 in {
   options.megahost.container-network.bridge0 = {
-    netmask6 = lib.mkOption {
-      type = lib.types.int;
-      default = 64;
+    prefix6 = lib.mkOption {
+      type = lib.types.str;
     };
 
     hostAddress6 = lib.mkOption {
       type = lib.types.str;
+      default = "${cfg.bridge0.prefix6}::1";
+    };
+
+    netmask6 = lib.mkOption {
+      type = lib.types.int;
+      default = 64;
     };
 
     containers = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule (
         {config, options, name, ...}: {
           options = {
+            suffix6 = lib.mkOption {
+              type = lib.types.str;
+            };
+
             address6 = lib.mkOption {
               type = lib.types.str;
+              default = "${cfg.bridge0.prefix6}::${config.suffix6}";
             };
           };
         }

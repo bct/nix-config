@@ -83,12 +83,13 @@
   };
 
   megahost.container-network.bridge0 = {
-    hostAddress6 = "fc00::1:1";
+    # https://unique-local-ipv6.com/#
+    prefix6 = "fdf0:4612:c105";
 
     containers = {
-      postgres    = { address6 = "fc00::1:2"; };
-      goatcounter = { address6 = "fc00::1:3"; };
-      wiki        = { address6 = "fc00::1:4"; };
+      postgres    = { suffix6 = "2"; };
+      goatcounter = { suffix6 = "3"; };
+      wiki        = { suffix6 = "4"; };
     };
   };
 
