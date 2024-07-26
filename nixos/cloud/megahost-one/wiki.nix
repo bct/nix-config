@@ -1,28 +1,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  hostIp6 = "fc00::1:1";
-  containerIp6 = "fc00::1:4/7";
   cfgContainerSecrets = config.megahost.container-secrets;
 in {
-  # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
-  networking.bridges = {
-    br0 = {
-      interfaces = [];
-    };
-  };
-  networking.interfaces = {
-    br0 = {
-      ipv6.addresses = [{ address = hostIp6; prefixLength = 7; }];
-    };
-  };
-
   containers.wiki = {
     autoStart = true;
     privateNetwork = true;
-
-    hostBridge = "br0";
-    localAddress6 = containerIp6;
 
     config = { config, ... }: {
       system.stateVersion = "24.05";

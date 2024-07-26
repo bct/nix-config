@@ -1,7 +1,5 @@
 { config, lib, ... }:
 let
-  hostIp6 = "fc00::1:1";
-  containerIp6 = "fc00::1:2/7";
   cfgContainerSecrets = config.megahost.container-secrets;
 
   cfg = config.megahost.postgres;
@@ -35,18 +33,6 @@ in {
         message = "username \"${username}\" does not match \"[-a-z]+\"";
     }) (lib.attrNames cfg.users);
 
-    # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
-    networking.bridges = {
-      br0 = {
-        interfaces = [];
-      };
-    };
-    networking.interfaces = {
-      br0 = {
-        ipv6.addresses = [{ address = hostIp6; prefixLength = 7; }];
-      };
-    };
-
     megahost.container-secrets.postgres = lib.concatMapAttrs (userName: userConfig: {
       "password-${userName}" = { hostPath = userConfig.passwordFile; };
     }) cfg.users;
@@ -54,9 +40,6 @@ in {
     containers.postgres = {
       autoStart = true;
       privateNetwork = true;
-
-      hostBridge = "br0";
-      localAddress6 = containerIp6;
 
       config = { config, pkgs, ... }: {
         system.stateVersion = "24.05";

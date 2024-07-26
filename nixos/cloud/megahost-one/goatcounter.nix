@@ -1,27 +1,10 @@
-{ inputs, config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 let
-  hostIp6 = "fc00::1:1";
-  containerIp6 = "fc00::1:3/7";
   cfgContainerSecrets = config.megahost.container-secrets;
 in {
-  # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
-  networking.bridges = {
-    br0 = {
-      interfaces = [];
-    };
-  };
-  networking.interfaces = {
-    br0 = {
-      ipv6.addresses = [{ address = hostIp6; prefixLength = 7; }];
-    };
-  };
-
   containers.goatcounter = {
     autoStart = true;
     privateNetwork = true;
-
-    hostBridge = "br0";
-    localAddress6 = containerIp6;
 
     # note that we're not taking pkgs here - it doesn't have access to our overlays.
     # instead we're using the outer pkgs.

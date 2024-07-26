@@ -10,6 +10,7 @@
 
     ./disk-config.nix
     ./coredns-wgsd.nix
+    ./container-networking.nix
     ./container-secrets.nix
     ./minio-instance.nix
     ./postgres.nix
