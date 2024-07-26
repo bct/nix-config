@@ -2,6 +2,7 @@
 
 let
   cfgContainerSecrets = config.megahost.container-secrets;
+  cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
 in {
   containers.wiki = {
     autoStart = true;
@@ -21,7 +22,7 @@ in {
           db = {
             db = "wiki-js";
             user = "wiki-js";
-            host = "fc00::1:2";
+            host = cfgContainerNetwork.postgres.address6;
             pass = "$(DB_PASS)";
           };
         };
@@ -60,7 +61,7 @@ in {
   services.caddy = {
     enable = true;
     virtualHosts."notes.diffeq.com".extraConfig = ''
-      reverse_proxy [fc00::1:4]:3000
+      reverse_proxy [${cfgContainerNetwork.wiki.address6}]:3000
     '';
   };
 }

@@ -1,4 +1,8 @@
-{ self, inputs, config, pkgs, ... }: {
+{ config, pkgs, ... }:
+
+let
+  cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
+in {
   services.borgmatic = {
     enable = true;
     settings = {
@@ -16,7 +20,7 @@
       postgresql_databases = [
         {
           name = "all";
-          hostname = "fc00::1:2";
+          hostname = cfgContainerNetwork.postgres.address6;
           username = "postgres";
           password = "\${POSTGRES_PASSWORD}";
 

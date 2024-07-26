@@ -1,44 +1,58 @@
 { lib, config, ... }:
 
 let
-  hostIp6 = "fc00::1:1";
-  containerIp6 = {
-    postgres    = "fc00::1:2/7";
-    goatcounter = "fc00::1:3/7";
-    wiki        = "fc00::1:4/7";
-  };
-
+  cfg = config.megahost.container-network;
   cfgMinio = config.megahost.minio;
 in {
-  # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
-  networking.bridges = {
-    br0 = {
+  options.megahost.container-network.bridge0 = {
+    netmask6 = lib.mkOption {
+      type = lib.types.int;
+      default = 64;
+    };
+
+    hostAddress6 = lib.mkOption {
+      type = lib.types.str;
+    };
+
+    containers = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule (
+        {config, options, name, ...}: {
+          options = {
+            address6 = lib.mkOption {
+              type = lib.types.str;
+            };
+          };
+        }
+      ));
+    };
+  };
+
+  config = {
+    # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
+    networking.bridges.br0 = {
       interfaces = [];
     };
+    networking.interfaces.br0 = {
+      ipv6.addresses = [
+        {
+          address = cfg.bridge0.hostAddress6;
+          prefixLength = cfg.bridge0.netmask6;
+        }
+      ];
+    };
+
+    containers = let
+      bridge0 = (lib.mapAttrs (containerName: networkConfig: {
+        hostBridge = "br0";
+
+        # including the netmask here gives the container access to the entire bridge network.
+        localAddress6 = "${networkConfig.address6}/${toString cfg.bridge0.netmask6}";
+      }) cfg.bridge0.containers);
+
+      minio = (lib.mapAttrs (containerName: instanceConfig: {
+        hostAddress6 = instanceConfig.hostAddress6;
+        localAddress6 = instanceConfig.containerAddress6;
+      }) cfgMinio.instances);
+    in bridge0 // minio;
   };
-  networking.interfaces = {
-    br0 = {
-      ipv6.addresses = [{ address = hostIp6; prefixLength = 7; }];
-    };
-  };
-
-  containers = {
-    postgres = {
-      hostBridge = "br0";
-      localAddress6 = containerIp6.postgres;
-    };
-
-    goatcounter = {
-      hostBridge = "br0";
-      localAddress6 = containerIp6.goatcounter;
-    };
-
-    wiki = {
-      hostBridge = "br0";
-      localAddress6 = containerIp6.wiki;
-    };
-  } // (lib.mapAttrs (containerName: instanceConfig: {
-    hostAddress6 = instanceConfig.hostAddress6;
-    localAddress6 = instanceConfig.containerAddress6;
-  }) cfgMinio.instances);
 }

@@ -82,5 +82,15 @@
     };
   };
 
+  megahost.container-network.bridge0 = {
+    hostAddress6 = "fc00::1:1";
+
+    containers = {
+      postgres    = { address6 = "fc00::1:2"; };
+      goatcounter = { address6 = "fc00::1:3"; };
+      wiki        = { address6 = "fc00::1:4"; };
+    };
+  };
+
   system.stateVersion = "24.05";
 }

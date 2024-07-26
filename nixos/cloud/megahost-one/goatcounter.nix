@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 let
   cfgContainerSecrets = config.megahost.container-secrets;
+  cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
 in {
   containers.goatcounter = {
     autoStart = true;
@@ -38,7 +39,7 @@ in {
               # username, which doesn't work due to the chroot etc. below
               ${pkgs.goatcounter}/bin/goatcounter serve \
                 -listen *:4000 \
-                -db "postgresql+host=fc00::1:2 password=$password sslmode=disable" \
+                -db "postgresql+host=${cfgContainerNetwork.postgres.address6} password=$password sslmode=disable" \
                 -tls http \
                 -email-from goatcounter@m.diffeq.com
             '';
@@ -79,7 +80,7 @@ in {
     enable = true;
 
     virtualHosts."m.diffeq.com".extraConfig = ''
-      reverse_proxy [fc00::1:3]:4000 {
+      reverse_proxy [${cfgContainerNetwork.goatcounter.address6}]:4000 {
         # 2.5.0 has "-tls proxy" which should make this unnecessary
         # https://github.com/arp242/goatcounter/issues/647#issuecomment-1345559928
         header_down Set-Cookie "^(.*HttpOnly;) (SameSite=None)$" "$1 Secure; $2"
