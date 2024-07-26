@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.megahost.minio;
   cfgContainerSecrets = config.megahost.container-secrets;
+  cfgContainerNetwork = config.megahost.container-network.direct.containers;
   consoleSubdomain = "console";
   bucketPort = 9000;
   consolePort = 9001;
@@ -16,14 +17,6 @@ in {
       type = types.attrsOf (types.submodule (
         {config, options, name, ...}: {
           options = {
-            hostAddress6 = mkOption {
-              type = types.str;
-            };
-
-            containerAddress6 = mkOption {
-              type = types.str;
-            };
-
             rootCredentialsPath = mkOption {
               type = types.path;
             };
@@ -79,14 +72,14 @@ in {
         ${instanceConfig.minioDomain} = {
           serverAliases = map (bucket: "${bucket}.${instanceConfig.minioDomain}") instanceConfig.buckets;
           extraConfig = ''
-            reverse_proxy [${instanceConfig.containerAddress6}]:${toString bucketPort}
+            reverse_proxy [${cfgContainerNetwork.${containerName}.address6}]:${toString bucketPort}
           '';
         };
 
         # the admin console runs on container port 9001
         "${consoleSubdomain}.${instanceConfig.minioDomain}" = {
           extraConfig = ''
-            reverse_proxy [${instanceConfig.containerAddress6}]:${toString consolePort}
+            reverse_proxy [${cfgContainerNetwork.${containerName}.address6}]:${toString consolePort}
           '';
         };
       }) cfg.instances;

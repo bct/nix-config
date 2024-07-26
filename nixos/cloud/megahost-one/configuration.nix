@@ -44,19 +44,15 @@
   megahost.minio = {
     enable = true;
     instances = {
-      "minio-escam-biz" = {
+      minio-escam-biz = {
         minioDomain = "s3.escam.biz";
         buckets = [ "mosfet-novpet" ];
-        hostAddress6 = "fc00::1";
-        containerAddress6 = "fc00::f1";
         rootCredentialsPath = config.age.secrets.s3-proxy-minio-root-credentials.path;
       };
 
-      "minio-diffeq-com" = {
+      minio-diffeq-com = {
         minioDomain = "s3.diffeq.com";
         buckets = [ "zardoz" "middel-salbyt" ];
-        hostAddress6 = "fc00::2";
-        containerAddress6 = "fc00::f2";
         rootCredentialsPath = config.age.secrets.s3-proxy-minio-root-credentials.path;
       };
     };
@@ -82,14 +78,21 @@
     };
   };
 
-  megahost.container-network.bridge0 = {
-    # https://unique-local-ipv6.com/#
-    prefix6 = "fdf0:4612:c105";
+  megahost.container-network = {
+    bridge0 = {
+      # https://unique-local-ipv6.com/#
+      prefix6 = "fdf0:4612:c105";
 
-    containers = {
-      postgres    = { suffix6 = "2"; };
-      goatcounter = { suffix6 = "3"; };
-      wiki        = { suffix6 = "4"; };
+      containers = {
+        postgres    = { suffix6 = "2"; };
+        goatcounter = { suffix6 = "3"; };
+        wiki        = { suffix6 = "4"; };
+      };
+    };
+
+    direct.containers = {
+      minio-escam-biz  = { prefix6 = "fd5d:2dbc:e792"; };
+      minio-diffeq-com = { prefix6 = "fd3e:977a:c017"; };
     };
   };
 
