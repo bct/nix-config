@@ -14,7 +14,7 @@ in {
       ];
 
       source_directories = [
-        "/var/lib/nixos-containers/wiki/var/lib/wiki-js"
+        "/srv/data/"
       ];
 
       postgresql_databases = [

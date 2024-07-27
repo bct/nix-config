@@ -96,5 +96,13 @@
     };
   };
 
+  systemd.tmpfiles.rules = [
+    # ensure that /srv/data exists, and is only accessible by root.
+    # this directory contains bind mounts with data that is only protected by having a
+    # private parent directory.
+    # "-" means no automatic cleanup.
+    "d /srv/data 0700 root root -"
+  ];
+
   system.stateVersion = "24.05";
 }

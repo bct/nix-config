@@ -64,4 +64,10 @@ in {
       reverse_proxy [${cfgContainerNetwork.wiki.address6}]:3000
     '';
   };
+
+  # bind mount data directory to the host for convenience
+  fileSystems."/srv/data/wiki" = {
+    device = "/var/lib/nixos-containers/wiki/var/lib/private/wiki-js/";
+    options = [ "bind" ];
+  };
 }
