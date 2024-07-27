@@ -55,15 +55,6 @@
   services.caddy = {
     enable = true;
 
-    virtualHosts."tasks.diffeq.com".extraConfig = ''
-      root * ${pkgs.vikunja}
-      encode gzip
-      file_server
-
-      reverse_proxy /api/* localhost:3456
-      reverse_proxy /.well-known/* localhost:3456
-      reverse_proxy /dav/* localhost:3456
-    '';
 
     virtualHosts."notes.diffeq.com".extraConfig = ''
       reverse_proxy localhost:3000
@@ -105,22 +96,6 @@
         #ensurePermissions = { "DATABASE vikunja" = "ALL PRIVILEGES"; };
       }
     ];
-  };
-
-  services.vikunja = {
-    enable = true;
-    frontendScheme = "https";
-    frontendHostname = "tasks.diffeq.com";
-
-    database = {
-      type = "postgres";
-      user = "vikunja-api";
-      host = "/run/postgresql";
-    };
-
-    settings.service = {
-      enableregistration = false;
-    };
   };
 
   services.borgmatic = {

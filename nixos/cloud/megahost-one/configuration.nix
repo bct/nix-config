@@ -15,6 +15,7 @@
     ./minio-instance.nix
     ./postgres.nix
     ./goatcounter.nix
+    ./vikunja.nix
     ./wiki.nix
     ./wireguard-viator.nix
     ./wireguard-conductum.nix
@@ -59,7 +60,11 @@
   };
 
   megahost.postgres = {
-    databases = [ "goatcounter" "wiki-js" ];
+    databases = [
+      "goatcounter"
+      "vikunja"
+      "wiki-js"
+    ];
 
     users = {
       postgres = {
@@ -68,6 +73,11 @@
 
       goatcounter = {
         passwordFile = config.age.secrets.password-goatcounter.path;
+        ensureDBOwnership = true;
+      };
+
+      vikunja = {
+        passwordFile = config.age.secrets.password-vikunja.path;
         ensureDBOwnership = true;
       };
 
@@ -87,6 +97,7 @@
         postgres    = { suffix6 = "2"; };
         goatcounter = { suffix6 = "3"; };
         wiki        = { suffix6 = "4"; };
+        vikunja     = { suffix6 = "5"; };
       };
     };
 
