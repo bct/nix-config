@@ -66,8 +66,6 @@ in {
   services.caddy = {
     enable = true;
 
-    # it's potentially problematic that we're serving the static files from the host,
-    # but presumably the host and the container have the same version of vikunja...
     virtualHosts."tasks.diffeq.com".extraConfig = ''
       reverse_proxy [${cfgContainerNetwork.vikunja.address6}]:3456
     '';
