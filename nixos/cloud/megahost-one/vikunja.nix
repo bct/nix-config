@@ -32,6 +32,9 @@ in {
 
         settings.service = {
           enableregistration = false;
+
+          # (•‿•)
+          allowiconchanges = false;
         };
       };
 
