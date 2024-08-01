@@ -110,11 +110,6 @@
           specialArgs = { inherit self inputs outputs; };
           modules = [ ./nixos/cloud/megahost-one/configuration.nix ];
         };
-
-        notes = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/cloud/notes/configuration.nix ];
-        };
       };
 
       deploy = let
@@ -148,12 +143,6 @@
           hostname = "megahost-one.diffeq.com";
           arch     = "x86_64-linux";
           config   = self.nixosConfigurations.megahost-one;
-        };
-
-        nodes.notes = mkNode {
-          hostname = "tasks.diffeq.com";
-          arch     = "x86_64-linux";
-          config   = self.nixosConfigurations.notes;
         };
       };
 
