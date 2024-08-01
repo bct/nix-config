@@ -34,6 +34,9 @@
   };
 
   systemd.services.starlink-exporter = {
+    # temporarily disable until I figure out why this is failing to start
+    enable = false;
+
     description = "starlink_exporter";
     after = ["network.target"];
     wantedBy = ["multi-user.target"];

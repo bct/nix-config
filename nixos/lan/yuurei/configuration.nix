@@ -9,6 +9,7 @@
 
     "${self}/nixos/modules/acme-zoneedit"
 
+    ./immich.nix
     ./metrics.nix
     ./miniflux.nix
   ];

@@ -36,6 +36,9 @@
     unshittify.url = "github:bct/unshittify.nix";
     unshittify.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
+    # for immich module
+    nixpkgs-jvanbruegge.url = "github:jvanbruegge/nixpkgs?ref=immich";
+
     # Shameless plug: looking for a way to nixify your themes and make
     # everything match nicely? Try nix-colors!
     # nix-colors.url = "github:misterio77/nix-colors";
