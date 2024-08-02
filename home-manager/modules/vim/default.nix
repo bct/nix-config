@@ -24,6 +24,7 @@
     # LSP servers
     pyright
     pkgs.nil
+    pkgs.unstable.nixd
     pkgs.hoonLanguageServer
     pkgs.gopls
     pkgs.unstable.ruff-lsp
