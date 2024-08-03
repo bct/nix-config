@@ -33,6 +33,9 @@
 
     # don't garbage collect intermediate derivations
     keep-derivations = true;
+
+    # don't overtax the CPU. default is "auto", i.e. 8.
+    max-jobs = 4;
   };
 
   # Enable touchpad support (enabled by default in most desktopManager).
