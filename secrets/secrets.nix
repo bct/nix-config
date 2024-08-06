@@ -10,11 +10,6 @@ let
   stereo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+0o3CDs78/NW73QxiZ4gJtXgZ5U+NAu8o9lNhzmLwl";
   yuurei = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINqIJgMjI1OWLvn6eOrlsF0TG8jFu6SYkzq85VODtUbP";
 
-  # -- cloud
-  megahost-one = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAbD0X8eQfKiG2rYYcZ6dVdRHQaRK8DrFz7YaLzHQx2";
-  s3-proxy = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG/edQPh5lgflnMjVHAHhRDNNmmusQxm7MHU2QE7kiyV";
-  viator = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHEtc5zAnIK1S6p+8L/FNjYgujVqhGUUG4Y9WpYb06mO";
-
 in
   {
     # mysql password
@@ -22,16 +17,6 @@ in
 
     # influxdb password
     "rtlamr-collect-env.age".publicKeys = [ bct-cimmeria spectator ];
-
-    # admin username/password for minio
-    "s3-proxy-minio-root-credentials.age".publicKeys = [ bct-cimmeria s3-proxy megahost-one ];
-
-    # wireguard keys
-    "viator-wireguard-key.age".publicKeys = [ bct-cimmeria viator megahost-one ];
-    "wg/megahost-one-conductum.age".publicKeys = [ bct-cimmeria megahost-one ];
-
-    # SSH keys for accessing borg.domus.diffeq.com
-    "ssh/megahost-one-borg.age".publicKeys = [ bct-cimmeria megahost-one ];
 
     # ZoneEdit API key for creating TXT records for ACME
     "zoneedit.age".publicKeys = [ bct-cimmeria spectator stereo yuurei ];
@@ -41,10 +26,4 @@ in
 
     # Miniflux admin credentials
     "miniflux-admin-credentials.age".publicKeys = [ bct-cimmeria yuurei ];
-
-    # Database passwords
-    "db/password-megahost-postgres.age".publicKeys = [ bct-cimmeria megahost-one ];
-    "db/password-goatcounter.age".publicKeys = [ bct-cimmeria megahost-one ];
-    "db/password-vikunja.age".publicKeys = [ bct-cimmeria megahost-one ];
-    "db/password-wikijs.age".publicKeys = [ bct-cimmeria megahost-one ];
   }
