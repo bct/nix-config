@@ -36,8 +36,8 @@
     # device unit name identified with:
     #
     #     sudo systemctl --all --full -t device
-    requires = ["sys-devices-platform-soc-3f980000.usb-usb1-1\\x2d1-1\\x2d1.3-1\\x2d1.3:1.0.device"];
-    after = ["sys-devices-platform-soc-3f980000.usb-usb1-1\\x2d1-1\\x2d1.3-1\\x2d1.3:1.0.device"];
+    # requires = ["sys-devices-platform-soc-3f980000.usb-usb1-1\\x2d1-1\\x2d1.3-1\\x2d1.3:1.0.device"];
+    # after = ["sys-devices-platform-soc-3f980000.usb-usb1-1\\x2d1-1\\x2d1.3-1\\x2d1.3:1.0.device"];
 
     serviceConfig = {
       Type = "simple";
