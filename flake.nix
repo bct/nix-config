@@ -11,11 +11,18 @@
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # flake-parts
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
     # Agenix
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.home-manager.follows = "home-manager";
     agenix.inputs.darwin.follows = "";
+
+    # agenix-rekey
+    agenix-rekey.url = "github:oddlama/agenix-rekey";
+    agenix-rekey.inputs.nixpkgs.follows = "nixpkgs";
 
     # deploy-rs
     deploy-rs.url = "github:serokell/deploy-rs";
@@ -34,6 +41,7 @@
     airsonic-refix-jukebox.inputs.nixpkgs.follows = "nixpkgs";
 
     unshittify.url = "github:bct/unshittify.nix";
+    unshittify.inputs.flake-parts.follows = "flake-parts";
     unshittify.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # Shameless plug: looking for a way to nixify your themes and make
