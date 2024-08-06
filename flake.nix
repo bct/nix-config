@@ -49,10 +49,9 @@
     # nix-colors.url = "github:misterio77/nix-colors";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, agenix, deploy-rs, nixos-generators, ... }@inputs:
-    let
-      inherit (self) outputs;
-      forAllSystems = nixpkgs.lib.genAttrs [
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, flake-parts, deploy-rs, nixos-generators, ... }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
         "aarch64-linux"
         "x86_64-linux"
 
@@ -61,115 +60,118 @@
         # "aarch64-darwin"
         # "x86_64-darwin"
       ];
-    in
-    {
-      # Your custom packages
-      # Acessible through 'nix build', 'nix shell', etc
-      packages = forAllSystems (system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-          pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-          generators = import ./generators { inherit inputs outputs nixpkgs nixos-generators; };
-        in import ./pkgs { inherit pkgs pkgs-unstable; } // generators
-      );
 
-      # Devshell for working on configs
-      # Acessible through 'nix develop' or 'nix-shell' (legacy)
-      devShells = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./shell.nix { inherit pkgs inputs; }
-      );
+      perSystem = { config, pkgs, system, ... }: {
+        # Your custom packages
+        # Acessible through 'nix build', 'nix shell', etc
+        packages = let
+            inherit (self) outputs;
+            pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+            generators = import ./generators { inherit inputs outputs nixpkgs nixos-generators; };
+          in import ./pkgs { inherit pkgs pkgs-unstable; } // generators;
 
-      # Your custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs; };
-
-      # NixOS configuration entrypoint
-      # Available through 'nixos-rebuild --flake .#your-hostname'
-      nixosConfigurations = {
-        # -- desktops
-        cimmeria = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/cimmeria/configuration.nix ];
-        };
-
-        dunwich = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/dunwich/configuration.nix ];
-        };
-
-        # -- LAN hosts
-        spectator = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/lan/spectator/configuration.nix ];
-        };
-
-        stereo = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/lan/stereo/configuration.nix ];
-        };
-
-        yuurei = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/lan/yuurei/configuration.nix ];
-        };
-
-        # -- cloud hosts
-        megahost-one = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit self inputs outputs; };
-          modules = [ ./nixos/cloud/megahost-one/configuration.nix ];
-        };
+        # Devshell for working on configs
+        # Acessible through 'nix develop' or 'nix-shell' (legacy)
+        devShells = import ./shell.nix { inherit pkgs inputs; };
       };
 
-      deploy = let
-        mkNode = { hostname, arch, config }: {
-          inherit hostname;
-          user = "root";
-          profiles.system.path = deploy-rs.lib."${arch}".activate.nixos config;
-        };
-      in {
-        # -- lan hosts --
-        nodes.spectator = mkNode {
-          hostname = "spectator.domus.diffeq.com";
-          arch     = "aarch64-linux";
-          config   = self.nixosConfigurations.spectator;
+      flake = {
+        # Your custom packages and modifications, exported as overlays
+        overlays = import ./overlays { inherit inputs; };
+
+        # NixOS configuration entrypoint
+        # Available through 'nixos-rebuild --flake .#your-hostname'
+        nixosConfigurations = let
+          inherit (self) outputs;
+        in
+          {
+          # -- desktops
+          cimmeria = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/cimmeria/configuration.nix ];
+          };
+
+          dunwich = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/dunwich/configuration.nix ];
+          };
+
+          # -- LAN hosts
+          spectator = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/lan/spectator/configuration.nix ];
+          };
+
+          stereo = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/lan/stereo/configuration.nix ];
+          };
+
+          yuurei = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/lan/yuurei/configuration.nix ];
+          };
+
+          # -- cloud hosts
+          megahost-one = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/cloud/megahost-one/configuration.nix ];
+          };
         };
 
-        nodes.stereo = mkNode {
-          hostname = "stereo.domus.diffeq.com";
-          arch     = "aarch64-linux";
-          config   = self.nixosConfigurations.stereo;
+        deploy = let
+          mkNode = { hostname, arch, config }: {
+            inherit hostname;
+            user = "root";
+            profiles.system.path = deploy-rs.lib."${arch}".activate.nixos config;
+          };
+        in {
+          # -- lan hosts --
+          nodes.spectator = mkNode {
+            hostname = "spectator.domus.diffeq.com";
+            arch     = "aarch64-linux";
+            config   = self.nixosConfigurations.spectator;
+          };
+
+          nodes.stereo = mkNode {
+            hostname = "stereo.domus.diffeq.com";
+            arch     = "aarch64-linux";
+            config   = self.nixosConfigurations.stereo;
+          };
+
+          nodes.yuurei = mkNode {
+            hostname = "yuurei.domus.diffeq.com";
+            arch     = "x86_64-linux";
+            config   = self.nixosConfigurations.yuurei;
+          };
+
+          # -- cloud hosts --
+          nodes.megahost-one = mkNode {
+            hostname = "megahost-one.diffeq.com";
+            arch     = "x86_64-linux";
+            config   = self.nixosConfigurations.megahost-one;
+          };
         };
 
-        nodes.yuurei = mkNode {
-          hostname = "yuurei.domus.diffeq.com";
-          arch     = "x86_64-linux";
-          config   = self.nixosConfigurations.yuurei;
+        # Standalone home-manager configuration entrypoint
+        # Available through 'home-manager --flake .#your-username@your-hostname'
+        homeConfigurations = let
+          inherit (self) outputs;
+        in {
+          "bct@cimmeria" = home-manager.lib.homeManagerConfiguration {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            extraSpecialArgs = { inherit inputs outputs; };
+            modules = [./home-manager/cimmeria];
+          };
+
+          "brendan@dunwich" = home-manager.lib.homeManagerConfiguration {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            extraSpecialArgs = { inherit inputs outputs; };
+            modules = [./home-manager/dunwich];
+          };
         };
 
-        # -- cloud hosts --
-        nodes.megahost-one = mkNode {
-          hostname = "megahost-one.diffeq.com";
-          arch     = "x86_64-linux";
-          config   = self.nixosConfigurations.megahost-one;
-        };
+        checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
       };
-
-      # Standalone home-manager configuration entrypoint
-      # Available through 'home-manager --flake .#your-username@your-hostname'
-      homeConfigurations = {
-        "bct@cimmeria" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [./home-manager/cimmeria];
-        };
-
-        "brendan@dunwich" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [./home-manager/dunwich];
-        };
-      };
-
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 }
