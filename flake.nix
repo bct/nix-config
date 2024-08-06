@@ -51,6 +51,10 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, flake-parts, deploy-rs, nixos-generators, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        inputs.agenix-rekey.flakeModule
+      ];
+
       systems = [
         "aarch64-linux"
         "x86_64-linux"
@@ -71,8 +75,8 @@
           in import ./pkgs { inherit pkgs pkgs-unstable; } // generators;
 
         # Devshell for working on configs
-        # Acessible through 'nix develop' or 'nix-shell' (legacy)
-        devShells = import ./shell.nix { inherit pkgs inputs; };
+        # Acessible through 'nix develop'
+        devShells = import ./shell.nix { inherit config pkgs inputs; };
       };
 
       flake = {

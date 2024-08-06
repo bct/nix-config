@@ -1,7 +1,7 @@
 # Shell for working on nix configs.
-# You can enter it through 'nix develop' or (legacy) 'nix-shell'
+# You can enter it through 'nix develop'
 
-{ pkgs ? (import ./nixpkgs.nix) { }, inputs ? {} }: {
+{ config, pkgs ? (import ./nixpkgs.nix) { }, inputs ? {} }: {
   default = pkgs.mkShell {
     # Enable experimental features without having to specify the argument
     NIX_CONFIG = "experimental-features = nix-command flakes";
@@ -10,10 +10,11 @@
     nativeBuildInputs = with pkgs; [ nixos-rebuild ];
   };
 
+  # loaded automatically by direnv
   nix-config = pkgs.mkShell {
     nativeBuildInputs = [
       pkgs.nixos-anywhere
-      inputs.agenix.packages.${pkgs.system}.agenix
+      config.agenix-rekey.package
       inputs.deploy-rs.packages.${pkgs.system}.deploy-rs
     ];
   };
