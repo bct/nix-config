@@ -55,7 +55,7 @@ in {
   };
 
   age.secrets = {
-    password-wikijs.file = ../../../secrets/db/password-wikijs.age;
+    password-wikijs.rekeyFile = ../../../secrets/db/password-wikijs.age;
   };
 
   services.caddy = {

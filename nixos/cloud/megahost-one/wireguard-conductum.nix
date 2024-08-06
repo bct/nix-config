@@ -33,7 +33,7 @@
 
   age.secrets = {
     megahost-one-conductum-wg-key = {
-      file = ../../../secrets/wg/megahost-one-conductum.age;
+      rekeyFile = ../../../secrets/wg/megahost-one-conductum.age;
       owner = "systemd-network";
       group = "systemd-network";
     };

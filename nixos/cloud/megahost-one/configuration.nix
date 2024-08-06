@@ -1,6 +1,8 @@
 { self, inputs, config, ... }: {
   imports = [
     inputs.agenix.nixosModules.default
+    inputs.agenix-rekey.nixosModules.default
+
     inputs.disko.nixosModules.disko
 
     "${self}/nixos/common/nix.nix"
@@ -34,12 +36,12 @@
   time.timeZone = "Etc/UTC";
 
   age.secrets = {
-    s3-proxy-minio-root-credentials.file =
+    s3-proxy-minio-root-credentials.rekeyFile =
       ../../../secrets/s3-proxy-minio-root-credentials.age;
 
-    password-postgres.file    = ../../../secrets/db/password-megahost-postgres.age;
-    password-goatcounter.file = ../../../secrets/db/password-goatcounter.age;
-    password-wikijs.file      = ../../../secrets/db/password-wikijs.age;
+    password-postgres.rekeyFile    = ../../../secrets/db/password-megahost-postgres.age;
+    password-goatcounter.rekeyFile = ../../../secrets/db/password-goatcounter.age;
+    password-wikijs.rekeyFile      = ../../../secrets/db/password-wikijs.age;
   };
 
   megahost.minio = {
@@ -114,6 +116,13 @@
     # "-" means no automatic cleanup.
     "d /srv/data 0700 root root -"
   ];
+
+  age.rekey = {
+    masterIdentities = ["/home/bct/.ssh/id_rsa"];
+    storageMode = "local";
+    localStorageDir = ../../.. + "/secrets/rekeyed/megahost-one";
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAbD0X8eQfKiG2rYYcZ6dVdRHQaRK8DrFz7YaLzHQx2";
+  };
 
   system.stateVersion = "24.05";
 }

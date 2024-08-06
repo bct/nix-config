@@ -77,7 +77,7 @@ in {
   in "${run-borgmatic}";
 
   age.secrets = {
-    password-postgres.file = ../../../secrets/db/password-megahost-postgres.age;
-    megahost-one-borg-ssh-key.file = ../../../secrets/ssh/megahost-one-borg.age;
+    password-postgres.rekeyFile = ../../../secrets/db/password-megahost-postgres.age;
+    megahost-one-borg-ssh-key.rekeyFile = ../../../secrets/ssh/megahost-one-borg.age;
   };
 }

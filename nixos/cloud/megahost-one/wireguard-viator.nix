@@ -34,10 +34,9 @@
 
   age.secrets = {
     viator-wireguard-key = {
-      file = ../../../secrets/viator-wireguard-key.age;
+      rekeyFile = ../../../secrets/viator-wireguard-key.age;
       owner = "systemd-network";
       group = "systemd-network";
-      mode = "600";
     };
   };
 }

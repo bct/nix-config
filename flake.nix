@@ -77,6 +77,8 @@
         # Devshell for working on configs
         # Acessible through 'nix develop'
         devShells = import ./shell.nix { inherit config pkgs inputs; };
+
+        agenix-rekey.nodes = { inherit (self.nixosConfigurations) megahost-one; };
       };
 
       flake = {
