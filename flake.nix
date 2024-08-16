@@ -113,6 +113,11 @@
             modules = [ ./nixos/lan/stereo/configuration.nix ];
           };
 
+          yuggoth = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/lan/yuggoth/configuration.nix ];
+          };
+
           yuurei = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
             modules = [ ./nixos/lan/yuurei/configuration.nix ];
@@ -143,6 +148,12 @@
             hostname = "stereo.domus.diffeq.com";
             arch     = "aarch64-linux";
             config   = self.nixosConfigurations.stereo;
+          };
+
+          nodes.yuggoth = mkNode {
+            hostname = "yuggoth.domus.diffeq.com";
+            arch     = "x86_64-linux";
+            config   = self.nixosConfigurations.yuggoth;
           };
 
           nodes.yuurei = mkNode {
