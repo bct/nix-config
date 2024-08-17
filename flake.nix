@@ -36,6 +36,10 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
+    # microvm
+    microvm.url = "github:astro/microvm.nix";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
+
     # packages from flakes
     airsonic-refix-jukebox.url = "github:bct/airsonic-refix-jukebox";
     airsonic-refix-jukebox.inputs.nixpkgs.follows = "nixpkgs";
@@ -78,7 +82,11 @@
         # Acessible through 'nix develop'
         devShells = import ./shell.nix { inherit config pkgs inputs; };
 
-        agenix-rekey.nodes = { inherit (self.nixosConfigurations) megahost-one; };
+        agenix-rekey.nodes = {
+          inherit (self.nixosConfigurations)
+            megahost-one
+            yuggoth;
+        };
       };
 
       flake = {

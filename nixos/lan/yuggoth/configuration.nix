@@ -1,6 +1,8 @@
-{ self, config, inputs, ... }: {
+{ self, inputs, lib, ... }: {
   imports = [
     inputs.agenix.nixosModules.default
+    inputs.agenix-rekey.nixosModules.default
+
     inputs.disko.nixosModules.disko
 
     "${self}/nixos/common/nix.nix"
@@ -8,16 +10,73 @@
 
     ./hardware-configuration.nix
     ./disk-config.nix
+
+    inputs.microvm.nixosModules.host
+
+    ./guests/miniflux.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  time.timeZone = "Etc/UTC";
+
   networking.hostName = "yuggoth";
   networking.useNetworkd = true;
 
-  time.timeZone = "Etc/UTC";
+  # https://astro.github.io/microvm.nix/simple-network.html
+  systemd.network.enable = true;
+
+  # bridge ethernet and VM interfaces
+  systemd.network.networks."10-lan" = {
+    matchConfig.Name = ["enp5s0f0" "vm-*"];
+    networkConfig = {
+      Bridge = "br0";
+    };
+  };
+
+  systemd.network.netdevs."br0" = {
+    netdevConfig = {
+      Name = "br0";
+      Kind = "bridge";
+    };
+  };
+
+  systemd.network.networks."10-lan-bridge" = {
+    matchConfig.Name = "br0";
+    networkConfig.DHCP = "yes";
+    linkConfig.RequiredForOnline = "routable";
+  };
+
+  microvm.host.enable = true;
+
+  # https://astro.github.io/microvm.nix/faq.html#how-to-centralize-logging-with-journald
+  systemd.tmpfiles.rules = [
+    # create a symlink of each MicroVM's journal under the host's /var/log/journal
+    "L+ /var/log/journal/b42e25167b6bc7ca726ea9f41ce5ffcb - - - - /var/lib/microvms/miniflux/journal/b42e25167b6bc7ca726ea9f41ce5ffcb"
+  ];
+
+  age.secrets = {
+    ssh-host-miniflux = {
+      path = "/run/agenix-vms/minflux/ssh-host";
+      symlink = false; # the VM can't resolve the symlink
+      rekeyFile = ../../../secrets/ssh/host-miniflux.age;
+      generator.script = {pkgs, file, ...}: ''
+        ${pkgs.openssh}/bin/ssh-keygen -qt ed25519 -N "" -C "root@miniflux" -f ${lib.escapeShellArg (lib.removeSuffix ".age" file)}
+        priv=$(${pkgs.coreutils}/bin/cat ${lib.escapeShellArg (lib.removeSuffix ".age" file)})
+        ${pkgs.coreutils}/bin/shred -u ${lib.escapeShellArg (lib.removeSuffix ".age" file)}
+        echo "$priv"
+      '';
+    };
+  };
+
+  age.rekey = {
+    masterIdentities = ["/home/bct/.ssh/id_rsa"];
+    storageMode = "local";
+    localStorageDir = ../../.. + "/secrets/rekeyed/yuggoth";
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVYcCxqBIE6ppS6n7VQb3Qs4w1gEYtNhTdKu+21XO82";
+  };
 
   system.stateVersion = "24.05";
 }
