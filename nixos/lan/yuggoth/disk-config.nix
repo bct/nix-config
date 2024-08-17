@@ -9,7 +9,6 @@
       content = {
         type = "gpt";
 
-        # https://github.com/nix-community/nixos-anywhere-examples/blob/main/disk-config.nix
         partitions = {
           # UEFI boot partition
           ESP = {
@@ -23,22 +22,37 @@
             };
           };
 
-          root = {
-            name = "nixos";
-            end = "-16G";
-            content = {
-              type = "filesystem";
-              format = "ext4";
-              mountpoint = "/";
-            };
-          };
-
-          swap = {
+          # LVM physical volume for virtual group "fastpool"
+          primary = {
             size = "100%";
             content = {
-              type = "swap";
-              discardPolicy = "both";
+              type = "lvm_pv";
+              vg = "fastpool";
             };
+          };
+        };
+      };
+    };
+
+    # LVM virtual group that lives on the NVME disk.
+    lvm_vg.fastpool = {
+      type = "lvm_vg";
+      lvs = {
+        swap = {
+          size = "16G";
+          content = {
+            type = "swap";
+            discardPolicy = "both";
+          };
+        };
+
+        host-root = {
+          name = "nixos";
+          size = "40G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+            mountpoint = "/";
           };
         };
       };
