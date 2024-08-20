@@ -85,7 +85,8 @@
         agenix-rekey.nodes = {
           inherit (self.nixosConfigurations)
             megahost-one
-            yuggoth;
+            yuggoth
+            miniflux;
         };
       };
 
@@ -135,6 +136,16 @@
           megahost-one = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
             modules = [ ./nixos/cloud/megahost-one/configuration.nix ];
+          };
+
+          # -- VMs
+          miniflux = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [
+              inputs.microvm.nixosModules.microvm
+              ./nixos/lan/yuggoth/guests/miniflux.nix
+              { nixpkgs.hostPlatform = "x86_64-linux"; }
+            ];
           };
         };
 
