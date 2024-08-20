@@ -10,7 +10,6 @@
     "${self}/nixos/modules/acme-zoneedit"
 
     ./metrics.nix
-    ./miniflux.nix
   ];
 
   networking.hostName = "yuurei";
