@@ -51,6 +51,7 @@
       torrent-scraper = {
         hostName = "torrent-scraper";
         tapInterfaceName = "vm-torrent-scra"; # <= 15 chars
+        tapInterfaceMac = "02:00:00:00:00:02";
         machineId = "e5b7d8199d4a4a34fb6748faef793248";
       };
     };

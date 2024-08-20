@@ -1,79 +1,9 @@
-{ self, pkgs, ... }:
-
-let
-  hostName = "prometheus";
-  tapInterfaceName = "vm-${hostName}"; # <= 15 chars
-  # Locally administered have one of 2/6/A/E in the second nibble.
-  tapInterfaceMac = "02:00:00:00:00:03";
-  machineId = "6621b60f7f7ac43dca44e143eb0578a8";
-in {
-  imports = [
-    # note that we're not including "${self}/nixos/common/nix.nix" here
-    # it complains:
-    #     Your system configures nixpkgs with an externally created
-    #     instance.
-    #     `nixpkgs.config` options should be passed when creating the
-    #     instance instead.
-    # presumably the overlays are being passed through anyways.
-    # the other nix configuration seems OK to ignore.
-    "${self}/nixos/common/headless.nix"
-  ];
-
+{ pkgs, ... }: {
   system.stateVersion = "24.05";
-  networking.hostName = hostName;
-
-  systemd.network.enable = true;
-  systemd.network.networks."20-lan" = {
-    matchConfig.Type = "ether";
-    networkConfig.DHCP = "yes";
-  };
-
-  environment.etc."machine-id" = {
-    mode = "0644";
-    text = "${machineId}\n";
-  };
-
-  services.openssh.hostKeys = [
-    {
-      path = "/run/agenix-host/ssh-host";
-      type = "ed25519";
-    }
-  ];
 
   microvm = {
     vcpu = 1;
     mem = 512;
-
-    interfaces = [
-      {
-        type = "tap";
-        id = tapInterfaceName;
-        mac = tapInterfaceMac;
-      }
-    ];
-
-    shares = [
-      {
-        tag = "ro-store";
-        source = "/nix/store";
-        mountPoint = "/nix/.ro-store";
-      }
-
-      {
-        tag = "agenix";
-        source = "/run/agenix-vms/${hostName}";
-        mountPoint = "/run/agenix-host";
-        proto = "virtiofs";
-      }
-
-      {
-        tag = "journal";
-        source = "/var/lib/microvms/${hostName}/journal";
-        mountPoint = "/var/log/journal";
-        proto = "virtiofs";
-        socket = "journal.sock";
-      }
-    ];
 
     volumes = [
       {

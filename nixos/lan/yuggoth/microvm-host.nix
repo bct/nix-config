@@ -91,7 +91,76 @@ in {
     microvm.vms = lib.mapAttrs (vmName: vmConfig: {
       specialArgs = { inherit self inputs outputs; };
       config = {
-        imports = [ ./guests/${vmName}.nix ];
+        imports = [
+          ./guests/${vmName}.nix
+
+          {
+            imports = [
+              # note that we're not including "${self}/nixos/common/nix.nix" here
+              # it complains:
+              #     Your system configures nixpkgs with an externally created
+              #     instance.
+              #     `nixpkgs.config` options should be passed when creating the
+              #     instance instead.
+              # presumably the overlays are being passed through anyways.
+              # the other nix configuration seems OK to ignore.
+              "${self}/nixos/common/headless.nix"
+            ];
+
+            networking.hostName = vmConfig.hostName;
+
+            systemd.network.enable = true;
+            systemd.network.networks."20-lan" = {
+              matchConfig.Type = "ether";
+              networkConfig.DHCP = "yes";
+            };
+
+            environment.etc."machine-id" = {
+              mode = "0644";
+              text = "${vmConfig.machineId}\n";
+            };
+
+            services.openssh.hostKeys = [
+              {
+                path = "/run/agenix-host/ssh-host";
+                type = "ed25519";
+              }
+            ];
+
+            microvm = {
+              interfaces = [
+                {
+                  type = "tap";
+                  id = vmConfig.tapInterfaceName;
+                  mac = vmConfig.tapInterfaceMac;
+                }
+              ];
+
+              shares = [
+                {
+                  tag = "ro-store";
+                  source = "/nix/store";
+                  mountPoint = "/nix/.ro-store";
+                }
+
+                {
+                  tag = "agenix";
+                  source = "/run/agenix-vms/${vmName}";
+                  mountPoint = "/run/agenix-host";
+                  proto = "virtiofs";
+                }
+
+                {
+                  tag = "journal";
+                  source = "/var/lib/microvms/${vmName}/journal";
+                  mountPoint = "/var/log/journal";
+                  proto = "virtiofs";
+                  socket = "journal.sock";
+                }
+              ];
+            };
+          }
+        ];
       };
     }) cfg.guests;
   };
