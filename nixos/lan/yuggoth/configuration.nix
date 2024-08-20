@@ -12,9 +12,6 @@
     ./disk-config.nix
 
     inputs.microvm.nixosModules.host
-
-    ./guests/prometheus.nix
-    ./guests/torrent-scraper.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -102,6 +99,20 @@
     specialArgs = { inherit self inputs outputs; };
     config = {
       imports = [ ./guests/miniflux.nix ];
+    };
+  };
+
+  microvm.vms.prometheus = {
+    specialArgs = { inherit self inputs outputs; };
+    config = {
+      imports = [ ./guests/prometheus.nix ];
+    };
+  };
+
+  microvm.vms.torrent-scraper = {
+    specialArgs = { inherit self inputs outputs; };
+    config = {
+      imports = [ ./guests/torrent-scraper.nix ];
     };
   };
 

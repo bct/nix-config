@@ -139,6 +139,7 @@
           };
 
           # -- VMs
+          # these have to be here so that they can be agenix-rekey targets
           miniflux = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
             modules = [
