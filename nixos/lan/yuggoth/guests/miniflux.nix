@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, config, lib, pkgs, ... }:
 
 let
   unshittifyPkgs = inputs.unshittify.packages.${pkgs.system};
@@ -18,6 +18,14 @@ in {
   microvm = {
     vcpu = 1;
     mem = 512;
+
+    volumes = [
+      {
+        image = "var.img";
+        mountPoint = "/var";
+        size = 1024;
+      }
+    ];
   };
 
   age.secrets = {

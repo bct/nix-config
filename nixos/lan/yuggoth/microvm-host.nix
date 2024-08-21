@@ -2,6 +2,12 @@
 
 let
   cfg = config.yuggoth.microvms;
+
+  # mount point for secrets passed from the host to the VM
+  agenixHostMountPoint = "/mnt/agenix-host";
+
+  # host directory containing secrets to pass to each VM
+  agenixVmPrefix = "/run/agenix-vms";
 in {
   imports = [
     inputs.microvm.nixosModules.host
@@ -81,7 +87,7 @@ in {
         '';
     in lib.concatMapAttrs (vmName: vmConfig: {
       "ssh-host-${vmName}" = {
-        path = "/run/agenix-vms/${vmName}/ssh-host";
+        path = "${agenixVmPrefix}/${vmName}/ssh-host";
         symlink = false; # the VM can't resolve the symlink
         rekeyFile = ../../../secrets/ssh/host-${vmName}.age;
         generator.script = generate-ssh-host-key vmName;
@@ -120,9 +126,13 @@ in {
               text = "${vmConfig.machineId}\n";
             };
 
+            # the system activation script depends on the host SSH key, which
+            # comes from this directory.
+            fileSystems.${agenixHostMountPoint}.neededForBoot = true;
+
             services.openssh.hostKeys = [
               {
-                path = "/run/agenix-host/ssh-host";
+                path = "${agenixHostMountPoint}/ssh-host";
                 type = "ed25519";
               }
             ];
@@ -145,8 +155,8 @@ in {
 
                 {
                   tag = "agenix";
-                  source = "/run/agenix-vms/${vmName}";
-                  mountPoint = "/run/agenix-host";
+                  source = "${agenixVmPrefix}/${vmName}";
+                  mountPoint = agenixHostMountPoint;
                   proto = "virtiofs";
                 }
 
