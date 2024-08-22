@@ -87,6 +87,8 @@
             megahost-one
             yuggoth
             miniflux;
+
+          torrent-scraper = self.nixosConfigurations.yuggoth.config.microvm.vms.torrent-scraper.config;
         };
       };
 
