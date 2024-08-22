@@ -51,8 +51,8 @@ in {
       # don't stop looking at a feed just because it has failed in the past
       POLLING_PARSING_ERROR_LIMIT = "0";
 
-      # every 2 minutes retrieve 3 feeds.
-      SCHEDULER_ROUND_ROBIN_MIN_INTERVAL = "2";
+      # every 5 minutes retrieve 3 feeds.
+      SCHEDULER_ROUND_ROBIN_MIN_INTERVAL = "5";
       BATCH_SIZE = "3";
       WORKER_POOL_SIZE = "1";
 
