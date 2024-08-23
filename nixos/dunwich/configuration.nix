@@ -136,6 +136,12 @@
     enable = true;
   };
 
+  # In August 2024 analog audio broke: https://github.com/NixOS/nixpkgs/issues/330685
+  # This appears to fix it. Digital mic (dmic) is probably not something we need?
+  boot.extraModprobeConfig = ''
+    options snd-hda-intel dmic_detect=0
+  '';
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It's perfectly fine and recommended to leave
