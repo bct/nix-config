@@ -18,6 +18,10 @@ in {
   ];
 
   users.users.${cfgPersonal.user}.packages = with pkgs; [
+    # nix utilities
+    nh
+
+    # desktop tools
     chromium
     mpv
     epdfview
