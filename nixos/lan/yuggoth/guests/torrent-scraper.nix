@@ -8,22 +8,50 @@
 
   microvm = {
     vcpu = 1;
-    mem = 512;
+    mem = 1024;
 
     volumes = [
       {
         image = "var.img";
         mountPoint = "/var";
-        size = 1024;
+        size = 4096;
       }
     ];
   };
 
+  users.groups.video-writers = {};
+  users.users = {
+    scraper = {
+      isSystemUser = true;
+      group = "video-writers";
+    };
+    bct.extraGroups = ["video-writers"];
+  };
+
   networking.firewall.allowedTCPPorts = [ 8081 ];
 
+  # port 8081
   services.sickbeard = {
     enable = true;
     package = pkgs.sickgear;
+    user = "scraper";
+    group = "video-writers";
+  };
+
+  # port 7878
+  services.radarr = {
+    enable = true;
+    openFirewall = true;
+    user = "scraper";
+    group = "video-writers";
+  };
+
+  # port 8989
+  services.sonarr = {
+    enable = true;
+    openFirewall = true;
+    user = "scraper";
+    group = "video-writers";
   };
 
   fileSystems."/mnt/video" = {
@@ -33,7 +61,10 @@
       # this line prevents hanging on network split
       automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-    in ["${automount_opts},credentials=${config.age.secrets.fs-mi-go-torrent-scraper.path}"];
+    # the defaults of a CIFS mount are not documented anywhere that I can see.
+    # you can run "mount" after mounting to see what options were actually used.
+    # cifsacl is required for the server-side permissions to show up correctly.
+    in ["${automount_opts},cifsacl,uid=scraper,gid=video-writers,credentials=${config.age.secrets.fs-mi-go-torrent-scraper.path}"];
   };
 
   age.secrets = {
