@@ -1,4 +1,4 @@
-{ inputs, config, ... }: {
+{ inputs, config, pkgs, ... }: {
   imports = [
     inputs.agenix.nixosModules.default
     inputs.agenix-rekey.nixosModules.default
@@ -8,7 +8,7 @@
 
   microvm = {
     vcpu = 1;
-    mem = 512;
+    mem = 1024;
 
     volumes = [
       {
@@ -42,24 +42,62 @@
     '';
   };
 
-  # expose rtorrent XML-RPC over HTTP, adding authentication.
-  networking.firewall.allowedTCPPorts = [ 8888 ];
+  networking.firewall.allowedTCPPorts = [
+    # flood
+    80
+
+    # rtorrent xml-rpc
+    8888
+  ];
+
   services.nginx = {
     enable = true;
     group = "rtorrent";
 
-    httpConfig = ''
-      server {
-        listen 8888;
-        auth_basic secured;
-        auth_basic_user_file ${config.age.secrets.rtorrent-xml-rpc-nginx-auth.path};
+    virtualHosts = {
+      # https://github.com/jesec/flood/blob/69feefe2f97be8727de6bd2e35c6715f341aa15b/distribution/shared/nginx.md
+      flood = {
+        serverName = "rtorrent.domus.diffeq.com";
+        listen = [{ addr = "0.0.0.0"; port = 80; }];
+        root = "${pkgs.flood}/lib/node_modules/flood/dist/assets";
 
-        location /RPC2 {
-          include ${config.services.nginx.package}/conf/scgi_params;
-          scgi_pass unix:${config.services.rtorrent.rpcSocket};
-        }
-      }
-    '';
+        locations."/" = {
+          tryFiles = "$uri /index.html";
+        };
+
+        locations."/api" = {
+          proxyPass = "http://127.0.0.1:3000";
+        };
+      };
+
+      # expose rtorrent XML-RPC over HTTP, adding authentication.
+      rtorrent-xml-rpc = {
+        serverName = "rtorrent.domus.diffeq.com";
+        listen = [{ addr = "0.0.0.0"; port = 8888; }];
+
+        basicAuthFile = config.age.secrets.rtorrent-xml-rpc-nginx-auth.path;
+
+        locations."/RPC2" = {
+          extraConfig = ''
+            include ${config.services.nginx.package}/conf/scgi_params;
+            scgi_pass unix:${config.services.rtorrent.rpcSocket};
+          '';
+        };
+      };
+    };
+  };
+
+  systemd.services.flood = {
+    enable = true;
+    description = "Flood rTorrent Web UI";
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.nodePackages.flood}/bin/flood --host 127.0.0.1 --port 3000";
+      User = config.services.rtorrent.user;
+      Group = config.services.rtorrent.group;
+    };
+
+    wantedBy = [ "multi-user.target" ];
   };
 
   fileSystems."/mnt/video" = {
