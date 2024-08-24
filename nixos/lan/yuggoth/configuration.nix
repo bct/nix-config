@@ -33,19 +33,29 @@
   yuggoth.microvms = {
     interfaceToBridge = "enp5s0f0";
 
+    # to generate a machineId:
+    #
+    #   ruby -r securerandom -e 'puts SecureRandom.hex'
+    #
+    # to choose a MAC address:
+    # Locally administered have one of 2/6/A/E in the second nibble.
     guests = {
       miniflux = {
         hostName = "miniflux";
-        # Locally administered have one of 2/6/A/E in the second nibble.
         tapInterfaceMac = "02:00:00:00:00:01";
         machineId = "b42e25167b6bc7ca726ea9f41ce5ffcb";
       };
 
       prometheus = {
         hostName = "prometheus";
-        # Locally administered have one of 2/6/A/E in the second nibble.
         tapInterfaceMac = "02:00:00:00:00:03";
         machineId = "6621b60f7f7ac43dca44e143eb0578a8";
+      };
+
+      rtorrent = {
+        hostName = "rtorrent";
+        tapInterfaceMac = "02:00:00:00:00:04";
+        machineId = "9448935ef2c6845cd2298c883fa10734";
       };
 
       torrent-scraper = {
