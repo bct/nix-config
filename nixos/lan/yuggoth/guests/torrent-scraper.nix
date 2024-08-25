@@ -2,6 +2,8 @@
   imports = [
     inputs.agenix.nixosModules.default
     inputs.agenix-rekey.nixosModules.default
+
+    "${inputs.nixpkgs-unstable}/nixos/modules/services/torrent/flood.nix"
   ];
 
   system.stateVersion = "24.05";
@@ -28,11 +30,17 @@
     bct.extraGroups = ["video-writers"];
   };
 
-  networking.firewall.allowedTCPPorts = [ 8081 ];
+  networking.firewall.allowedTCPPorts = [
+    # sickgear
+    #8081
+
+    # flood
+    80
+  ];
 
   # port 8081
   services.sickbeard = {
-    enable = true;
+    enable = false;
     package = pkgs.sickgear;
     user = "scraper";
     group = "video-writers";
@@ -71,6 +79,16 @@
     fs-mi-go-torrent-scraper = {
       rekeyFile = ../../../../secrets/fs/mi-go-torrent-scraper.age;
     };
+
+    ssh-client-rtorrent-socket = {
+      rekeyFile = ../../../../secrets/ssh/client-rtorrent-socket.age;
+    };
+
+    rtorrent-xml-rpc-nginx-auth = {
+      rekeyFile = ./secrets/rtorrent-xml-rpc-nginx-auth.age;
+      owner = config.services.nginx.user;
+      group = config.services.nginx.group;
+    };
   };
 
   age.rekey = {
@@ -80,5 +98,80 @@
 
     # TODO: pull from the .pub on disk?
     hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILwu2O9ulPoL1YYEIkbDOjA5B7h/efXYjrPPV0xNpOxY root@torrent-scraper";
+  };
+
+  users.groups = {
+    rtorrent = {};
+  };
+
+  services.flood = {
+    enable = true;
+    openFirewall = false;
+    host = "127.0.0.1";
+  };
+  systemd.services.flood.serviceConfig.SupplementaryGroups = ["rtorrent"];
+
+  # https://gist.github.com/drmalex07/c0f9304deea566842490
+  systemd.services.rtorrent-socket = {
+    enable = true;
+    description = "rTorrent socket tunnel";
+    serviceConfig = {
+      Type = "simple";
+
+      LoadCredential = [
+        "ssh-identity:${config.age.secrets.ssh-client-rtorrent-socket.path}"
+      ];
+      RuntimeDirectory = "rtorrent-socket";
+
+      # StreamLocalBindMask=0117 makes a socket that group-writeable
+      ExecStart = "${pkgs.openssh}/bin/ssh -o StreamLocalBindMask=0117 -i \${CREDENTIALS_DIRECTORY}/ssh-identity -NL \${RUNTIME_DIRECTORY}/rtorrent.sock:/home/bct/.rtorrent/rpc.sock bct@torrent.domus.diffeq.com";
+      DynamicUser = true;
+
+      # this is the group that will own the socket
+      Group = "rtorrent";
+    };
+
+    wantedBy = [ "multi-user.target" ];
+  };
+
+  programs.ssh.knownHosts = {
+    "torrent.domus.diffeq.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPDMeXYu6wbZFx9ONThqwQKbK6/mq6hluZqIB6w0knqK";
+  };
+
+  services.nginx = {
+    enable = true;
+    group = "rtorrent";
+
+    virtualHosts = {
+      # https://github.com/jesec/flood/blob/69feefe2f97be8727de6bd2e35c6715f341aa15b/distribution/shared/nginx.md
+      flood = {
+        serverName = null;
+        listen = [{ addr = "0.0.0.0"; port = 80; }];
+        root = "${config.services.flood.package}/lib/node_modules/flood/dist/assets";
+
+        locations."/" = {
+          tryFiles = "$uri /index.html";
+        };
+
+        locations."/api" = {
+          proxyPass = "http://127.0.0.1:3000";
+        };
+      };
+
+      # expose rtorrent XML-RPC over HTTP, adding authentication.
+      rtorrent-xml-rpc = {
+        serverName = "rtorrent.domus.diffeq.com";
+        listen = [{ addr = "127.0.0.1"; port = 8888; }];
+
+        basicAuthFile = config.age.secrets.rtorrent-xml-rpc-nginx-auth.path;
+
+        locations."/RPC2" = {
+          extraConfig = ''
+            include ${config.services.nginx.package}/conf/scgi_params;
+            scgi_pass unix:/run/rtorrent-socket/rtorrent.sock;
+          '';
+        };
+      };
+    };
   };
 }

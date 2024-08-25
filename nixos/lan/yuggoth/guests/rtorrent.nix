@@ -34,7 +34,7 @@
   };
 
   services.rtorrent = {
-    enable = true;
+    enable = false;
     user = "rtorrent";
     group = "rtorrent";
     downloadDir = "/mnt/video/downloads/rtorrent";
