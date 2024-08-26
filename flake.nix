@@ -82,14 +82,22 @@
         # Acessible through 'nix develop'
         devShells = import ./shell.nix { inherit config pkgs inputs; };
 
-        agenix-rekey.nodes = {
-          inherit (self.nixosConfigurations)
-            megahost-one
-            yuggoth
-            miniflux;
-
-          torrent-scraper = self.nixosConfigurations.yuggoth.config.microvm.vms.torrent-scraper.config;
-        };
+        # agenix-rekey configuration
+        # see https://flake.parts/options/agenix-rekey
+        agenix-rekey.nodes = let
+          allVms = self.nixosConfigurations.yuggoth.config.microvm.vms;
+          agenixVms = nixpkgs.lib.filterAttrs
+            # only look at VMs with "age" attributes set.
+            (containerName: {config,...}: config.config ? age)
+            allVms;
+        in
+          {
+            inherit (self.nixosConfigurations)
+              megahost-one
+              yuggoth;
+          } // nixpkgs.lib.mapAttrs
+                (containerName: instanceConfig: instanceConfig.config)
+                agenixVms;
       };
 
       flake = {
@@ -138,17 +146,6 @@
           megahost-one = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
             modules = [ ./nixos/cloud/megahost-one/configuration.nix ];
-          };
-
-          # -- VMs
-          # these have to be here so that they can be agenix-rekey targets
-          miniflux = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [
-              inputs.microvm.nixosModules.microvm
-              ./nixos/lan/yuggoth/guests/miniflux.nix
-              { nixpkgs.hostPlatform = "x86_64-linux"; }
-            ];
           };
         };
 
