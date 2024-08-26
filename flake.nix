@@ -88,7 +88,6 @@
             yuggoth
             miniflux;
 
-          rtorrent = self.nixosConfigurations.yuggoth.config.microvm.vms.rtorrent.config;
           torrent-scraper = self.nixosConfigurations.yuggoth.config.microvm.vms.torrent-scraper.config;
         };
       };

@@ -52,12 +52,6 @@
         machineId = "6621b60f7f7ac43dca44e143eb0578a8";
       };
 
-      rtorrent = {
-        hostName = "rtorrent";
-        tapInterfaceMac = "02:00:00:00:00:04";
-        machineId = "9448935ef2c6845cd2298c883fa10734";
-      };
-
       torrent-scraper = {
         hostName = "torrent-scraper";
         tapInterfaceName = "vm-torrent-scra"; # <= 15 chars
