@@ -116,15 +116,28 @@
     enable = true;
     description = "rTorrent socket tunnel";
     serviceConfig = {
-      Type = "simple";
-
       LoadCredential = [
         "ssh-identity:${config.age.secrets.ssh-client-rtorrent-socket.path}"
       ];
       RuntimeDirectory = "rtorrent-socket";
 
-      # StreamLocalBindMask=0117 makes a socket that group-writeable
-      ExecStart = "${pkgs.openssh}/bin/ssh -o StreamLocalBindMask=0117 -i \${CREDENTIALS_DIRECTORY}/ssh-identity -NL \${RUNTIME_DIRECTORY}/rtorrent.sock:/home/bct/.rtorrent/rpc.sock bct@torrent.domus.diffeq.com";
+      ExecStart = builtins.concatStringsSep " " [
+        "${pkgs.openssh}/bin/ssh"
+        # ServerAliveInterval: check that the connection is alive
+        "-o ServerAliveInterval=60"
+        # ExitOnForwardfailure: close the connection if the tunnel fails
+        "-o ExitOnForwardFailure=yes"
+        # StreamLocalBindMask=0117: make a socket that group-writeable
+        "-o StreamLocalBindMask=0117"
+        "-i \${CREDENTIALS_DIRECTORY}/ssh-identity"
+        "-N"
+        "-L \${RUNTIME_DIRECTORY}/rtorrent.sock:/home/bct/.rtorrent/rpc.sock bct@torrent.domus.diffeq.com"
+      ];
+
+      # Restart every >2 seconds to avoid StartLimitInterval failure
+      RestartSec = 5;
+      Restart = "always";
+
       DynamicUser = true;
 
       # this is the group that will own the socket
