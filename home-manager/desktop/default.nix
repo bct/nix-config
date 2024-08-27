@@ -64,7 +64,7 @@
     feh
 
     # media
-    supersonic
+    unstable.supersonic
   ];
 
   # Raw configuration files
