@@ -1,8 +1,6 @@
-{ inputs, pkgs, config, ... }: {
+{ self, inputs, pkgs, config, ... }: {
   imports = [
-    inputs.agenix.nixosModules.default
-    inputs.agenix-rekey.nixosModules.default
-
+    "${self}/nixos/common/agenix-rekey.nix"
     "${inputs.nixpkgs-unstable}/nixos/modules/services/torrent/flood.nix"
   ];
 
@@ -75,6 +73,9 @@
     in ["${automount_opts},cifsacl,uid=scraper,gid=video-writers,credentials=${config.age.secrets.fs-mi-go-torrent-scraper.path}"];
   };
 
+  # TODO: pull from the .pub on disk?
+  age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILwu2O9ulPoL1YYEIkbDOjA5B7h/efXYjrPPV0xNpOxY root@torrent-scraper";
+
   age.secrets = {
     fs-mi-go-torrent-scraper = {
       rekeyFile = ../../../../secrets/fs/mi-go-torrent-scraper.age;
@@ -89,15 +90,6 @@
       owner = config.services.nginx.user;
       group = config.services.nginx.group;
     };
-  };
-
-  age.rekey = {
-    masterIdentities = ["/home/bct/.ssh/id_rsa"];
-    storageMode = "local";
-    localStorageDir = ../../../.. + "/secrets/rekeyed/torrent-scraper";
-
-    # TODO: pull from the .pub on disk?
-    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILwu2O9ulPoL1YYEIkbDOjA5B7h/efXYjrPPV0xNpOxY root@torrent-scraper";
   };
 
   users.groups = {

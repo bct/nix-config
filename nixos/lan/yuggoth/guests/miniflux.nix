@@ -1,4 +1,4 @@
-{ inputs, config, lib, pkgs, ... }:
+{ self, inputs, config, pkgs, ... }:
 
 let
   unshittifyPkgs = inputs.unshittify.packages.${pkgs.system};
@@ -8,8 +8,7 @@ in {
   disabledModules = [ "services/misc/nitter.nix" ];
 
   imports = [
-    inputs.agenix.nixosModules.default
-    inputs.agenix-rekey.nixosModules.default
+    "${self}/nixos/common/agenix-rekey.nix"
     "${inputs.nixpkgs-unstable}/nixos/modules/services/misc/nitter.nix"
   ];
 
@@ -28,6 +27,8 @@ in {
     ];
   };
 
+  # TODO: pull from the .pub on disk?
+  age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINKz7HRp/8LfeXDEhLNbsNBKJWacqXWFZngOzBzwXGNl";
   age.secrets = {
     nitter-guest-accounts = {
       rekeyFile = ../../../../secrets/nitter-guest-accounts.age;
@@ -70,14 +71,5 @@ in {
     guestAccounts = config.age.secrets.nitter-guest-accounts.path;
     server.port = 8080;
     server.hostname = "miniflux:8080";
-  };
-
-  age.rekey = {
-    masterIdentities = ["/home/bct/.ssh/id_rsa"];
-    storageMode = "local";
-    localStorageDir = ../../../.. + "/secrets/rekeyed/miniflux";
-
-    # TODO: pull from the .pub on disk?
-    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINKz7HRp/8LfeXDEhLNbsNBKJWacqXWFZngOzBzwXGNl";
   };
 }

@@ -1,12 +1,10 @@
 { self, inputs, outputs, lib, ... }: {
   imports = [
-    inputs.agenix.nixosModules.default
-    inputs.agenix-rekey.nixosModules.default
-
     inputs.disko.nixosModules.disko
 
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
+    "${self}/nixos/common/agenix-rekey.nix"
 
     ./hardware-configuration.nix
     ./disk-config.nix
@@ -23,12 +21,7 @@
   networking.hostName = "yuggoth";
   networking.useNetworkd = true;
 
-  age.rekey = {
-    masterIdentities = ["/home/bct/.ssh/id_rsa"];
-    storageMode = "local";
-    localStorageDir = ../../.. + "/secrets/rekeyed/yuggoth";
-    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVYcCxqBIE6ppS6n7VQb3Qs4w1gEYtNhTdKu+21XO82";
-  };
+  age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVYcCxqBIE6ppS6n7VQb3Qs4w1gEYtNhTdKu+21XO82";
 
   yuggoth.microvms = {
     interfaceToBridge = "enp5s0f0";

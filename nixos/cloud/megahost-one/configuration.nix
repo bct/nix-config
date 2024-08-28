@@ -1,12 +1,10 @@
 { self, inputs, config, ... }: {
   imports = [
-    inputs.agenix.nixosModules.default
-    inputs.agenix-rekey.nixosModules.default
-
     inputs.disko.nixosModules.disko
 
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
+    "${self}/nixos/common/agenix-rekey.nix"
 
     "${self}/nixos/hardware/vultr"
 
@@ -35,6 +33,8 @@
 
   time.timeZone = "Etc/UTC";
 
+  # TODO: can we use agenix-rekey to bootstrap the host SSH key?
+  age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAbD0X8eQfKiG2rYYcZ6dVdRHQaRK8DrFz7YaLzHQx2";
   age.secrets = {
     s3-proxy-minio-root-credentials.rekeyFile =
       ../../../secrets/s3-proxy-minio-root-credentials.age;
@@ -116,13 +116,6 @@
     # "-" means no automatic cleanup.
     "d /srv/data 0700 root root -"
   ];
-
-  age.rekey = {
-    masterIdentities = ["/home/bct/.ssh/id_rsa"];
-    storageMode = "local";
-    localStorageDir = ../../.. + "/secrets/rekeyed/megahost-one";
-    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAbD0X8eQfKiG2rYYcZ6dVdRHQaRK8DrFz7YaLzHQx2";
-  };
 
   system.stateVersion = "24.05";
 }
