@@ -6,10 +6,10 @@
 
   config = {
     age.rekey = {
-      masterIdentities = ["/home/bct/.ssh/id_rsa"];
+      masterIdentities = [ ../../secrets/yk1-nix-rage.pub ];
       extraEncryptionPubkeys = [
-        # TODO backup key.
-        # https://github.com/oddlama/agenix-rekey?tab=readme-ov-file#agerekeyextraencryptionpubkeys
+        # backup key, in case the yubikey is lost, etc.
+        "age1rtx8k55ce7u3um2q7c2pyvaau7rqd07y25pc2xaq8tfragnx5qrs7zukgs"
       ];
       storageMode = "local";
       localStorageDir = ../.. + "/secrets/rekeyed/${config.networking.hostName}";
