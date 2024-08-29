@@ -20,10 +20,4 @@ in
 
     # ZoneEdit API key for creating TXT records for ACME
     "zoneedit.age".publicKeys = [ bct-cimmeria spectator stereo yuurei ];
-
-    # Nitter OAuth tokens
-    "nitter-guest-accounts.age".publicKeys = [ bct-cimmeria yuurei ];
-
-    # Miniflux admin credentials
-    "miniflux-admin-credentials.age".publicKeys = [ bct-cimmeria yuurei ];
   }
