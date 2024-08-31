@@ -45,6 +45,12 @@
         machineId = "6621b60f7f7ac43dca44e143eb0578a8";
       };
 
+      spectator = {
+        hostName = "spectator";
+        tapInterfaceMac = "02:00:00:00:00:04";
+        machineId = "08e6532eedca9b41586bd21b881c6bbf";
+      };
+
       torrent-scraper = {
         hostName = "torrent-scraper";
         tapInterfaceName = "vm-torrent-scra"; # <= 15 chars
@@ -53,6 +59,17 @@
       };
     };
   };
+
+  # grant qemu access to the devices that will be passed through to microvms
+  services.udev.extraRules = ''
+    # RTL2838UHIDIR
+    # Realtek Semiconductor Corp. RTL2838 DVB-T
+    SUBSYSTEM=="usb", ATTR{idVendor}=="0bda", ATTR{idProduct}=="2838", GROUP="kvm"
+
+    # Sonoff Zigbee 3.0 USB Dongle Plus
+    # Silicon Labs CP210x UART Bridge
+    SUBSYSTEM=="usb", ATTR{idVendor}=="10c4", ATTR{idProduct}=="ea60", GROUP="kvm"
+  '';
 
   system.stateVersion = "24.05";
 }
