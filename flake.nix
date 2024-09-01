@@ -122,11 +122,6 @@
           };
 
           # -- LAN hosts
-          spectator = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/lan/spectator/configuration.nix ];
-          };
-
           stereo = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
             modules = [ ./nixos/lan/stereo/configuration.nix ];
@@ -157,12 +152,6 @@
           };
         in {
           # -- lan hosts --
-          nodes.spectator = mkNode {
-            hostname = "spectator.domus.diffeq.com";
-            arch     = "aarch64-linux";
-            config   = self.nixosConfigurations.spectator;
-          };
-
           nodes.stereo = mkNode {
             hostname = "stereo.domus.diffeq.com";
             arch     = "aarch64-linux";
