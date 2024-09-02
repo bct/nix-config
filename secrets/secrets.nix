@@ -6,17 +6,10 @@ let
   #   ssh-keyscan -t ssh-ed25519 <host>
 
   # -- lan
-  stereo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+0o3CDs78/NW73QxiZ4gJtXgZ5U+NAu8o9lNhzmLwl";
   yuurei = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINqIJgMjI1OWLvn6eOrlsF0TG8jFu6SYkzq85VODtUbP";
 
 in
   {
-    # mysql password
-    "home-assistant-my-cnf.age".publicKeys = [ bct-cimmeria ];
-
-    # influxdb password
-    "rtlamr-collect-env.age".publicKeys = [ bct-cimmeria ];
-
     # ZoneEdit API key for creating TXT records for ACME
-    "zoneedit.age".publicKeys = [ bct-cimmeria stereo yuurei ];
+    "zoneedit.age".publicKeys = [ bct-cimmeria yuurei ];
   }

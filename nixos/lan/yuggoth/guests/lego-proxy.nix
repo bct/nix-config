@@ -6,6 +6,10 @@ let
       domain = "spectator.domus.diffeq.com";
       pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFk2zCBoSRaNUJfUhFNGLI1r+H5EVtWNukvTG6Lq0z+J spectator:lego-proxy-spectator";
     }
+    {
+      domain = "stereo.domus.diffeq.com";
+      pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGps5WovLRtcOWuBupjj2CC2YxVtQsHjHa4UN686eU3Q stereo:lego-proxy-spectator";
+    }
   ];
 in {
   # TODO: assert format of authorized keys (no newlines)

@@ -94,6 +94,7 @@
           {
             inherit (self.nixosConfigurations)
               megahost-one
+              stereo
               yuggoth;
           } // nixpkgs.lib.mapAttrs
                 (containerName: instanceConfig: instanceConfig.config)

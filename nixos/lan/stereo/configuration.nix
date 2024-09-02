@@ -1,6 +1,6 @@
-{ self, config, inputs, lib, pkgs, ... }: {
+{ self, config, lib, pkgs, ... }: {
   imports = [
-    inputs.agenix.nixosModules.default
+    "${self}/nixos/common/agenix-rekey.nix"
 
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
@@ -11,7 +11,7 @@
     ./hardware-configuration.nix
 
     "${self}/nixos/modules/airsonic-refix"
-    "${self}/nixos/modules/acme-zoneedit"
+    "${self}/nixos/modules/lego-proxy-client"
   ];
 
   networking.hostName = "stereo";
@@ -119,21 +119,25 @@
 
   services.airsonic-refix.enable = true;
 
-  services.acme-zoneedit = {
+  services.lego-proxy-client = {
     enable = true;
-    hostnames = ["stereo.domus.diffeq.com"];
+    domains = [
+      { domain = "stereo.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-stereo.path; }
+    ];
+    dnsResolver = "ns5.zoneedit.com";
     email = "s+acme@diffeq.com";
-    credentialsFile = config.age.secrets.zoneedit.path;
   };
 
   age.secrets = {
-    zoneedit = {
-      file = ../../../secrets/zoneedit.age;
+    lego-proxy-stereo = {
+      generator.script = "ssh-ed25519";
+      rekeyFile = ../../../secrets/lego-proxy/stereo.age;
       owner = "acme";
       group = "acme";
-      mode = "600";
     };
   };
+
+  age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+0o3CDs78/NW73QxiZ4gJtXgZ5U+NAu8o9lNhzmLwl";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";
