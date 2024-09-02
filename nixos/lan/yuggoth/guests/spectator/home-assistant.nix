@@ -1,7 +1,7 @@
 { self, config, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
-    "${self}/nixos/modules/acme-zoneedit"
+    "${self}/nixos/modules/lego-proxy-client"
   ];
 
   age.secrets = {
@@ -11,21 +11,23 @@
       group = "hass";
     };
 
-    #zoneedit = {
-    #  rekeyFile = ../../../../../secrets/zoneedit.age;
-    #  owner = "acme";
-    #  group = "acme";
-    #  mode = "600";
-    #};
+    lego-proxy-spectator = {
+      generator.script = "ssh-ed25519";
+      rekeyFile = ../../../../../secrets/lego-proxy/spectator.age;
+      owner = "acme";
+      group = "acme";
+    };
   };
 
-  #services.acme-zoneedit = {
-  #  enable = true;
-  #  hostnames = ["spectator.domus.diffeq.com"];
-  #  email = "s+acme@diffeq.com";
-  #  group = "hass";
-  #  credentialsFile = config.age.secrets.zoneedit.path;
-  #};
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      { domain = "spectator.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-spectator.path; }
+    ];
+    dnsResolver = "ns5.zoneedit.com";
+    email = "s+acme@diffeq.com";
+    group = "hass";
+  };
 
   networking.firewall.allowedTCPPorts = [ 8123 ];
 
@@ -59,7 +61,7 @@
     ];
 
     config = let
-      #sslDirectory = "${config.security.acme.certs."spectator.domus.diffeq.com".directory}";
+      sslDirectory = "${config.security.acme.certs."spectator.domus.diffeq.com".directory}";
     in {
       # Includes dependencies for a basic setup
       # https://www.home-assistant.io/integrations/default_config/
@@ -70,10 +72,10 @@
         country = "CA";
       };
 
-      #http = {
-      #  ssl_certificate = "${sslDirectory}/fullchain.pem";
-      #  ssl_key = "${sslDirectory}/key.pem";
-      #};
+      http = {
+        ssl_certificate = "${sslDirectory}/fullchain.pem";
+        ssl_key = "${sslDirectory}/key.pem";
+      };
 
       recorder = {
         # commit less frequently to reduce wear on the SD card

@@ -57,6 +57,12 @@
         tapInterfaceMac = "02:00:00:00:00:02";
         machineId = "e5b7d8199d4a4a34fb6748faef793248";
       };
+
+      lego-proxy = {
+        hostName = "lego-proxy";
+        tapInterfaceMac = "02:00:00:00:00:05";
+        machineId = "0c309b2d738728317e0dbc9725a64dc1";
+      };
     };
   };
 

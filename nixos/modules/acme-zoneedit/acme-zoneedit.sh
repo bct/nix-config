@@ -22,6 +22,8 @@ do_add() {
     echo "zoneedit API call failed:"
     echo "$result"
     exit 1
+  else
+    echo "TXT record submitted."
   fi
 }
 
@@ -41,6 +43,8 @@ do_cleanup() {
     echo "zoneedit API call failed:"
     echo "$result"
     exit 1
+  else
+    echo "TXT record cleaned up."
   fi
 }
 
