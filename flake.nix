@@ -36,6 +36,10 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
+    # microvm
+    microvm.url = "github:astro/microvm.nix";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
+
     # packages from flakes
     airsonic-refix-jukebox.url = "github:bct/airsonic-refix-jukebox";
     airsonic-refix-jukebox.inputs.nixpkgs.follows = "nixpkgs";
@@ -78,7 +82,23 @@
         # Acessible through 'nix develop'
         devShells = import ./shell.nix { inherit config pkgs inputs; };
 
-        agenix-rekey.nodes = { inherit (self.nixosConfigurations) megahost-one; };
+        # agenix-rekey configuration
+        # see https://flake.parts/options/agenix-rekey
+        agenix-rekey.nodes = let
+          allVms = self.nixosConfigurations.yuggoth.config.microvm.vms;
+          agenixVms = nixpkgs.lib.filterAttrs
+            # only look at VMs with "age" attributes set.
+            (containerName: {config,...}: config.config ? age)
+            allVms;
+        in
+          {
+            inherit (self.nixosConfigurations)
+              megahost-one
+              stereo
+              yuggoth;
+          } // nixpkgs.lib.mapAttrs
+                (containerName: instanceConfig: instanceConfig.config)
+                agenixVms;
       };
 
       flake = {
@@ -103,19 +123,14 @@
           };
 
           # -- LAN hosts
-          spectator = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/lan/spectator/configuration.nix ];
-          };
-
           stereo = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
             modules = [ ./nixos/lan/stereo/configuration.nix ];
           };
 
-          yuurei = nixpkgs.lib.nixosSystem {
+          yuggoth = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/lan/yuurei/configuration.nix ];
+            modules = [ ./nixos/lan/yuggoth/configuration.nix ];
           };
 
           # -- cloud hosts
@@ -133,22 +148,16 @@
           };
         in {
           # -- lan hosts --
-          nodes.spectator = mkNode {
-            hostname = "spectator.domus.diffeq.com";
-            arch     = "aarch64-linux";
-            config   = self.nixosConfigurations.spectator;
-          };
-
           nodes.stereo = mkNode {
             hostname = "stereo.domus.diffeq.com";
             arch     = "aarch64-linux";
             config   = self.nixosConfigurations.stereo;
           };
 
-          nodes.yuurei = mkNode {
-            hostname = "yuurei.domus.diffeq.com";
+          nodes.yuggoth = mkNode {
+            hostname = "yuggoth.domus.diffeq.com";
             arch     = "x86_64-linux";
-            config   = self.nixosConfigurations.yuurei;
+            config   = self.nixosConfigurations.yuggoth;
           };
 
           # -- cloud hosts --

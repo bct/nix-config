@@ -38,7 +38,7 @@
     Install = { WantedBy = [ "default.target" ]; };
 
     Mount = {
-      What = "bct@mi-go.domus.diffeq.com:/mnt/bulk/media";
+      What = "bct@mi-go.domus.diffeq.com:/mnt/bulk";
       Where = "/bulk";
       Type = "fuse.sshfs";
       Options = "_netdev,reconnect,ServerAliveInterval=30,ServerAliveCountMax=5,x-systemd.automount";

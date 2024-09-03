@@ -73,6 +73,9 @@
 
   services.trezord.enable = true;
 
+  # required for Yubikey's CCID/PIV mode
+  services.pcscd.enable = true;
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It's perfectly fine and recommended to leave
