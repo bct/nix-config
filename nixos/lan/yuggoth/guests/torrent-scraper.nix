@@ -1,6 +1,7 @@
 { self, inputs, pkgs, config, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
+    "${self}/nixos/modules/lego-proxy-client"
     "${inputs.nixpkgs-unstable}/nixos/modules/services/torrent/flood.nix"
   ];
 
@@ -19,35 +20,32 @@
     ];
   };
 
-  users.groups.video-writers = {};
+  users.groups.video-writers = {
+    # guarantee a stable GID, since /etc is not persistent.
+    gid = 989;
+  };
   users.users = {
     scraper = {
       isSystemUser = true;
       group = "video-writers";
+
+      # guarantee a stable UID, since /etc is not persistent.
+      uid = 992;
     };
     bct.extraGroups = ["video-writers"];
+    nginx.extraGroups = ["acme"];
   };
 
   networking.firewall.allowedTCPPorts = [
-    # sickgear
-    #8081
-
-    # flood
+    # nginx
     80
+    443
   ];
-
-  # port 8081
-  services.sickbeard = {
-    enable = false;
-    package = pkgs.sickgear;
-    user = "scraper";
-    group = "video-writers";
-  };
 
   # port 7878
   services.radarr = {
     enable = true;
-    openFirewall = true;
+    openFirewall = false;
     user = "scraper";
     group = "video-writers";
   };
@@ -55,7 +53,7 @@
   # port 8989
   services.sonarr = {
     enable = true;
-    openFirewall = true;
+    openFirewall = false;
     user = "scraper";
     group = "video-writers";
   };
@@ -90,6 +88,38 @@
       owner = config.services.nginx.user;
       group = config.services.nginx.group;
     };
+
+    lego-proxy-flood = {
+      generator.script = "ssh-ed25519";
+      rekeyFile = ../../../../secrets/lego-proxy/flood.age;
+      owner = "acme";
+      group = "acme";
+    };
+
+    lego-proxy-radarr = {
+      generator.script = "ssh-ed25519";
+      rekeyFile = ../../../../secrets/lego-proxy/radarr.age;
+      owner = "acme";
+      group = "acme";
+    };
+
+    lego-proxy-sonarr = {
+      generator.script = "ssh-ed25519";
+      rekeyFile = ../../../../secrets/lego-proxy/sonarr.age;
+      owner = "acme";
+      group = "acme";
+    };
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      { domain = "flood.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-flood.path; }
+      { domain = "radarr.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-radarr.path; }
+      { domain = "sonarr.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-sonarr.path; }
+    ];
+    dnsResolver = "ns5.zoneedit.com";
+    email = "s+acme@diffeq.com";
   };
 
   users.groups = {
@@ -149,9 +179,10 @@
 
     virtualHosts = {
       # https://github.com/jesec/flood/blob/69feefe2f97be8727de6bd2e35c6715f341aa15b/distribution/shared/nginx.md
-      flood = {
-        serverName = null;
-        listen = [{ addr = "0.0.0.0"; port = 80; }];
+      "flood.domus.diffeq.com" = {
+        useACMEHost = "flood.domus.diffeq.com";
+        forceSSL = true;
+
         root = "${config.services.flood.package}/lib/node_modules/flood/dist/assets";
 
         locations."/" = {
@@ -176,6 +207,20 @@
             scgi_pass unix:/run/rtorrent-socket/rtorrent.sock;
           '';
         };
+      };
+
+      "radarr.domus.diffeq.com" = {
+        useACMEHost = "radarr.domus.diffeq.com";
+        forceSSL = true;
+
+        locations."/".proxyPass = "http://localhost:7878";
+      };
+
+      "sonarr.domus.diffeq.com" = {
+        useACMEHost = "sonarr.domus.diffeq.com";
+        forceSSL = true;
+
+        locations."/".proxyPass = "http://localhost:8989";
       };
     };
   };
