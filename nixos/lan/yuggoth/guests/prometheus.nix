@@ -30,6 +30,18 @@
           { targets = ["localhost:9108"]; }
         ];
       }
+
+      {
+        job_name = "node-exporter";
+        scrape_interval = "60s";
+        static_configs = [
+          { targets = ["lego-proxy.domus.diffeq.com:9100"]; }
+          { targets = ["miniflux.domus.diffeq.com:9100"]; }
+          { targets = ["prometheus.domus.diffeq.com:9100"]; }
+          { targets = ["spectator.domus.diffeq.com:9100"]; }
+          { targets = ["torrent-scraper.domus.diffeq.com:9100"]; }
+        ];
+      }
     ];
   };
 

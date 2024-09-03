@@ -111,6 +111,7 @@ in {
               # presumably the overlays are being passed through anyways.
               # the other nix configuration seems OK to ignore.
               "${self}/nixos/common/headless.nix"
+              "${self}/nixos/common/node-exporter.nix"
             ];
 
             networking.hostName = vmConfig.hostName;
