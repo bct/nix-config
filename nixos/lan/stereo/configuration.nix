@@ -4,6 +4,7 @@
 
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
+    "${self}/nixos/common/node-exporter.nix"
 
     "${self}/nixos/hardware/raspberry-pi"
     "${self}/nixos/hardware/raspberry-pi/hifiberry-dac-plus.nix"

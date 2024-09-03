@@ -35,6 +35,11 @@
         job_name = "node-exporter";
         scrape_interval = "60s";
         static_configs = [
+          # hosts
+          { targets = ["stereo.domus.diffeq.com:9100"]; }
+          { targets = ["yuggoth.domus.diffeq.com:9100"]; }
+
+          # VMs
           { targets = ["lego-proxy.domus.diffeq.com:9100"]; }
           { targets = ["miniflux.domus.diffeq.com:9100"]; }
           { targets = ["prometheus.domus.diffeq.com:9100"]; }

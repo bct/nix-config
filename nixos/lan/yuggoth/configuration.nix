@@ -5,6 +5,7 @@
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
     "${self}/nixos/common/agenix-rekey.nix"
+    "${self}/nixos/common/node-exporter.nix"
 
     ./hardware-configuration.nix
     ./disk-config.nix
