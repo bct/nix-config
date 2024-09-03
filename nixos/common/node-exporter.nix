@@ -8,6 +8,7 @@
     enabledCollectors = [
       "cpu"
       "filesystem"
+      "loadavg"
       "meminfo"
     ];
     extraFlags = [ "--collector.disable-defaults" ];
