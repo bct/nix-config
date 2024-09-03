@@ -133,11 +133,6 @@
             modules = [ ./nixos/lan/yuggoth/configuration.nix ];
           };
 
-          yuurei = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/lan/yuurei/configuration.nix ];
-          };
-
           # -- cloud hosts
           megahost-one = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
@@ -163,12 +158,6 @@
             hostname = "yuggoth.domus.diffeq.com";
             arch     = "x86_64-linux";
             config   = self.nixosConfigurations.yuggoth;
-          };
-
-          nodes.yuurei = mkNode {
-            hostname = "yuurei.domus.diffeq.com";
-            arch     = "x86_64-linux";
-            config   = self.nixosConfigurations.yuurei;
           };
 
           # -- cloud hosts --
