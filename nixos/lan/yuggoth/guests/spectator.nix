@@ -12,7 +12,7 @@
 
   microvm = {
     vcpu = 1;
-    mem = 1024;
+    mem = 768;
 
     volumes = [
       {
