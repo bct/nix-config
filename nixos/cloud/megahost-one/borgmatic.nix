@@ -74,7 +74,11 @@ in {
         --why="Prevent interrupting scheduled backup" \
         ${pkgs.borgmatic}/bin/borgmatic --verbosity -2 --syslog-verbosity 1
     '';
-  in "${run-borgmatic}";
+  in [
+    # to override ExecStart we need to explicitly clear it first.
+    ""
+    "${run-borgmatic}"
+  ];
 
   age.secrets = {
     password-postgres.rekeyFile = ../../../secrets/db/password-megahost-postgres.age;
