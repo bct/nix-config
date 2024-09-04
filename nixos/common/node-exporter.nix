@@ -11,6 +11,11 @@
       "loadavg"
       "meminfo"
     ];
-    extraFlags = [ "--collector.disable-defaults" ];
+    extraFlags = [
+      "--collector.disable-defaults"
+
+      # only include "real" filesystems
+      "--collector.filesystem.fs-types-exclude=^(9p|bpf|configfs|cgroup2|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|proc|pstore|ramfs|securityfs|sysfs|tmpfs|virtiofs)$"
+    ];
   };
 }
