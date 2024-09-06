@@ -34,6 +34,12 @@
     # to choose a MAC address:
     # Locally administered have one of 2/6/A/E in the second nibble.
     guests = {
+      grafana = {
+        hostName = "grafana";
+        tapInterfaceMac = "02:00:00:00:00:06";
+        machineId = "d2bf3078fe2744f57398cc02476228f9";
+      };
+
       miniflux = {
         hostName = "miniflux";
         tapInterfaceMac = "02:00:00:00:00:01";
