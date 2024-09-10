@@ -9,6 +9,7 @@ in {
 
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
+    "${self}/nixos/modules/lego-proxy-client"
     "${inputs.nixpkgs-unstable}/nixos/modules/services/misc/nitter.nix"
   ];
 
@@ -37,11 +38,39 @@ in {
     miniflux-admin-credentials = {
       rekeyFile = ../../../../secrets/miniflux-admin-credentials.age;
     };
+
+    lego-proxy-miniflux = {
+      generator.script = "ssh-ed25519";
+      rekeyFile = ../../../../secrets/lego-proxy/miniflux.age;
+      owner = "acme";
+      group = "acme";
+    };
+
+    lego-proxy-nitter = {
+      generator.script = "ssh-ed25519";
+      rekeyFile = ../../../../secrets/lego-proxy/nitter.age;
+      owner = "acme";
+      group = "acme";
+    };
   };
 
-  # 8080: nitter
-  # 8081: miniflux
-  networking.firewall.allowedTCPPorts = [8080 8081];
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      { domain = "miniflux.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-miniflux.path; }
+      { domain = "nitter.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-nitter.path; }
+    ];
+    group = "caddy";
+    dnsResolver = "ns5.zoneedit.com";
+    email = "s+acme@diffeq.com";
+  };
+
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+    8080 # nitter
+    8081 # miniflux
+  ];
 
   services.miniflux = {
     enable = true;
@@ -71,5 +100,18 @@ in {
     guestAccounts = config.age.secrets.nitter-guest-accounts.path;
     server.port = 8080;
     server.hostname = "miniflux:8080";
+  };
+
+  services.caddy = {
+    enable = true;
+    virtualHosts."miniflux.domus.diffeq.com" = {
+      useACMEHost = "miniflux.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:8081";
+    };
+
+    virtualHosts."nitter.domus.diffeq.com" = {
+      useACMEHost = "nitter.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:8080";
+    };
   };
 }

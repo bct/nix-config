@@ -22,6 +22,14 @@ let
       domain = "sonarr.domus.diffeq.com";
       pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJobOIdFH71iFfj2IrMr63xh6r+Ydhc/SGkifV2wAIoc torrent-scraper:lego-proxy-sonarr";
     }
+    {
+      domain = "miniflux.domus.diffeq.com";
+      pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHZEMtL1gR8npkfwmN5XN4p5a7qFgfr2gJIWQpyA/JGH miniflux:lego-proxy-miniflux";
+    }
+    {
+      domain = "nitter.domus.diffeq.com";
+      pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAxjglC0aoZBlx23w3TR7dnpI/udIRDMtVezl4Bj5Rvq miniflux:lego-proxy-nitter";
+    }
   ];
 in {
   # TODO: assert format of authorized keys (no newlines)
