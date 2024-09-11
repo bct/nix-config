@@ -23,7 +23,7 @@ do_add() {
     echo "$result"
     exit 1
   else
-    echo "TXT record submitted."
+    echo "${host}: TXT record submitted."
   fi
 }
 
@@ -44,7 +44,7 @@ do_cleanup() {
     echo "$result"
     exit 1
   else
-    echo "TXT record cleaned up."
+    echo "${host}: TXT record cleaned up"
   fi
 }
 

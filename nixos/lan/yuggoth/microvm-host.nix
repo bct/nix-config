@@ -78,19 +78,15 @@ in {
       "L+ /var/log/journal/${vmConfig.machineId} - - - - /var/lib/microvms/${vmName}/journal/${vmConfig.machineId}"
     ) cfg.guests;
 
-    age.secrets = let
-      generate-ssh-host-key = hostName: {pkgs, file, ...}: ''
-          ${pkgs.openssh}/bin/ssh-keygen -qt ed25519 -N "" -C "root@${hostName}" -f ${lib.escapeShellArg (lib.removeSuffix ".age" file)}
-          priv=$(${pkgs.coreutils}/bin/cat ${lib.escapeShellArg (lib.removeSuffix ".age" file)})
-          ${pkgs.coreutils}/bin/shred -u ${lib.escapeShellArg (lib.removeSuffix ".age" file)}
-          echo "$priv"
-        '';
-    in lib.concatMapAttrs (vmName: vmConfig: {
+    age.secrets = lib.concatMapAttrs (vmName: vmConfig: {
       "ssh-host-${vmName}" = {
         path = "${agenixVmPrefix}/${vmName}/ssh-host";
-        symlink = false; # the VM can't resolve the symlink
         rekeyFile = ../../../secrets/ssh/host-${vmName}.age;
-        generator.script = generate-ssh-host-key vmName;
+        generator.script = "ssh-ed25519-pubkey";
+
+        # the guest can't resolve a symlink, because it would point to a path
+        # that only exists on the host.
+        symlink = false;
       };
     }) cfg.guests;
 

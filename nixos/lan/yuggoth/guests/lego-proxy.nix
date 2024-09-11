@@ -62,6 +62,10 @@ in {
         domain = "nitter.domus.diffeq.com";
         pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAxjglC0aoZBlx23w3TR7dnpI/udIRDMtVezl4Bj5Rvq miniflux:lego-proxy-nitter";
       }
+      {
+        domain = "grafana.domus.diffeq.com";
+        pubKey = builtins.readFile ../../../../secrets/lego-proxy/grafana.pub;
+      }
     ];
   };
 }

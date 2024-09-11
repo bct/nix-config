@@ -1,6 +1,7 @@
 { self, config, lib, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
+    "${self}/nixos/modules/lego-proxy-client"
   ];
 
   system.stateVersion = "24.05";
@@ -25,16 +26,33 @@
       owner = "grafana";
       group = "grafana";
     };
+
+    lego-proxy-grafana = {
+      generator.script = "ssh-ed25519-pubkey";
+      rekeyFile = ../../../../secrets/lego-proxy/grafana.age;
+      owner = "acme";
+      group = "acme";
+    };
   };
 
-  networking.firewall.allowedTCPPorts = [3000];
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      { domain = "grafana.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-grafana.path; }
+    ];
+    group = "caddy";
+    dnsResolver = "ns5.zoneedit.com";
+    email = "s+acme@diffeq.com";
+  };
+
+  networking.firewall.allowedTCPPorts = [80 443];
 
   services.grafana = {
     enable = true;
 
     settings = {
       server = {
-        http_addr = "0.0.0.0";
+        http_addr = "127.0.0.1";
         http_port = 3000;
       };
 
@@ -45,6 +63,14 @@
         user = "grafana";
         password = "$__file{${config.age.secrets.db-password-domus-grafana.path}}";
       };
+    };
+  };
+
+  services.caddy = {
+    enable = true;
+    virtualHosts."grafana.domus.diffeq.com" = {
+      useACMEHost = "grafana.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:3000";
     };
   };
 }
