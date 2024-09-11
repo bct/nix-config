@@ -98,8 +98,12 @@ in {
     enable = true;
     package = unshittifyPkgs.nitter;
     guestAccounts = config.age.secrets.nitter-guest-accounts.path;
-    server.port = 8080;
-    server.hostname = "miniflux:8080";
+
+    server = {
+      port = 8080;
+      hostname = "nitter.domus.diffeq.com";
+      https = true;
+    };
   };
 
   services.caddy = {
