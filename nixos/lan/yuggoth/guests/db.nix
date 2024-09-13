@@ -2,6 +2,8 @@
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
+
+    ./db/borgmatic.nix
   ];
 
   system.stateVersion = "24.05";
@@ -20,8 +22,6 @@
   };
 
   age.rekey.hostPubkey = lib.mkIf (builtins.pathExists ../../../../secrets/ssh/host-db.pub) ../../../../secrets/ssh/host-db.pub;
-  age.secrets = {
-  };
 
   environment.systemPackages = [
     config.services.mysql.package

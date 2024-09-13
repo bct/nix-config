@@ -35,7 +35,7 @@
     # Locally administered have one of 2/6/A/E in the second nibble.
     guests = {
       db = {
-        hostName = "db-new";
+        hostName = "db";
         tapInterfaceMac = "02:00:00:00:00:07";
         machineId = "2e9cd72837fcd95c103ac6f4bdeb726a";
       };
