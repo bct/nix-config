@@ -61,7 +61,7 @@
       RTLAMR_FILTERID= "40010397,41946625";
 
       # COLLECT_LOGLEVEL = "Debug";
-      COLLECT_INFLUXDB_HOSTNAME = "http://db.domus.diffeq.com:8086/";
+      COLLECT_INFLUXDB_HOSTNAME = "http://influx.domus.diffeq.com:8086/";
       COLLECT_INFLUXDB_ORG = "arbitrary";
       COLLECT_INFLUXDB_BUCKET = "rtlamr";
       COLLECT_INFLUXDB_MEASUREMENT = "utilities";
