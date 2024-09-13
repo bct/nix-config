@@ -18,6 +18,7 @@
     vim
     git
     tmux
+    htop
   ];
 
   # don't install nano and perl
