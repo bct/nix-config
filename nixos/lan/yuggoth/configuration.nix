@@ -34,6 +34,12 @@
     # to choose a MAC address:
     # Locally administered have one of 2/6/A/E in the second nibble.
     guests = {
+      abrado = {
+        hostName = "abrado-new";
+        tapInterfaceMac = "02:00:00:00:00:08";
+        machineId = "6b044915f8a8c5a6c0e9b5401d9778cf";
+      };
+
       db = {
         hostName = "db";
         tapInterfaceMac = "02:00:00:00:00:07";
