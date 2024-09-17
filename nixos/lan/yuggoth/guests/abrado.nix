@@ -65,7 +65,7 @@
   systemd.timers.exchange-rates = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnCalendary = "*-*-* 02:00:00 UTC";
+      OnCalendar = "*-*-* 02:00:00 UTC";
       Unit = "exchange-rates.service";
     };
   };
@@ -86,7 +86,28 @@
   systemd.timers.gas-rates = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnCalendary = "*-*-* 03:00:00 UTC";
+      OnCalendar = "*-*-* 03:00:00 UTC";
+      Unit = "gas-rates.service";
+    };
+  };
+
+  systemd.services.gas-rates = {
+    serviceConfig = {
+      Type = "oneshot";
+      User = "abrado";
+
+      WorkingDirectory = "/srv/scrapers/py";
+      ExecStart = "${pkgs.unstable.uv}/bin/uv run gas-rates.py";
+      LoadCredential = [
+        "INFLUXDB_PASSWORD:${config.age.secrets.password-db-influxdb-abrado.path}"
+      ];
+    };
+  };
+
+  systemd.timers.fortis = {
+  wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*-*-* 03:00:00 UTC";
       Unit = "gas-rates.service";
     };
   };
