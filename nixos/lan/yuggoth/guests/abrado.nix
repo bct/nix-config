@@ -44,6 +44,12 @@
       owner = "abrado";
       group = "abrado";
     };
+
+    config-fortis = {
+      rekeyFile = ./abrado/secrets/config-fortis.age;
+      owner = "abrado";
+      group = "abrado";
+    };
   };
 
   users = {
@@ -138,9 +144,8 @@
       Type = "oneshot";
       User = "abrado";
 
-      WorkingDirectory = "/srv/scraper-data/fortis";
       # using path: syntax so that the service doesn't need access to git.
-      ExecStart = "${config.nix.package}/bin/nix run path:/srv/scrapers/fortis";
+      ExecStart = "${config.nix.package}/bin/nix run path:/srv/scrapers/fortis -- --config ${config.age.secrets.config-fortis.path}";
     };
   };
 }
