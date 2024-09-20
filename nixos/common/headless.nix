@@ -6,7 +6,7 @@
   ];
 
   # Preserve space by sacrificing history
-  nix.gc.automatic = true;
+  nix.gc.automatic = lib.mkDefault true;
   nix.gc.options = "--delete-older-than 30d";
   boot.tmp.cleanOnBoot = true;
 
