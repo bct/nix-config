@@ -23,7 +23,7 @@ in {
       {
         image = "var.img";
         mountPoint = "/var";
-        size = 1024;
+        size = 4096;
       }
     ];
   };
