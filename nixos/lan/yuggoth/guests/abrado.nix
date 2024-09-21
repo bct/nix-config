@@ -68,8 +68,8 @@
   systemd.timers.current-temp = {
   wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnBootSec = "5m";
-      OnUnitActiveSec = "5m";
+      OnBootSec = "30m";
+      OnUnitActiveSec = "30m";
       Unit = "current-temp.service";
     };
   };
