@@ -4,6 +4,7 @@
     "${self}/nixos/modules/lego-proxy-client"
 
     ./db/borgmatic.nix
+    ./db/postgres.nix
   ];
 
   system.stateVersion = "24.05";
@@ -26,10 +27,12 @@
   environment.systemPackages = [
     config.services.mysql.package
     config.services.influxdb.package
+    config.services.postgresql.package
   ];
 
   networking.firewall.allowedTCPPorts = [
     3306 # mysql
+    5432 # postgres
     8086 # influxdb
   ];
 
