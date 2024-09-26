@@ -52,6 +52,12 @@
         machineId = "d2bf3078fe2744f57398cc02476228f9";
       };
 
+      immich = {
+        hostName = "immich";
+        tapInterfaceMac = "02:00:00:00:00:09";
+        machineId = "538b82e19deee1b600027ea47fe3e8dc";
+      };
+
       miniflux = {
         hostName = "miniflux";
         tapInterfaceMac = "02:00:00:00:00:01";

@@ -76,6 +76,7 @@
 
   age.secrets = {
     fs-mi-go-torrent-scraper = {
+      # username: torrent-scraper
       rekeyFile = ../../../../secrets/fs/mi-go-torrent-scraper.age;
     };
 
