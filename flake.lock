@@ -389,6 +389,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-immich": {
+      "locked": {
+        "lastModified": 1727359619,
+        "narHash": "sha256-TkuzxA+v7sjPT++TKPz9jdVbC6CZSfhvHizuSBnWUMA=",
+        "owner": "bct",
+        "repo": "nixpkgs",
+        "rev": "8debc8df7982b227dcaae624316ce5de291466c6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bct",
+        "ref": "immich-database-port",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1725233747,
@@ -473,6 +489,7 @@
         "microvm": "microvm",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-immich": "nixpkgs-immich",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "unshittify": "unshittify"
       }

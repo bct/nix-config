@@ -79,6 +79,21 @@
         set_password "$username"
       done
     '';
+    immichSqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
+      CREATE EXTENSION IF NOT EXISTS unaccent;
+      CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+      CREATE EXTENSION IF NOT EXISTS vectors;
+      CREATE EXTENSION IF NOT EXISTS cube;
+      CREATE EXTENSION IF NOT EXISTS earthdistance;
+      CREATE EXTENSION IF NOT EXISTS pg_trgm;
+      ALTER SCHEMA public OWNER TO immich;
+      ALTER SCHEMA vectors OWNER TO immich;
+      GRANT SELECT ON TABLE pg_vector_index_stat TO immich;
+      ALTER EXTENSION vectors UPDATE;
+    '';
   in
-    lib.mkAfter "${set-all-passwords} miniflux immich";
+  lib.mkAfter ''
+    ${set-all-passwords} miniflux immich
+    ${lib.getExe' config.services.postgresql.package "psql"} -d "immich" -f "${immichSqlFile}"
+  '';
 }

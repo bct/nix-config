@@ -1,6 +1,11 @@
-{ self, config, lib, pkgs, ... }: {
+{ self, inputs, config, lib, pkgs, ... }:
+
+let
+  immich-nixpkgs = inputs.nixpkgs-immich;
+in {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
+    "${immich-nixpkgs}/nixos/modules/services/web-apps/immich.nix"
   ];
 
   system.stateVersion = "24.05";
@@ -23,6 +28,12 @@
     fs-mi-go-immich = {
       rekeyFile = ../../../../secrets/fs/mi-go-immich.age;
     };
+
+    immich-env = {
+      rekeyFile = ./secrets/immich-env.age;
+      owner = config.services.immich.user;
+      group = config.services.immich.group;
+    };
   };
 
   fileSystems."/mnt/photos" = {
@@ -35,16 +46,25 @@
     # the defaults of a CIFS mount are not documented anywhere that I can see.
     # you can run "mount" after mounting to see what options were actually used.
     # cifsacl is required for the server-side permissions to show up correctly.
-    in ["${automount_opts},cifsacl,uid=immich,credentials=${config.age.secrets.fs-mi-go-immich.path}"];
+    in ["${automount_opts},cifsacl,uid=${config.services.immich.user},credentials=${config.age.secrets.fs-mi-go-immich.path}"];
   };
 
-  # TODO: remove this once service.immich is enabled
-  users.users = {
-    immich = {
-      name = "immich";
-      group = "immich";
-      isSystemUser = true;
+  services.immich = {
+    enable = true;
+    package = pkgs.unstable.immich;
+
+    openFirewall = true;
+    host = "0.0.0.0";
+
+    mediaLocation = "/mnt/photos/immich";
+    secretsFile = config.age.secrets.immich-env.path;
+
+    database = {
+      # use a remote postgres server
+      enable = false;
+      host = "db.domus.diffeq.com";
+      port = 5432;
+      user = "immich";
     };
   };
-  users.groups = { immich = { }; };
 }

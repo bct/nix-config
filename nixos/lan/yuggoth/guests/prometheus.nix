@@ -42,6 +42,7 @@
           # VMs
           { targets = ["db.domus.diffeq.com:9100"]; }
           { targets = ["grafana.domus.diffeq.com:9100"]; }
+          { targets = ["immich.domus.diffeq.com:9100"]; }
           { targets = ["lego-proxy.domus.diffeq.com:9100"]; }
           { targets = ["miniflux.domus.diffeq.com:9100"]; }
           { targets = ["prometheus.domus.diffeq.com:9100"]; }
