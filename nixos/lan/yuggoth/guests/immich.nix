@@ -5,6 +5,7 @@ let
 in {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
+    "${self}/nixos/modules/lego-proxy-client"
     "${immich-nixpkgs}/nixos/modules/services/web-apps/immich.nix"
   ];
 
@@ -34,6 +35,23 @@ in {
       owner = config.services.immich.user;
       group = config.services.immich.group;
     };
+
+    lego-proxy-immich = {
+      generator.script = "ssh-ed25519-pubkey";
+      rekeyFile = ../../../../secrets/lego-proxy/immich.age;
+      owner = "acme";
+      group = "acme";
+    };
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      { domain = "immich.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-immich.path; }
+    ];
+    group = "caddy";
+    dnsResolver = "ns5.zoneedit.com";
+    email = "s+acme@diffeq.com";
   };
 
   fileSystems."/mnt/photos" = {
@@ -53,8 +71,7 @@ in {
     enable = true;
     package = pkgs.unstable.immich;
 
-    openFirewall = true;
-    host = "0.0.0.0";
+    host = "127.0.0.1";
 
     mediaLocation = "/mnt/photos/immich";
     secretsFile = config.age.secrets.immich-env.path;
@@ -65,6 +82,16 @@ in {
       host = "db.domus.diffeq.com";
       port = 5432;
       user = "immich";
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [80 443];
+
+  services.caddy = {
+    enable = true;
+    virtualHosts."immich.domus.diffeq.com" = {
+      useACMEHost = "immich.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:3001";
     };
   };
 }

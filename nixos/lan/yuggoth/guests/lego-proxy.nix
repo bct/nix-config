@@ -66,6 +66,10 @@ in {
         domain = "grafana.domus.diffeq.com";
         pubKey = builtins.readFile ../../../../secrets/lego-proxy/grafana.pub;
       }
+      {
+        domain = "immich.domus.diffeq.com";
+        pubKey = builtins.readFile ../../../../secrets/lego-proxy/immich.pub;
+      }
     ];
   };
 }
