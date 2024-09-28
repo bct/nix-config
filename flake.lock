@@ -368,11 +368,11 @@
     },
     "nixpkgs-immich": {
       "locked": {
-        "lastModified": 1727531984,
-        "narHash": "sha256-wydM2B77MuiTUr6Cbby+CvOUwETdsOfzYBpAxvtmHKk=",
+        "lastModified": 1727627577,
+        "narHash": "sha256-qjYXb6bUCLZdgokp8R1p/68/mRv7Sn1uQ4q4n5C9HFs=",
         "owner": "bct",
         "repo": "nixpkgs",
-        "rev": "c726b1548eff53c9fb54805a5fb557cd61423b00",
+        "rev": "0d6c2f87c3c08c3177902403ce696e5ed25b29e7",
         "type": "github"
       },
       "original": {
