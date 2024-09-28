@@ -368,16 +368,16 @@
     },
     "nixpkgs-immich": {
       "locked": {
-        "lastModified": 1727359619,
-        "narHash": "sha256-TkuzxA+v7sjPT++TKPz9jdVbC6CZSfhvHizuSBnWUMA=",
+        "lastModified": 1727531984,
+        "narHash": "sha256-wydM2B77MuiTUr6Cbby+CvOUwETdsOfzYBpAxvtmHKk=",
         "owner": "bct",
         "repo": "nixpkgs",
-        "rev": "8debc8df7982b227dcaae624316ce5de291466c6",
+        "rev": "c726b1548eff53c9fb54805a5fb557cd61423b00",
         "type": "github"
       },
       "original": {
         "owner": "bct",
-        "ref": "immich-database-port",
+        "ref": "immich-deploy",
         "repo": "nixpkgs",
         "type": "github"
       }

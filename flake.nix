@@ -8,7 +8,7 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Temporary bugfix
-    nixpkgs-immich.url = "github:bct/nixpkgs/immich-database-port";
+    nixpkgs-immich.url = "github:bct/nixpkgs/immich-deploy";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-24.05";
