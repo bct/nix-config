@@ -33,6 +33,4 @@
       { bus = "usb"; path = "vendorid=0x10c4,productid=0xea60"; }
     ];
   };
-
-  age.rekey.hostPubkey = builtins.readFile ../../../../secrets/ssh/host-spectator.pub;
 }

@@ -1,6 +1,5 @@
 { self, config, lib, pkgs, ... }: {
   imports = [
-    "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
 
     ./db/borgmatic.nix
@@ -21,8 +20,6 @@
       }
     ];
   };
-
-  age.rekey.hostPubkey = lib.mkIf (builtins.pathExists ../../../../secrets/ssh/host-db.pub) ../../../../secrets/ssh/host-db.pub;
 
   environment.systemPackages = [
     config.services.mysql.package

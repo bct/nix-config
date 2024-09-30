@@ -37,7 +37,6 @@
     ];
   };
 
-  age.rekey.hostPubkey = lib.mkIf (builtins.pathExists ../../../../secrets/ssh/host-abrado.pub) ../../../../secrets/ssh/host-abrado.pub;
   age.secrets = {
     password-db-influxdb-abrado = {
       rekeyFile = ../../../../secrets/db/password-db-influxdb-abrado.age;

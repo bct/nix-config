@@ -3,6 +3,7 @@
 let
   cfg = config.yuggoth.microvms;
   mkGuestModule = import ./microvm/mkGuestModule.nix;
+  secretsRoot = ../../../secrets;
 in {
   imports = [
     inputs.microvm.nixosModules.host
@@ -106,10 +107,19 @@ in {
           # presumably the overlays are being passed through anyways.
           # the other nix configuration seems OK to ignore.
           "${self}/nixos/common/headless.nix"
+
           "${self}/nixos/common/node-exporter.nix"
+          "${self}/nixos/common/agenix-rekey.nix"
 
           (mkGuestModule vmName vmConfig)
           ./guests/${vmName}.nix
+
+          (
+            let pubKey = secretsRoot + /ssh/host-${vmName}.pub;
+            in lib.optionalAttrs
+                (builtins.pathExists pubKey)
+                { age.rekey.hostPubkey = pubKey; }
+          )
         ];
       };
     }) cfg.guests;

@@ -19,8 +19,6 @@ in {
     mem = 256;
   };
 
-  age.rekey.hostPubkey = builtins.readFile ../../../../secrets/ssh/host-lego-proxy.pub;
-
   age.secrets = {
     zoneedit = {
       rekeyFile = ./lego-proxy/secrets/zoneedit.age;

@@ -19,7 +19,6 @@
     ];
   };
 
-  age.rekey.hostPubkey = lib.mkIf (builtins.pathExists ../../../../secrets/ssh/host-grafana.pub) ../../../../secrets/ssh/host-grafana.pub;
   age.secrets = {
     db-password-domus-grafana = {
       rekeyFile = ../../../../secrets/db/password-domus-grafana.age;

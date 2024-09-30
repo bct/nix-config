@@ -27,7 +27,6 @@ in {
     ];
   };
 
-  age.rekey.hostPubkey = lib.mkIf (builtins.pathExists ../../../../secrets/ssh/host-immich.pub) ../../../../secrets/ssh/host-immich.pub;
   age.secrets = {
     fs-mi-go-immich = {
       rekeyFile = ../../../../secrets/fs/mi-go-immich.age;

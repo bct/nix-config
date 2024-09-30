@@ -28,8 +28,6 @@ in {
     ];
   };
 
-  # TODO: pull from the .pub on disk?
-  age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINKz7HRp/8LfeXDEhLNbsNBKJWacqXWFZngOzBzwXGNl";
   age.secrets = {
     nitter-guest-accounts = {
       rekeyFile = ../../../../secrets/nitter-guest-accounts.age;
