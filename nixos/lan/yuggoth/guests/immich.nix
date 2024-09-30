@@ -7,7 +7,10 @@ in {
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
     "${immich-nixpkgs}/nixos/modules/services/web-apps/immich.nix"
+    "${immich-nixpkgs}/nixos/modules/services/databases/redis.nix"
   ];
+
+  disabledModules = [ "services/databases/redis.nix" ];
 
   system.stateVersion = "24.05";
 
