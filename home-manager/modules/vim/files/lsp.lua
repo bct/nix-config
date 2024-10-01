@@ -96,6 +96,11 @@ require'lspconfig'.terraformls.setup{
   on_attach = on_attach,
 }
 
+require'lspconfig'.tflint.setup{
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
+
 -- typescript
 require'lspconfig'.eslint.setup{
   capabilities = capabilities,

@@ -29,6 +29,7 @@
     pkgs.gopls
     pkgs.unstable.ruff-lsp
     pkgs.terraform-ls
+    pkgs.tflint
     pkgs.nodePackages.vscode-langservers-extracted
     pkgs.nodePackages.typescript-language-server
     pkgs.ansible-language-server
