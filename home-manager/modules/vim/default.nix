@@ -19,7 +19,7 @@
     pkgs.ripgrep
 
     # formatters
-    pkgs.nodePackages.prettier
+    pkgs.unstable.nodePackages.prettier
 
     # LSP servers
     pyright
@@ -162,7 +162,7 @@
               formatters = {
                 black = { command = "${black}/bin/black" },
                 isort = { command = "${pkgs.isort}/bin/isort" },
-                prettier = { command = "${pkgs.nodePackages.prettier}/bin/prettier" },
+                prettier = { command = "${pkgs.unstable.nodePackages.prettier}/bin/prettier" },
               },
 
               formatters_by_ft = {
