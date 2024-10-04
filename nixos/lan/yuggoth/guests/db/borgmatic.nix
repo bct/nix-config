@@ -32,6 +32,16 @@
         }
       ];
 
+      postgresql_databases = [
+        {
+          name = "all";
+          username = "postgres";
+
+          # dump each database to a separate file.
+          format = "custom";
+        }
+      ];
+
       before_backup = [
         "${config.services.influxdb.package}/bin/influxd backup -portable /var/backups/influxdb/ >/dev/null"
       ];
@@ -62,7 +72,10 @@
   };
 
   # make database commands available to borgmatic.
-  systemd.services.borgmatic.path = [ config.services.mysql.package ];
+  systemd.services.borgmatic.path = [
+    config.services.mysql.package
+    config.services.postgresql.package
+  ];
 
   # override the borgmatic service to set password environment variables.
   systemd.services.borgmatic.serviceConfig.ExecStart = let

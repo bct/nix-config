@@ -24,11 +24,27 @@
       search_path = "\"$user\", public, vectors";
     };
 
+    # https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
+    # The first record with a matching connection type, client address,
+    # requested database, and user name is used to perform authentication. There
+    # is no “fall-through” or “backup”: if one record is chosen and the
+    # authentication fails, subsequent records are not considered. If no record
+    # matches, access is denied.
     authentication = ''
-      # TYPE  DATABASE        USER            ADDRESS                 METHOD
+      # allow root to log in as postgres
+      # TYPE  DATABASE  USER  AUTH_METHOD [AUTH_OPTIONS]
+      local   all       all   peer        map=superuser_map
 
       # allow "md5" (password) authentication on TCP connections
+      # TYPE  DATABASE        USER            ADDRESS                 METHOD
       host    all             all             ::/0                    md5
+    '';
+
+    identMap = ''
+      # allow root & postgres system users to log in as postgres.
+      # ARBITRARY_MAP_NAME  SYSTEM_USER   DB_USER
+      superuser_map         root          postgres
+      superuser_map         postgres      postgres
     '';
 
     ensureDatabases = [
