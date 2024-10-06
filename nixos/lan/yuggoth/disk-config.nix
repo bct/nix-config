@@ -55,7 +55,23 @@
             mountpoint = "/";
           };
         };
+
+        db-var = {
+          name = "db-var";
+          size = "16G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+          };
+        };
       };
     };
   };
+
+  # make LVM disks accessible to microvms
+  # to look up the properties used here:
+  #     udevadm info --query=all --name=/dev/dm-2
+  services.udev.extraRules = ''
+    ENV{DM_VG_NAME}=="fastpool" ENV{DM_LV_NAME}=="db-var" OWNER="microvm"
+  '';
 }

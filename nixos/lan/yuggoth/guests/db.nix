@@ -14,9 +14,9 @@
 
     volumes = [
       {
-        image = "var.img";
+        image = "/dev/mapper/fastpool-db--var";
         mountPoint = "/var";
-        size = 2048;
+        autoCreate = false;
       }
     ];
   };
