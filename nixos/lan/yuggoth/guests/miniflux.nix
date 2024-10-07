@@ -23,12 +23,16 @@ in {
       {
         image = "var.img";
         mountPoint = "/var";
-        size = 4096;
+        size = 1024;
       }
     ];
   };
 
   age.secrets = {
+    db-password-miniflux = {
+      rekeyFile = ../../../../secrets/db/password-db-postgres-miniflux.age;
+    };
+
     nitter-guest-accounts = {
       rekeyFile = ../../../../secrets/nitter-guest-accounts.age;
     };
@@ -73,8 +77,10 @@ in {
   services.miniflux = {
     enable = true;
     package = unshittifyPkgs.miniflux;
+    createDatabaseLocally = false;
     config = {
-      LISTEN_ADDR = "0.0.0.0:8081";
+      LISTEN_ADDR = "127.0.0.1:8081";
+      DATABASE_URL_FILE = "/run/miniflux/database-url";
 
       # don't stop looking at a feed just because it has failed in the past
       POLLING_PARSING_ERROR_LIMIT = "0";
@@ -90,6 +96,22 @@ in {
       POLLING_FREQUENCY = "20";
     };
     adminCredentialsFile = config.age.secrets.miniflux-admin-credentials.path;
+  };
+
+  systemd.services.miniflux = {
+    serviceConfig.LoadCredential = [
+      "password-miniflux:${config.age.secrets.db-password-miniflux.path}"
+    ];
+
+    preStart = let
+      template = "host=db.domus.diffeq.com user=miniflux password=\${DB_PASSWORD} dbname=miniflux sslmode=disable";
+    in ''
+      DB_PASSWORD=$(cat $CREDENTIALS_DIRECTORY/password-miniflux | tr -d '\n')
+
+      echo '${template}' | \
+        DB_PASSWORD="$DB_PASSWORD" ${pkgs.envsubst}/bin/envsubst | \
+        (umask 0077; cat >/run/miniflux/database-url)
+    '';
   };
 
   services.nitter = {
