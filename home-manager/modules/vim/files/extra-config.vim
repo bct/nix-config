@@ -2,7 +2,7 @@
 let g:gruvbox_italic=1
 set background=dark
 set termguicolors
-autocmd vimenter * ++nested colorscheme gruvbox
+colorscheme gruvbox
 
 filetype indent on
 filetype plugin on
@@ -45,6 +45,7 @@ let g:lightline#lsp#indicator_warnings = "\uf071 "
 let g:lightline#lsp#indicator_errors = "\uf05e "
 
 let g:lightline = {}
+let g:lightline.colorscheme = "gruvbox"
 let g:lightline.component_expand = {
   \   'lsp_warnings': 'lightline#lsp#warnings',
   \   'lsp_errors': 'lightline#lsp#errors',
