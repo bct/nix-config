@@ -66,6 +66,7 @@ let g:lightline.component_type = {
 
 " Add the components to the lightline:
 let g:lightline.active = {
+      \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ],
       \ 'right': [ [ 'lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok' ],
       \            [ 'lsp_status' ],
       \            [ 'lineinfo' ],
