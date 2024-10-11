@@ -147,4 +147,23 @@
       ExecStart = "${config.nix.package}/bin/nix run path:/srv/scrapers/fortis -- --config ${config.age.secrets.config-fortis.path}";
     };
   };
+
+  systemd.timers.cgwm = {
+  wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "17:00 America/Edmonton";
+      Unit = "cgwm.service";
+    };
+  };
+
+  systemd.services.cgwm = {
+    serviceConfig = {
+      Type = "oneshot";
+      User = "abrado";
+      WorkingDirectory = "/srv/scraper-data/cgwm";
+
+      # using path: syntax so that the service doesn't need access to git.
+      ExecStart = "${config.nix.package}/bin/nix run path:/srv/scrapers/cgwm";
+    };
+  };
 }
