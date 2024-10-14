@@ -68,6 +68,10 @@ in {
         domain = "immich.domus.diffeq.com";
         pubKey = builtins.readFile ../../../../secrets/lego-proxy/immich.pub;
       }
+      {
+        domain = "paperless.domus.diffeq.com";
+        pubKey = builtins.readFile ../../../../secrets/lego-proxy/paperless.pub;
+      }
     ];
   };
 }

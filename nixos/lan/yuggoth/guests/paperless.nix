@@ -1,6 +1,7 @@
 { self, config, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
+    "${self}/nixos/modules/lego-proxy-client"
   ];
 
   system.stateVersion = "24.05";
@@ -22,17 +23,18 @@
     enable = true;
     mediaDir = "/mnt/paperless/media";
     consumptionDir = "/mnt/paperless/consume";
-
-    address = "0.0.0.0";
   };
-
-  networking.firewall.allowedTCPPorts = [
-    config.services.paperless.port
-  ];
 
   age.secrets = {
     fs-mi-go-paperless = {
       rekeyFile = ../../../../secrets/fs/mi-go-paperless.age;
+    };
+
+    lego-proxy-paperless = {
+      generator.script = "ssh-ed25519-pubkey";
+      rekeyFile = ../../../../secrets/lego-proxy/paperless.age;
+      owner = "acme";
+      group = "acme";
     };
   };
 
@@ -47,5 +49,24 @@
     # you can run "mount" after mounting to see what options were actually used.
     # cifsacl is required for the server-side permissions to show up correctly.
     in ["${automount_opts},cifsacl,uid=${config.services.paperless.user},credentials=${config.age.secrets.fs-mi-go-paperless.path}"];
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      { domain = "paperless.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-paperless.path; }
+    ];
+    group = "caddy";
+    dnsResolver = "ns5.zoneedit.com";
+    email = "s+acme@diffeq.com";
+  };
+
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  services.caddy = {
+    enable = true;
+    virtualHosts."paperless.domus.diffeq.com" = {
+      useACMEHost = "paperless.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:${toString config.services.paperless.port}";
+    };
   };
 }
