@@ -105,7 +105,7 @@
     fsType = "cifs";
     options = let
       # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
 
     in ["${automount_opts},guest"];
   };

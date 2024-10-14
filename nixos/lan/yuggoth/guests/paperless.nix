@@ -41,7 +41,7 @@
     fsType = "cifs";
     options = let
       # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
 
     # the defaults of a CIFS mount are not documented anywhere that I can see.
     # you can run "mount" after mounting to see what options were actually used.
