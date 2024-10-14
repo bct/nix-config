@@ -64,6 +64,12 @@
         machineId = "b42e25167b6bc7ca726ea9f41ce5ffcb";
       };
 
+      paperless = {
+        hostName = "paperless";
+        tapInterfaceMac = "02:00:00:00:00:10";
+        machineId = "4e792125b5445ffd50e474ad64f5d30b";
+      };
+
       prometheus = {
         hostName = "prometheus";
         tapInterfaceMac = "02:00:00:00:00:03";

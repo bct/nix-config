@@ -1,0 +1,6 @@
+## SMB
+
+SMB credential files look like this:
+
+    username=...
+    password=...
