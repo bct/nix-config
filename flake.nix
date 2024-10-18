@@ -5,10 +5,10 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/eb05b2e481b90c5c7d3956ec98641a86eaaf1461"; # temporary pin to a specific commit for https://github.com/NixOS/nixpkgs/issues/348847
+    # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Temporary bugfix
-    nixpkgs-immich.url = "github:bct/nixpkgs/immich-deploy";
     nixpkgs-paperless.url = "github:bct/nixpkgs/paperless-secrets-file";
 
     # Home manager

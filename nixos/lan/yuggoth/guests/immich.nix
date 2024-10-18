@@ -1,16 +1,9 @@
-{ self, inputs, config, lib, pkgs, ... }:
-
-let
-  immich-nixpkgs = inputs.nixpkgs-immich;
-in {
+{ self, inputs, config, pkgs, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
-    "${immich-nixpkgs}/nixos/modules/services/web-apps/immich.nix"
-    "${immich-nixpkgs}/nixos/modules/services/databases/redis.nix"
+    "${inputs.nixpkgs-unstable}/nixos/modules/services/web-apps/immich.nix"
   ];
-
-  disabledModules = [ "services/databases/redis.nix" ];
 
   system.stateVersion = "24.05";
 

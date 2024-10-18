@@ -366,22 +366,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-immich": {
-      "locked": {
-        "lastModified": 1727627577,
-        "narHash": "sha256-qjYXb6bUCLZdgokp8R1p/68/mRv7Sn1uQ4q4n5C9HFs=",
-        "owner": "bct",
-        "repo": "nixpkgs",
-        "rev": "0d6c2f87c3c08c3177902403ce696e5ed25b29e7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "bct",
-        "ref": "immich-deploy",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1725233747,
@@ -428,17 +412,17 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1727492312,
-        "narHash": "sha256-oRkgc+DosM3HIl9el98TxF2rtliKHCNVw00nlQC7xYM=",
+        "lastModified": 1728108365,
+        "narHash": "sha256-b3ZKat3XAEn2cYVntqvPfE/d3gXxtLK/6R2QMdUdPMQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "4471f9f67fe0f95f5fec4cc2ebac59fe32af2b62",
+        "rev": "eb05b2e481b90c5c7d3956ec98641a86eaaf1461",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
+        "rev": "eb05b2e481b90c5c7d3956ec98641a86eaaf1461",
         "type": "github"
       }
     },
@@ -482,7 +466,6 @@
         "microvm": "microvm",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-immich": "nixpkgs-immich",
         "nixpkgs-paperless": "nixpkgs-paperless",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "unshittify": "unshittify"
