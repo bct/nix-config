@@ -9,6 +9,7 @@
 
     # Temporary bugfix
     nixpkgs-immich.url = "github:bct/nixpkgs/immich-deploy";
+    nixpkgs-paperless.url = "github:bct/nixpkgs/paperless-secrets-file";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-24.05";

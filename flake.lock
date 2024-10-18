@@ -394,6 +394,22 @@
         "url": "https://github.com/NixOS/nixpkgs/archive/356624c12086a18f2ea2825fed34523d60ccc4e3.tar.gz"
       }
     },
+    "nixpkgs-paperless": {
+      "locked": {
+        "lastModified": 1729137829,
+        "narHash": "sha256-zbus74o76NW5wzuHQ6pGoacJprD5zXOw0nw8QuDCNj0=",
+        "owner": "bct",
+        "repo": "nixpkgs",
+        "rev": "03737cd6e2411affff5ad966fdb6552953634a4a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bct",
+        "ref": "paperless-secrets-file",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1685801374,
@@ -467,6 +483,7 @@
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",
         "nixpkgs-immich": "nixpkgs-immich",
+        "nixpkgs-paperless": "nixpkgs-paperless",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "unshittify": "unshittify"
       }

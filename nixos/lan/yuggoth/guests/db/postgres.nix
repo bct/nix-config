@@ -1,4 +1,7 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+let
+  usersWithPasswords = [ "immich" "miniflux" "paperless" ];
+in {
   age.secrets = {
     db-password-db-postgres-immich = {
       generator.script = "alnum";
@@ -8,6 +11,11 @@
     db-password-db-postgres-miniflux = {
       generator.script = "alnum";
       rekeyFile = ../../../../../secrets/db/password-db-postgres-miniflux.age;
+    };
+
+    db-password-db-postgres-paperless = {
+      generator.script = "alnum";
+      rekeyFile = ../../../../../secrets/db/password-db-postgres-paperless.age;
     };
   };
 
@@ -20,8 +28,8 @@
     ];
 
     settings = {
-      shared_preload_libraries = [ "vectors.so" ];
-      search_path = "\"$user\", public, vectors";
+      shared_preload_libraries = [ "vectors.so" ]; # immich
+      search_path = "\"$user\", public, vectors";  # immich
     };
 
     # https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
@@ -50,24 +58,30 @@
     ensureDatabases = [
       "immich"
       "miniflux"
+      "paperless"
     ];
 
     ensureUsers = [
       {
         name = "immich";
         ensureDBOwnership = true;
-        ensureClauses.login = true;
+        ensureClauses.login = true; # not sure why this is here.
       }
 
       {
         name = "miniflux";
         ensureDBOwnership = true;
       }
+
+      {
+        name = "paperless";
+        ensureDBOwnership = true;
+      }
     ];
   };
 
   systemd.services.postgresql.serviceConfig.LoadCredential = builtins.map (userName:
-    "password-${userName}:${config.age.secrets."db-password-db-postgres-${userName}".path}") [ "immich" "miniflux" ];
+    "password-${userName}:${config.age.secrets."db-password-db-postgres-${userName}".path}") usersWithPasswords;
 
   systemd.services.postgresql.postStart = let
     set-all-passwords = pkgs.writeShellScript "psql-set-password" ''
@@ -109,7 +123,7 @@
     '';
   in
   lib.mkAfter ''
-    ${set-all-passwords} miniflux immich
+    ${set-all-passwords} ${builtins.concatStringsSep " " usersWithPasswords}
     ${lib.getExe' config.services.postgresql.package "psql"} -d "immich" -f "${immichSqlFile}"
   '';
 }

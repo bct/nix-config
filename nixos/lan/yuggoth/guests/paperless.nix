@@ -1,8 +1,15 @@
-{ self, config, ... }: {
+{ self, inputs, lib, config, ... }:
+
+let
+  paperless-nixpkgs = inputs.nixpkgs-paperless;
+in {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
+    "${paperless-nixpkgs}/nixos/modules/services/misc/paperless.nix"
   ];
+
+  disabledModules = [ "services/misc/paperless.nix" ];
 
   system.stateVersion = "24.05";
 
@@ -23,7 +30,16 @@
     enable = true;
     mediaDir = "/mnt/paperless/media";
     consumptionDir = "/mnt/paperless/consume";
+    secretsFile = config.age.secrets.paperless-env.path;
+
+    settings = {
+      PAPERLESS_DBHOST = "db.domus.diffeq.com";
+    };
   };
+
+  # can't have a private network if we need to talk to the database.
+  systemd.services.paperless-consumer.serviceConfig.PrivateNetwork = lib.mkForce false;
+  systemd.services.paperless-scheduler.serviceConfig.PrivateNetwork = lib.mkForce false;
 
   age.secrets = {
     fs-mi-go-paperless = {
@@ -35,6 +51,11 @@
       rekeyFile = ../../../../secrets/lego-proxy/paperless.age;
       owner = "acme";
       group = "acme";
+    };
+
+    paperless-env = {
+      rekeyFile = ./secrets/paperless-env.age;
+      owner = config.services.paperless.user;
     };
   };
 
