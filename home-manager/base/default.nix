@@ -21,7 +21,7 @@ in {
  config = {
     home = {
       username = cfgPersonal.user;
-      homeDirectory = "/home/${cfgPersonal.user}";
+      homeDirectory = lib.mkDefault "/home/${cfgPersonal.user}";
     };
 
     # Enable home-manager and git

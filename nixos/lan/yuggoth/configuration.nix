@@ -58,6 +58,12 @@
         machineId = "538b82e19deee1b600027ea47fe3e8dc";
       };
 
+      mail = {
+        hostName = "mail-new";
+        tapInterfaceMac = "02:00:00:00:00:11";
+        machineId = "b1d942ead0d9d6afb175cedf4e416d22";
+      };
+
       miniflux = {
         hostName = "miniflux";
         tapInterfaceMac = "02:00:00:00:00:01";

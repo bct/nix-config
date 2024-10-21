@@ -64,6 +64,15 @@
             format = "ext4";
           };
         };
+
+        mail-var = {
+          name = "mail-var";
+          size = "32G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+          };
+        };
       };
     };
   };
@@ -73,5 +82,6 @@
   #     udevadm info --query=all --name=/dev/dm-2
   services.udev.extraRules = ''
     ENV{DM_VG_NAME}=="fastpool" ENV{DM_LV_NAME}=="db-var" OWNER="microvm"
+    ENV{DM_VG_NAME}=="fastpool" ENV{DM_LV_NAME}=="mail-var" OWNER="microvm"
   '';
 }

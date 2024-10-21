@@ -44,6 +44,10 @@
     microvm.url = "github:astro/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
 
+    # simple-nixos-mailserver
+    # https://nixos-mailserver.readthedocs.io/en/latest/index.html
+    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-24.05";
+
     # packages from flakes
     airsonic-refix-jukebox.url = "github:bct/airsonic-refix-jukebox";
     airsonic-refix-jukebox.inputs.nixpkgs.follows = "nixpkgs";
