@@ -3,6 +3,7 @@
     inputs.simple-nixos-mailserver.nixosModule
 
     "${self}/nixos/common/agenix-rekey.nix"
+    "${self}/nixos/modules/lego-proxy-client"
 
     # ./mail/borgmatic.nix
   ];
@@ -42,10 +43,12 @@
   mailserver = {
     enable = true;
     fqdn = "mail-new.domus.diffeq.com";
-    domains = ["diffeq.com"];
+    domains = ["diffeq.com" "domus.diffeq.com"];
 
     indexDir = "/var/lib/dovecot/indices";
     useFsLayout = true;
+
+    certificateScheme = "acme";
 
     # nix-shell -p mkpasswd --run 'mkpasswd -sm bcrypt'
     loginAccounts = {
@@ -53,11 +56,32 @@
         aliases = ["@diffeq.com"];
         hashedPasswordFile = config.age.secrets.bct-hashed-password.path;
       };
+
+      "paperless@domus.diffeq.com" = {
+        hashedPasswordFile = config.age.secrets.paperless-hashed-password.path;
+      };
     };
   };
 
   age.secrets = {
     bct-hashed-password.rekeyFile = ./secrets/mail-bct-hashed-password.age;
+    paperless-hashed-password.rekeyFile = ./secrets/mail-paperless-hashed-password.age;
+
+    lego-proxy-mail = {
+      generator.script = "ssh-ed25519-pubkey";
+      rekeyFile = ../../../../secrets/lego-proxy/mail.age;
+      owner = "acme";
+      group = "acme";
+    };
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      { domain = "mail-new.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-mail.path; }
+    ];
+    dnsResolver = "ns5.zoneedit.com";
+    email = "s+acme@diffeq.com";
   };
 
   systemd.timers.getmail = {

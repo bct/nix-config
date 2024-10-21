@@ -69,6 +69,10 @@ in {
         pubKey = builtins.readFile ../../../../secrets/lego-proxy/immich.pub;
       }
       {
+        domain = "mail-new.domus.diffeq.com";
+        pubKey = builtins.readFile ../../../../secrets/lego-proxy/mail.pub;
+      }
+      {
         domain = "paperless.domus.diffeq.com";
         pubKey = builtins.readFile ../../../../secrets/lego-proxy/paperless.pub;
       }
