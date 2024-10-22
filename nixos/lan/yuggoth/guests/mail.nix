@@ -1,4 +1,7 @@
-{ self, inputs, config, pkgs, ... }: {
+{ self, inputs, config, pkgs, ... }:
+let
+  relayhost = "[smtppro.zoho.com]:587";
+in {
   imports = [
     inputs.simple-nixos-mailserver.nixosModule
 
@@ -31,13 +34,25 @@
     extraGroups = [config.mailserver.vmailGroupName];
   };
 
-  environment.systemPackages = [
+  environment.systemPackages = let
+    rspamc-deliver = pkgs.writeShellApplication {
+      name = "rspamc-deliver";
+      runtimeInputs = [
+        pkgs.rspamd
+        pkgs.procmail
+      ];
+      text = ''
+        rspamc --connect /run/rspamd/worker-controller.sock --mime --exec procmail
+      '';
+    };
+  in [
     pkgs.neomutt
     pkgs.notmuch
     pkgs.getmail6
     pkgs.afew
     pkgs.msmtp
     pkgs.procmail
+    rspamc-deliver
   ];
 
   mailserver = {
@@ -60,12 +75,33 @@
       "paperless@domus.diffeq.com" = {
         hashedPasswordFile = config.age.secrets.paperless-hashed-password.path;
       };
+
+      "immich@domus.diffeq.com" = {
+        hashedPasswordFile = config.age.secrets.immich-hashed-password.path;
+      };
     };
+  };
+
+  services.postfix = {
+    mapFiles."sasl_passwd" = config.age.secrets.sasl-passwd.path;
+
+    extraConfig =
+    ''
+      smtp_sasl_auth_enable = yes
+      smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+      smtp_sasl_security_options = noanonymous
+      smtp_sasl_tls_security_options = noanonymous
+      smtp_sasl_mechanism_filter = AUTH LOGIN
+      relayhost = ${relayhost}
+    '';
   };
 
   age.secrets = {
     bct-hashed-password.rekeyFile = ./secrets/mail-bct-hashed-password.age;
     paperless-hashed-password.rekeyFile = ./secrets/mail-paperless-hashed-password.age;
+    immich-hashed-password.rekeyFile = ./secrets/mail-immich-hashed-password.age;
+
+    sasl-passwd.rekeyFile = ./secrets/mail-sasl-passwd.age;
 
     lego-proxy-mail = {
       generator.script = "ssh-ed25519-pubkey";
@@ -97,7 +133,7 @@
     serviceConfig = {
       Type = "oneshot";
       User = "bct";
-      ExecStart = "${pkgs.getmail6}/bin/getmail --quiet --rcfile zoho-catchall";
+      ExecStart = "${pkgs.getmail6}/bin/getmail --quiet --rcfile zoho-bct --rcfile zoho-catchall";
     };
   };
 }
