@@ -117,5 +117,14 @@
     "d /srv/data 0700 root root -"
   ];
 
+  services.caddy = {
+    enable = true;
+    virtualHosts."photos.diffeq.com".extraConfig = ''
+      reverse_proxy https://immich.domus.diffeq.com {
+        header_up Host {upstream_hostport}
+      }
+    '';
+  };
+
   system.stateVersion = "24.05";
 }
