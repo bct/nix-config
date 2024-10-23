@@ -9,11 +9,14 @@
       repositories = [
         {
           label = "borg.domus.diffeq.com";
-          path = "ssh://borg@borg.domus.diffeq.com/srv/borg/mail/";
+          path = "ssh://borg@borg.domus.diffeq.com/srv/borg/mail.domus.diffeq.com/";
         }
       ];
 
-      source_directories = [];
+      source_directories = [
+        "/var/home/"
+        "/var/vmail/"
+      ];
 
       # state directories must be on a persistent volume.
       borg_base_directory = "/var/lib/borg";

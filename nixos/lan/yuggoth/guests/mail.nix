@@ -8,7 +8,7 @@ in {
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
 
-    # ./mail/borgmatic.nix
+    ./mail/borgmatic.nix
   ];
 
   system.stateVersion = "24.05";
