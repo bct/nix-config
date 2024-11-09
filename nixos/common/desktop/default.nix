@@ -80,7 +80,7 @@ in {
 
     users.users.${cfgPersonal.user} = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "audio" "networkmanager" "video" "lp" "scanner" ];
+      extraGroups = [ "wheel" "audio" "networkmanager" "video" "lp" "scanner" "dialout" ];
     };
 
     # Allow users to mount removeable storage.
