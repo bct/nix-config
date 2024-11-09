@@ -427,11 +427,11 @@
     },
     "nixpkgs-paperless": {
       "locked": {
-        "lastModified": 1729137829,
-        "narHash": "sha256-zbus74o76NW5wzuHQ6pGoacJprD5zXOw0nw8QuDCNj0=",
+        "lastModified": 1729775167,
+        "narHash": "sha256-vCz1rFaIbcyZSu4HL64KJosRbmkr0N+NvgoQYr6dCMw=",
         "owner": "bct",
         "repo": "nixpkgs",
-        "rev": "03737cd6e2411affff5ad966fdb6552953634a4a",
+        "rev": "4a525f8bb7039088a16586ae00ac2ce4ab5b88f6",
         "type": "github"
       },
       "original": {
