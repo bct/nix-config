@@ -9,7 +9,7 @@ in {
     extraGroups = [ "adbusers" ];
 
     packages = with pkgs; [
-      unstable.androidStudioPackages.canary
+      androidStudioPackages.canary
       gcc # Android Studio needs cc.
     ];
   };
