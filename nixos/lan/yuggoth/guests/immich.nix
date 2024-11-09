@@ -2,8 +2,11 @@
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
+    "${inputs.nixpkgs-unstable}/nixos/modules/services/databases/redis.nix"
     "${inputs.nixpkgs-unstable}/nixos/modules/services/web-apps/immich.nix"
   ];
+
+  disabledModules = [ "services/databases/redis.nix" ];
 
   system.stateVersion = "24.05";
 
