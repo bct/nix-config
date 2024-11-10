@@ -8,7 +8,7 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Temporary bugfix
-    nixpkgs-paperless.url = "github:bct/nixpkgs/paperless-secrets-file";
+    nixpkgs-paperless.url = "github:bct/nixpkgs/paperless-deploy";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-24.05";

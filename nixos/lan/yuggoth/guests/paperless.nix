@@ -1,4 +1,4 @@
-{ self, inputs, lib, config, ... }:
+{ self, inputs, lib, config, pkgs, ... }:
 
 let
   paperless-nixpkgs = inputs.nixpkgs-paperless;
@@ -30,11 +30,14 @@ in {
     enable = true;
     mediaDir = "/mnt/paperless/media";
     consumptionDir = "/mnt/paperless/consume";
-    secretsFile = config.age.secrets.paperless-env.path;
+    environmentFile = config.age.secrets.paperless-env.path;
 
     settings = {
       PAPERLESS_DBHOST = "db.domus.diffeq.com";
     };
+
+    # https://github.com/NixOS/nixpkgs/issues/354725
+    package = pkgs.unstable.paperless-ngx;
   };
 
   # can't have a private network if we need to talk to the database.
