@@ -56,6 +56,16 @@
           };
         };
 
+        microvms = {
+          name = "microvms";
+          size = "32G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+            mountpoint = "/var/lib/microvms";
+          };
+        };
+
         db-var = {
           name = "db-var";
           size = "16G";
