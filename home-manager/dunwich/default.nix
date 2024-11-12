@@ -23,7 +23,6 @@
     vscode
 
     python311
-    pipenv
     awscli2
     ansible
     process-compose

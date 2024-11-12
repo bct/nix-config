@@ -63,7 +63,6 @@
   airsonic-refix = pkgs.callPackage ./airsonic-refix { };
   goatcounter = pkgs.callPackage ./goatcounter { };
 
-  pipenv = pkgs.callPackage ./pipenv { python3 = pkgs-unstable.python3; };
   pollymc-unwrapped = pkgs.qt6Packages.callPackage ./pollymc {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
