@@ -57,7 +57,7 @@ in {
 
   mailserver = {
     enable = true;
-    fqdn = "mail-new.domus.diffeq.com";
+    fqdn = "mail.domus.diffeq.com";
     domains = ["diffeq.com" "domus.diffeq.com"];
 
     indexDir = "/var/lib/dovecot/indices";
@@ -137,7 +137,7 @@ in {
   services.lego-proxy-client = {
     enable = true;
     domains = [
-      { domain = "mail-new.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-mail.path; }
+      { domain = "mail.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-mail.path; }
     ];
     dnsResolver = "ns5.zoneedit.com";
     email = "s+acme@diffeq.com";

@@ -59,7 +59,7 @@
       };
 
       mail = {
-        hostName = "mail-new";
+        hostName = "mail";
         tapInterfaceMac = "02:00:00:00:00:11";
         machineId = "b1d942ead0d9d6afb175cedf4e416d22";
       };
