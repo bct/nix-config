@@ -25,8 +25,9 @@
       ssh_command = "ssh -i ${config.age.secrets.ssh-borg-mail.path}";
 
       # retention
-      keep_daily = 7;
-      keep_weekly = 4;
+      keep_hourly = 24;
+      keep_daily = 14;
+      keep_weekly = 6;
       keep_monthly = 6;
       keep_yearly = 1;
 
@@ -41,6 +42,11 @@
         };
       };
     };
+  };
+
+  systemd.timers.borgmatic.timerConfig = {
+    OnCalendar = "hourly";
+    RandomizedDelaySec = "10m";
   };
 
   age.secrets = {
