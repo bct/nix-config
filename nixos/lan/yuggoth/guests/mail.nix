@@ -15,7 +15,7 @@ in {
 
   microvm = {
     vcpu = 1;
-    mem = 512;
+    mem = 768;
 
     volumes = [
       {
