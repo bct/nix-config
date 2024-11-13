@@ -80,6 +80,29 @@ in {
         hashedPasswordFile = config.age.secrets.immich-hashed-password.path;
       };
     };
+
+    mailboxes = {
+      Drafts = {
+        auto = "subscribe";
+        specialUse = "Drafts";
+      };
+      Junk = {
+        auto = "subscribe";
+        specialUse = "Junk";
+      };
+      Sent = {
+        auto = "subscribe";
+        specialUse = "Sent";
+      };
+      Trash = {
+        auto = "no";
+        specialUse = "Trash";
+      };
+      archive = {
+        auto = "create";
+        specialUse = "Archive";
+      };
+    };
   };
 
   services.postfix = {
