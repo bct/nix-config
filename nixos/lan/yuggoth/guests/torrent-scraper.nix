@@ -129,7 +129,10 @@
     openFirewall = false;
     host = "127.0.0.1";
   };
-  systemd.services.flood.serviceConfig.SupplementaryGroups = ["rtorrent"];
+  systemd.services.flood.serviceConfig.SupplementaryGroups = [
+    "rtorrent"       # flood can access the rtorrent socket
+    "video-writers"  # flood can directly modify downloaded files
+  ];
 
   # https://gist.github.com/drmalex07/c0f9304deea566842490
   systemd.services.rtorrent-socket = {
