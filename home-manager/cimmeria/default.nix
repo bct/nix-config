@@ -91,6 +91,7 @@
 
       lastgenre = {
         count = 2;
+        force = false;
       };
     };
   };
