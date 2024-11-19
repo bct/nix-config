@@ -61,6 +61,8 @@
       podcast-path = "/var/empty";
       scan-interval = 60; # minutes
 
+      multi-value-genre = "delim ,";
+
       jukebox-enabled = true;
       jukebox-mpv-extra-args = "--audio-device=alsa/default:CARD=sndrpihifiberry";
 
