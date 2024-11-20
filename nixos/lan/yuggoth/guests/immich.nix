@@ -89,7 +89,7 @@
     enable = true;
     virtualHosts."immich.domus.diffeq.com" = {
       useACMEHost = "immich.domus.diffeq.com";
-      extraConfig = "reverse_proxy localhost:3001";
+      extraConfig = "reverse_proxy localhost:${toString config.services.immich.port}";
     };
   };
 }
