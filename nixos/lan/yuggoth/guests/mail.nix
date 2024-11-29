@@ -156,6 +156,7 @@ in {
     serviceConfig = {
       Type = "oneshot";
       User = "bct";
+      Group = "virtualMail";
       ExecStart = "${pkgs.getmail6}/bin/getmail --quiet --rcfile zoho-bct --rcfile zoho-catchall";
     };
   };
