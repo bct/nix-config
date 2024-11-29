@@ -34,6 +34,16 @@
       };
     };
 
+    disk.ssd = {
+      device = "/dev/sda";
+      type = "disk";
+
+      content = {
+        type = "lvm_pv";
+        vg = "ssdpool";
+      };
+    };
+
     # LVM virtual group that lives on the NVME disk.
     lvm_vg.fastpool = {
       type = "lvm_vg";
@@ -85,6 +95,39 @@
         };
       };
     };
+
+    # LVM virtual group that lives on the SSD.
+    lvm_vg.ssdpool = {
+      type = "lvm_vg";
+      lvs = {
+        abrado-nix-store-overlay = {
+          name = "abrado-nix-store-overlay";
+          size = "16G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+          };
+        };
+
+        immich-var = {
+          name = "immich-var";
+          size = "8G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+          };
+        };
+
+        prometheus-var = {
+          name = "prometheus-var";
+          size = "16G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+          };
+        };
+      };
+    };
   };
 
   # make LVM disks accessible to microvms
@@ -93,5 +136,8 @@
   services.udev.extraRules = ''
     ENV{DM_VG_NAME}=="fastpool" ENV{DM_LV_NAME}=="db-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="fastpool" ENV{DM_LV_NAME}=="mail-var" OWNER="microvm"
+    ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="abrado-nix-store-overlay" OWNER="microvm"
+    ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="immich-var" OWNER="microvm"
+    ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="prometheus-var" OWNER="microvm"
   '';
 }

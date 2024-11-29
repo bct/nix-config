@@ -16,9 +16,9 @@
 
     volumes = [
       {
-        image = "var.img";
+        image = "/dev/mapper/ssdpool-immich--var";
         mountPoint = "/var";
-        size = 1024;
+        autoCreate = false;
       }
     ];
   };

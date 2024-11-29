@@ -27,12 +27,9 @@
       }
 
       {
-        image = "nix-store-overlay.img";
+        image = "/dev/mapper/ssdpool-abrado--nix--store--overlay";
         mountPoint = config.microvm.writableStoreOverlay;
-        size = 2048;
-        # with the default bytes-per-inode of 16384, a 1GB volume only gets
-        # 65536 inodes. that runs out quickly!
-        mkfsExtraArgs = ["-i" "8192"];
+        autoCreate = false;
       }
     ];
   };
