@@ -63,16 +63,26 @@
 
       multi-value-genre = "delim ,";
 
-      jukebox-enabled = true;
-      jukebox-mpv-extra-args = "--audio-device=alsa/default:CARD=sndrpihifiberry";
-
       tls-cert = "${config.security.acme.certs."stereo.domus.diffeq.com".directory}/fullchain.pem";
       tls-key = "${config.security.acme.certs."stereo.domus.diffeq.com".directory}/key.pem";
     };
   };
-  systemd.services.gonic.serviceConfig.SupplementaryGroups = ["audio" "acme"];
-  systemd.services.gonic.serviceConfig.DeviceAllow = "char-alsa rw";
-  systemd.services.gonic.serviceConfig.PrivateDevices = lib.mkForce false;
+  systemd.services.gonic.serviceConfig.SupplementaryGroups = ["acme"];
+
+  services.mpd = {
+    enable = true;
+    network.listenAddress = "[::]"; # the default ("any") does not bind to IPv6
+    musicDirectory = "/mnt/beets";
+
+    extraConfig = ''
+      audio_output {
+        type "alsa"
+        name "hifiberry"
+        device "hw:1,0" # "hw:card,device", found using aplay -l
+        mixer_control "Analogue"
+      }
+    '';
+  };
 
   systemd.services.subsonic-action-proxy = {
     description = "subsonic-action-proxy";
