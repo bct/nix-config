@@ -24,7 +24,6 @@ in {
     # desktop tools
     chromium
     mpv
-    epdfview
 
     # for "strings"
     binutils

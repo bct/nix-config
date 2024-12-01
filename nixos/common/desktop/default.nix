@@ -54,8 +54,6 @@ in {
       extraBackends = [ pkgs.sane-airscan ];
     };
 
-    sound.enable = true;
-
     # Enable X and lightdm.
     # Delegate X session configuration to home-manager.
     services.xserver.enable = true;
