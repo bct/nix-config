@@ -2,16 +2,7 @@
 
 {
   # Packages that should be installed to the user profile.
-  home.packages = let
-    # aa/src wants a specific version of pyright
-    pyright = pkgs.nodePackages.pyright.override rec {
-      version = "1.1.357";
-      src = pkgs.fetchurl {
-        url = "https://registry.npmjs.org/pyright/-/pyright-${version}.tgz";
-        sha256 = "sha256-2xSICMxrszkqtYqvSg/81fc951LHARPqHaht/Bk5Yi4=";
-      };
-    };
-  in [
+  home.packages = [
     # neovim needs xclip for clipboard access
     pkgs.xclip
 
@@ -22,7 +13,7 @@
     pkgs.unstable.nodePackages.prettier
 
     # LSP servers
-    pyright
+    pkgs.pyright
     pkgs.nil
     pkgs.unstable.nixd
     pkgs.hoonLanguageServer
