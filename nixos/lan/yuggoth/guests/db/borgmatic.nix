@@ -5,6 +5,10 @@
 
   services.borgmatic = {
     enable = true;
+
+    # config check fails because POSTGRES_PASSWORD isn't set
+    enableConfigCheck = false;
+
     settings = {
       repositories = [
         {

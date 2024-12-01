@@ -3,14 +3,9 @@
 let
   unshittifyPkgs = inputs.unshittify.packages.${pkgs.system};
 in {
-  # we need to use the nixpkgs-unstable version of the nitter module.
-  # we disable the default version. and then import the unstable version.
-  disabledModules = [ "services/misc/nitter.nix" ];
-
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
-    "${inputs.nixpkgs-unstable}/nixos/modules/services/misc/nitter.nix"
   ];
 
   system.stateVersion = "24.05";

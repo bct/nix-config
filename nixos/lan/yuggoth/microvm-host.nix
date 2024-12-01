@@ -1,4 +1,4 @@
-{ self, inputs, outputs, lib, config, ... }:
+{ self, inputs, outputs, lib, config, pkgs, ... }:
 
 let
   cfg = config.yuggoth.microvms;
@@ -96,6 +96,7 @@ in {
 
     microvm.vms = lib.mapAttrs (vmName: vmConfig: {
       specialArgs = { inherit self inputs outputs; };
+
       config = {
         imports = [
           # note that we're not including "${self}/nixos/common/nix.nix" here

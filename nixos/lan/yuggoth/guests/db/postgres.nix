@@ -23,7 +23,7 @@ in {
     enable = true;
     enableTCPIP = true;
 
-    extraPlugins = ps: with ps; [
+    extensions = ps: with ps; [
       pgvecto-rs # immich
     ];
 

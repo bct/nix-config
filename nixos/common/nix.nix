@@ -19,6 +19,15 @@
 
     config = {
       allowUnfree = true;
+
+      # TODO: scope this to the one VM that needs it.
+      # https://github.com/NixOS/nixpkgs/issues/360592
+      permittedInsecurePackages = [
+        "aspnetcore-runtime-wrapped-6.0.36"
+        "aspnetcore-runtime-6.0.36"
+        "dotnet-sdk-wrapped-6.0.428"
+        "dotnet-sdk-6.0.428"
+      ];
     };
   };
 

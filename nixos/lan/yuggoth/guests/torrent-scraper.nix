@@ -1,8 +1,7 @@
-{ self, inputs, pkgs, config, ... }: {
+{ self, pkgs, config, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
-    "${inputs.nixpkgs-unstable}/nixos/modules/services/torrent/flood.nix"
   ];
 
   system.stateVersion = "24.05";
