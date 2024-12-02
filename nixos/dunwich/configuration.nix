@@ -28,8 +28,7 @@
   # power management
   services.tlp.enable = true;
 
-  hardware.pulseaudio.enable = true;
-  sound.extraConfig = ''
+  environment.etc."asound.conf".text = ''
     defaults.pcm.!card 1
     defaults.ctl.!card 1
   '';
@@ -52,7 +51,6 @@
     "resume_offset=196800512"
   ];
 
-
   services.udev.extraRules = ''
     # Suspend the system when battery level drops to 5% or lower
     SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl suspend"
@@ -61,11 +59,7 @@
     ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video $sys$devpath/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w $sys$devpath/brightness"
   '';
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-  };
-
+  hardware.graphics.enable = true;
   services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
@@ -113,14 +107,6 @@
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
-  };
-
-  networking.hosts = {
-    "127.0.0.1" = [
-      "bagel.local.artificial.agency"
-      "admin.local.artificial.agency"
-      "dashboard.local.artificial.agency"
-    ];
   };
 
   virtualisation.docker = {
