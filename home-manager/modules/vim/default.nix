@@ -18,11 +18,11 @@
     pkgs.nixd
     pkgs.hoonLanguageServer
     pkgs.gopls
-    pkgs.ruff-lsp
+    pkgs.ruff
     pkgs.terraform-ls
     pkgs.tflint
     pkgs.nodePackages.vscode-langservers-extracted
-    pkgs.nodePackages.typescript-language-server
+    pkgs.typescript-language-server
     pkgs.ansible-language-server
     pkgs.ansible-lint
   ];

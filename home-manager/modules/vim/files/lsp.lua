@@ -78,7 +78,7 @@ require'lspconfig'.pyright.setup{
   }
 }
 
-require'lspconfig'.ruff_lsp.setup{
+require'lspconfig'.ruff.setup{
   capabilities = capabilities,
   on_attach = on_attach
 }
@@ -107,7 +107,7 @@ require'lspconfig'.eslint.setup{
   on_attach = on_attach,
 }
 
-require'lspconfig'.tsserver.setup{
+require'lspconfig'.ts_ls.setup{
   capabilities = capabilities,
   on_attach = on_attach,
 }
