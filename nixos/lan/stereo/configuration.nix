@@ -1,4 +1,4 @@
-{ self, config, lib, pkgs, ... }: {
+{ self, config, pkgs, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
 
@@ -139,6 +139,21 @@
     ];
     dnsResolver = "ns5.zoneedit.com";
     email = "s+acme@diffeq.com";
+  };
+
+  systemd.timers.mpc-update = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "hourly";
+      Unit = "mpc-update.service";
+    };
+  };
+
+  systemd.services.mpc-update = {
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.mpc}/bin/mpc update";
+    };
   };
 
   age.secrets = {
