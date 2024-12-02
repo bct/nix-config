@@ -12,11 +12,9 @@
         PrivateKeyFile = config.age.secrets.megahost-one-conductum-wg-key.path;
       };
       wireguardPeers = [{
-        wireguardPeerConfig = {
-          # conductum
-          PublicKey = "fBOs8h31Jce8FH0eeeKWLvtXNSD7a6PkQoYiJtoOxUo=";
-          AllowedIPs = [ "192.168.9.1/32" "192.168.0.0/16" ];
-        };
+        # conductum
+        PublicKey = "fBOs8h31Jce8FH0eeeKWLvtXNSD7a6PkQoYiJtoOxUo=";
+        AllowedIPs = [ "192.168.9.1/32" "192.168.0.0/16" ];
       }];
     };
 

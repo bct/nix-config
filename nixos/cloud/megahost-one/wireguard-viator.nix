@@ -20,8 +20,8 @@
       wireguardPeers = [
         # router
         {
-          wireguardPeerConfig.PublicKey = "pZ8XBJYx9gWz7emqNDkmBF+BMQ9IW9ESHCfZEj75VHw=";
-          wireguardPeerConfig.AllowedIPs = [ "192.168.8.1/32" "192.168.0.0/16" ];
+          PublicKey = "pZ8XBJYx9gWz7emqNDkmBF+BMQ9IW9ESHCfZEj75VHw=";
+          AllowedIPs = [ "192.168.8.1/32" "192.168.0.0/16" ];
         }
       ];
     };
