@@ -66,7 +66,6 @@
 
   programs.beets = {
     enable = true;
-    package = pkgs.unstable.beets;
     settings = {
       library = "/mnt/beets/library.db";
       directory = "/mnt/beets/library";

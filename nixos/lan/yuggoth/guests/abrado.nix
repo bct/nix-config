@@ -1,4 +1,4 @@
-{ self, config, lib, pkgs, ... }: {
+{ self, config, pkgs, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
   ];
@@ -56,7 +56,7 @@
 
       packages = [
         pkgs.python3
-        pkgs.unstable.uv
+        pkgs.uv
       ];
     };
   };
@@ -76,7 +76,7 @@
       User = "abrado";
 
       WorkingDirectory = "/srv/scrapers/py";
-      ExecStart = "${pkgs.unstable.uv}/bin/uv run current-temp.py";
+      ExecStart = "${pkgs.uv}/bin/uv run current-temp.py";
       LoadCredential = [
         "INFLUXDB_PASSWORD:${config.age.secrets.password-db-influxdb-abrado.path}"
       ];
@@ -97,7 +97,7 @@
       User = "abrado";
 
       WorkingDirectory = "/srv/scrapers/py";
-      ExecStart = "${pkgs.unstable.uv}/bin/uv run exchange-rates.py";
+      ExecStart = "${pkgs.uv}/bin/uv run exchange-rates.py";
       LoadCredential = [
         "INFLUXDB_PASSWORD:${config.age.secrets.password-db-influxdb-abrado.path}"
       ];
@@ -118,7 +118,7 @@
       User = "abrado";
 
       WorkingDirectory = "/srv/scrapers/py";
-      ExecStart = "${pkgs.unstable.uv}/bin/uv run gas-rates.py";
+      ExecStart = "${pkgs.uv}/bin/uv run gas-rates.py";
       LoadCredential = [
         "INFLUXDB_PASSWORD:${config.age.secrets.password-db-influxdb-abrado.path}"
       ];

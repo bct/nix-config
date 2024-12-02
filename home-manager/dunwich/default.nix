@@ -11,7 +11,7 @@
   home.file.".xmobarrc".source = ./files/xmobarrc.hs;
 
   home.pointerCursor = {
-    package = pkgs.unstable.hackneyed;
+    package = pkgs.hackneyed;
     name = "Hackneyed";
     size = 24;
     x11.enable = true;

@@ -36,8 +36,7 @@ in {
       PAPERLESS_DBHOST = "db.domus.diffeq.com";
     };
 
-    # https://github.com/NixOS/nixpkgs/issues/354725
-    package = pkgs.unstable.paperless-ngx;
+    package = pkgs.paperless-ngx;
   };
 
   # can't have a private network if we need to talk to the database.

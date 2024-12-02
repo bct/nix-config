@@ -10,15 +10,15 @@
     pkgs.ripgrep
 
     # formatters
-    pkgs.unstable.nodePackages.prettier
+    pkgs.nodePackages.prettier
 
     # LSP servers
     pkgs.pyright
     pkgs.nil
-    pkgs.unstable.nixd
+    pkgs.nixd
     pkgs.hoonLanguageServer
     pkgs.gopls
-    pkgs.unstable.ruff-lsp
+    pkgs.ruff-lsp
     pkgs.terraform-ls
     pkgs.tflint
     pkgs.nodePackages.vscode-langservers-extracted
@@ -29,12 +29,6 @@
 
   programs.neovim = {
     enable = true;
-
-    # neovim 0.10, so we have native snippets available
-    # have to use -unwrapped or it fails to build with:
-    #   /nix/store/klvl86nr4wj5q9r351jnq0l2nway8vkj-neovim-0.10.0/bin/nvim-python3: Permission denied
-    # https://github.com/NixOS/nixpkgs/issues/137829
-    package = pkgs.unstable.neovim-unwrapped;
 
     # a helpful reference for config: https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
     extraLuaConfig = lib.fileContents ./files/init.lua;
@@ -141,7 +135,7 @@
 
         # formatting
         {
-          plugin = pkgs.unstable.vimPlugins.conform-nvim;
+          plugin = pkgs.vimPlugins.conform-nvim;
           type = "lua";
           config = ''
             local conform = require 'conform'
@@ -154,7 +148,7 @@
               formatters = {
                 black = { command = "${black}/bin/black" },
                 isort = { command = "${pkgs.isort}/bin/isort" },
-                prettier = { command = "${pkgs.unstable.nodePackages.prettier}/bin/prettier" },
+                prettier = { command = "${pkgs.nodePackages.prettier}/bin/prettier" },
               },
 
               formatters_by_ft = {
