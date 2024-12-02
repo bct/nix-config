@@ -71,7 +71,7 @@
       library = "/mnt/beets/library.db";
       directory = "/mnt/beets/library";
 
-      plugins = "fetchart inline lastgenre";
+      plugins = "fetchart inline lastgenre permissions";
 
       import = {
         move = true;
@@ -92,6 +92,11 @@
       lastgenre = {
         count = 2;
         force = false;
+      };
+
+      permissions = {
+        file = 644;
+        dir = 755;
       };
     };
   };
