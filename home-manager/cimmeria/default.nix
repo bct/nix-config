@@ -73,7 +73,7 @@
       plugins = "fetchart inline lastgenre permissions";
 
       import = {
-        move = true;
+        copy = true;
         log = "/mnt/beets/log/import.log";
       };
 
