@@ -37,11 +37,11 @@
     plugins = with pkgs.vimPlugins; let
       # aa/src wants a specific version of black
       black = pkgs.black.overridePythonAttrs (oldAttrs: rec {
-        version = "23.12.1";
+        version = "24.8.0";
         src = pkgs.fetchPypi {
           inherit version;
           pname = "black";
-          hash = "sha256-TOPvFOvo2VCRiAFNlq8cRWqRDVtcv0NKCf734CSz0NU=";
+          hash = "sha256-JQCUVCC2eEw4ue6IWvA59edHHvKEqwP6Nezd5GiM2D8=";
         };
       });
 
