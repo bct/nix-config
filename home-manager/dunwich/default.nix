@@ -17,20 +17,29 @@
     x11.enable = true;
   };
 
-  home.packages = with pkgs; [
-    slack
+  home.packages = with pkgs;
+    let
+      terraform-1_8_5 = pkgs.mkTerraform {
+        version = "1.8.5";
+        hash = "sha256-5PzP0LUJPpOQQ8YqwBFyEFcsHF2O1uDD8Yh8wB3uJ8s=";
+        vendorHash = "sha256-PXA2AWq1IFmnqhhU92S9UaIYTUAAn5lsg3S7h5hBOQE=";
+      };
+    in [
+      slack
 
-    vscode
+      vscode
 
-    python311
-    awscli2
-    ansible
-    process-compose
+      python312
+      awscli2
+      ansible
+      process-compose
 
-    terraform
+      terraform-1_8_5
 
-    prismlauncher
-  ];
+      prismlauncher
+
+      unstable.devenv
+    ];
 
   programs.git.lfs.enable = true;
 
