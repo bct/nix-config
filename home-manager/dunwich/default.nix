@@ -29,7 +29,8 @@
 
       vscode
 
-      python312
+      python311
+      (python312 // { meta.priority = 10; })
       awscli2
       ansible
       process-compose

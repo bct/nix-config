@@ -13,6 +13,9 @@
     # scale chromium/brave browser UIs.
     # maybe I should figure out how to scale the UI more generally?
     CHROME_EXTRA_FLAGS = "--force-device-scale-factor=1.5";
+
+    # we can't run Pythons downloaded by uv, don't even attempt it.
+    UV_PYTHON_DOWNLOADS = "never";
   };
 
   home.shellAliases = {
