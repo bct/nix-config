@@ -43,6 +43,12 @@ in {
               default = "/run/agenix-vms/${name}";
               description = "host directory containing secrets to pass to the VM";
             };
+
+            restartIfChanged = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Restart this MicroVM if the systemd units are changed, i.e. if it has been updated by rebuilding the host.";
+            };
           };
         }
       ));
@@ -96,6 +102,8 @@ in {
 
     microvm.vms = lib.mapAttrs (vmName: vmConfig: {
       specialArgs = { inherit self inputs outputs; };
+
+      restartIfChanged = vmConfig.restartIfChanged;
 
       config = {
         imports = [

@@ -126,6 +126,15 @@
             format = "ext4";
           };
         };
+
+        shelloftheold-root = {
+          name = "shelloftheold-root";
+          size = "128G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+          };
+        };
       };
     };
   };
@@ -139,5 +148,6 @@
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="abrado-nix-store-overlay" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="immich-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="prometheus-var" OWNER="microvm"
+    ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="shelloftheold-root" OWNER="microvm"
   '';
 }

@@ -76,6 +76,10 @@ in {
         domain = "paperless.domus.diffeq.com";
         pubKey = builtins.readFile ../../../../secrets/lego-proxy/paperless.pub;
       }
+      {
+        domain = "shell-of-the-old.domus.diffeq.com";
+        pubKey = builtins.readFile ../../../../secrets/lego-proxy/shell-of-the-old.pub;
+      }
     ];
   };
 }

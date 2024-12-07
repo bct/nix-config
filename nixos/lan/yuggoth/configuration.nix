@@ -82,6 +82,14 @@
         machineId = "6621b60f7f7ac43dca44e143eb0578a8";
       };
 
+      shell-of-the-old = {
+        hostName = "shell-of-the-old";
+        tapInterfaceName = "vm-shell-of-the"; # <= 15 chars
+        tapInterfaceMac = "02:00:00:00:00:12";
+        machineId = "5c5ab3a55d2518c2ab823096462194e4";
+        restartIfChanged = false;
+      };
+
       spectator = {
         hostName = "spectator";
         tapInterfaceMac = "02:00:00:00:00:04";
