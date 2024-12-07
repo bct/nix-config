@@ -83,9 +83,7 @@
 
   # override the borgmatic service to set password environment variables.
   systemd.services.borgmatic.serviceConfig.ExecStart = let
-    run-borgmatic = pkgs.writeScript "run-borgmatic" ''
-      #!/bin/sh
-
+    run-borgmatic = pkgs.writeShellScript "run-borgmatic" ''
       set -euo pipefail
 
       password=$(cat ${config.age.secrets.db-password-db-mysql-backup.path} | tr -d '\n')

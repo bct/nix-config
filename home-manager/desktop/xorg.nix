@@ -4,9 +4,7 @@ let
   # https://gist.github.com/erfanio/eec67e1a538eeef3ff72562412030b6a
   # "adapted from xss-lock documantation"
   # https://bitbucket.org/raymonad/xss-lock/src/1e158fb20108058dbd62bd51d8e8c003c0a48717/doc/dim-screen.sh
-  dim-screen = pkgs.writeScript "dim-screen" ''
-    #!/bin/sh
-
+  dim-screen = pkgs.writeShellScript "dim-screen" ''
     set -euo pipefail
 
     # Brightness will be lowered to this value.

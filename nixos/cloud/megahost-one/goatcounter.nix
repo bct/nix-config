@@ -28,9 +28,7 @@ in {
           ];
 
           ExecStart = let
-            run-goatcounter = pkgs.writeScript "run-goatcounter" ''
-              #!/bin/sh
-
+            run-goatcounter = pkgs.writeShellScript "run-goatcounter" ''
               set -euo pipefail
 
               password=$(cat $CREDENTIALS_DIRECTORY/password-goatcounter | tr -d '\n')

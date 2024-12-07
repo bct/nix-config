@@ -34,9 +34,7 @@ in {
         ];
 
         ExecStart = let
-          run-wikijs = pkgs.writeScript "run-wikijs" ''
-            #!/bin/sh
-
+          run-wikijs = pkgs.writeShellScript "run-wikijs" ''
             set -euo pipefail
 
             export DB_PASS=$(cat $CREDENTIALS_DIRECTORY/password-wikijs | tr -d '\n')
