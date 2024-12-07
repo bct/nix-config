@@ -7,10 +7,10 @@
   cura5 = (
     let cura5 = pkgs.appimageTools.wrapType2 rec {
       name = "cura5";
-      version = "5.4.0";
+      version = "5.9.0";
       src = pkgs.fetchurl {
-        url = "https://github.com/Ultimaker/Cura/releases/download/${version}/UltiMaker-Cura-${version}-linux-modern.AppImage";
-        hash = "sha256-QVv7Wkfo082PH6n6rpsB79st2xK2+Np9ivBg/PYZd74=";
+        url = "https://github.com/Ultimaker/Cura/releases/download/${version}/UltiMaker-Cura-${version}-linux-X64.AppImage";
+        hash = "sha256-STtVeM4Zs+PVSRO3cI0LxnjRDhOxSlttZF+2RIXnAp4=";
       };
       extraPkgs = pkgs: [ ];
     };
