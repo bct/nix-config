@@ -689,11 +689,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1714831030,
-        "narHash": "sha256-vVjy3lWao7DOsunVRmG2BmG2FN3+iDKY9Tk4To/XnuM=",
+        "lastModified": 1733579551,
+        "narHash": "sha256-iw/oMudfNLUO5zkhjGgSxXYOG9rxnlPX8ttOiLsXLUk=",
         "owner": "bct",
         "repo": "unshittify.nix",
-        "rev": "d0ab24f78ebe9d71deb56713338f0ab3b124b605",
+        "rev": "5af68cda34cb72c2f126fc8d1c3a8015ecf94518",
         "type": "github"
       },
       "original": {

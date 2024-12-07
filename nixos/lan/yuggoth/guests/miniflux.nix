@@ -62,12 +62,13 @@ in {
     email = "s+acme@diffeq.com";
   };
 
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-    8080 # nitter
-    8081 # miniflux
-  ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.hosts = {
+    "127.0.0.1" = [
+      "miniflux.domus.diffeq.com"
+      "nitter.domus.diffeq.com"
+    ];
+  };
 
   services.miniflux = {
     enable = true;
@@ -80,9 +81,9 @@ in {
       # don't stop looking at a feed just because it has failed in the past
       POLLING_PARSING_ERROR_LIMIT = "0";
 
-      # every 5 minutes retrieve 3 feeds.
-      SCHEDULER_ROUND_ROBIN_MIN_INTERVAL = "5";
-      BATCH_SIZE = "3";
+      # every 1 minute retrieve 2 feeds.
+      SCHEDULER_ROUND_ROBIN_MIN_INTERVAL = "1";
+      BATCH_SIZE = "2";
       WORKER_POOL_SIZE = "1";
 
       # if i'm understanding correctly this is an lower bound on the time
