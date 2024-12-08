@@ -24,6 +24,7 @@ in {
     };
 
     home.packages = with pkgs; [
+      alsa-utils # xmobar Alsa plugin uses alsactl
       xmobar
 
       alacritty

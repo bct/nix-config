@@ -1,7 +1,6 @@
 import XMonad
 
 import XMonad.Util.EZConfig
-import XMonad.Util.Ungrab
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -16,7 +15,7 @@ import XMonad.Actions.FloatKeys (keysMoveWindowTo)
 import XMonad.Actions.TopicSpace
 
 import XMonad.Actions.SpawnOn (spawnHere, shellPromptHere, spawnOn)
-import XMonad.Actions.Volume
+import XMonad.Actions.Volume (lowerVolume, raiseVolume, toggleMute)
 
 import XMonad.Actions.PhysicalScreens
 
