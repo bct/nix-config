@@ -81,15 +81,12 @@ in {
       # don't stop looking at a feed just because it has failed in the past
       POLLING_PARSING_ERROR_LIMIT = "0";
 
-      # every 1 minute retrieve 2 feeds.
-      SCHEDULER_ROUND_ROBIN_MIN_INTERVAL = "1";
-      BATCH_SIZE = "2";
-      WORKER_POOL_SIZE = "1";
+      SCHEDULER_ROUND_ROBIN_MIN_INTERVAL = "15";
+      BATCH_SIZE = "3";
+      POLLING_FREQUENCY = "1";
 
-      # if i'm understanding correctly this is an lower bound on the time
-      # between polls. with a large enough number of feeds this value is
-      # ~irrelevant.
-      POLLING_FREQUENCY = "20";
+      # avoid doing requests in parallel
+      WORKER_POOL_SIZE = "1";
     };
     adminCredentialsFile = config.age.secrets.miniflux-admin-credentials.path;
   };
