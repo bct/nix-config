@@ -23,10 +23,12 @@ Config { overrideRedirect = False
                         , "--offc", "#282828,#ebdbb2" -- Off colour
                       ]
                     , Run Network "wlp0s20f3"
-                      [
+                      [ "--nastring", "󰖪"
+                      , "--template", "󰖩 <rx>KB|<tx>KB"
                       ] 50
                     , Run Network "wg0"
                       [ "--nastring", "󰿇"
+                      , "--template", "󰍁 <rx>KB|<tx>KB"
                       ] 50
                     , Run Battery
                       [ "--template" , "<acstatus>"
