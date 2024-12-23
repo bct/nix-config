@@ -52,6 +52,7 @@ in {
     pkgs.afew
     pkgs.msmtp
     pkgs.procmail
+    pkgs.lynx
     rspamc-deliver
   ];
 
