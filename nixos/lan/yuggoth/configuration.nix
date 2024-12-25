@@ -58,6 +58,12 @@
         machineId = "538b82e19deee1b600027ea47fe3e8dc";
       };
 
+      jellyfin = {
+        hostName = "jellyfin";
+        tapInterfaceMac = "02:00:00:00:00:13";
+        machineId = "099112cbbe05544a6240c797d4c83e7a";
+      };
+
       mail = {
         hostName = "mail";
         tapInterfaceMac = "02:00:00:00:00:11";

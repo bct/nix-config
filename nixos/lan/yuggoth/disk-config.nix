@@ -135,6 +135,15 @@
             format = "ext4";
           };
         };
+
+        jellyfin-var = {
+          name = "jellyfin-var";
+          size = "128G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+          };
+        };
       };
     };
   };
@@ -147,6 +156,7 @@
     ENV{DM_VG_NAME}=="fastpool" ENV{DM_LV_NAME}=="mail-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="abrado-nix-store-overlay" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="immich-var" OWNER="microvm"
+    ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="jellyfin-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="prometheus-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="shelloftheold-root" OWNER="microvm"
   '';
