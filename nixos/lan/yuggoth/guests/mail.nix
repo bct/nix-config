@@ -161,4 +161,22 @@ in {
       ExecStart = "${pkgs.getmail6}/bin/getmail --quiet --rcfile zoho-bct --rcfile zoho-catchall";
     };
   };
+
+  systemd.timers.notmuch-new = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "5m";
+      OnUnitActiveSec = "5m";
+      Unit = "notmuch-new.service";
+    };
+  };
+
+  systemd.services.notmuch-new = {
+    serviceConfig = {
+      Type = "oneshot";
+      User = "bct";
+      Group = "virtualMail";
+      ExecStart = "${pkgs.notmuch}/bin/notmuch new --quiet";
+    };
+  };
 }
