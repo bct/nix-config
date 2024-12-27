@@ -1,7 +1,7 @@
 { self, inputs, lib, config, pkgs, ... }:
 
 let
-  paperless-nixpkgs = inputs.nixpkgs-paperless;
+  paperless-nixpkgs = inputs.nixpkgs-unstable;
 in {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"

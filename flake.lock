@@ -437,18 +437,18 @@
         "url": "https://github.com/NixOS/nixpkgs/archive/5487e69da40cbd611ab2cadee0b4637225f7cfae.tar.gz"
       }
     },
-    "nixpkgs-paperless": {
+    "nixpkgs-lubelogger": {
       "locked": {
-        "lastModified": 1731249071,
-        "narHash": "sha256-KxgKSJMwxy/zNktMmMMrAI5OAhh9YT21NVbFVFJSLT8=",
+        "lastModified": 1735161590,
+        "narHash": "sha256-nIbviuS6eMjiHAQH0yD6D/gff6zk50+m34hnmyxjN5E=",
         "owner": "bct",
         "repo": "nixpkgs",
-        "rev": "0f9e9ed1c24236ef1a36e4f0bd3b2635931a8d18",
+        "rev": "2027dcdf407e25cc5d6dbd6683b7dd7a582508b8",
         "type": "github"
       },
       "original": {
         "owner": "bct",
-        "ref": "paperless-deploy",
+        "ref": "lubelogger-module",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -536,7 +536,7 @@
         "microvm": "microvm",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-paperless": "nixpkgs-paperless",
+        "nixpkgs-lubelogger": "nixpkgs-lubelogger",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "unshittify": "unshittify"

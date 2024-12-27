@@ -64,6 +64,12 @@
         machineId = "099112cbbe05544a6240c797d4c83e7a";
       };
 
+      lubelogger = {
+        hostName = "lubelogger";
+        tapInterfaceMac = "02:00:00:00:00:14";
+        machineId = "136934c3334f852e7e2a506bc5484a2b";
+      };
+
       mail = {
         hostName = "mail";
         tapInterfaceMac = "02:00:00:00:00:11";
