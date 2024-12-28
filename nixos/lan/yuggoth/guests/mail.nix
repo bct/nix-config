@@ -5,9 +5,6 @@ in {
   imports = [
     inputs.simple-nixos-mailserver.nixosModule
 
-    "${self}/nixos/common/agenix-rekey.nix"
-    "${self}/nixos/modules/lego-proxy-client"
-
     ./mail/borgmatic.nix
   ];
 
@@ -126,22 +123,6 @@ in {
     immich-hashed-password.rekeyFile = ./secrets/mail-immich-hashed-password.age;
 
     sasl-passwd.rekeyFile = ./secrets/mail-sasl-passwd.age;
-
-    lego-proxy-mail = {
-      generator.script = "ssh-ed25519-pubkey";
-      rekeyFile = ../../../../secrets/lego-proxy/mail.age;
-      owner = "acme";
-      group = "acme";
-    };
-  };
-
-  services.lego-proxy-client = {
-    enable = true;
-    domains = [
-      { domain = "mail.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-mail.path; }
-    ];
-    dnsResolver = "ns5.zoneedit.com";
-    email = "s+acme@diffeq.com";
   };
 
   systemd.timers.getmail = {

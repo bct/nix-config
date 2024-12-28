@@ -1,4 +1,4 @@
-{ self, pkgs, ... }:
+{ self, pkgs, lib, ... }:
 
 let
   acme-zoneedit = pkgs.writeShellApplication {
@@ -6,6 +6,7 @@ let
     runtimeInputs = [ pkgs.curl ];
     text = builtins.readFile ../../../modules/acme-zoneedit/acme-zoneedit.sh;
   };
+  clients = import ../lego-proxy-clients.nix;
 in {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
@@ -60,30 +61,9 @@ in {
         domain = "nitter.domus.diffeq.com";
         pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAxjglC0aoZBlx23w3TR7dnpI/udIRDMtVezl4Bj5Rvq miniflux:lego-proxy-nitter";
       }
-      {
-        domain = "grafana.domus.diffeq.com";
-        pubKey = builtins.readFile ../../../../secrets/lego-proxy/grafana.pub;
-      }
-      {
-        domain = "immich.domus.diffeq.com";
-        pubKey = builtins.readFile ../../../../secrets/lego-proxy/immich.pub;
-      }
-      {
-        domain = "lubelogger.domus.diffeq.com";
-        pubKey = builtins.readFile ../../../../secrets/lego-proxy/lubelogger.pub;
-      }
-      {
-        domain = "mail.domus.diffeq.com";
-        pubKey = builtins.readFile ../../../../secrets/lego-proxy/mail.pub;
-      }
-      {
-        domain = "paperless.domus.diffeq.com";
-        pubKey = builtins.readFile ../../../../secrets/lego-proxy/paperless.pub;
-      }
-      {
-        domain = "shell-of-the-old.domus.diffeq.com";
-        pubKey = builtins.readFile ../../../../secrets/lego-proxy/shell-of-the-old.pub;
-      }
-    ];
+    ] ++ lib.mapAttrsToList (name: clientConfig: {
+      domain = clientConfig.domain;
+      pubKey = builtins.readFile ../../../../secrets/lego-proxy/${name}.pub;
+    }) clients;
   };
 }

@@ -1,9 +1,4 @@
 { self, config, pkgs, ... }: {
-  imports = [
-    "${self}/nixos/common/agenix-rekey.nix"
-    "${self}/nixos/modules/lego-proxy-client"
-  ];
-
   system.stateVersion = "24.05";
 
   microvm = {
@@ -29,23 +24,6 @@
       owner = config.services.immich.user;
       group = config.services.immich.group;
     };
-
-    lego-proxy-immich = {
-      generator.script = "ssh-ed25519-pubkey";
-      rekeyFile = ../../../../secrets/lego-proxy/immich.age;
-      owner = "acme";
-      group = "acme";
-    };
-  };
-
-  services.lego-proxy-client = {
-    enable = true;
-    domains = [
-      { domain = "immich.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-immich.path; }
-    ];
-    group = "caddy";
-    dnsResolver = "ns5.zoneedit.com";
-    email = "s+acme@diffeq.com";
   };
 
   fileSystems."/mnt/photos" = {

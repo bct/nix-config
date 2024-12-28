@@ -50,12 +50,17 @@
         hostName = "grafana";
         tapInterfaceMac = "02:00:00:00:00:06";
         machineId = "d2bf3078fe2744f57398cc02476228f9";
+        legoProxyClients = [ "grafana" ];
+        legoProxyGroup = "caddy";
       };
 
       immich = {
         hostName = "immich";
         tapInterfaceMac = "02:00:00:00:00:09";
         machineId = "538b82e19deee1b600027ea47fe3e8dc";
+
+        legoProxyClients = [ "immich" ];
+        legoProxyGroup = "caddy";
       };
 
       jellyfin = {
@@ -68,12 +73,17 @@
         hostName = "lubelogger";
         tapInterfaceMac = "02:00:00:00:00:14";
         machineId = "136934c3334f852e7e2a506bc5484a2b";
+
+        legoProxyClients = [ "lubelogger" ];
+        legoProxyGroup = "caddy";
       };
 
       mail = {
         hostName = "mail";
         tapInterfaceMac = "02:00:00:00:00:11";
         machineId = "b1d942ead0d9d6afb175cedf4e416d22";
+
+        legoProxyClients = [ "mail" ];
       };
 
       miniflux = {
@@ -86,6 +96,9 @@
         hostName = "paperless";
         tapInterfaceMac = "02:00:00:00:00:10";
         machineId = "4e792125b5445ffd50e474ad64f5d30b";
+
+        legoProxyClients = [ "paperless" ];
+        legoProxyGroup = "caddy";
       };
 
       prometheus = {
@@ -100,6 +113,8 @@
         tapInterfaceMac = "02:00:00:00:00:12";
         machineId = "5c5ab3a55d2518c2ab823096462194e4";
         restartIfChanged = false;
+        legoProxyClients = [ "shell-of-the-old" ];
+        legoProxyGroup = "caddy";
       };
 
       spectator = {

@@ -1,9 +1,4 @@
-{ self, config, lib, ... }: {
-  imports = [
-    "${self}/nixos/common/agenix-rekey.nix"
-    "${self}/nixos/modules/lego-proxy-client"
-  ];
-
+{ self, config, ... }: {
   system.stateVersion = "24.05";
 
   microvm = {
@@ -25,23 +20,6 @@
       owner = "grafana";
       group = "grafana";
     };
-
-    lego-proxy-grafana = {
-      generator.script = "ssh-ed25519-pubkey";
-      rekeyFile = ../../../../secrets/lego-proxy/grafana.age;
-      owner = "acme";
-      group = "acme";
-    };
-  };
-
-  services.lego-proxy-client = {
-    enable = true;
-    domains = [
-      { domain = "grafana.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-grafana.path; }
-    ];
-    group = "caddy";
-    dnsResolver = "ns5.zoneedit.com";
-    email = "s+acme@diffeq.com";
   };
 
   networking.firewall.allowedTCPPorts = [80 443];

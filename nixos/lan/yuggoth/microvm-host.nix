@@ -4,6 +4,8 @@ let
   cfg = config.yuggoth.microvms;
   mkGuestModule = import ./microvm/mkGuestModule.nix;
   secretsRoot = ../../../secrets;
+
+  legoProxyClients = import ./lego-proxy-clients.nix;
 in {
   imports = [
     inputs.microvm.nixosModules.host
@@ -48,6 +50,17 @@ in {
               type = types.bool;
               default = true;
               description = "Restart this MicroVM if the systemd units are changed, i.e. if it has been updated by rebuilding the host.";
+            };
+
+            legoProxyClients = mkOption {
+              type = types.nullOr (types.listOf types.str);
+              default = null;
+              description = "TODO";
+            };
+
+            legoProxyGroup = mkOption {
+              type = types.str;
+              default = "acme";
             };
           };
         }
@@ -120,6 +133,8 @@ in {
           "${self}/nixos/common/node-exporter.nix"
           "${self}/nixos/common/agenix-rekey.nix"
 
+          "${self}/nixos/modules/lego-proxy-client"
+
           (mkGuestModule vmName vmConfig)
           ./guests/${vmName}.nix
 
@@ -128,6 +143,35 @@ in {
             in lib.optionalAttrs
                 (builtins.pathExists pubKey)
                 { age.rekey.hostPubkey = pubKey; }
+          )
+
+          (
+            {config, ...}: lib.optionalAttrs (vmConfig.legoProxyClients != null) {
+              age.secrets = builtins.listToAttrs (builtins.map (clientName: 
+                {
+                  name = "lego-proxy-${clientName}";
+                  value = {
+                    generator.script = "ssh-ed25519-pubkey";
+                    rekeyFile = ../../../secrets/lego-proxy/${clientName}.age;
+                    owner = "acme";
+                    group = "acme";
+                  };
+                }
+              ) vmConfig.legoProxyClients);
+
+              services.lego-proxy-client = {
+                enable = true;
+                domains = builtins.map (clientName: 
+                  {
+                    domain = legoProxyClients.${clientName}.domain;
+                    identity = config.age.secrets."lego-proxy-${clientName}".path;
+                  }
+                ) vmConfig.legoProxyClients;
+                group = vmConfig.legoProxyGroup;
+                dnsResolver = "ns5.zoneedit.com";
+                email = "s+acme@diffeq.com";
+              };
+            }
           )
         ];
       };
