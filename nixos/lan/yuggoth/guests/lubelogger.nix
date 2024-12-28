@@ -1,10 +1,10 @@
 { self, inputs, config, ... }:
 
 let
-  paperless-nixpkgs = inputs.nixpkgs-lubelogger;
+  lubelogger-nixpkgs = inputs.nixpkgs-lubelogger;
 in {
   imports = [
-    "${paperless-nixpkgs}/nixos/modules/services/web-apps/lubelogger.nix"
+    "${lubelogger-nixpkgs}/nixos/modules/services/web-apps/lubelogger.nix"
   ];
 
   system.stateVersion = "24.11";
@@ -26,6 +26,7 @@ in {
 
   services.lubelogger = {
     enable = true;
+    package = lubelogger-nixpkgs.legacyPackages.x86_64-linux.lubelogger;
   };
 
   services.caddy = {
