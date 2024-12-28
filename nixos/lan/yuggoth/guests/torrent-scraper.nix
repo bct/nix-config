@@ -1,9 +1,4 @@
 { self, pkgs, config, ... }: {
-  imports = [
-    "${self}/nixos/common/agenix-rekey.nix"
-    "${self}/nixos/modules/lego-proxy-client"
-  ];
-
   system.stateVersion = "24.05";
 
   microvm = {
@@ -85,38 +80,6 @@
       owner = config.services.nginx.user;
       group = config.services.nginx.group;
     };
-
-    lego-proxy-flood = {
-      generator.script = "ssh-ed25519";
-      rekeyFile = ../../../../secrets/lego-proxy/flood.age;
-      owner = "acme";
-      group = "acme";
-    };
-
-    lego-proxy-radarr = {
-      generator.script = "ssh-ed25519";
-      rekeyFile = ../../../../secrets/lego-proxy/radarr.age;
-      owner = "acme";
-      group = "acme";
-    };
-
-    lego-proxy-sonarr = {
-      generator.script = "ssh-ed25519";
-      rekeyFile = ../../../../secrets/lego-proxy/sonarr.age;
-      owner = "acme";
-      group = "acme";
-    };
-  };
-
-  services.lego-proxy-client = {
-    enable = true;
-    domains = [
-      { domain = "flood.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-flood.path; }
-      { domain = "radarr.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-radarr.path; }
-      { domain = "sonarr.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-sonarr.path; }
-    ];
-    dnsResolver = "ns5.zoneedit.com";
-    email = "s+acme@diffeq.com";
   };
 
   users.groups = {

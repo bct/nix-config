@@ -3,11 +3,6 @@
 let
   unshittifyPkgs = inputs.unshittify.packages.${pkgs.system};
 in {
-  imports = [
-    "${self}/nixos/common/agenix-rekey.nix"
-    "${self}/nixos/modules/lego-proxy-client"
-  ];
-
   system.stateVersion = "24.05";
 
   microvm = {
@@ -35,31 +30,6 @@ in {
     miniflux-admin-credentials = {
       rekeyFile = ../../../../secrets/miniflux-admin-credentials.age;
     };
-
-    lego-proxy-miniflux = {
-      generator.script = "ssh-ed25519";
-      rekeyFile = ../../../../secrets/lego-proxy/miniflux.age;
-      owner = "acme";
-      group = "acme";
-    };
-
-    lego-proxy-nitter = {
-      generator.script = "ssh-ed25519";
-      rekeyFile = ../../../../secrets/lego-proxy/nitter.age;
-      owner = "acme";
-      group = "acme";
-    };
-  };
-
-  services.lego-proxy-client = {
-    enable = true;
-    domains = [
-      { domain = "miniflux.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-miniflux.path; }
-      { domain = "nitter.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-nitter.path; }
-    ];
-    group = "caddy";
-    dnsResolver = "ns5.zoneedit.com";
-    email = "s+acme@diffeq.com";
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];

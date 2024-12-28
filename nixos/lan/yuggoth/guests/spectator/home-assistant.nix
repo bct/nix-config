@@ -1,32 +1,10 @@
 { self, config, ... }: {
-  imports = [
-    "${self}/nixos/common/agenix-rekey.nix"
-    "${self}/nixos/modules/lego-proxy-client"
-  ];
-
   age.secrets = {
     home-assistant-my-cnf = {
       rekeyFile = ../../../../../secrets/home-assistant-my-cnf.age;
       owner = "hass";
       group = "hass";
     };
-
-    lego-proxy-spectator = {
-      generator.script = "ssh-ed25519";
-      rekeyFile = ../../../../../secrets/lego-proxy/spectator.age;
-      owner = "acme";
-      group = "acme";
-    };
-  };
-
-  services.lego-proxy-client = {
-    enable = true;
-    domains = [
-      { domain = "spectator.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-spectator.path; }
-    ];
-    dnsResolver = "ns5.zoneedit.com";
-    email = "s+acme@diffeq.com";
-    group = "hass";
   };
 
   networking.firewall.allowedTCPPorts = [ 8123 ];

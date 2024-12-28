@@ -90,6 +90,9 @@
         hostName = "miniflux";
         tapInterfaceMac = "02:00:00:00:00:01";
         machineId = "b42e25167b6bc7ca726ea9f41ce5ffcb";
+
+        legoProxyClients = [ "miniflux" "nitter" ];
+        legoProxyGroup = "caddy";
       };
 
       paperless = {
@@ -121,6 +124,9 @@
         hostName = "spectator";
         tapInterfaceMac = "02:00:00:00:00:04";
         machineId = "08e6532eedca9b41586bd21b881c6bbf";
+
+        legoProxyClients = [ "spectator" ];
+        legoProxyGroup = "hass";
       };
 
       torrent-scraper = {
@@ -128,6 +134,8 @@
         tapInterfaceName = "vm-torrent-scra"; # <= 15 chars
         tapInterfaceMac = "02:00:00:00:00:02";
         machineId = "e5b7d8199d4a4a34fb6748faef793248";
+
+        legoProxyClients = [ "flood" "radarr" "sonarr" ];
       };
 
       lego-proxy = {
