@@ -34,6 +34,11 @@ in {
       playerctl
     ];
 
-    services.picom.enable = true;
+    services.picom = {
+      enable = true;
+      opacityRules = [
+        "85:!focused && class_i = \"Alacritty\""
+      ];
+    };
   };
 }
