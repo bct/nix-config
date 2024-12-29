@@ -77,6 +77,10 @@ in {
       "immich@domus.diffeq.com" = {
         hashedPasswordFile = config.age.secrets.immich-hashed-password.path;
       };
+
+      "lubelogger@domus.diffeq.com" = {
+        hashedPasswordFile = config.age.secrets.lubelogger-hashed-password.path;
+      };
     };
 
     mailboxes = {
@@ -121,6 +125,7 @@ in {
     bct-hashed-password.rekeyFile = ./secrets/mail-bct-hashed-password.age;
     paperless-hashed-password.rekeyFile = ./secrets/mail-paperless-hashed-password.age;
     immich-hashed-password.rekeyFile = ./secrets/mail-immich-hashed-password.age;
+    lubelogger-hashed-password.rekeyFile = ./secrets/mail-lubelogger-hashed-password.age;
 
     sasl-passwd.rekeyFile = ./secrets/mail-sasl-passwd.age;
   };

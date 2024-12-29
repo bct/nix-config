@@ -24,9 +24,23 @@ in {
 
   networking.firewall.allowedTCPPorts = [80 443];
 
+  age.secrets = {
+    lubelogger-env = {
+      rekeyFile = ./secrets/lubelogger-env.age;
+      owner = config.services.lubelogger.user;
+    };
+  };
+
   services.lubelogger = {
     enable = true;
     package = lubelogger-nixpkgs.legacyPackages.x86_64-linux.lubelogger;
+    environmentFile = config.age.secrets.lubelogger-env.path;
+    settings = {
+      MailConfig__EmailServer = "mail.domus.diffeq.com";
+      MailConfig__EmailFrom = "lubelogger@mail.domus.diffeq.com";
+      MailConfig__Port = "587";
+      MailConfig__Username = "lubelogger";
+    };
   };
 
   services.caddy = {
