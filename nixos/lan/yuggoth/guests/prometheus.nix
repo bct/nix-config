@@ -55,6 +55,14 @@
           { targets = ["torrent-scraper.domus.diffeq.com:9100"]; }
         ];
       }
+
+      {
+        job_name = "starlink";
+        scrape_interval = "5s";
+        static_configs = [
+          { targets = ["localhost:9817"]; }
+        ];
+      }
     ];
   };
 
@@ -183,6 +191,17 @@
 
     serviceConfig = {
       ExecStart = "${pkgs.prometheus-graphite-exporter}/bin/graphite_exporter --graphite.listen-address=:2003 --graphite.mapping-config=${configFile}";
+      DynamicUser = true;
+    };
+  };
+
+  systemd.services.starlink-exporter = {
+    description = "starlink_exporter";
+    after = ["network.target"];
+    wantedBy = ["multi-user.target"];
+
+    serviceConfig = {
+      ExecStart = "${pkgs.starlink_exporter}/bin/starlink_exporter -port 9817";
       DynamicUser = true;
     };
   };
