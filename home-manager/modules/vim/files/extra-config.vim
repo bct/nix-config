@@ -40,16 +40,18 @@ let mapleader = '-'      " use a leader key that's convenient for dvorak
 nnoremap <leader><leader> <c-^>
 
 " ==== lightline ====
-let g:lightline#lsp#indicator_info = "\uf129"
+let g:lightline#lsp#indicator_hints = "\uf002 "
+let g:lightline#lsp#indicator_infos = "\uf129 "
 let g:lightline#lsp#indicator_warnings = "\uf071 "
 let g:lightline#lsp#indicator_errors = "\uf05e "
+let g:lightline#lsp#indicator_ok = "\uf00c "
 
 let g:lightline = {}
 let g:lightline.colorscheme = "gruvbox"
 let g:lightline.component_expand = {
   \   'lsp_warnings': 'lightline#lsp#warnings',
   \   'lsp_errors': 'lightline#lsp#errors',
-  \   'lsp_info': 'lightline#lsp#info',
+  \   'lsp_infos': 'lightline#lsp#infos',
   \   'lsp_hints': 'lightline#lsp#hints',
   \   'lsp_ok': 'lightline#lsp#ok',
   \   'status': 'lightline#lsp#status',
@@ -59,15 +61,15 @@ let g:lightline.component_expand = {
 let g:lightline.component_type = {
   \   'lsp_warnings': 'warning',
   \   'lsp_errors': 'error',
-  \   'lsp_info': 'info',
-  \   'lsp_hints': 'hints',
-  \   'lsp_ok': 'left',
+  \   'lsp_infos': 'right',
+  \   'lsp_hints': 'right',
+  \   'lsp_ok': 'right',
   \ }
 
 " Add the components to the lightline:
 let g:lightline.active = {
       \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ],
-      \ 'right': [ [ 'lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok' ],
+      \ 'right': [ [ 'lsp_infos', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok' ],
       \            [ 'lsp_status' ],
       \            [ 'lineinfo' ],
       \            [ 'percent' ],
