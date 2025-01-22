@@ -8,7 +8,7 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Branch that includes the lubelogger module
-    nixpkgs-lubelogger.url = "github:bct/nixpkgs/lubelogger-deploy";
+    nixpkgs-lubelogger.url = "github:bct/nixpkgs/lubelogger-module";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-24.11";

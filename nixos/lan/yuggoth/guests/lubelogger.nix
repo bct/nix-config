@@ -1,8 +1,9 @@
-{ self, inputs, config, ... }:
+{ inputs, config, ... }:
 
 let
   lubelogger-nixpkgs = inputs.nixpkgs-lubelogger;
-in {
+in
+{
   imports = [
     "${lubelogger-nixpkgs}/nixos/modules/services/web-apps/lubelogger.nix"
   ];
@@ -22,7 +23,10 @@ in {
     ];
   };
 
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 
   age.secrets = {
     lubelogger-env = {
@@ -39,7 +43,7 @@ in {
       MailConfig__EmailServer = "mail.domus.diffeq.com";
       MailConfig__EmailFrom = "lubelogger@mail.domus.diffeq.com";
       MailConfig__Port = "587";
-      MailConfig__Username = "lubelogger";
+      MailConfig__Username = "lubelogger@mail.domus.diffeq.com";
     };
   };
 
