@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ config, pkgs, ... }: {
   system.stateVersion = "24.05";
 
   microvm = {
@@ -63,7 +63,27 @@
           { targets = ["localhost:9817"]; }
         ];
       }
+
+      {
+        job_name = "ping";
+        scrape_interval = "60s";
+        static_configs = [
+          { targets = ["localhost:${toString config.services.prometheus.exporters.ping.port}"]; }
+        ];
+      }
     ];
+
+    exporters = {
+      ping = {
+        enable = true;
+        settings = {
+          targets = [
+            "scx-3405w.domus.diffeq.com"
+            "fever-dreams.domus.diffeq.com"
+          ];
+        };
+      };
+    };
   };
 
   # services.prometheus.exporters.graphite.enable ?
