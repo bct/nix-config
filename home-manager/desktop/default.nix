@@ -60,6 +60,7 @@
     htop
     silver-searcher
     ruby
+    pwgen
 
     # screen locking
     xss-lock
