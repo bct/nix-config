@@ -43,6 +43,11 @@
     };
   };
 
+  # allow using unfree packages with nix-shell, `nix run`, etc.
+  xdg.configFile."nixpkgs/config.nix".text = ''
+    { allowUnfree = true; }
+  '';
+
   home.packages = with pkgs; [
     # fonts
     ubuntu_font_family
