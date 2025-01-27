@@ -1,3 +1,5 @@
+# lego-proxy whitelist.
+# keys in this attrset refer to entries in secrets/lego-proxy/
 {
   flood = {
     domain = "flood.domus.diffeq.com";
@@ -37,6 +39,10 @@
   radarr = {
     domain = "radarr.domus.diffeq.com";
     pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7e7g8qEpc8BFv6MRdkZvlxHwrhusa9en98e4EhT/70 torrent-scraper:lego-proxy-radarr";
+  };
+
+  recipes = {
+    domain = "recipes.domus.diffeq.com";
   };
 
   spectator = {

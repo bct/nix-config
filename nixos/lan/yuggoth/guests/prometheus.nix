@@ -51,6 +51,7 @@
           { targets = ["miniflux.domus.diffeq.com:9100"]; }
           { targets = ["paperless.domus.diffeq.com:9100"]; }
           { targets = ["prometheus.domus.diffeq.com:9100"]; }
+          { targets = ["recipes.domus.diffeq.com:9100"]; }
           { targets = ["spectator.domus.diffeq.com:9100"]; }
           { targets = ["torrent-scraper.domus.diffeq.com:9100"]; }
         ];

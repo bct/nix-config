@@ -143,6 +143,15 @@
         tapInterfaceMac = "02:00:00:00:00:05";
         machineId = "0c309b2d738728317e0dbc9725a64dc1";
       };
+
+      recipes = {
+        hostName = "recipes";
+        tapInterfaceMac = "02:00:00:00:00:15";
+        machineId = "74945dfb075a7b0954d04c66f03b40e1";
+
+        legoProxyClients = [ "recipes" ];
+        legoProxyGroup = "caddy";
+      };
     };
   };
 
