@@ -67,6 +67,9 @@
         hostName = "jellyfin";
         tapInterfaceMac = "02:00:00:00:00:13";
         machineId = "099112cbbe05544a6240c797d4c83e7a";
+
+        legoProxyClients = [ "jellyfin" ];
+        legoProxyGroup = "caddy";
       };
 
       lubelogger = {

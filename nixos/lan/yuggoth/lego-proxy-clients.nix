@@ -14,6 +14,10 @@
     domain = "immich.domus.diffeq.com";
   };
 
+  jellyfin = {
+    domain = "jellyfin.domus.diffeq.com";
+  };
+
   lubelogger = {
     domain = "lubelogger.domus.diffeq.com";
   };

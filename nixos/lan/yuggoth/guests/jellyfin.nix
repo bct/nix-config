@@ -19,9 +19,22 @@
     ];
   };
 
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
+
   services.jellyfin = {
     enable = true;
-    openFirewall = true;
+    openFirewall = false;
+  };
+
+  services.caddy = {
+    enable = true;
+    virtualHosts."jellyfin.domus.diffeq.com" = {
+      useACMEHost = "jellyfin.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:8096";
+    };
   };
 
   fileSystems."/mnt/video" = {
