@@ -71,6 +71,7 @@ in {
 
         environmentFile = pkgs.writeText "" ''
           EXEC_PATH=${lego-proxy-client}/bin/lego-proxy-client
+          EXEC_PROPAGATION_TIMEOUT=180
           SSH_IDENTITY=${identity}
         '';
       };
