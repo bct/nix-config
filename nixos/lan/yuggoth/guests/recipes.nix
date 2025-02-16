@@ -23,6 +23,10 @@
 
   services.tandoor-recipes = {
     enable = true;
+    extraConfig = {
+      # https://docs.tandoor.dev/system/configuration/#gunicorn-media
+      GUNICORN_MEDIA = "1";
+    };
   };
 
   services.caddy = {
