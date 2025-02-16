@@ -11,6 +11,7 @@ declare -rA REMOTE_USER_BY_HOST_SHORT=(
 
 declare -rA REMOTE_DIR_BY_HOST_SHORT=(
   ["fever-dreams"]="/userdata"
+  ["paperless"]="/var/lib/paperless/consume"
 )
 
 REMOTE_USER="${REMOTE_USER_BY_HOST_SHORT[$HOST_SHORT]:-bct}"

@@ -27,8 +27,8 @@ in {
   services.paperless = {
     enable = true;
     mediaDir = "/mnt/paperless/media";
-    consumptionDir = "/mnt/paperless/consume";
     environmentFile = config.age.secrets.paperless-env.path;
+    consumptionDirIsPublic = true;
 
     settings = {
       PAPERLESS_DBHOST = "db.domus.diffeq.com";
