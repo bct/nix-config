@@ -61,6 +61,7 @@
     silver-searcher
     ruby
     pwgen
+    tmux
 
     # screen locking
     xss-lock
