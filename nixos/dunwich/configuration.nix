@@ -4,6 +4,7 @@
   imports =
     [
       ./hardware-configuration.nix
+      ./cachix.nix
 
       "${self}/nixos/common/nix.nix"
       "${self}/nixos/common/desktop"
