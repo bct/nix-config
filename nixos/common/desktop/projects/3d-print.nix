@@ -9,7 +9,7 @@ in {
   xdg.portal.config.common.default = "gtk";
 
   users.users.${cfgPersonal.user}.packages = with pkgs; [
-    cura5
+    pkgs.unstable.cura-appimage
     freecad
     openscad
   ];
