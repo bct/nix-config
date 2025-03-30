@@ -24,6 +24,8 @@
 
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVYcCxqBIE6ppS6n7VQb3Qs4w1gEYtNhTdKu+21XO82";
 
+  services.prometheus.exporters.node.enabledCollectors = [ "hwmon" ];
+
   yuggoth.microvms = {
     interfaceToBridge = "enp5s0f0";
 
