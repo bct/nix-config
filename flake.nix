@@ -140,6 +140,15 @@
             modules = [ ./nixos/lan/yuggoth/configuration.nix ];
           };
 
+          # -- VMs
+          tmp-test-vm = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [
+              inputs.microvm.nixosModules.microvm
+              ./nixos/vm/tmp-test-vm/configuration.nix
+            ];
+          };
+
           # -- cloud hosts
           megahost-one = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
@@ -165,6 +174,14 @@
             hostname = "yuggoth.domus.diffeq.com";
             arch     = "x86_64-linux";
             config   = self.nixosConfigurations.yuggoth;
+          };
+
+          # -- VMs --
+
+          nodes.tmp-test-vm = mkNode {
+            hostname = "tmp-test-vm.domus.diffeq.com";
+            arch     = "x86_64-linux";
+            config   = self.nixosConfigurations.tmp-test-vm;
           };
 
           # -- cloud hosts --
