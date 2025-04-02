@@ -34,6 +34,18 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    age.secrets = builtins.listToAttrs (builtins.map (domain:
+      {
+        name = "lego-proxy-${domain}";
+        value = {
+          generator.script = "ssh-ed25519-pubkey";
+          rekeyFile = ../../../secrets/lego-proxy/${domain}.age;
+          owner = "acme";
+          group = "acme";
+        };
+      }
+    ) cfg.domains);
+
     # TODO: readFile
     programs.ssh.knownHosts = {
       "lego-proxy.domus.diffeq.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMA5YAhyRoYYUPJOXWrFCxh6loBKK1fWuiFU3NgVj9iU root@lego-proxy";

@@ -147,18 +147,6 @@ in {
 
           (
             {config, ...}: lib.optionalAttrs (vmConfig.legoProxyClients != null) {
-              age.secrets = builtins.listToAttrs (builtins.map (clientName: 
-                {
-                  name = "lego-proxy-${clientName}";
-                  value = {
-                    generator.script = "ssh-ed25519-pubkey";
-                    rekeyFile = ../../../secrets/lego-proxy/${clientName}.age;
-                    owner = "acme";
-                    group = "acme";
-                  };
-                }
-              ) vmConfig.legoProxyClients);
-
               services.lego-proxy-client = {
                 enable = true;
                 domains = vmConfig.legoProxyClients;

@@ -152,15 +152,6 @@
     };
   };
 
-  age.secrets = {
-    lego-proxy-stereo = {
-      generator.script = "ssh-ed25519";
-      rekeyFile = ../../../secrets/lego-proxy/stereo.age;
-      owner = "acme";
-      group = "acme";
-    };
-  };
-
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+0o3CDs78/NW73QxiZ4gJtXgZ5U+NAu8o9lNhzmLwl";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
