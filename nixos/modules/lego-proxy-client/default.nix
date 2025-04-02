@@ -11,35 +11,19 @@ let
       ssh -i "$SSH_IDENTITY" lego-proxy@lego-proxy.domus.diffeq.com "$@"
     '';
   };
+
+  dnsResolver = "ns5.zoneedit.com";
+  email = "s+acme@diffeq.com";
+
+  clients = import ./clients.nix;
 in {
   options.services.lego-proxy-client = with lib; {
     enable = mkEnableOption "lego-proxy-client";
 
     # TODO: proxy username, proxy host, proxy known host
 
-    dnsResolver = mkOption {
-      type = types.str;
-    };
-
     domains = mkOption {
-      type = types.listOf (types.submodule (
-        {...}: {
-          options = {
-            identity = mkOption {
-              type = types.path;
-            };
-
-            domain = mkOption {
-              type = types.str;
-            };
-          };
-        }
-      ));
-    };
-
-    email = lib.mkOption {
-      type = lib.types.str;
-      description = lib.mdDoc "Email address to use when requsting certificates";
+      type = types.listOf types.str;
     };
 
     group = lib.mkOption {
@@ -57,17 +41,19 @@ in {
 
     security.acme.acceptTerms = true;
 
-    security.acme.certs = builtins.listToAttrs (map ({ domain, identity }: {
-      name = domain;
+    security.acme.certs = builtins.listToAttrs (map (domain: let
+      identity = config.age.secrets."lego-proxy-${domain}".path;
+    in {
+      name = clients.${domain}.domain;
       value = {
-        email = cfg.email;
+        email = email;
         group = cfg.group;
 
         # set DNS TXT records by exec-ing acme-zoneedit.sh
         # (configured below)
         dnsProvider = "exec";
 
-        dnsResolver = cfg.dnsResolver;
+        dnsResolver = dnsResolver;
 
         environmentFile = pkgs.writeText "" ''
           EXEC_PATH=${lego-proxy-client}/bin/lego-proxy-client

@@ -134,11 +134,7 @@
 
   services.lego-proxy-client = {
     enable = true;
-    domains = [
-      { domain = "stereo.domus.diffeq.com"; identity = config.age.secrets.lego-proxy-stereo.path; }
-    ];
-    dnsResolver = "ns5.zoneedit.com";
-    email = "s+acme@diffeq.com";
+    domains = [ "stereo" ];
   };
 
   systemd.timers.mpc-update = {

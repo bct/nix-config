@@ -161,15 +161,8 @@ in {
 
               services.lego-proxy-client = {
                 enable = true;
-                domains = builtins.map (clientName: 
-                  {
-                    domain = legoProxyClients.${clientName}.domain;
-                    identity = config.age.secrets."lego-proxy-${clientName}".path;
-                  }
-                ) vmConfig.legoProxyClients;
+                domains = vmConfig.legoProxyClients;
                 group = vmConfig.legoProxyGroup;
-                dnsResolver = "ns5.zoneedit.com";
-                email = "s+acme@diffeq.com";
               };
             }
           )

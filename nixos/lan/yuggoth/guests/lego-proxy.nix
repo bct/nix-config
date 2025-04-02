@@ -32,12 +32,7 @@ in {
     enable = true;
     execCommand = "${acme-zoneedit}/bin/acme-zoneedit";
 
-    clients = [
-      {
-        domain = "stereo.domus.diffeq.com";
-        pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGps5WovLRtcOWuBupjj2CC2YxVtQsHjHa4UN686eU3Q stereo:lego-proxy-spectator";
-      }
-    ] ++ lib.mapAttrsToList (name: clientConfig: {
+    clients = lib.mapAttrsToList (name: clientConfig: {
       domain = clientConfig.domain;
       pubKey = if clientConfig ? "pubKey"
                 then clientConfig.pubKey
