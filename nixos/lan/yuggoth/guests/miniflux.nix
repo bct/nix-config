@@ -3,6 +3,10 @@
 let
   unshittifyPkgs = inputs.unshittify.packages.${pkgs.system};
 in {
+  imports = [
+    "${self}/nixos/modules/lego-proxy-client"
+  ];
+
   system.stateVersion = "24.05";
 
   microvm = {
@@ -16,6 +20,12 @@ in {
         size = 1024;
       }
     ];
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "miniflux" "nitter" ];
+    group = "caddy";
   };
 
   age.secrets = {

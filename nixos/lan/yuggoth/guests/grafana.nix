@@ -1,4 +1,8 @@
 { self, config, ... }: {
+  imports = [
+    "${self}/nixos/modules/lego-proxy-client"
+  ];
+
   system.stateVersion = "24.05";
 
   microvm = {
@@ -12,6 +16,12 @@
         size = 1024;
       }
     ];
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "grafana" ];
+    group = "caddy";
   };
 
   age.secrets = {

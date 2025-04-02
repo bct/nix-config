@@ -1,4 +1,8 @@
 { self, inputs, config, pkgs, ... }: {
+  imports = [
+    "${self}/nixos/modules/lego-proxy-client"
+  ];
+
   system.stateVersion = "24.11";
 
   microvm = {
@@ -12,6 +16,12 @@
         autoCreate = false;
       }
     ];
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "shell-of-the-old" ];
+    group = "caddy";
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];

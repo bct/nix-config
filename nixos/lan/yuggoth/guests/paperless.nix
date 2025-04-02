@@ -5,6 +5,8 @@ let
 in {
   imports = [
     "${paperless-nixpkgs}/nixos/modules/services/misc/paperless.nix"
+
+    "${self}/nixos/modules/lego-proxy-client"
   ];
 
   disabledModules = [ "services/misc/paperless.nix" ];
@@ -22,6 +24,12 @@ in {
         size = 1024;
       }
     ];
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "paperless" ];
+    group = "caddy";
   };
 
   services.paperless = {

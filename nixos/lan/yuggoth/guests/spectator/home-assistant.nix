@@ -7,6 +7,12 @@
     };
   };
 
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "spectator" ];
+    group = "hass";
+  };
+
   networking.firewall.allowedTCPPorts = [ 8123 ];
 
   services.home-assistant = {

@@ -1,6 +1,7 @@
 { self, config, lib, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
+    "${self}/nixos/modules/lego-proxy-client"
   ];
 
   system.stateVersion = "24.05";
@@ -16,6 +17,12 @@
         autoCreate = false;
       }
     ];
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "jellyfin" ];
+    group = "caddy";
   };
 
   networking.firewall.allowedTCPPorts = [

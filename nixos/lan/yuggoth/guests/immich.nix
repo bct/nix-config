@@ -1,4 +1,8 @@
 { self, config, pkgs, ... }: {
+  imports = [
+    "${self}/nixos/modules/lego-proxy-client"
+  ];
+
   system.stateVersion = "24.05";
 
   microvm = {
@@ -12,6 +16,12 @@
         autoCreate = false;
       }
     ];
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "immich" ];
+    group = "caddy";
   };
 
   age.secrets = {

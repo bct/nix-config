@@ -1,4 +1,8 @@
 { self, pkgs, config, ... }: {
+  imports = [
+    "${self}/nixos/modules/lego-proxy-client"
+  ];
+
   system.stateVersion = "24.05";
 
   microvm = {
@@ -12,6 +16,11 @@
         size = 4096;
       }
     ];
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "flood" "radarr" "sonarr" ];
   };
 
   users.groups.video-writers = {

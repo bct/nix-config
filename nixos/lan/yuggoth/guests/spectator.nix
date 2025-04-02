@@ -3,6 +3,7 @@
 {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
+    "${self}/nixos/modules/lego-proxy-client"
 
     ./spectator/home-assistant.nix
     ./spectator/rtlamr.nix

@@ -5,6 +5,8 @@ in {
   imports = [
     inputs.simple-nixos-mailserver.nixosModule
 
+    "${self}/nixos/modules/lego-proxy-client"
+
     ./mail/borgmatic.nix
   ];
 
@@ -21,6 +23,11 @@ in {
         autoCreate = false;
       }
     ];
+  };
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "mail" ];
   };
 
   users.users.bct = {
