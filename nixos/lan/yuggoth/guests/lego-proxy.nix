@@ -6,7 +6,7 @@ let
     runtimeInputs = [ pkgs.curl ];
     text = builtins.readFile ../../../modules/acme-zoneedit/acme-zoneedit.sh;
   };
-  clients = import ../lego-proxy-clients.nix;
+  clients = import ../../../modules/lego-proxy-client/clients.nix;
 in {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"

@@ -1,7 +1,5 @@
 { self, config, lib, pkgs, ... }: {
   imports = [
-    "${self}/nixos/modules/lego-proxy-client"
-
     ./db/borgmatic.nix
     ./db/postgres.nix
   ];

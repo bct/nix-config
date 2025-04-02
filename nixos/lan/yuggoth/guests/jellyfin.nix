@@ -1,7 +1,6 @@
 { self, config, lib, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
-    "${self}/nixos/modules/lego-proxy-client"
   ];
 
   system.stateVersion = "24.05";

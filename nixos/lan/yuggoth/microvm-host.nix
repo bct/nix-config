@@ -5,7 +5,7 @@ let
   mkGuestModule = import ./microvm/mkGuestModule.nix;
   secretsRoot = ../../../secrets;
 
-  legoProxyClients = import ./lego-proxy-clients.nix;
+  legoProxyClients = import ../../modules/lego-proxy-client/clients.nix;
 in {
   imports = [
     inputs.microvm.nixosModules.host
