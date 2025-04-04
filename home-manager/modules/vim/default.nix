@@ -233,6 +233,23 @@
           '';
         }
 
+        # used by oil-nvim
+        {
+          plugin = mini-icons;
+          type = "lua";
+          config = ''
+            require("mini.icons").setup()
+          '';
+        }
+
+        {
+          plugin = oil-nvim;
+          type = "lua";
+          config = ''
+            require("oil").setup()
+          '';
+        }
+
         # -- language-specific
         # nix
         vim-nix
