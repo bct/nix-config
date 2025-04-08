@@ -36,6 +36,7 @@
         scrape_interval = "60s";
         static_configs = [
           # hosts
+          { targets = ["fever-dreams.domus.diffeq.com:9100"]; }
           { targets = ["stereo.domus.diffeq.com:9100"]; }
           { targets = ["yuggoth.domus.diffeq.com:9100"]; }
 
