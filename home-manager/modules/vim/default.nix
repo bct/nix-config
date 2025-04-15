@@ -246,7 +246,19 @@
           plugin = oil-nvim;
           type = "lua";
           config = ''
-            require("oil").setup()
+            require("oil").setup({
+              view_options = {
+                show_hidden = true,
+              },
+              git = {
+                mv = function(src_path, dest_path)
+                  return true
+                end,
+                rm = function(path)
+                  return true
+                end,
+              },
+            })
           '';
         }
 
