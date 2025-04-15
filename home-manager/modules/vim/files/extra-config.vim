@@ -32,7 +32,7 @@ set number
 set formatoptions+=j     " Delete comment character when joining commented lines
 set noshowmode           " Don't show the current mode (lightline.vim takes care of us)
 
-set colorcolumn=80,100   " Show where to break lines
+set colorcolumn=80,88,100   " Show where to break lines
 
 let mapleader = '-'      " use a leader key that's convenient for dvorak
 
