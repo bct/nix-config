@@ -20,4 +20,7 @@ extraWorkspaces = [
 
     -- nf-md-slack
   , ("\xf04b1", "slack", Nothing, Just $ spawn "slack")
+
+    -- film
+  , ("\xf008", "kino", Nothing, Nothing)
   ]
