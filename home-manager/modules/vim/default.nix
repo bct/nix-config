@@ -221,7 +221,7 @@
 
             require('telescope').load_extension('telescope-alternate')
 
-            vim.keymap.set('n', '<leader>a', ':Telescope telescope-alternate alternate_file<cr>', { desc = 'Go to [a]lternate file' })
+            vim.keymap.set('n', '<leader>x', ':Telescope telescope-alternate alternate_file<cr>', { desc = 'Go to [a]lternate file' })
           '';
         }
 
@@ -252,6 +252,31 @@
               },
             })
           '';
+        }
+
+        # -- LLM
+        pkgs.unstable.vimPlugins.nui-nvim
+        nvim-treesitter
+        dressing-nvim
+        plenary-nvim
+
+        {
+          plugin = render-markdown-nvim;
+          type = "lua";
+          config = ''
+            require('render-markdown').setup({
+              file_types = {
+                "markdown",
+                "Avante",
+              };
+            })
+          '';
+        }
+
+        {
+          plugin = pkgs.unstable.vimPlugins.avante-nvim;
+          type = "lua";
+          config = builtins.readFile ./plugins/avante.lua;
         }
 
         # -- language-specific
