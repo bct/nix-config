@@ -30,11 +30,15 @@
   programs.neovim = {
     enable = true;
 
+    # neovim 0.11, for the "virtual_lines" diagnostic handler
+    package = pkgs.unstable.neovim-unwrapped;
+
     # a helpful reference for config: https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
     extraLuaConfig = lib.fileContents ./files/init.lua;
     extraConfig = lib.fileContents ./files/extra-config.vim;
 
-    plugins = with pkgs.vimPlugins; let
+    # "unstable" - attempt to get plugins that are compatible with nvim 0.11
+    plugins = with pkgs.unstable.vimPlugins; let
       # aa/src wants a specific version of black
       black = pkgs.black.overridePythonAttrs (oldAttrs: rec {
         version = "24.8.0";
@@ -46,18 +50,6 @@
       });
 
       # -- unpackaged plugins
-      arrow-nvim = pkgs.vimUtils.buildVimPlugin {
-        pname = "arrow.nvim";
-        version = "2024-02-21";
-        src = pkgs.fetchFromGitHub {
-          owner = "otavioschwanck";
-          repo = "arrow.nvim";
-          rev = "79527117368995b81aa1a77714b49d0d7535274b";
-          sha256 = "sha256-+CG9Ox3Sct7rKszxhOuHS70UgvlrdnQzeHGivUtDU5M=";
-        };
-        meta.homepage = "https://github.com/otavioschwanck/arrow.nvim";
-      };
-
       telescope-alternate-nvim = pkgs.vimUtils.buildVimPlugin {
         pname = "telescope-alternate.nvim";
         version = "2024-04-15";
