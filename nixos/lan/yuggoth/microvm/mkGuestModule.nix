@@ -1,4 +1,4 @@
-vmName: vmConfig:
+vmName: {vmConfig, lib}:
 let
   # mount point for secrets passed from the host to the VM
   agenixHostMountPoint = "/mnt/agenix-host";
@@ -28,6 +28,12 @@ in {
   ];
 
   microvm = {
+    preStart = lib.mkIf (vmConfig.startDelay != null) ''
+      echo "executing ${toString vmConfig.startDelay} start delay..."
+      sleep ${toString vmConfig.startDelay}
+      echo "start delay complete."
+    '';
+
     interfaces = [
       {
         type = "tap";

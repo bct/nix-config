@@ -1,4 +1,4 @@
-{ self, inputs, outputs, lib, config, pkgs, ... }:
+{ self, inputs, outputs, lib, config, ... }:
 
 let
   cfg = config.yuggoth.microvms;
@@ -49,6 +49,18 @@ in {
               default = true;
               description = "Restart this MicroVM if the systemd units are changed, i.e. if it has been updated by rebuilding the host.";
             };
+
+            requires = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = "systemd Requires=";
+            };
+
+            startDelay = mkOption {
+              type = types.nullOr types.int;
+              default = null;
+              description = "delay before booting the service, to ensure prerequisites are available and reduce load on system boot.";
+            };
           };
         }
       ));
@@ -81,6 +93,9 @@ in {
     };
 
     microvm.host.enable = true;
+    # Enable if all your MicroVMs run with a Hypervisor that sends readiness notification over a VSOCK.
+    # **Danger!** If one of your MicroVMs doesn't do this, its systemd service will not start up successfully!
+    microvm.host.useNotifySockets = true;
 
     # https://astro.github.io/microvm.nix/faq.html#how-to-centralize-logging-with-journald
     # create a symlink of each MicroVM's journal under the host's /var/log/journal
@@ -120,7 +135,7 @@ in {
           "${self}/nixos/common/node-exporter.nix"
           "${self}/nixos/common/agenix-rekey.nix"
 
-          (mkGuestModule vmName vmConfig)
+          (mkGuestModule vmName { inherit vmConfig lib; })
           ./guests/${vmName}.nix
 
           (
@@ -131,6 +146,12 @@ in {
           )
         ];
       };
+    }) cfg.guests;
+
+    # microvm@ service dependencies
+    systemd.services = lib.mapAttrs' (vmName: vmConfig: {
+      name = "microvm@${vmName}";
+      value = { requires = vmConfig.requires; };
     }) cfg.guests;
   };
 }
