@@ -79,7 +79,7 @@
 
         db-var = {
           name = "db-var";
-          size = "16G";
+          size = "64G";
           content = {
             type = "filesystem";
             format = "ext4";
