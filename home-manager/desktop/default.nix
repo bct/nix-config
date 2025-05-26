@@ -51,7 +51,7 @@
   home.packages = with pkgs; [
     # fonts
     ubuntu_font_family
-    (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+    nerd-fonts.ubuntu-mono
 
     # terminal
     alacritty

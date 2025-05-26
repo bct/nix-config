@@ -39,7 +39,7 @@ in {
 
             export DB_PASS=$(cat $CREDENTIALS_DIRECTORY/password-wikijs | tr -d '\n')
 
-            ${pkgs.nodejs_18}/bin/node ${pkgs.wiki-js}/server
+            ${pkgs.nodejs_22}/bin/node ${pkgs.wiki-js}/server
           '';
           in lib.mkForce "${run-wikijs}";
       };

@@ -130,7 +130,7 @@
     gpio = {};
   };
 
-  services.airsonic-refix.enable = true;
+  # services.airsonic-refix.enable = true;
 
   services.lego-proxy-client = {
     enable = true;
