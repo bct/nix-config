@@ -31,14 +31,13 @@
     enable = true;
 
     # neovim 0.11, for the "virtual_lines" diagnostic handler
-    package = pkgs.unstable.neovim-unwrapped;
+    package = pkgs.neovim-unwrapped;
 
     # a helpful reference for config: https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
     extraLuaConfig = lib.fileContents ./files/init.lua;
     extraConfig = lib.fileContents ./files/extra-config.vim;
 
-    # "unstable" - attempt to get plugins that are compatible with nvim 0.11
-    plugins = with pkgs.unstable.vimPlugins; let
+    plugins = with pkgs.vimPlugins; let
       # aa/src wants a specific version of black
       black = pkgs.black.overridePythonAttrs (oldAttrs: rec {
         version = "24.8.0";
@@ -59,6 +58,7 @@
           rev = "2efa87d99122ee1abe8ada1a50304180a1802c34";
           sha256 = "sha256-oit93iNRGlQhKAgsy0JgaJLkf+1miDhi3XjzE39gx7g=";
         };
+        buildInputs = [ telescope-nvim ];
         meta.homepage = "https://github.com/otavioschwanck/telescope-alternate.nvim";
       };
     in [
@@ -273,7 +273,7 @@
         }
 
         # -- LLM
-        pkgs.unstable.vimPlugins.nui-nvim
+        pkgs.vimPlugins.nui-nvim
         nvim-treesitter
         dressing-nvim
         plenary-nvim
@@ -292,7 +292,7 @@
         }
 
         {
-          plugin = pkgs.unstable.vimPlugins.avante-nvim;
+          plugin = pkgs.vimPlugins.avante-nvim;
           type = "lua";
           config = builtins.readFile ./plugins/avante.lua;
         }
