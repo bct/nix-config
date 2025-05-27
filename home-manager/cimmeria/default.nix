@@ -26,6 +26,8 @@
     wine
     winetricks
     vulkan-tools
+
+    moonlight-embedded
   ];
 
   systemd.user.mounts.bulk = {
