@@ -44,7 +44,7 @@
           tags = "sweat,borgmatic";
         };
 
-        # List of monitoring states to ping fore. Defaults to pinging for failure only.
+        # List of monitoring states to ping for. Defaults to pinging for failure only.
         states = ["finish" "fail"];
       };
     };

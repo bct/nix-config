@@ -38,8 +38,8 @@
           message = "Your backup has failed.";
           priority = "default";
           tags = "sweat,borgmatic";
-          states = ["fail"];
         };
+        states = ["fail"];
       };
     };
   };

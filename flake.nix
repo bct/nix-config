@@ -45,7 +45,7 @@
 
     # simple-nixos-mailserver
     # https://nixos-mailserver.readthedocs.io/en/latest/index.html
-    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-24.05";
+    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.05";
 
     # packages from flakes
     airsonic-refix-jukebox.url = "github:bct/airsonic-refix-jukebox";

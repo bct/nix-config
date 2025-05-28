@@ -90,7 +90,7 @@ in {
   services.nitter = {
     enable = true;
     package = unshittifyPkgs.nitter;
-    guestAccounts = config.age.secrets.nitter-guest-accounts.path;
+    sessionsFile = config.age.secrets.nitter-guest-accounts.path;
 
     server = {
       port = 8080;
