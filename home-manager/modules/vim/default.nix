@@ -30,9 +30,6 @@
   programs.neovim = {
     enable = true;
 
-    # neovim 0.11, for the "virtual_lines" diagnostic handler
-    package = pkgs.neovim-unwrapped;
-
     # a helpful reference for config: https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
     extraLuaConfig = lib.fileContents ./files/init.lua;
     extraConfig = lib.fileContents ./files/extra-config.vim;
@@ -64,7 +61,19 @@
     in [
         gruvbox-community
         bufexplorer
-        lightline-vim
+
+        {
+          plugin = lualine-nvim;
+          type = "lua";
+          config = ''
+            local lualine = require 'lualine'
+            lualine.setup {
+              options = {
+                theme = 'gruvbox'
+              }
+            }
+          '';
+        }
 
         # telescope
         telescope-nvim
@@ -141,7 +150,6 @@
 
         # lsp
         nvim-lspconfig
-        nvim-lightline-lsp
 
         # formatting
         {
