@@ -188,7 +188,7 @@ fixupFloatingWindowForCurrentDisplay = withFocused fixupWindow
     isMyWindow = hasProperty (ClassName "Supersonic")
 
 
-myConfig = ewmh $ def
+myConfig = ewmhFullscreen $ def
     { terminal = "alacritty"
     , workspaces = Workspaces.topics
     , layoutHook = smartSpacingWithEdge 10 $ smartBorders $ myLayout
