@@ -1,4 +1,4 @@
-{ self, inputs, config, ... }:
+{ self, config, ... }:
 
 {
   imports = [
@@ -38,6 +38,9 @@
       GUNICORN_MEDIA = "1";
     };
   };
+
+  # ExecStartPre often hits the default 90s timeout
+  systemd.services.tandoor-recipes.serviceConfig.TimeoutStartSec = 180;
 
   services.caddy = {
     enable = true;
