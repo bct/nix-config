@@ -1,4 +1,4 @@
-{ self, inputs, outputs, lib, ... }: {
+{ self, inputs, ... }: {
   imports = [
     inputs.disko.nixosModules.disko
 
@@ -87,14 +87,6 @@
         tapInterfaceMac = "02:00:00:00:00:11";
         machineId = "b1d942ead0d9d6afb175cedf4e416d22";
         requires = ["microvm@lego-proxy.service"];
-      };
-
-      miniflux = {
-        hostName = "miniflux";
-        tapInterfaceMac = "02:00:00:00:00:01";
-        machineId = "b42e25167b6bc7ca726ea9f41ce5ffcb";
-        requires = ["microvm@db.service" "microvm@lego-proxy.service"];
-        startDelay = 60;
       };
 
       paperless = {

@@ -197,21 +197,6 @@
         "type": "github"
       }
     },
-    "flake-containers": {
-      "locked": {
-        "lastModified": 1712613437,
-        "narHash": "sha256-YUwsJvyYJpMS+rnfTuqO1jPrNNLpTwvPddDYr+w13Fg=",
-        "owner": "adfaure",
-        "repo": "flake-containers",
-        "rev": "871db16c63a617344f69a3387335887b979f42fe",
-        "type": "github"
-      },
-      "original": {
-        "owner": "adfaure",
-        "repo": "flake-containers",
-        "type": "github"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -248,21 +233,6 @@
       "original": {
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "type": "github"
-      }
-    },
-    "flake-root": {
-      "locked": {
-        "lastModified": 1713493429,
-        "narHash": "sha256-ztz8JQkI08tjKnsTpfLqzWoKFQF4JGu2LRz8bkdnYUk=",
-        "owner": "srid",
-        "repo": "flake-root",
-        "rev": "bc748b93b86ee76e2032eecda33440ceb2532fcd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "srid",
-        "repo": "flake-root",
         "type": "github"
       }
     },
@@ -565,8 +535,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-lubelogger": "nixpkgs-lubelogger",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "simple-nixos-mailserver": "simple-nixos-mailserver",
-        "unshittify": "unshittify"
+        "simple-nixos-mailserver": "simple-nixos-mailserver"
       }
     },
     "simple-nixos-mailserver": {
@@ -686,31 +655,6 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "type": "github"
-      }
-    },
-    "unshittify": {
-      "inputs": {
-        "flake-containers": "flake-containers",
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "flake-root": "flake-root",
-        "nixpkgs": [
-          "nixpkgs-unstable"
-        ]
-      },
-      "locked": {
-        "lastModified": 1733579551,
-        "narHash": "sha256-iw/oMudfNLUO5zkhjGgSxXYOG9rxnlPX8ttOiLsXLUk=",
-        "owner": "bct",
-        "repo": "unshittify.nix",
-        "rev": "5af68cda34cb72c2f126fc8d1c3a8015ecf94518",
-        "type": "github"
-      },
-      "original": {
-        "owner": "bct",
-        "repo": "unshittify.nix",
         "type": "github"
       }
     },
