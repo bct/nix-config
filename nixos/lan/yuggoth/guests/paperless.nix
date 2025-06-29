@@ -39,6 +39,7 @@ in {
     consumptionDirIsPublic = true;
 
     settings = {
+      PAPERLESS_URL = "https://paperless.domus.diffeq.com";
       PAPERLESS_DBHOST = "db.domus.diffeq.com";
     };
 
