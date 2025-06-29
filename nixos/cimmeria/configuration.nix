@@ -73,7 +73,17 @@
     enable32Bit = true;
   };
 
+  hardware.xpadneo.enable = true;
+
   services.trezord.enable = true;
+
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.settings = {
+    General = {
+      JustWorksRepairing = "confirm";
+    };
+  };
 
   # required for Yubikey's CCID/PIV mode
   services.pcscd.enable = true;
