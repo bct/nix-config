@@ -28,6 +28,8 @@
     vulkan-tools
 
     moonlight-embedded
+
+    obsidian
   ];
 
   systemd.user.mounts.bulk = {

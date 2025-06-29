@@ -315,6 +315,24 @@
           config = builtins.readFile ./plugins/avante.lua;
         }
 
+        # -- note taking
+        plenary-nvim # obsidian-nvim depends on this
+
+        {
+          plugin = obsidian-nvim;
+          type = "lua";
+          config = ''
+            require("obsidian").setup({
+              workspaces = {
+                {
+                  name = "notes",
+                  path = "~/projects/obsidian/notes/",
+                },
+              },
+            })
+          '';
+        }
+
         # -- language-specific
         # nix
         vim-nix
