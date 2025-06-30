@@ -1,6 +1,10 @@
 # lego-proxy whitelist.
 # keys in this attrset refer to entries in secrets/lego-proxy/
 {
+  books = {
+    domain = "books.domus.diffeq.com";
+  };
+
   flood = {
     domain = "flood.domus.diffeq.com";
     pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAju9q9t7fV3gjA4Xeup8apk4fFQQZy8Y0QmEYEhCGd torrent-scraper:lego-proxy-flood";

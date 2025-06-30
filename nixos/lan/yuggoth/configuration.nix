@@ -44,6 +44,14 @@
         startDelay = 60;
       };
 
+      books = {
+        hostName = "books";
+        tapInterfaceMac = "02:00:00:00:00:16";
+        machineId = "4335d74e7a5b1743ec13ad4d7b8241be";
+        requires = ["microvm@lego-proxy.service"];
+        startDelay = 60;
+      };
+
       db = {
         hostName = "db";
         tapInterfaceMac = "02:00:00:00:00:07";
