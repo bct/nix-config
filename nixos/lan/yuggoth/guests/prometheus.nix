@@ -43,6 +43,7 @@
           # VMs
           { targets = ["abrado.domus.diffeq.com:9100"]; }
           { targets = ["books.domus.diffeq.com:9100"]; }
+          { targets = ["bookmarks.domus.diffeq.com:9100"]; }
           { targets = ["db.domus.diffeq.com:9100"]; }
           { targets = ["grafana.domus.diffeq.com:9100"]; }
           { targets = ["immich.domus.diffeq.com:9100"]; }
