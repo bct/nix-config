@@ -1,4 +1,4 @@
-{ self, config, ... }: {
+{ pkgs, config, ... }: {
   age.secrets = {
     home-assistant-my-cnf = {
       rekeyFile = ../../../../../secrets/home-assistant-my-cnf.age;
@@ -17,11 +17,11 @@
 
   services.home-assistant = {
     enable = true;
+    package = pkgs.unstable.home-assistant;
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
     extraComponents = [
       "default_config"
-      "met"
       "mqtt"
       "backup"
 
@@ -29,6 +29,7 @@
       "kodi"
       "dlna_dmr"
       "openweathermap"
+      "environment_canada"
       "esphome"
 
       # Zigbee
@@ -54,6 +55,8 @@
       homeassistant = {
         time_zone = "America/Edmonton";
         country = "CA";
+        external_url = "https://spectator.domus.diffeq.com:8123";
+        internal_url = "https://spectator.domus.diffeq.com:8123";
       };
 
       http = {
