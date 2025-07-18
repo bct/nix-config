@@ -452,11 +452,11 @@
     },
     "nixpkgs-lubelogger": {
       "locked": {
-        "lastModified": 1743257942,
-        "narHash": "sha256-BITlMU7YZFaMo6RfTKetLicgyYtlkO8v7xQuxs4hUHI=",
+        "lastModified": 1752761175,
+        "narHash": "sha256-SmIQGeUS+f93JyLU082egYZQOfrrz4IBhj6vRx8RrwU=",
         "owner": "bct",
         "repo": "nixpkgs",
-        "rev": "aa17fd078d597c77aa2be91bb921e6c858f8b4fa",
+        "rev": "6fc07697e3fae972e865241a73cec8657a984164",
         "type": "github"
       },
       "original": {

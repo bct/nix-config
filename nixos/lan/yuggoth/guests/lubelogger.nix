@@ -7,6 +7,8 @@ in
   imports = [
     "${lubelogger-nixpkgs}/nixos/modules/services/web-apps/lubelogger.nix"
     "${self}/nixos/modules/lego-proxy-client"
+
+    ./lubelogger/borgmatic.nix
   ];
 
   system.stateVersion = "24.11";
@@ -44,7 +46,6 @@ in
 
   services.lubelogger = {
     enable = true;
-    package = lubelogger-nixpkgs.legacyPackages.x86_64-linux.lubelogger;
     environmentFile = config.age.secrets.lubelogger-env.path;
     settings = {
       MailConfig__EmailServer = "mail.domus.diffeq.com";
