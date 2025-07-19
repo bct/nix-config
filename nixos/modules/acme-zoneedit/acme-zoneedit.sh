@@ -1,9 +1,4 @@
-#!/bin/sh
-#
 # https://go-acme.github.io/lego/dns/exec/
-
-set -euo pipefail
-
 authorization="$ZONEEDIT_ID:$ZONEEDIT_TOKEN"
 
 do_add() {

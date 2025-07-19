@@ -10,8 +10,6 @@ let
     name = "backup-lubelogger";
     runtimeInputs = [pkgs.curl];
     text = ''
-      set -euo pipefail
-
       base_url="http://localhost:${toString config.services.lubelogger.port}"
       makebackup_output=$(curl -sL "$base_url/api/makebackup" | tr -d "\"")
 
