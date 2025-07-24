@@ -1,4 +1,4 @@
-{ self, config, ... }: {
+{ self, config, pkgs, ... }: {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
@@ -33,13 +33,29 @@
   services.calibre-web = {
     enable = true;
     openFirewall = false;
+    options = {
+      enableBookConversion = true;
+      enableKepubify = true;
+      enableBookUploading = true;
+    };
+
+    # https://github.com/NixOS/nixpkgs/issues/405974
+    package = pkgs.calibre-web.overridePythonAttrs (old: {
+      dependencies = old.dependencies ++ old.optional-dependencies.kobo ++ old.optional-dependencies.metadata;
+    });
   };
 
   services.caddy = {
     enable = true;
     virtualHosts."books.domus.diffeq.com" = {
       useACMEHost = "books.domus.diffeq.com";
-      extraConfig = "reverse_proxy localhost:${toString config.services.calibre-web.listen.port}";
+
+      # https://github.com/janeczku/calibre-web/issues/2960
+      extraConfig = ''
+        reverse_proxy localhost:${toString config.services.calibre-web.listen.port} {
+           header_up X-Scheme https
+        }
+      '';
     };
   };
 }
