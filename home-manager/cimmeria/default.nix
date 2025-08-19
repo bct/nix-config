@@ -30,6 +30,7 @@
     moonlight-embedded
 
     obsidian
+    koodo-reader
   ];
 
   systemd.user.mounts.bulk = {
