@@ -1,4 +1,4 @@
-{ self, inputs, lib, config, pkgs, ... }:
+{ self, inputs, config, pkgs, ... }:
 
 let
   paperless-nixpkgs = inputs.nixpkgs-unstable;
@@ -45,10 +45,6 @@ in {
 
     package = pkgs.paperless-ngx;
   };
-
-  # can't have a private network if we need to talk to the database.
-  systemd.services.paperless-consumer.serviceConfig.PrivateNetwork = lib.mkForce false;
-  systemd.services.paperless-scheduler.serviceConfig.PrivateNetwork = lib.mkForce false;
 
   age.secrets = {
     fs-mi-go-paperless = {
