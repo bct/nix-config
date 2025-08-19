@@ -1,4 +1,4 @@
-{ self, inputs, ... }: {
+{ self, inputs, pkgs, ... }: {
   imports = [
     inputs.disko.nixosModules.disko
 
@@ -16,6 +16,11 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # attempt to work around issues with cold boot
+  # (stuck at EFI stub, "measured initrd data into pcr 9")
+  # 6.12.39 works, 6.12.41 does not?
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   time.timeZone = "Etc/UTC";
 
