@@ -124,6 +124,11 @@
         header_up Host {upstream_hostport}
       }
     '';
+    virtualHosts."books.diffeq.com".extraConfig = ''
+      reverse_proxy https://books.domus.diffeq.com {
+        header_up Host {upstream_hostport}
+      }
+    '';
   };
 
   system.stateVersion = "24.05";

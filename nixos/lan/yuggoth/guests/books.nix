@@ -41,7 +41,8 @@
 
     # https://github.com/NixOS/nixpkgs/issues/405974
     package = pkgs.calibre-web.overridePythonAttrs (old: {
-      dependencies = old.dependencies ++ old.optional-dependencies.kobo ++ old.optional-dependencies.metadata;
+      # gevent may allow larger uploads
+      dependencies = old.dependencies ++ old.optional-dependencies.kobo ++ old.optional-dependencies.metadata ++ [pkgs.python3Packages.gevent];
     });
   };
 
@@ -54,6 +55,10 @@
       extraConfig = ''
         reverse_proxy localhost:${toString config.services.calibre-web.listen.port} {
            header_up X-Scheme https
+        }
+
+        request_body {
+          max_size 512MB
         }
       '';
     };
