@@ -81,6 +81,8 @@ in {
       extraGroups = [ "wheel" "audio" "networkmanager" "video" "lp" "scanner" "dialout" ];
     };
 
+    nix.settings.trusted-users = [ "@wheel" ];
+
     # Allow users to mount removeable storage.
     services.devmon.enable = true;
     programs.udevil.enable = true;
