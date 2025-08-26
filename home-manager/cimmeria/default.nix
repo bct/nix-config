@@ -110,6 +110,14 @@
     settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./oh-my-posh.json));
   };
 
+  programs.zathura = {
+    enable = true;
+    options = {
+      open-first-page = true;
+      page-v-padding = 5;
+    };
+  };
+
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "22.11";
 }
