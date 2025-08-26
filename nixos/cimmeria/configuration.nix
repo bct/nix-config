@@ -98,17 +98,6 @@
     };
   };
 
-  environment.etc."brother/scanner/brscan-skey/brscan-skey.config" = {
-    text = ''
-      password=
-      IMAGE="${pkgs.brscan-skey}/lib/script/scantoimage.sh"
-      OCR="${pkgs.brscan-skey}/lib/script/scantoocr.sh"
-      EMAIL="${pkgs.brscan-skey}/lib/script/scantoemail.sh"
-      FILE="${pkgs.brscan-skey}/lib/script/scantofile.sh"
-      SEMID=b
-    '';
-  };
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It's perfectly fine and recommended to leave
