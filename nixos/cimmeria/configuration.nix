@@ -88,7 +88,7 @@
   # required for Yubikey's CCID/PIV mode
   services.pcscd.enable = true;
 
-  hardware.sane.brscan5 = {
+  hardware.sane.brscan4 = {
     enable = true;
     netDevices = {
       office1 = {
