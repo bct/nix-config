@@ -17,6 +17,16 @@
     ];
   };
 
+  headless-image-cloud-x86_64-qcow2 = nixos-generators.nixosGenerate {
+    system = "x86_64-linux";
+    format = "qcow";
+    specialArgs = { inherit inputs outputs; };
+    modules = [
+      "${nixpkgs}/nixos/modules/profiles/qemu-guest.nix"
+      ../nixos/headless-images/cloud-x86_64.nix
+    ];
+  };
+
   # NOTE: this is not working yet
   headless-image-cloud-x86_64 = nixos-generators.nixosGenerate {
     system = "x86_64-linux";

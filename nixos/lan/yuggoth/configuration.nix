@@ -11,6 +11,7 @@
     ./disk-config.nix
 
     ./microvm-host.nix
+    ./nixvirt.nix
   ];
 
   # Use the systemd-boot EFI boot loader.

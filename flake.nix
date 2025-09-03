@@ -48,6 +48,10 @@
     microvm.url = "github:astro/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
 
+    # nixvirt
+    nixvirt.url = "https://flakehub.com/f/AshleyYakeley/NixVirt/*.tar.gz";
+    nixvirt.inputs.nixpkgs.follows = "nixpkgs";
+
     # simple-nixos-mailserver
     # https://nixos-mailserver.readthedocs.io/en/latest/index.html
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.05";
@@ -131,6 +135,11 @@
           };
 
           # -- LAN hosts
+          medley = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/vms/medley/configuration.nix ];
+          };
+
           stereo = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
             modules = [ ./nixos/lan/stereo/configuration.nix ];
@@ -156,6 +165,12 @@
           };
         in {
           # -- lan hosts --
+          nodes.medley = mkNode {
+            hostname = "nixos.domus.diffeq.com";
+            arch     = "x86_64-linux";
+            config   = self.nixosConfigurations.medley;
+          };
+
           nodes.stereo = mkNode {
             hostname = "stereo.domus.diffeq.com";
             arch     = "aarch64-linux";

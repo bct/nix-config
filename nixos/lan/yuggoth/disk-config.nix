@@ -163,6 +163,16 @@
             format = "ext4";
           };
         };
+
+        srv-libvirt-images = {
+          name = "srv-libvirt-images";
+          size = "512G";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+            mountpoint = "/srv/libvirt/images";
+          };
+        };
       };
     };
   };
