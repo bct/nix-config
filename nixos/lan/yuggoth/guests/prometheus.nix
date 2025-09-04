@@ -51,6 +51,7 @@
           { targets = ["lego-proxy.domus.diffeq.com:9100"]; }
           { targets = ["lubelogger.domus.diffeq.com:9100"]; }
           { targets = ["mail.domus.diffeq.com:9100"]; }
+          { targets = ["medley.domus.diffeq.com:9100"]; }
           { targets = ["paperless.domus.diffeq.com:9100"]; }
           { targets = ["prometheus.domus.diffeq.com:9100"]; }
           { targets = ["recipes.domus.diffeq.com:9100"]; }

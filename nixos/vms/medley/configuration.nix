@@ -4,12 +4,16 @@ in {
   imports = [
     "${nixpkgs}/nixos/modules/profiles/qemu-guest.nix"
 
+    "${self}/nixos/common/agenix-rekey.nix"
+
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
     "${self}/nixos/common/node-exporter.nix"
 
     ./hardware-configuration.nix
     ./homepage.nix
+
+    "${self}/nixos/modules/lego-proxy-client"
   ];
 
   # https://github.com/nix-community/nixos-generators/blob/master/formats/qcow.nix
@@ -20,6 +24,15 @@ in {
   time.timeZone = "Etc/UTC";
 
   networking.hostName = "medley";
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
+  age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMzt2gr8msbC0K/l5aoXLMWVTbAqgkRLR7SS3i6iLdQT";
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "homepage" ];
+    group = "caddy";
+  };
 
   system.stateVersion = "25.05";
 }

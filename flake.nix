@@ -105,6 +105,7 @@
         in
           {
             inherit (self.nixosConfigurations)
+              medley
               megahost-one
               stereo
               yuggoth;
@@ -166,7 +167,7 @@
         in {
           # -- lan hosts --
           nodes.medley = mkNode {
-            hostname = "nixos.domus.diffeq.com";
+            hostname = "medley.domus.diffeq.com";
             arch     = "x86_64-linux";
             config   = self.nixosConfigurations.medley;
           };

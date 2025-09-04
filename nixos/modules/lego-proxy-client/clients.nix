@@ -18,6 +18,8 @@
     domain = "grafana.domus.diffeq.com";
   };
 
+  homepage.domain = "homepage.domus.diffeq.com";
+
   immich = {
     domain = "immich.domus.diffeq.com";
   };
