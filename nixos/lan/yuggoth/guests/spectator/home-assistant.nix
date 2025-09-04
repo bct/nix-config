@@ -36,7 +36,7 @@
       "zha"
 
       # Printer
-      "syncthru"
+      "brother"
       "ipp"
     ];
 
