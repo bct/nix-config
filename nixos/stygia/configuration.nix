@@ -1,4 +1,4 @@
-{ self, pkgs, ... }:
+{ self, ... }:
 
 {
   imports =
@@ -13,11 +13,29 @@
 
   personal.user = "bct";
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.useOSProber = true;
+  # grub seems to be the best way to dual-boot windows
+  boot.loader.grub = {
+    enable = true;
+    device = "nodev";
+    efiSupport = true;
+
+    # by default we'll boot into windows.
+    extraEntriesBeforeNixOS = true;
+
+    # this is copy/pasted from the grub.cfg produced by "useOSProber".
+    # useOSProber = true;
+    extraEntries = ''
+      menuentry 'Windows Boot Manager (on /dev/sdb1)' --class windows --class os --id 'osprober-efi-E8E1-DD32' {
+        insmod part_gpt
+        insmod fat
+        set root='hd1,gpt1'
+        search --no-floppy --fs-uuid --set=root --hint-ieee1275='ieee1275//disk@0,gpt1' --hint-bios=hd1,gpt1 --hint-efi=hd1,gpt1 --hint-baremetal=ahci1,gpt1  E8E1-DD32
+        chainloader /efi/Microsoft/Boot/bootmgfw.efi
+      }
+    '';
+  };
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.timeout = 15;
 
   networking.hostName = "stygia";
 
