@@ -135,6 +135,11 @@
             modules = [ ./nixos/dunwich/configuration.nix ];
           };
 
+          stygia = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/stygia/configuration.nix ];
+          };
+
           # -- LAN hosts
           medley = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
@@ -207,6 +212,12 @@
             pkgs = nixpkgs.legacyPackages.x86_64-linux;
             extraSpecialArgs = { inherit inputs outputs; };
             modules = [./home-manager/dunwich];
+          };
+
+          "bct@stygia" = home-manager.lib.homeManagerConfiguration {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            extraSpecialArgs = { inherit inputs outputs; };
+            modules = [./home-manager/stygia];
           };
         };
 
