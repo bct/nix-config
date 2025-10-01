@@ -76,6 +76,13 @@ in {
       ];
     };
 
+    fonts = {
+      enableDefaultPackages = true;
+      packages = [
+        pkgs.vista-fonts
+      ];
+    };
+
     users.users.${cfgPersonal.user} = {
       isNormalUser = true;
       extraGroups = [ "wheel" "audio" "networkmanager" "video" "lp" "scanner" "dialout" ];
