@@ -1,15 +1,7 @@
-{ self, inputs, config, pkgs, ... }:
-
-let
-  paperless-nixpkgs = inputs.nixpkgs-unstable;
-in {
+{ self, config, pkgs, ... }: {
   imports = [
-    "${paperless-nixpkgs}/nixos/modules/services/misc/paperless.nix"
-
     "${self}/nixos/modules/lego-proxy-client"
   ];
-
-  disabledModules = [ "services/misc/paperless.nix" ];
 
   system.stateVersion = "24.05";
 
