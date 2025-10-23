@@ -72,6 +72,9 @@
 
     # media
     unstable.supersonic
+
+    # etc
+    webcord
   ];
 
   # Raw configuration files
