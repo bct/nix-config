@@ -117,3 +117,9 @@ require'lspconfig'.ansiblels.setup{
   capabilities = capabilities,
   on_attach = on_attach,
 }
+
+-- rust
+require'lspconfig'.rust_analyzer.setup{
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
