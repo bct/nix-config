@@ -15,6 +15,8 @@ in {
 
     # killall, etc.
     psmisc
+
+    dmidecode
   ];
 
   users.users.${cfgPersonal.user}.packages = with pkgs; [
