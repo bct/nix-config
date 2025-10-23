@@ -24,7 +24,7 @@ in {
     nh
 
     # desktop tools
-    chromium
+    ungoogled-chromium
     mpv
 
     # for "strings"
