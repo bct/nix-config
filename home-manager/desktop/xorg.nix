@@ -33,7 +33,7 @@ in {
   imports = [
     ../modules/dunst
     ../modules/rofi
-    ../modules/xmonad
+    ../modules/hyprland
 
     ./screen-break-reminder.nix
   ];

@@ -3,8 +3,8 @@
 {
   # Packages that should be installed to the user profile.
   home.packages = [
-    # neovim needs xclip for clipboard access
-    pkgs.xclip
+    pkgs.wl-clipboard # clipboard provider for Wayland
+    pkgs.xclip # clipboard provider for X
 
     # for telescope
     pkgs.ripgrep

@@ -125,6 +125,11 @@
         in
           {
           # -- desktops
+          aquilonia = nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit self inputs outputs; };
+            modules = [ ./nixos/aquilonia/configuration.nix ];
+          };
+
           cimmeria = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
             modules = [ ./nixos/cimmeria/configuration.nix ];
@@ -202,6 +207,12 @@
         homeConfigurations = let
           inherit (self) outputs;
         in {
+          "bct@aquilonia" = home-manager.lib.homeManagerConfiguration {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            extraSpecialArgs = { inherit inputs outputs; };
+            modules = [./home-manager/aquilonia];
+          };
+
           "bct@cimmeria" = home-manager.lib.homeManagerConfiguration {
             pkgs = nixpkgs.legacyPackages.x86_64-linux;
             extraSpecialArgs = { inherit inputs outputs; };

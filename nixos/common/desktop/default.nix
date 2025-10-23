@@ -54,26 +54,32 @@ in {
       extraBackends = [ pkgs.sane-airscan ];
     };
 
-    # Enable X and lightdm.
     # Delegate X session configuration to home-manager.
     services.xserver.enable = true;
-    services.displayManager.defaultSession = "default";
+    services.displayManager.defaultSession = "xsession";
     services.xserver.displayManager = {
-      lightdm = {
-        enable = true;
-        greeters.slick = {
-          enable = true;
-          theme.name = "Adwaita-dark";
-        };
-      };
+      # possibly required for greetd/tuigreet?
+      startx.enable = true;
 
       session = [
         {
           manage = "desktop";
-          name = "default";
+          name = "xsession";
           start = ''exec $HOME/.xsession'';
         }
       ];
+    };
+
+    services.greetd = {
+      enable = true;
+      # TODO: once on unstable
+      # useTextGreeter = true;
+      settings = {
+        default_session = {
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session --asterisks";
+          user = "greeter";
+        };
+      };
     };
 
     fonts = {
@@ -81,6 +87,15 @@ in {
       packages = [
         pkgs.vista-fonts
       ];
+    };
+
+    programs.hyprland = {
+      enable = true;
+
+      # Launch Hyprland with the UWSM (Universal Wayland Session Manager)
+      # session manager. This has improved systemd support and is recommended
+      # for most users.
+      # withUWSM = true;
     };
 
     users.users.${cfgPersonal.user} = {
