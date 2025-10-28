@@ -19,8 +19,11 @@
   };
 
   home.shellAliases = {
-    aoeu = "setxkbmap -layout us";
-    asdf = "setxkbmap -layout us -variant dvorak";
+    # switch to qwerty
+    aoeu = "hyprctl switchxkblayout current 1";
+
+    # switch to dvorak
+    asdf = "hyprctl switchxkblayout current 0";
 
     grep = "grep --color=auto";
 
