@@ -37,12 +37,12 @@
       "hyprland/workspaces" = {
         format = "{icon}";
         format-icons = {
-          "1" = "";
-          "2" = "";
-          "3" = "";
-          "4" = "󰭹";
-          "5" = "";
-          "6" = "";
+          "mon" = "";
+          "web" = "";
+          "proj" = "";
+          "chat" = "󰭹";
+          "mail" = "";
+          "kino" = "";
           "urgent" = "";
           "default" = "";
         };
@@ -372,11 +372,19 @@
 
 
       ##############################
-      ### WINDOWS AND WORKSPACES ###
+      ### WORKSPACES AND WINDOWS ###
       ##############################
 
-      # See https://wiki.hypr.land/Configuring/Window-Rules/ for more
       # See https://wiki.hypr.land/Configuring/Workspace-Rules/ for workspace rules
+
+      workspace = 1, defaultName:mon
+      workspace = 2, defaultName:web
+      workspace = 3, defaultName:proj
+      workspace = 4, defaultName:chat
+      workspace = 5, defaultName:mail
+      workspace = 6, defaultName:kino
+
+      # See https://wiki.hypr.land/Configuring/Window-Rules/ for more
 
       # Example windowrule
       # windowrule = float,class:^(kitty)$,title:^(kitty)$
