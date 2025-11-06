@@ -8,7 +8,7 @@
       global = {
         follow = "keyboard";
 
-        font = "UbuntuMono Nerd Font 18";
+        font = "UbuntuMono Nerd Font 12";
         frame_color = "#83a598";
 
         origin = "bottom-right";

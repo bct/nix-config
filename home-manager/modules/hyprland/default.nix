@@ -1,4 +1,45 @@
-{ pkgs, ... }: {
+{ config, inputs, lib, pkgs, ... }: let
+  workspaces = [
+    { name = "mon";   icon = ""; }
+    { name = "web";   icon = ""; }
+    { name = "proj";  icon = ""; }
+    { name = "chat";  icon = "󰭹"; }
+    { name = "mail";  icon = ""; }
+    { name = "notes"; icon = "󰷈"; }
+    { name = "kino";  icon = ""; }
+    { name = "3dp";   icon = ""; }
+    { name = "zap";   icon = ""; }
+    { name = "host";  icon = ""; }
+  ];
+
+  # prepare a list of workspaces for grid-select -d.
+  # format: "value,display"
+  workspaceSelectors = pkgs.writeText "hyprland-workspaces-selectors" (
+    lib.concatImapStrings
+      (wsId: ws: "${toString wsId},${ws.icon} ${ws.name}" + "\n")
+      workspaces
+  );
+
+  gridselect-workspace = pkgs.writeShellApplication {
+    name = "gridselect-workspace";
+    runtimeInputs = [
+      config.wayland.windowManager.hyprland.package
+      inputs.grid-select.packages.${pkgs.system}.default
+    ];
+    text = ''
+      dispatcher=$1
+
+      # open the grid select to choose a workspace.
+      workspace_id=$(grid-select -d , <${workspaceSelectors})
+
+      # was a workspace selected?
+      if [ -n "$workspace_id" ]; then
+        # switch to the selected workspace.
+        hyprctl dispatch "$dispatcher" "$workspace_id"
+      fi
+    '';
+  };
+in {
   services.clipman.enable = true;
   programs.wofi.enable = true;
 
@@ -16,7 +57,6 @@
       modules-left = [
         "hyprland/workspaces"
         "hyprland/submap"
-        "custom/media"
       ];
 
       modules-center = [
@@ -34,18 +74,17 @@
       ];
 
       # Modules configuration
-      "hyprland/workspaces" = {
+      "hyprland/workspaces" = let
+        ws-icons = builtins.listToAttrs (map (ws: { name = ws.name; value = ws.icon; }) workspaces);
+      in {
         format = "{icon}";
-        format-icons = {
-          "mon" = "";
-          "web" = "";
-          "proj" = "";
-          "chat" = "󰭹";
-          "mail" = "";
-          "kino" = "";
+        format-icons = ws-icons // {
+          "music" = "";
           "urgent" = "";
           "default" = "";
         };
+        show-special = true;
+        special-visible-only = true;
       };
       tray = {
         # "icon-size": 21,
@@ -73,11 +112,13 @@
           warning = 30;
           critical = 15;
         };
-        format = "{capacity}% {icon}";
-        format-full = "{capacity}% {icon}";
-        format-charging = "{capacity}% 󰢝";
-        format-plugged = "{capacity}% ";
-        format-alt = "{time} {icon}";
+        # add extra space on the right because it looks bad with the background
+        # when critical
+        format = "{capacity}% {icon} ";
+        format-full = "{capacity}% {icon} ";
+        format-charging = "{capacity}% 󰢝" ;
+        format-plugged = "{capacity}%  ";
+        format-alt = "{time} {icon} ";
         format-icons = ["" "" "" "" ""];
       };
       "network" = {
@@ -97,18 +138,6 @@
           "default" = ["" "" ""];
         };
         on-click = "pavucontrol";
-      };
-      "custom/media" = {
-        "format" = "{icon} {text}";
-        "return-type" = "json";
-        "max-length" = 40;
-        "format-icons" = {
-          "spotify" = "";
-          "default" = "🎜";
-        };
-        "escape" = true;
-        "exec" = "$HOME/.config/waybar/mediaplayer.py 2> /dev/null"; # Script in resources folder
-        # "exec" = "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" # Filter player based on name
       };
     }];
 
@@ -157,17 +186,17 @@
       }
 
       #battery.warning:not(.charging) {
-        color: #fab387;
+        color: #d65d0e;
       }
 
       #battery.critical:not(.charging) {
-        color: #f38ba8;
+        color: #d65d0e;
         animation: blink 0.5s linear infinite alternate;
       }
 
       @keyframes blink {
         to {
-          background-color: #f38ba8;
+          background-color: #d65d0e;
           color: #1e1e2e;
         }
       }
@@ -218,7 +247,10 @@
     ];
 
     # https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.conf
-    extraConfig = ''
+    extraConfig = let
+      # we could use named workspaces, but this allows us to specify the order
+      workspaceRules = lib.concatLines (lib.imap1 (i: ws: "workspace = ${toString i}, defaultName:${ws.name}") workspaces);
+    in ''
       ###################
       ### MY PROGRAMS ###
       ###################
@@ -263,6 +295,11 @@
           disable_hyprland_logo = true # disable the random hyprland logo / anime girl background
       }
 
+      decoration {
+        # when a special workspace is open, dim everything else a little more
+        dim_special = 0.4
+      }
+
       #############
       ### INPUT ###
       #############
@@ -287,9 +324,10 @@
       ###################
       ### KEYBINDINGS ###
       ###################
-
+##
       # See https://wiki.hypr.land/Configuring/Keywords/
-      $mainMod = SUPER # Sets "Windows" key as main modifier
+      #$mainMod = SUPER # Sets "Windows" key as main modifier
+      $mainMod = ALT # Sets "Windows" key as main modifier
 
       # Example binds, see https://wiki.hypr.land/Configuring/Binds/ for more
       bind = SHIFT ALT, Return, exec, $terminal
@@ -298,7 +336,7 @@
       #bind = $mainMod, V, togglefloating,
       bind = $mainMod, P, exec, $menu
       #bind = $mainMod, P, pseudo, # dwindle
-      bind = $mainMod, J, togglesplit, # dwindle
+      #bind = $mainMod, J, togglesplit, # dwindle
 
       bind = $mainMod, F, fullscreenstate, 1 0
 
@@ -311,40 +349,17 @@
       # Return to previous workspace
       bind = ALT, r, workspace, previous
 
-      # Switch workspaces with mainMod + [0-9]
-      bind = $mainMod, 1, workspace, 1
-      bind = $mainMod, 2, workspace, 2
-      bind = $mainMod, 3, workspace, 3
-      bind = $mainMod, 4, workspace, 4
-      bind = $mainMod, 5, workspace, 5
-      bind = $mainMod, 6, workspace, 6
-      bind = $mainMod, 7, workspace, 7
-      bind = $mainMod, 8, workspace, 8
-      bind = $mainMod, 9, workspace, 9
-      bind = $mainMod, 0, workspace, 10
+      # Switch workspace
+      bind = $mainMod, T, exec, ${gridselect-workspace}/bin/gridselect-workspace focusworkspaceoncurrentmonitor
 
-      # Move active windowGto a workspace with mainMod + SHIFT + [0-9]
-      bind = $mainMod SHIFT, 1, movetoworkspace, 1
-      bind = $mainMod SHIFT, 2, movetoworkspace, 2
-      bind = $mainMod SHIFT, 3, movetoworkspace, 3
-      bind = $mainMod SHIFT, 4, movetoworkspace, 4
-      bind = $mainMod SHIFT, 5, movetoworkspace, 5
-      bind = $mainMod SHIFT, 6, movetoworkspace, 6
-      bind = $mainMod SHIFT, 7, movetoworkspace, 7
-      bind = $mainMod SHIFT, 8, movetoworkspace, 8
-      bind = $mainMod SHIFT, 9, movetoworkspace, 9
-      bind = $mainMod SHIFT, 0, movetoworkspace, 10
+      # Send window to workspace
+      bind = $mainMod SHIFT, T, exec, ${gridselect-workspace}/bin/gridselect-workspace movetoworkspace
 
-      # Example special workspace (scratchpad)
-      bind = $mainMod, S, togglespecialworkspace, magic
-      bind = $mainMod SHIFT, S, movetoworkspace, special:magic
-
-      # Scroll through existing workspaces with mainMod + scroll
-      bind = $mainMod, mouse_down, workspace, e+1
-      bind = $mainMod, mouse_up, workspace, e-1
+      # Special workspaces
+      bind = $mainMod, M, togglespecialworkspace, music
 
       # Tabbed layout
-      bind = $mainMod, T, togglegroup
+      bind = $mainMod, G, togglegroup
       bind = $mainMod CTRL, h, changegroupactive, b
       bind = $mainMod CTRL, l, changegroupactive, f
       bind = $mainMod SHIFT, h, movewindoworgroup, l
@@ -377,12 +392,9 @@
 
       # See https://wiki.hypr.land/Configuring/Workspace-Rules/ for workspace rules
 
-      workspace = 1, defaultName:mon
-      workspace = 2, defaultName:web
-      workspace = 3, defaultName:proj
-      workspace = 4, defaultName:chat
-      workspace = 5, defaultName:mail
-      workspace = 6, defaultName:kino
+      ${workspaceRules}
+      workspace = special:music, on-created-empty:supersonic, gapsout:50
+      workspace = name:notes, on-created-empty:obsidian
 
       # See https://wiki.hypr.land/Configuring/Window-Rules/ for more
 
@@ -399,6 +411,12 @@
       windowrule = group set,workspace:2,class:^(chromium-browser)$
       # Jellyfin opens on workspace 6
       windowrule = workspace 6 silent,class:^(chromium-browser)$,title:^(Jellyfin)$
+
+      windowrule = workspace special:music,class:Supersonic
+
+      #debug {
+      #  disable_logs = false
+      #}
     '';
   };
 }
