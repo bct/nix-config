@@ -60,6 +60,9 @@
     airsonic-refix-jukebox.url = "github:bct/airsonic-refix-jukebox";
     airsonic-refix-jukebox.inputs.nixpkgs.follows = "nixpkgs";
 
+    grid-select.url = "github:bct/grid-select";
+    grid-select.inputs.nixpkgs.follows = "nixpkgs";
+
     # Shameless plug: looking for a way to nixify your themes and make
     # everything match nicely? Try nix-colors!
     # nix-colors.url = "github:misterio77/nix-colors";
