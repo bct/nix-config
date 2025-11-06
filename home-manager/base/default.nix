@@ -47,6 +47,8 @@ in {
       ignores = [
         ".*.s[a-w][a-z]"
         ".s[a-w][a-z]"
+        ".envrc"
+        ".direnv"
       ];
     };
 
