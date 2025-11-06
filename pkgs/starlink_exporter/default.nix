@@ -8,10 +8,10 @@ pkgs.buildGoModule rec {
     owner = "DanMolz";
     repo = "starlink_exporter";
     rev = "v${version}";
-    sha256 = "sha256-6YG4Tx/4llOUWE0NlLiZgZQqEH9pDBadizVJdzX3BQg=";
+    sha256 = "sha256-Z61FC/BkxmYsRRG1Jw905JKK98R3eguVZWxp5IYmpnM=";
   };
 
-  vendorHash = "sha256-VA3XAZVGhH9lIiag6D8INe24AhsmInVa9qvHWoRMr1A=";
+  vendorHash = "sha256-1265IxM43+FzNqSSqPke3GraZnJwu04A7oe9SUSWKJA=";
 
   meta = with lib; {
     description = "Prometheus exporter that exposes metrics from SpaceX Starlink Dish";
