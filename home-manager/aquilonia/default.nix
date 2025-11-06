@@ -24,7 +24,7 @@
     winetricks
     vulkan-tools
 
-    moonlight-embedded
+    moonlight-qt
 
     obsidian
     koodo-reader
