@@ -349,7 +349,7 @@ in {
       #bind = $mainMod, V, togglefloating,
       bind = $mainMod, P, exec, $menu
       #bind = $mainMod, P, pseudo, # dwindle
-      #bind = $mainMod, J, togglesplit, # dwindle
+      bind = $mainMod, v, togglesplit, # dwindle
 
       bind = $mainMod, F, fullscreenstate, 1 0
 
