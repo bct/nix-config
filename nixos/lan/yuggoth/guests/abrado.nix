@@ -126,11 +126,11 @@
   };
 
   systemd.timers.fortis = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       # run every ~3 days
       # when I ran more frequently than this I stopped getting any data at all.
-      OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28,31 02:45:00 UTC";
+      OnCalendar = "*-*-2,5,8,11,14,17,20,23,26,29 02:45:00 UTC";
       Unit = "fortis.service";
     };
   };
