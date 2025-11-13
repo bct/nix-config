@@ -300,6 +300,19 @@ in {
         dim_special = 0.4
       }
 
+      animations {
+        enabled = yes
+
+        bezier = easeOutQuint,0.23,1,0.32,1
+        bezier = almostLinear,0.5,0.5,0.75,1.0
+
+        #           NAME,             ONOFF, SPEED, CURVE,        [STYLE]
+        # switch workspaces instantly
+        animation = workspaces,       0
+        animation = specialWorkspace, 1,     1.94,  almostLinear, fade
+        animation = windowsIn,        1,     2.0,   easeOutQuint, popin 87%
+      }
+
       #############
       ### INPUT ###
       #############
