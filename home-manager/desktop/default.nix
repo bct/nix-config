@@ -75,6 +75,7 @@
 
     # etc
     webcord
+    rofi-bluetooth
   ];
 
   # Raw configuration files
