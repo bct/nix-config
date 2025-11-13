@@ -59,7 +59,7 @@
 
         host-root = {
           name = "nixos";
-          size = "40G";
+          size = "50G";
           content = {
             type = "filesystem";
             format = "ext4";
