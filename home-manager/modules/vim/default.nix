@@ -24,7 +24,6 @@
     pkgs.nodePackages.vscode-langservers-extracted
     pkgs.typescript-language-server
     pkgs.ansible-language-server
-    pkgs.ansible-lint
     pkgs.rust-analyzer
   ];
 
