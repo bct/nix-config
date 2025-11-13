@@ -340,7 +340,7 @@ in {
 ##
       # See https://wiki.hypr.land/Configuring/Keywords/
       #$mainMod = SUPER # Sets "Windows" key as main modifier
-      $mainMod = ALT # Sets "Windows" key as main modifier
+      $mainMod = ALT
 
       # Example binds, see https://wiki.hypr.land/Configuring/Binds/ for more
       bind = SHIFT ALT, Return, exec, $terminal
@@ -358,6 +358,12 @@ in {
       bind = ALT, j, movefocus, d
       bind = ALT, k, movefocus, u
       bind = ALT, l, movefocus, r
+
+      # resize the active window
+      bind = SUPER CTRL, h, resizeactive, -36 0
+      bind = SUPER CTRL, s, resizeactive, 36 0
+      bind = SUPER CTRL, n, resizeactive, 0 -24
+      bind = SUPER CTRL, t, resizeactive, 0 24
 
       # Return to previous workspace
       bind = ALT, r, workspace, previous
