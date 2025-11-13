@@ -16,11 +16,15 @@
       }
     '';
 
-    package = pkgs.coredns.override {
+    # use unstable for https://github.com/NixOS/nixpkgs/pull/459763
+    package = pkgs.unstable.coredns.override {
       externalPlugins = [
         {name = "wgsd"; repo = "github.com/jwhited/wgsd"; version = "v0.3.6";}
       ];
-      vendorHash = "sha256-FNnVwxPYoaYpfkm3ZPWVhjFIaEhTxMyskv0+UJO2dd0=";
+      # the vendorHash needs to be updated every time pkgs.coredns updates,
+      # due to the way the core & plugin packages are combined when vendored.
+      # I spent a couple of days trying to fix this, and eventually gave up.
+      vendorHash = "sha256-4jBu/Gub3tJ2Up98V4Qg3AA3TmSeSeekwmjvH5PIHTg=";
     };
   };
 
