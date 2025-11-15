@@ -134,11 +134,6 @@
             modules = [ ./nixos/cimmeria/configuration.nix ];
           };
 
-          dunwich = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/dunwich/configuration.nix ];
-          };
-
           stygia = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
             modules = [ ./nixos/stygia/configuration.nix ];
@@ -216,12 +211,6 @@
             pkgs = nixpkgs.legacyPackages.x86_64-linux;
             extraSpecialArgs = { inherit inputs outputs; };
             modules = [./home-manager/cimmeria];
-          };
-
-          "brendan@dunwich" = home-manager.lib.homeManagerConfiguration {
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            extraSpecialArgs = { inherit inputs outputs; };
-            modules = [./home-manager/dunwich];
           };
 
           "bct@stygia" = home-manager.lib.homeManagerConfiguration {
