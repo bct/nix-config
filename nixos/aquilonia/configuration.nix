@@ -26,7 +26,7 @@
   networking.hostName = "aquilonia";
   networking.firewall.enable = false;
 
-  services.wireguard-via-wgsd.address = "192.168.8.17/32";
+  services.wireguard-via-wgsd.address = "192.168.8.18/32";
 
   nix.settings = {
     # don't garbage collect outputs that are only needed at build-time
