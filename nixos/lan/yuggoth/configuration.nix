@@ -58,14 +58,6 @@
         startDelay = 60;
       };
 
-      bookmarks = {
-        hostName = "bookmarks";
-        tapInterfaceMac = "02:00:00:00:00:17";
-        machineId = "7643dcf484e2d3efd140a048f87c1b17";
-        requires = ["microvm@lego-proxy.service"];
-        startDelay = 60;
-      };
-
       db = {
         hostName = "db";
         tapInterfaceMac = "02:00:00:00:00:07";

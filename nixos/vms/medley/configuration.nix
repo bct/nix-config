@@ -1,4 +1,5 @@
-{ self, inputs, pkgs, ... }: let
+# see yuggoth/nixvirt.nix for memory & CPU settings.
+{ self, inputs, ... }: let
   nixpkgs = inputs.nixpkgs;
 in {
   imports = [
@@ -11,7 +12,9 @@ in {
     "${self}/nixos/common/node-exporter.nix"
 
     ./hardware-configuration.nix
+
     ./homepage.nix
+    ./karakeep.nix
 
     "${self}/nixos/modules/lego-proxy-client"
   ];
@@ -30,7 +33,7 @@ in {
 
   services.lego-proxy-client = {
     enable = true;
-    domains = [ "homepage" ];
+    domains = [ "bookmarks" "homepage" ];
     group = "caddy";
   };
 

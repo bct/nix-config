@@ -48,7 +48,7 @@ in {
       definition = nixvirt.lib.domain.writeXML (nixvirt.lib.domain.templates.linux {
         name = "medley";
         uuid = "76a25495-6730-4982-9761-637f57f18e4a";
-        memory = { count = 1; unit = "GiB"; };
+        memory = { count = 3; unit = "GiB"; };
         storage_vol = { pool = storagePool; volume = "medley-root.qcow2"; };
 
         # br0 is set up in microvm-host.nix
