@@ -44,6 +44,7 @@ in
       };
 
       terminal = "${pkgs.alacritty}/bin/alacritty";
+      theme = "gruvbox-light";
     };
   };
 }

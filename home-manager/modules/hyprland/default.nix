@@ -41,7 +41,6 @@
   };
 in {
   services.clipman.enable = true;
-  programs.wofi.enable = true;
 
   programs.waybar = {
     enable = true;
@@ -259,7 +258,7 @@ in {
 
       # Set programs that you use
       $terminal = alacritty
-      $menu = wofi --show run
+      $menu = rofi-launcher
 
 
       #################
@@ -298,6 +297,17 @@ in {
       decoration {
         # when a special workspace is open, dim everything else a little more
         dim_special = 0.4
+      }
+
+      group {
+        col.border_active = rgb(ffffff)
+        col.border_inactive = rgba(444444ff)
+
+        groupbar {
+          indicator_height = 1
+          col.active = rgb(d79921)
+          col.inactive = rgb(3c3836)
+        }
       }
 
       animations {
@@ -404,6 +414,8 @@ in {
       bindl = , XF86AudioPlay, exec, playerctl play-pause
       bindl = , XF86AudioPrev, exec, playerctl previous
 
+      # Lock the screen
+      bind = SUPER CTRL, l, exec, hyprlock
 
       ##############################
       ### WORKSPACES AND WINDOWS ###
@@ -438,4 +450,93 @@ in {
       #}
     '';
   };
+
+  programs.hyprlock = {
+    enable = true;
+    extraConfig = ''
+      $font = UbuntuMono
+
+      general {
+          hide_cursor = true
+      }
+
+      animations {
+          enabled = true
+          bezier = linear, 1, 1, 0, 0
+          animation = fadeIn, 1, 5, linear
+          animation = fadeOut, 1, 5, linear
+          animation = inputFieldDots, 1, 2, linear
+      }
+
+      background {
+          color = rgb(282828)
+      }
+
+      input-field {
+          rounding = 0
+          placeholder_text =
+          outline_thickness = 2
+          outer_color = rgb(d79921)
+          inner_color = rgb(1d2021)
+          font_color = rgb(ebdbb2)
+          check_color = rgb(98971a)
+          fail_color = rgb(cc241d)
+      }
+
+      # TIME
+      label {
+          monitor =
+          text = $TIME # ref. https://wiki.hyprland.org/Hypr-Ecosystem/hyprlock/#variable-substitution
+          font_size = 90
+          font_family = $font
+          color = rgb(ebdbb2)
+
+          position = -100, -20
+          halign = right
+          valign = top
+      }
+
+      # DATE
+      label {
+          monitor =
+          text = cmd[update:60000] date +"%A %m/%d" # update every 60 seconds
+          font_size = 25
+          font_family = $font
+          color = rgb(8ec07c)
+
+          position = -100, -170
+          halign = right
+          valign = top
+      }
+    '';
+  };
+
+  services.hypridle = {
+    enable = true;
+  };
+
+  xdg.configFile."hypr/hypridle.conf".text = ''
+    general {
+        lock_cmd = pidof hyprlock || hyprlock       # avoid starting multiple hyprlock instances.
+        before_sleep_cmd = loginctl lock-session    # lock before suspend.
+        after_sleep_cmd = hyprctl dispatch dpms on  # to avoid having to press a key twice to turn on the display.
+    }
+
+    listener {
+        timeout = 150                                # 2.5min.
+        on-timeout = brightnessctl -s set 10         # set monitor backlight to minimum, avoid 0 on OLED monitor.
+        on-resume = brightnessctl -r                 # monitor backlight restore.
+    }
+
+    listener {
+        timeout = 300                                 # 5min
+        on-timeout = loginctl lock-session            # lock screen when timeout has passed
+    }
+
+    listener {
+        timeout = 330                                                     # 5.5min
+        on-timeout = hyprctl dispatch dpms off                            # screen off when timeout has passed
+        on-resume = hyprctl dispatch dpms on && brightnessctl -r          # screen on when activity is detected after timeout has fired.
+    }
+  '';
 }
