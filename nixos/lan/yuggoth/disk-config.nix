@@ -155,15 +155,6 @@
           };
         };
 
-        bookmarks-var = {
-          name = "bookmarks-var";
-          size = "5G";
-          content = {
-            type = "filesystem";
-            format = "ext4";
-          };
-        };
-
         srv-libvirt-images = {
           name = "srv-libvirt-images";
           size = "512G";
