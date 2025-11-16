@@ -15,6 +15,7 @@ in {
 
     ./homepage.nix
     ./karakeep.nix
+    ./tandoor.nix
 
     "${self}/nixos/modules/lego-proxy-client"
   ];
@@ -33,7 +34,7 @@ in {
 
   services.lego-proxy-client = {
     enable = true;
-    domains = [ "bookmarks" "homepage" ];
+    domains = [ "bookmarks" "homepage" "recipes" ];
     group = "caddy";
   };
 
