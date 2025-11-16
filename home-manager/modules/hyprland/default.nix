@@ -64,7 +64,8 @@ in {
 
       modules-right = [
         "pulseaudio"
-        "network"
+        "network#wireless"
+        "network#wg"
         "cpu"
         "backlight"
         "battery"
@@ -120,14 +121,22 @@ in {
         format-alt = "{time} {icon} ";
         format-icons = ["" "" "" "" ""];
       };
-      "network" = {
-          # "interface" = "wlp2*", # (Optional) To force the use of this interface
-          "format-wifi" = "{essid} ({signalStrength}%) ";
+      "network#wireless" = {
+          "interface" = "wlp*";
+          "format-wifi" = "{signalStrength}% ";
           "format-ethernet" = "{ipaddr}/{cidr} ";
           "tooltip-format" = "{ifname} via {gwaddr}";
           "format-linked" = "{ifname} (No IP) ";
           "format-disconnected" = "Disconnected ⚠";
           "format-alt" = "{ifname} = {ipaddr}/{cidr}";
+      };
+      "network#wg" = {
+          "interface" = "wg0";
+          "format" = "󰌾";
+          "tooltip-format" = "{ifname}";
+          "format-linked" = "{ifname} (No IP) 󰌾";
+          "format-disconnected" = "";
+          "format-alt" = "{ifname} = {ipaddr}/{cidr} 󰌾";
       };
       pulseaudio = {
         format = "{volume}% {icon}";
@@ -321,6 +330,13 @@ in {
         animation = workspaces,       0
         animation = specialWorkspace, 1,     1.94,  almostLinear, fade
         animation = windowsIn,        1,     2.0,   easeOutQuint, popin 87%
+      }
+
+      misc {
+        # be less aggressive about popping up the "application not responding"
+        # dialog.
+        # default is 5.
+        anr_missed_pings = 10
       }
 
       #############
