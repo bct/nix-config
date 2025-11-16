@@ -20,27 +20,6 @@
     "cros_ec_lpcs"
   ];
 
-  # https://community.frame.work/t/externally-visible-sleep-indicator/5615/30
-  systemd.services."suspend-led-set" = {
-    description = "blue led for sleep";
-    wantedBy = [ "suspend.target" ];
-    before = [ "systemd-suspend.service" ];
-    serviceConfig.Type = "simple";
-    script = ''
-      ${pkgs.fw-ectool}/bin/ectool led battery blue
-    '';
-  };
-
-  systemd.services."suspend-led-unset" = {
-    description = "auto led after sleep";
-    wantedBy = [ "suspend.target" ];
-    after = [ "systemd-suspend.service" ];
-    serviceConfig.Type = "simple";
-    script = ''
-      ${pkgs.fw-ectool}/bin/ectool led battery auto
-    '';
-  };
-
   # suspend works with 6.15
   boot.kernelPackages = lib.mkIf (lib.versionOlder pkgs.linux.version "6.15") (
     lib.mkDefault pkgs.linuxPackages_latest
