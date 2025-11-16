@@ -214,11 +214,6 @@ in {
   home.packages = with pkgs; [
     brightnessctl
 
-    # pkgs.hyprpaper
-    hyprlock
-    hypridle
-    #pkgs.hyprpicker
-
     swww
     capitaine-cursors
 
@@ -489,14 +484,21 @@ in {
       }
 
       input-field {
+          size = 600, 90
+
           rounding = 0
           placeholder_text =
           outline_thickness = 2
+
           outer_color = rgb(d79921)
           inner_color = rgb(1d2021)
           font_color = rgb(ebdbb2)
           check_color = rgb(98971a)
           fail_color = rgb(cc241d)
+
+          dots_size = 0.2
+          dots_rounding = 0
+          dots_spacing = 0.65
       }
 
       # TIME
@@ -520,7 +522,7 @@ in {
           font_family = $font
           color = rgb(8ec07c)
 
-          position = -100, -170
+          position = -100, -130
           halign = right
           valign = top
       }
@@ -555,4 +557,17 @@ in {
         on-resume = hyprctl dispatch dpms on && brightnessctl -r          # screen on when activity is detected after timeout has fired.
     }
   '';
+
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      preload = [
+        "/home/bct/images/wallpaper/View_of_Vent_in_the_Ventertal.jpg"
+      ];
+
+      wallpaper = [
+        ",/home/bct/images/wallpaper/View_of_Vent_in_the_Ventertal.jpg"
+      ];
+    };
+  };
 }
