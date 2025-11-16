@@ -33,6 +33,8 @@ set formatoptions+=j     " Delete comment character when joining commented lines
 
 set colorcolumn=80,88,100   " Show where to break lines
 
+set title " Set the terminal title
+
 let mapleader = '-'      " use a leader key that's convenient for dvorak
 
 " <c-^> means 'Edit the alternate file' (i.e. go back to previous file)

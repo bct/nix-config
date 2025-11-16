@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   home.sessionPath = [
@@ -32,33 +32,19 @@
     historyControl = ["ignoredups"];
 
     initExtra = ''
-      # autojump
-      eval "$(${pkgs.z-lua}/bin/z --init bash)"
-
       # go to the root of the current repository
       r() {
         cd "$(git rev-parse --show-toplevel 2>/dev/null)"
       }
 
-      . ~/.nix-profile/share/git/contrib/completion/git-prompt.sh
-
-      # bct@cimmeria:~/projects/nixfiles (master) $
-      PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\] $(__git_ps1 "(%s)")\$ '
-
-      # If this is a GUI terminal, set the title to user@host:dir
-      case "$TERM" in
-      xterm*|rxvt*|alacritty*)
-        PS1="\[\e]0;\u@\h: \w\a\]$PS1"
-          ;;
-      *)
-          ;;
-      esac
-
       # make ^L work
       bind -m vi-insert 'Control-l: clear-screen'
-
-      export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels''${NIX_PATH:+:$NIX_PATH}
     '';
+  };
+
+  programs.z-lua = {
+    enable = true;
+    enableAliases = true;
   };
 
   programs.direnv = {
