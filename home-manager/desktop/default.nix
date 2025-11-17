@@ -56,26 +56,24 @@
     # terminal
     alacritty
 
-    # utilities
+    # tui utilities
     htop
     silver-searcher
     ruby
     pwgen
     tmux
 
-    # screen locking
-    xss-lock
-    sxlock
+    # gui utilities
+    rofi-bluetooth
 
-    # background
-    feh
+    # image viewer
+    imv
 
     # media
     unstable.supersonic
 
-    # etc
+    # chat
     webcord
-    rofi-bluetooth
   ];
 
   # Raw configuration files
