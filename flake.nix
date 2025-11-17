@@ -104,6 +104,7 @@
         in
           {
             inherit (self.nixosConfigurations)
+              aquilonia
               medley
               megahost-one
               stereo

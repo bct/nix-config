@@ -1,13 +1,22 @@
-{ ... }:
+{ config, ... }:
 
-{
+let
+  backupName = "aquilonia";
+in {
+  age.secrets = {
+    ssh-borg-aquilonia = {
+      rekeyFile = ../../secrets/ssh/borg-aquilonia.age;
+      generator.script = "ssh-ed25519-pubkey";
+    };
+  };
+
   services.borgmatic = {
     enable = true;
     settings = {
       repositories = [
         {
           label = "borg.domus.diffeq.com";
-          path = "ssh://borg@borg.domus.diffeq.com/srv/borg/cimmeria/";
+          path = "ssh://borg@borg.domus.diffeq.com/srv/borg/${backupName}/";
         }
       ];
 
@@ -20,8 +29,7 @@
         "/home/bct/videos"
       ];
 
-      # TODO: move this into age?
-      ssh_command = "ssh -i /root/.ssh/borg";
+      ssh_command = "ssh -i ${config.age.secrets.ssh-borg-aquilonia.path}";
 
       # retention
       keep_daily = 14;
@@ -32,13 +40,13 @@
       ntfy = {
         topic = "doog4maechoh";
         finish = {
-          title = "[cimmeria] borgmatic finished";
+          title = "[${backupName}] borgmatic finished";
           message = "Your backup has finished.";
           priority = "default";
           tags = "kissing_heart,borgmatic";
         };
         fail = {
-          title = "[cimmeria] borgmatic failed";
+          title = "[${backupName}] borgmatic failed";
           message = "Your backup has failed.";
           priority = "default";
           tags = "sweat,borgmatic";

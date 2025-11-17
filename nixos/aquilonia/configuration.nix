@@ -3,14 +3,16 @@
 {
   imports =
     [
-      ./hardware-configuration.nix
+      "${self}/nixos/common/agenix-rekey.nix"
 
       "${self}/nixos/common/nix.nix"
       "${self}/nixos/common/desktop"
 
       "${self}/nixos/modules/wireguard-via-wgsd.nix"
 
-      #./borgmatic.nix
+      ./hardware-configuration.nix
+
+      ./borgmatic.nix
       ./framework.nix
 
       "${self}/nixos/common/desktop/projects/android.nix"
@@ -18,6 +20,8 @@
     ];
 
   personal.user = "bct";
+
+  age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKG0UT1vOHAbi9Rosdsu/ckvredKsdZ+vsAE9uLU1JNM";
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
