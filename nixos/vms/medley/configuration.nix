@@ -13,6 +13,7 @@ in {
 
     ./hardware-configuration.nix
 
+    ./borgmatic.nix
     ./homepage.nix
     ./karakeep.nix
     ./tandoor.nix
