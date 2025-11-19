@@ -1,4 +1,4 @@
-{ self, inputs, config, pkgs, ... }: {
+{ config, ... }: {
   networking.firewall.allowedUDPPorts = [ 51821 ];
 
   systemd.network = {
@@ -31,7 +31,7 @@
 
   age.secrets = {
     megahost-one-conductum-wg-key = {
-      rekeyFile = ../../../secrets/wg/megahost-one-conductum.age;
+      rekeyFile = config.diffeq.secretsPath + /wg/megahost-one-conductum.age;
       owner = "systemd-network";
       group = "systemd-network";
     };

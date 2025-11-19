@@ -77,11 +77,11 @@
   age.secrets = {
     fs-mi-go-torrent-scraper = {
       # username: torrent-scraper
-      rekeyFile = ../../../../secrets/fs/mi-go-torrent-scraper.age;
+      rekeyFile = config.diffeq.secretsPath + /fs/mi-go-torrent-scraper.age;
     };
 
     ssh-client-rtorrent-socket = {
-      rekeyFile = ../../../../secrets/ssh/client-rtorrent-socket.age;
+      rekeyFile = config.diffeq.secretsPath + /ssh/client-rtorrent-socket.age;
     };
 
     rtorrent-xml-rpc-nginx-auth = {

@@ -3,7 +3,14 @@
 let
   cfg = config.yuggoth.microvms;
   mkGuestModule = import ./microvm/mkGuestModule.nix;
-  secretsRoot = ../../../secrets;
+
+  # https://jade.fyi/blog/flakes-arent-real/
+  injectDeps = { lib, ... }: {
+    options.diffeq.secretsPath = lib.mkOption {
+      type = lib.types.path;
+    };
+    config.diffeq.secretsPath = config.diffeq.secretsPath;
+  };
 in {
   imports = [
     inputs.microvm.nixosModules.host
@@ -106,7 +113,7 @@ in {
     age.secrets = lib.concatMapAttrs (vmName: vmConfig: {
       "ssh-host-${vmName}" = {
         path = "${vmConfig.agenixHostPrefix}/ssh-host";
-        rekeyFile = ../../../secrets/ssh/host-${vmName}.age;
+        rekeyFile = config.diffeq.secretsPath + /ssh/host-${vmName}.age;
         generator.script = "ssh-ed25519-pubkey";
 
         # the guest can't resolve a symlink, because it would point to a path
@@ -135,11 +142,12 @@ in {
           "${self}/nixos/common/node-exporter.nix"
           "${self}/nixos/common/agenix-rekey.nix"
 
+          injectDeps
           (mkGuestModule vmName { inherit vmConfig lib; })
           ./guests/${vmName}.nix
 
           (
-            let pubKey = secretsRoot + /ssh/host-${vmName}.pub;
+            let pubKey = config.diffeq.secretsPath + /ssh/host-${vmName}.pub;
             in lib.optionalAttrs
                 (builtins.pathExists pubKey)
                 { age.rekey.hostPubkey = pubKey; }

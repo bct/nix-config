@@ -6,13 +6,13 @@
 
   config = {
     age.rekey = {
-      masterIdentities = [ ../../secrets/yk1-nix-rage.pub ];
+      masterIdentities = [ (config.diffeq.secretsPath + /yk1-nix-rage.pub) ];
       extraEncryptionPubkeys = [
         # backup key, in case the yubikey is lost, etc.
         "age1rtx8k55ce7u3um2q7c2pyvaau7rqd07y25pc2xaq8tfragnx5qrs7zukgs"
       ];
       storageMode = "local";
-      localStorageDir = ../.. + "/secrets/rekeyed/${config.networking.hostName}";
+      localStorageDir = config.diffeq.secretsPath + /rekeyed/${config.networking.hostName};
     };
 
     age.generators = {

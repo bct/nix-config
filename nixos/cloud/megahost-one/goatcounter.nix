@@ -65,7 +65,7 @@ in {
   };
 
   age.secrets = {
-    password-goatcounter.rekeyFile = ../../../secrets/db/password-goatcounter.age;
+    password-goatcounter.rekeyFile = config.diffeq.secretsPath + /db/password-goatcounter.age;
   };
 
   megahost.container-secrets.goatcounter = {

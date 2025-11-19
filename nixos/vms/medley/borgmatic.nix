@@ -5,7 +5,7 @@
 
   age.secrets = {
     ssh-borg-medley = {
-      rekeyFile = ../../../secrets/ssh/borg-medley.age;
+      rekeyFile = config.diffeq.secretsPath + /ssh/borg-medley.age;
       generator.script = "ssh-ed25519-pubkey";
     };
   };

@@ -122,44 +122,52 @@
         # Available through 'nixos-rebuild --flake .#your-hostname'
         nixosConfigurations = let
           inherit (self) outputs;
+          secretsPath = ./secrets;
+          # https://jade.fyi/blog/flakes-arent-real/
+          injectDeps = { lib, ... }: {
+            options.diffeq.secretsPath = lib.mkOption {
+              type = lib.types.path;
+            };
+            config.diffeq.secretsPath = secretsPath;
+          };
         in
           {
           # -- desktops
           aquilonia = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/aquilonia/configuration.nix ];
+            modules = [ injectDeps ./nixos/aquilonia/configuration.nix ];
           };
 
           cimmeria = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/cimmeria/configuration.nix ];
+            modules = [ injectDeps ./nixos/cimmeria/configuration.nix ];
           };
 
           stygia = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/stygia/configuration.nix ];
+            modules = [ injectDeps ./nixos/stygia/configuration.nix ];
           };
 
           # -- LAN hosts
           medley = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/vms/medley/configuration.nix ];
+            modules = [ injectDeps ./nixos/vms/medley/configuration.nix ];
           };
 
           stereo = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/lan/stereo/configuration.nix ];
+            modules = [ injectDeps ./nixos/lan/stereo/configuration.nix ];
           };
 
           yuggoth = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/lan/yuggoth/configuration.nix ];
+            modules = [ injectDeps ./nixos/lan/yuggoth/configuration.nix ];
           };
 
           # -- cloud hosts
           megahost-one = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit self inputs outputs; };
-            modules = [ ./nixos/cloud/megahost-one/configuration.nix ];
+            modules = [ injectDeps ./nixos/cloud/megahost-one/configuration.nix ];
           };
         };
 

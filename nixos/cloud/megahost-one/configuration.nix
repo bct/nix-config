@@ -37,11 +37,11 @@
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAbD0X8eQfKiG2rYYcZ6dVdRHQaRK8DrFz7YaLzHQx2";
   age.secrets = {
     s3-proxy-minio-root-credentials.rekeyFile =
-      ../../../secrets/s3-proxy-minio-root-credentials.age;
+      config.diffeq.secretsPath + /s3-proxy-minio-root-credentials.age;
 
-    password-postgres.rekeyFile    = ../../../secrets/db/password-megahost-postgres.age;
-    password-goatcounter.rekeyFile = ../../../secrets/db/password-goatcounter.age;
-    password-wikijs.rekeyFile      = ../../../secrets/db/password-wikijs.age;
+    password-postgres.rekeyFile    = config.diffeq.secretsPath + /db/password-megahost-postgres.age;
+    password-goatcounter.rekeyFile = config.diffeq.secretsPath + /db/password-goatcounter.age;
+    password-wikijs.rekeyFile      = config.diffeq.secretsPath + /db/password-wikijs.age;
   };
 
   megahost.minio = {

@@ -85,7 +85,7 @@
 
   age.secrets = {
     rtlamr-collect-env = {
-      rekeyFile = ../../../../../secrets/rtlamr-collect-env.age;
+      rekeyFile = config.diffeq.secretsPath + /rtlamr-collect-env.age;
       owner = "rtlamr";
       group = "rtlamr";
     };

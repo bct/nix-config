@@ -63,7 +63,7 @@ in {
   };
 
   age.secrets = {
-    password-vikunja.rekeyFile = ../../../secrets/db/password-vikunja.age;
+    password-vikunja.rekeyFile = config.diffeq.secretsPath + /db/password-vikunja.age;
   };
 
   services.caddy = {

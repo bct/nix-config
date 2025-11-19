@@ -39,7 +39,7 @@ in {
         name = "lego-proxy-${domain}";
         value = {
           generator.script = "ssh-ed25519-pubkey";
-          rekeyFile = ../../../secrets/lego-proxy/${domain}.age;
+          rekeyFile = config.diffeq.secretsPath + /lego-proxy/${domain}.age;
           owner = "acme";
           group = "acme";
         };

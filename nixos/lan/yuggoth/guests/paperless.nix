@@ -40,7 +40,7 @@
 
   age.secrets = {
     fs-mi-go-paperless = {
-      rekeyFile = ../../../../secrets/fs/mi-go-paperless.age;
+      rekeyFile = config.diffeq.secretsPath + /fs/mi-go-paperless.age;
     };
 
     paperless-env = {

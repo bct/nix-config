@@ -36,7 +36,7 @@
 
   age.secrets = {
     password-db-influxdb-abrado = {
-      rekeyFile = ../../../../secrets/db/password-db-influxdb-abrado.age;
+      rekeyFile = config.diffeq.secretsPath + /db/password-db-influxdb-abrado.age;
       owner = "abrado";
       group = "abrado";
     };

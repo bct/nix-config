@@ -5,7 +5,7 @@
 
   age.secrets = {
     ssh-borg-aquilonia = {
-      rekeyFile = ../../secrets/ssh/borg-aquilonia.age;
+      rekeyFile = config.diffeq.secretsPath + /ssh/borg-aquilonia.age;
       generator.script = "ssh-ed25519-pubkey";
     };
   };

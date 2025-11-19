@@ -26,7 +26,7 @@
 
   age.secrets = {
     db-password-domus-grafana = {
-      rekeyFile = ../../../../secrets/db/password-domus-grafana.age;
+      rekeyFile = config.diffeq.secretsPath + /db/password-domus-grafana.age;
       owner = "grafana";
       group = "grafana";
     };

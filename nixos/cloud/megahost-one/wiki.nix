@@ -53,7 +53,7 @@ in {
   };
 
   age.secrets = {
-    password-wikijs.rekeyFile = ../../../secrets/db/password-wikijs.age;
+    password-wikijs.rekeyFile = config.diffeq.secretsPath + /db/password-wikijs.age;
   };
 
   services.caddy = {

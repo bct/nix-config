@@ -106,7 +106,7 @@
   ];
 
   age.secrets = {
-    db-password-db-mysql-backup.rekeyFile = ../../../../../secrets/db/password-db-mysql-backup.age;
-    ssh-borg-db.rekeyFile = ../../../../../secrets/ssh/borg-db.age;
+    db-password-db-mysql-backup.rekeyFile = config.diffeq.secretsPath + /db/password-db-mysql-backup.age;
+    ssh-borg-db.rekeyFile = config.diffeq.secretsPath + /ssh/borg-db.age;
   };
 }

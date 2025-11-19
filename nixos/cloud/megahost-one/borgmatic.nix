@@ -83,7 +83,7 @@ in {
   ];
 
   age.secrets = {
-    password-postgres.rekeyFile = ../../../secrets/db/password-megahost-postgres.age;
-    megahost-one-borg-ssh-key.rekeyFile = ../../../secrets/ssh/megahost-one-borg.age;
+    password-postgres.rekeyFile = config.diffeq.secretsPath + /db/password-megahost-postgres.age;
+    megahost-one-borg-ssh-key.rekeyFile = config.diffeq.secretsPath + /ssh/megahost-one-borg.age;
   };
 }

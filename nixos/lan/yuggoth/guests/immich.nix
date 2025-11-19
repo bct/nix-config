@@ -26,7 +26,7 @@
 
   age.secrets = {
     fs-mi-go-immich = {
-      rekeyFile = ../../../../secrets/fs/mi-go-immich.age;
+      rekeyFile = config.diffeq.secretsPath + /fs/mi-go-immich.age;
     };
 
     immich-env = {

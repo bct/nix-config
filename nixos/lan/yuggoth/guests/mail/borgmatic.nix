@@ -51,7 +51,7 @@
 
   age.secrets = {
     ssh-borg-mail = {
-      rekeyFile = ../../../../../secrets/ssh/borg-mail.age;
+      rekeyFile = config.diffeq.secretsPath + /ssh/borg-mail.age;
       generator.script = "ssh-ed25519-pubkey";
     };
   };

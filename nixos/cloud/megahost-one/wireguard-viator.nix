@@ -34,7 +34,7 @@
 
   age.secrets = {
     viator-wireguard-key = {
-      rekeyFile = ../../../secrets/viator-wireguard-key.age;
+      rekeyFile = config.diffeq.secretsPath + /viator-wireguard-key.age;
       owner = "systemd-network";
       group = "systemd-network";
     };

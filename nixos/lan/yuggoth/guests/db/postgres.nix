@@ -5,17 +5,17 @@ in {
   age.secrets = {
     db-password-db-postgres-immich = {
       generator.script = "alnum";
-      rekeyFile = ../../../../../secrets/db/password-db-postgres-immich.age;
+      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-immich.age;
     };
 
     db-password-db-postgres-miniflux = {
       generator.script = "alnum";
-      rekeyFile = ../../../../../secrets/db/password-db-postgres-miniflux.age;
+      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-miniflux.age;
     };
 
     db-password-db-postgres-paperless = {
       generator.script = "alnum";
-      rekeyFile = ../../../../../secrets/db/password-db-postgres-paperless.age;
+      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-paperless.age;
     };
   };
 

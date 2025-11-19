@@ -1,4 +1,4 @@
-{ self, pkgs, lib, ... }:
+{ self, config, pkgs, lib, ... }:
 
 let
   acme-zoneedit = pkgs.writeShellApplication {
@@ -36,7 +36,7 @@ in {
       domain = clientConfig.domain;
       pubKey = if clientConfig ? "pubKey"
                 then clientConfig.pubKey
-                else builtins.readFile ../../../../secrets/lego-proxy/${name}.pub;
+                else builtins.readFile (config.diffeq.secretsPath + /lego-proxy/${name}.pub);
     }) clients;
   };
 }

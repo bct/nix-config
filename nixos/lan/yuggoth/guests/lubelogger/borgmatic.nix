@@ -76,7 +76,7 @@ in {
 
   age.secrets = {
     ssh-borg-lubelogger = {
-      rekeyFile = ../../../../../secrets/ssh/borg-lubelogger.age;
+      rekeyFile = config.diffeq.secretsPath + /ssh/borg-lubelogger.age;
       generator.script = "ssh-ed25519-pubkey";
     };
   };

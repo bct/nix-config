@@ -1,7 +1,7 @@
 { pkgs, config, ... }: {
   age.secrets = {
     home-assistant-my-cnf = {
-      rekeyFile = ../../../../../secrets/home-assistant-my-cnf.age;
+      rekeyFile = config.diffeq.secretsPath + /home-assistant-my-cnf.age;
       owner = "hass";
       group = "hass";
     };
