@@ -1,4 +1,4 @@
-{ self, inputs, config, ... }:
+{ self, inputs, config, pkgs, lib, ... }:
 
 let
   lubelogger-nixpkgs = inputs.nixpkgs-lubelogger;
@@ -49,9 +49,9 @@ in
     environmentFile = config.age.secrets.lubelogger-env.path;
     settings = {
       MailConfig__EmailServer = "mail.domus.diffeq.com";
-      MailConfig__EmailFrom = "lubelogger@mail.domus.diffeq.com";
+      MailConfig__EmailFrom = "lubelogger@domus.diffeq.com";
       MailConfig__Port = "587";
-      MailConfig__Username = "lubelogger@mail.domus.diffeq.com";
+      MailConfig__Username = "lubelogger@domus.diffeq.com";
     };
   };
 
@@ -60,6 +60,24 @@ in
     virtualHosts."lubelogger.domus.diffeq.com" = {
       useACMEHost = "lubelogger.domus.diffeq.com";
       extraConfig = "reverse_proxy localhost:${toString config.services.lubelogger.port}";
+    };
+  };
+
+  systemd.timers.lubelogger-reminders = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "daily";
+      RandomizedDelaySec = "10m";
+      Unit = "lubelogger-reminders.service";
+    };
+  };
+
+  systemd.services.lubelogger-reminders = let
+    reminderUrl = "https://lubelogger.domus.diffeq.com/api/vehicle/reminders/send?urgencies=NotUrgent&urgencies=VeryUrgent&urgencies=Urgent&urgencies=PastDue";
+  in {
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${lib.getExe pkgs.curl} ${reminderUrl}";
     };
   };
 }
