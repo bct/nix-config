@@ -1,4 +1,5 @@
 {
+
   # Based on the "minimal" config from https://github.com/Misterio77/nix-starter-configs
   description = "bct's nix config";
 
@@ -11,9 +12,6 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-
-    # Branch that includes the lubelogger module
-    nixpkgs-lubelogger.url = "github:bct/nixpkgs/lubelogger-module";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-25.05";

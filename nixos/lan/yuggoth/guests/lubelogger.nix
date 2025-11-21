@@ -1,11 +1,11 @@
 { self, inputs, config, pkgs, lib, ... }:
 
 let
-  lubelogger-nixpkgs = inputs.nixpkgs-lubelogger;
+  nixpkgs-unstable = inputs.nixpkgs-unstable;
 in
 {
   imports = [
-    "${lubelogger-nixpkgs}/nixos/modules/services/web-apps/lubelogger.nix"
+    "${nixpkgs-unstable}/nixos/modules/services/web-apps/lubelogger.nix"
     "${self}/nixos/modules/lego-proxy-client"
 
     ./lubelogger/borgmatic.nix
