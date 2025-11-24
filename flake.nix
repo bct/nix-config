@@ -43,8 +43,8 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     # microvm
+    # doesn't follow nixpkgs, so that we can take advantage of the cache.
     microvm.url = "github:astro/microvm.nix";
-    microvm.inputs.nixpkgs.follows = "nixpkgs";
 
     # nixvirt
     nixvirt.url = "https://flakehub.com/f/AshleyYakeley/NixVirt/*.tar.gz";
