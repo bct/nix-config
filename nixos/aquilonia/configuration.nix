@@ -16,7 +16,6 @@
       ./framework.nix
 
       "${self}/nixos/common/desktop/projects/android.nix"
-      "${self}/nixos/common/desktop/projects/3d-print.nix"
     ];
 
   personal.user = "bct";

@@ -6,6 +6,7 @@
 
     ./shell.nix
     ./xorg.nix
+    ./3d-print.nix
   ];
 
   nixpkgs = {

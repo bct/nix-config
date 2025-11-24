@@ -7,8 +7,6 @@
 
       "${self}/nixos/common/nix.nix"
       "${self}/nixos/common/desktop"
-
-      "${self}/nixos/common/desktop/projects/3d-print.nix"
     ];
 
   personal.user = "bct";
