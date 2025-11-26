@@ -437,6 +437,7 @@ in {
       ${workspaceRules}
       workspace = special:music, on-created-empty:supersonic, gapsout:50
       workspace = name:notes, on-created-empty:obsidian
+      workspace = name:web, gapsout:10 20 10 20
 
       # See https://wiki.hypr.land/Configuring/Window-Rules/ for more
 
