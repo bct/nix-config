@@ -31,9 +31,8 @@ in
 
   programs = {
     rofi = {
-      package = pkgs.rofi.override {
-        plugins = [ pkgs.rofi-calc ];
-      };
+      package = pkgs.rofi-wayland;
+      plugins = [ pkgs.rofi-calc ];
 
       enable = true;
       font = "UbuntuMono Nerd Font 18";
