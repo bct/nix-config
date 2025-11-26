@@ -66,6 +66,7 @@
 
     # gui utilities
     rofi-bluetooth
+    rofi-network-manager
 
     # image viewer
     imv
