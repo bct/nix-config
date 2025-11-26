@@ -64,6 +64,8 @@
     # Writes ~/.config/atuin/config.toml
     settings = {
       prefers_reduced_motion = true;  # No automatic time updates
+      inline_height = 16; # Allow me to see some of the terminal history
+      filter_mode_shell_up_key_binding = "session"; # Up only searches the current session
     };
   };
 
