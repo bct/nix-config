@@ -10,6 +10,7 @@
     { name = "3dp";   icon = ""; }
     { name = "zap";   icon = ""; }
     { name = "host";  icon = ""; }
+    { name = "img";   icon = ""; }
   ];
 
   # prepare a list of workspaces for grid-select -d.
