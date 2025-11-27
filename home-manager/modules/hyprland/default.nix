@@ -41,7 +41,7 @@
     '';
   };
 in {
-  services.clipman.enable = true;
+  services.cliphist.enable = true;
 
   programs.waybar = {
     enable = true;
