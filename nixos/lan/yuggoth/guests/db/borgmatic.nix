@@ -1,28 +1,12 @@
-{ inputs, config, pkgs, ... }: {
-  # unstable fixes https://github.com/NixOS/nixpkgs/issues/412113
-  imports = [
-    "${inputs.nixpkgs-unstable}/nixos/modules/services/backup/borgmatic.nix"
-  ];
-  disabledModules = [ "services/backup/borgmatic.nix" ];
+{ self, config, pkgs, ... }: {
+  imports = [ "${self}/nixos/modules/borgmatic" ];
 
-  programs.ssh.knownHosts = {
-    "borg.domus.diffeq.com".publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCtsDN0WY1wDki3JNSmGqOmxMR34IrZue4h3Xd+wdYfDOHhHTlk1taNWFGJusSc7hSC7ittGoOmeP6AepCIAhKNce0d9ITA9xAIN40qnFFkW1lUTL6/eE3+CM2VBqYreLy0YiID8K/OfoqppPzHpMB4ijQiSRrtBtGYx5OGtMAQkSSu50XH3s4tzHR0qXnjAi3Ly7pJ47d62MFR4JvpI5LQuIe3zvwW4W1GEYlZHOXDX7bb1cEyEhPeoEJ2AOHCdbtZ7osZyjQtARypWfuTgngpLYVcLErjj9UazUikJn7sBhYgwkaFcjfFn2optnU+3TpjIl4ot59vrwzOKOF634YTUD7iNWOTpdduHUWfK3eAARM4YnAOL3PMhEp/656kQqMPGeM60aSgGWKeBZWycp1VMGtQhZ4BCpFSErYKEi1CKey1xfHMaH5PVFZTJLToUEMzHlLYSbV8AYO25vNppUEfJAk215Al6gHR7o5l0NRlqLL18uo7zFlj75P7nIBsLSk=";
-  };
-
-  services.borgmatic = {
+  diffeq.borgmatic = {
     enable = true;
-
-    # config check fails because POSTGRES_PASSWORD isn't set
-    enableConfigCheck = false;
+    backupName = "db";
+    sshKeyPath = config.age.secrets.ssh-borg-db.path;
 
     settings = {
-      repositories = [
-        {
-          label = "borg.domus.diffeq.com";
-          path = "ssh://borg@borg.domus.diffeq.com/srv/borg/db/";
-        }
-      ];
-
       source_directories = [
         "/var/backups/influxdb/"
       ];
@@ -60,24 +44,11 @@
         "rm -rf /var/backups/influxdb/"
       ];
 
-      ssh_command = "ssh -i ${config.age.secrets.ssh-borg-db.path}";
-
       # retention
       keep_daily = 7;
       keep_weekly = 4;
       keep_monthly = 6;
       keep_yearly = 1;
-
-      ntfy = {
-        topic = "doog4maechoh";
-        fail = {
-          title = "[db] borgmatic failed";
-          message = "Your backup has failed.";
-          priority = "default";
-          tags = "sweat,borgmatic";
-        };
-        states = ["fail"];
-      };
     };
   };
 
@@ -104,6 +75,9 @@
     ""
     "${run-borgmatic}"
   ];
+
+  # config check fails because POSTGRES_PASSWORD isn't set
+  services.borgmatic.enableConfigCheck = false;
 
   age.secrets = {
     db-password-db-mysql-backup.rekeyFile = config.diffeq.secretsPath + /db/password-db-mysql-backup.age;

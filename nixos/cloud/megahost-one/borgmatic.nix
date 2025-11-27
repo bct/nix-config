@@ -1,22 +1,16 @@
-{ config, pkgs, ... }:
+{ self, config, pkgs, ... }:
 
 let
   cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
 in {
-  services.borgmatic = {
-    enable = true;
+  imports = [ "${self}/nixos/modules/borgmatic" ];
 
-    # config check fails because POSTGRES_PASSWORD isn't set
-    enableConfigCheck = false;
+  diffeq.borgmatic = {
+    enable = true;
+    backupName = "megahost-one.diffeq.com";
+    sshKeyPath = config.age.secrets.megahost-one-borg-ssh-key.path;
 
     settings = {
-      repositories = [
-        {
-          label = "borg.domus.diffeq.com";
-          path = "ssh://borg@borg.domus.diffeq.com/srv/borg/megahost-one.diffeq.com/";
-        }
-      ];
-
       source_directories = [
         "/srv/data/"
       ];
@@ -37,24 +31,11 @@ in {
         }
       ];
 
-      ssh_command = "ssh -i ${config.age.secrets.megahost-one-borg-ssh-key.path}";
-
       # retention
       keep_daily = 7;
       keep_weekly = 4;
       keep_monthly = 6;
       keep_yearly = 1;
-
-      ntfy = {
-        topic = "doog4maechoh";
-        fail = {
-          title = "[megahost-one] borgmatic failed";
-          message = "Your backup has failed.";
-          priority = "default";
-          tags = "sweat,borgmatic";
-        };
-        states = ["fail"];
-      };
     };
   };
 
@@ -81,6 +62,9 @@ in {
     ""
     "${run-borgmatic}"
   ];
+
+  # config check fails because POSTGRES_PASSWORD isn't set
+  services.borgmatic.enableConfigCheck = false;
 
   age.secrets = {
     password-postgres.rekeyFile = config.diffeq.secretsPath + /db/password-megahost-postgres.age;
