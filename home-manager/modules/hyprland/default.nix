@@ -572,4 +572,12 @@ in {
       ];
     };
   };
+
+  gtk = {
+    enable = true;
+    font = {
+      name = "Ubuntu";
+      size = 8;
+    };
+  };
 }
