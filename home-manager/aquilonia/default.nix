@@ -14,7 +14,12 @@
 
     ansible
 
-    gimp
+    gimp3
+    inkscape
+
+    # fixes missing icons in inkscape
+    # https://github.com/NixOS/nixpkgs/pull/447250
+    adwaita-icon-theme
 
     hoon-crib
 
