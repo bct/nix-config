@@ -96,7 +96,6 @@ in {
         # }
       };
       clock = {
-        # "timezone": "America/New_York",
         tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
         format-alt = "{:%Y-%m-%d}";
       };
@@ -167,15 +166,26 @@ in {
         padding: 0 10px;
       }
 
+      #workspaces {
+        padding-left: 3px;
+      }
+
       #workspaces button {
-        padding: 0 5px;
         background: transparent;
         color: #ebdbb2;
+        margin: 0;
+        padding: 0 9px 0 5px;
         border: 0;
+        border-radius: 0;
+      }
+
+      #workspaces button:hover {
+        border: 0;
+        box-shadow: none;
       }
 
       #workspaces button.active {
-        background: rgba(203, 166, 247, 0.2);
+        background: #689d6a;
       }
 
       #clock,
