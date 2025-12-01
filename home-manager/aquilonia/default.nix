@@ -1,6 +1,8 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, ... }:
+{
   imports = [
     ../desktop
+    ./lutris.nix
   ];
 
   personal.user = "bct";
@@ -40,7 +42,9 @@
       Wants = [ "network-online.target" ];
     };
 
-    Install = { WantedBy = [ "default.target" ]; };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
 
     Mount = {
       What = "bct@mi-go.domus.diffeq.com:/mnt/bulk";
@@ -58,7 +62,9 @@
       Wants = [ "network-online.target" ];
     };
 
-    Install = { WantedBy = [ "default.target" ]; };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
 
     Mount = {
       What = "bct@mi-go.domus.diffeq.com:/mnt/bulk/beets";
@@ -108,7 +114,9 @@
   programs.oh-my-posh = {
     enable = true;
     enableBashIntegration = true;
-    settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./oh-my-posh.json));
+    settings = builtins.fromJSON (
+      builtins.unsafeDiscardStringContext (builtins.readFile ./oh-my-posh.json)
+    );
   };
 
   programs.zathura = {
