@@ -16,6 +16,8 @@ let
   email = "s+acme@diffeq.com";
 
   clients = import ./clients.nix;
+
+  proxyHostKey = builtins.readFile (config.diffeq.secretsPath + /ssh/host-lego-proxy.pub);
 in {
   options.services.lego-proxy-client = with lib; {
     enable = mkEnableOption "lego-proxy-client";
@@ -46,9 +48,8 @@ in {
       }
     ) cfg.domains);
 
-    # TODO: readFile
     programs.ssh.knownHosts = {
-      "lego-proxy.domus.diffeq.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMA5YAhyRoYYUPJOXWrFCxh6loBKK1fWuiFU3NgVj9iU root@lego-proxy";
+      "lego-proxy.domus.diffeq.com".publicKey = proxyHostKey;
     };
 
     security.acme.acceptTerms = true;
