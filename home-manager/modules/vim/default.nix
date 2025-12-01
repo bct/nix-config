@@ -33,21 +33,24 @@
     extraLuaConfig = lib.fileContents ./files/init.lua;
     extraConfig = lib.fileContents ./files/extra-config.vim;
 
-    plugins = with pkgs.vimPlugins; let
-      # -- unpackaged plugins
-      telescope-alternate-nvim = pkgs.vimUtils.buildVimPlugin {
-        pname = "telescope-alternate.nvim";
-        version = "2024-04-15";
-        src = pkgs.fetchFromGitHub {
-          owner = "otavioschwanck";
-          repo = "telescope-alternate.nvim";
-          rev = "2efa87d99122ee1abe8ada1a50304180a1802c34";
-          sha256 = "sha256-oit93iNRGlQhKAgsy0JgaJLkf+1miDhi3XjzE39gx7g=";
+    plugins =
+      with pkgs.vimPlugins;
+      let
+        # -- unpackaged plugins
+        telescope-alternate-nvim = pkgs.vimUtils.buildVimPlugin {
+          pname = "telescope-alternate.nvim";
+          version = "2024-04-15";
+          src = pkgs.fetchFromGitHub {
+            owner = "otavioschwanck";
+            repo = "telescope-alternate.nvim";
+            rev = "2efa87d99122ee1abe8ada1a50304180a1802c34";
+            sha256 = "sha256-oit93iNRGlQhKAgsy0JgaJLkf+1miDhi3XjzE39gx7g=";
+          };
+          buildInputs = [ telescope-nvim ];
+          meta.homepage = "https://github.com/otavioschwanck/telescope-alternate.nvim";
         };
-        buildInputs = [ telescope-nvim ];
-        meta.homepage = "https://github.com/otavioschwanck/telescope-alternate.nvim";
-      };
-    in [
+      in
+      [
         gruvbox-community
         bufexplorer
 
@@ -312,6 +315,7 @@
           type = "lua";
           config = ''
             require("obsidian").setup({
+              legacy_commands = false,
               workspaces = {
                 {
                   name = "notes",
@@ -335,9 +339,10 @@
 
     withPython3 = true;
 
-    extraPython3Packages = ps: with ps; [
-      flake8
-    ];
+    extraPython3Packages =
+      ps: with ps; [
+        flake8
+      ];
 
     vimAlias = true;
   };
