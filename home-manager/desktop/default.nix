@@ -51,7 +51,7 @@
 
   home.packages = with pkgs; [
     # fonts
-    ubuntu_font_family
+    ubuntu-classic
     nerd-fonts.ubuntu-mono
     dejavu_fonts
     corefonts

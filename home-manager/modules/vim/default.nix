@@ -23,7 +23,6 @@
     pkgs.tflint
     pkgs.nodePackages.vscode-langservers-extracted
     pkgs.typescript-language-server
-    pkgs.ansible-language-server
     pkgs.rust-analyzer
   ];
 
@@ -35,16 +34,6 @@
     extraConfig = lib.fileContents ./files/extra-config.vim;
 
     plugins = with pkgs.vimPlugins; let
-      # aa/src wants a specific version of black
-      black = pkgs.black.overridePythonAttrs (oldAttrs: rec {
-        version = "24.8.0";
-        src = pkgs.fetchPypi {
-          inherit version;
-          pname = "black";
-          hash = "sha256-JQCUVCC2eEw4ue6IWvA59edHHvKEqwP6Nezd5GiM2D8=";
-        };
-      });
-
       # -- unpackaged plugins
       telescope-alternate-nvim = pkgs.vimUtils.buildVimPlugin {
         pname = "telescope-alternate.nvim";
@@ -174,7 +163,7 @@
 
             conform.setup({
               formatters = {
-                black = { command = "${black}/bin/black" },
+                black = { command = "${pkgs.black}/bin/black" },
                 isort = { command = "${pkgs.isort}/bin/isort" },
                 prettier = { command = "${pkgs.nodePackages.prettier}/bin/prettier" },
               },

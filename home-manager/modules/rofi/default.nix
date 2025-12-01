@@ -31,7 +31,6 @@ in
 
   programs = {
     rofi = {
-      package = pkgs.rofi-wayland;
       plugins = [ pkgs.rofi-calc ];
 
       enable = true;

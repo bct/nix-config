@@ -7,8 +7,6 @@
   personal.email = "bct@diffeq.com";
 
   home.packages = with pkgs; [
-    pollymc
-
     brave
     libreoffice
 
