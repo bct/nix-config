@@ -1,11 +1,6 @@
-{ self, inputs, config, pkgs, lib, ... }:
-
-let
-  nixpkgs-unstable = inputs.nixpkgs-unstable;
-in
+{ self, config, pkgs, lib, ... }:
 {
   imports = [
-    "${nixpkgs-unstable}/nixos/modules/services/web-apps/lubelogger.nix"
     "${self}/nixos/modules/lego-proxy-client"
 
     ./lubelogger/borgmatic.nix
@@ -72,12 +67,14 @@ in
     };
   };
 
-  systemd.services.lubelogger-reminders = let
-    reminderUrl = "https://lubelogger.domus.diffeq.com/api/vehicle/reminders/send?urgencies=NotUrgent&urgencies=VeryUrgent&urgencies=Urgent&urgencies=PastDue";
-  in {
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${lib.getExe pkgs.curl} ${reminderUrl}";
+  systemd.services.lubelogger-reminders =
+    let
+      reminderUrl = "https://lubelogger.domus.diffeq.com/api/vehicle/reminders/send?urgencies=NotUrgent&urgencies=VeryUrgent&urgencies=Urgent&urgencies=PastDue";
+    in
+    {
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${lib.getExe pkgs.curl} ${reminderUrl}";
+      };
     };
-  };
 }
