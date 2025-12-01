@@ -1,7 +1,8 @@
 { self, inputs, config, pkgs, ... }:
 let
   relayhost = "[smtppro.zoho.com]:587";
-in {
+in
+{
   imports = [
     inputs.simple-nixos-mailserver.nixosModule
 
@@ -11,6 +12,7 @@ in {
   ];
 
   system.stateVersion = "24.05";
+  mailserver.stateVersion = 3;
 
   microvm = {
     vcpu = 1;
@@ -35,35 +37,40 @@ in {
     home = "/var/home/bct";
 
     # give me access to the mailboxes
-    extraGroups = [config.mailserver.vmailGroupName];
+    extraGroups = [ config.mailserver.vmailGroupName ];
   };
 
-  environment.systemPackages = let
-    rspamc-deliver = pkgs.writeShellApplication {
-      name = "rspamc-deliver";
-      runtimeInputs = [
-        pkgs.rspamd
-        pkgs.procmail
-      ];
-      text = ''
-        rspamc --connect /run/rspamd/worker-controller.sock --mime --exec procmail
-      '';
-    };
-  in [
-    pkgs.neomutt
-    pkgs.notmuch
-    pkgs.getmail6
-    pkgs.afew
-    pkgs.msmtp
-    pkgs.procmail
-    pkgs.lynx
-    rspamc-deliver
-  ];
+  environment.systemPackages =
+    let
+      rspamc-deliver = pkgs.writeShellApplication {
+        name = "rspamc-deliver";
+        runtimeInputs = [
+          pkgs.rspamd
+          pkgs.procmail
+        ];
+        text = ''
+          rspamc --connect /run/rspamd/worker-controller.sock --mime --exec procmail
+        '';
+      };
+    in
+    [
+      pkgs.neomutt
+      pkgs.notmuch
+      pkgs.getmail6
+      pkgs.afew
+      pkgs.msmtp
+      pkgs.procmail
+      pkgs.lynx
+      rspamc-deliver
+    ];
 
   mailserver = {
     enable = true;
     fqdn = "mail.domus.diffeq.com";
-    domains = ["diffeq.com" "domus.diffeq.com"];
+    domains = [
+      "diffeq.com"
+      "domus.diffeq.com"
+    ];
 
     indexDir = "/var/lib/dovecot/indices";
     useFsLayout = true;
@@ -73,7 +80,7 @@ in {
     # nix-shell -p mkpasswd --run 'mkpasswd -sm bcrypt'
     loginAccounts = {
       "bct@diffeq.com" = {
-        aliases = ["@diffeq.com"];
+        aliases = [ "@diffeq.com" ];
         hashedPasswordFile = config.age.secrets.bct-hashed-password.path;
       };
 
@@ -117,15 +124,14 @@ in {
   services.postfix = {
     mapFiles."sasl_passwd" = config.age.secrets.sasl-passwd.path;
 
-    extraConfig =
-    ''
-      smtp_sasl_auth_enable = yes
-      smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
-      smtp_sasl_security_options = noanonymous
-      smtp_sasl_tls_security_options = noanonymous
-      smtp_sasl_mechanism_filter = AUTH LOGIN
-      relayhost = ${relayhost}
-    '';
+    settings.main = {
+      smtp_sasl_auth_enable = true;
+      smtp_sasl_password_maps = "hash:/etc/postfix/sasl_passwd";
+      smtp_sasl_security_options = "noanonymous";
+      smtp_sasl_tls_security_options = "noanonymous";
+      smtp_sasl_mechanism_filter = "AUTH LOGIN";
+      relayhost = [ relayhost ];
+    };
   };
 
   age.secrets = {
