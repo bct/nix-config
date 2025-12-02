@@ -265,6 +265,14 @@ in {
       # we could use named workspaces, but this allows us to specify the order
       workspaceRules = lib.concatLines (lib.imap1 (i: ws: "workspace = ${toString i}, defaultName:${ws.name}") workspaces);
     in ''
+      ################
+      ### MONITORS ###
+      ################
+
+      # See https://wiki.hypr.land/Configuring/Monitors/
+      monitor = desc:Dell Inc. DELL U2515H FJYC778B0XLL, preferred, auto, 1.333
+      monitor = ,preferred,auto,auto
+
       ###################
       ### MY PROGRAMS ###
       ###################
