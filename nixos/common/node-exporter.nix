@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   networking.firewall.allowedTCPPorts = [
     9100 # prometheus node-exporter
   ];

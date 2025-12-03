@@ -1,7 +1,9 @@
 { config, pkgs, ... }:
 
-let cfgPersonal = config.personal;
-in {
+let
+  cfgPersonal = config.personal;
+in
+{
   environment.systemPackages = with pkgs; [
     vim
     git

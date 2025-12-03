@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfgPersonal = config.personal;
-in {
+let
+  cfgPersonal = config.personal;
+in
+{
   imports = [
     ./packages.nix
   ];
@@ -100,7 +107,15 @@ in {
 
     users.users.${cfgPersonal.user} = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "audio" "networkmanager" "video" "lp" "scanner" "dialout" ];
+      extraGroups = [
+        "wheel"
+        "audio"
+        "networkmanager"
+        "video"
+        "lp"
+        "scanner"
+        "dialout"
+      ];
     };
 
     nix.settings.trusted-users = [ "@wheel" ];

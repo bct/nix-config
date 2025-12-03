@@ -1,6 +1,12 @@
 # Enable SSH with public key authentication.
 # Set up a user who can log in via SSH.
-{ inputs, lib, pkgs, ... }: {
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
+{
   imports = [
     inputs.home-manager.nixosModules.home-manager
   ];
@@ -22,7 +28,10 @@
   ];
 
   # don't install nano and perl
-  environment.defaultPackages = [ pkgs.rsync pkgs.strace ];
+  environment.defaultPackages = [
+    pkgs.rsync
+    pkgs.strace
+  ];
 
   environment.variables.EDITOR = "vim";
 

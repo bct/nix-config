@@ -1,7 +1,9 @@
 { config, pkgs, ... }:
 
-let cfgPersonal = config.personal;
-in {
+let
+  cfgPersonal = config.personal;
+in
+{
   programs.adb.enable = true;
 
   users.users.${cfgPersonal.user} = {

@@ -1,4 +1,5 @@
-{ inputs, config, ... }: {
+{ inputs, config, ... }:
+{
   imports = [
     inputs.agenix.nixosModules.default
     inputs.agenix-rekey.nixosModules.default
@@ -20,15 +21,24 @@
       # .pub file on disk too.
       # a downside of this approach is that the unencrypted private key is
       # briefly written to disk.
-      ssh-ed25519-pubkey = {name, lib, pkgs, file, ...}: let
-        comment = lib.escapeShellArg "${config.networking.hostName}:${name}";
-        privKeyPath = lib.escapeShellArg (lib.removeSuffix ".age" file);
-      in ''
-        ${pkgs.openssh}/bin/ssh-keygen -qt ed25519 -N "" -C ${comment} -f ${privKeyPath}
-        priv=$(${pkgs.coreutils}/bin/cat ${privKeyPath})
-        ${pkgs.coreutils}/bin/shred -u ${privKeyPath}
-        echo "$priv"
-      '';
+      ssh-ed25519-pubkey =
+        {
+          name,
+          lib,
+          pkgs,
+          file,
+          ...
+        }:
+        let
+          comment = lib.escapeShellArg "${config.networking.hostName}:${name}";
+          privKeyPath = lib.escapeShellArg (lib.removeSuffix ".age" file);
+        in
+        ''
+          ${pkgs.openssh}/bin/ssh-keygen -qt ed25519 -N "" -C ${comment} -f ${privKeyPath}
+          priv=$(${pkgs.coreutils}/bin/cat ${privKeyPath})
+          ${pkgs.coreutils}/bin/shred -u ${privKeyPath}
+          echo "$priv"
+        '';
     };
   };
 }
