@@ -327,9 +327,19 @@ in {
         col.border_inactive = rgba(444444ff)
 
         groupbar {
-          indicator_height = 1
-          col.active = rgb(d79921)
-          col.inactive = rgb(3c3836)
+          keep_upper_gap = false
+
+          # give the group bar a background
+          # https://github.com/hyprwm/Hyprland/discussions/3284#discussioncomment-13620599
+          height = 1
+          font_size = 10
+
+          # about half the indicator height
+          text_offset = -12
+          indicator_height = 24
+
+          col.active = rgba(d7992166)
+          col.inactive = rgba(3c383666)
         }
       }
 
