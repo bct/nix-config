@@ -1,17 +1,27 @@
-{ self, inputs, outputs, lib, config, ... }:
+{
+  self,
+  inputs,
+  outputs,
+  lib,
+  config,
+  ...
+}:
 
 let
   cfg = config.yuggoth.microvms;
   mkGuestModule = import ./microvm/mkGuestModule.nix;
 
   # https://jade.fyi/blog/flakes-arent-real/
-  injectDeps = { lib, ... }: {
-    options.diffeq.secretsPath = lib.mkOption {
-      type = lib.types.path;
+  injectDeps =
+    { lib, ... }:
+    {
+      options.diffeq.secretsPath = lib.mkOption {
+        type = lib.types.path;
+      };
+      config.diffeq.secretsPath = config.diffeq.secretsPath;
     };
-    config.diffeq.secretsPath = config.diffeq.secretsPath;
-  };
-in {
+in
+{
   imports = [
     inputs.microvm.nixosModules.host
   ];
@@ -23,54 +33,57 @@ in {
     };
 
     guests = mkOption {
-      type = types.attrsOf (types.submodule (
-        {config, name, ...}: {
-          options = {
-            hostName = mkOption {
-              type = types.str;
-              default = name;
-            };
+      type = types.attrsOf (
+        types.submodule (
+          { config, name, ... }:
+          {
+            options = {
+              hostName = mkOption {
+                type = types.str;
+                default = name;
+              };
 
-            tapInterfaceName = mkOption {
-              type = types.str;
-              default = "vm-${config.hostName}"; # <= 15 chars
-            };
+              tapInterfaceName = mkOption {
+                type = types.str;
+                default = "vm-${config.hostName}"; # <= 15 chars
+              };
 
-            tapInterfaceMac = mkOption {
-              type = types.str;
-            };
+              tapInterfaceMac = mkOption {
+                type = types.str;
+              };
 
-            machineId = mkOption {
-              type = types.str;
-              description = "Populates /etc/machine-id. The machine ID is a single newline-terminated, hexadecimal, 32-character, lowercase ID.";
-            };
+              machineId = mkOption {
+                type = types.str;
+                description = "Populates /etc/machine-id. The machine ID is a single newline-terminated, hexadecimal, 32-character, lowercase ID.";
+              };
 
-            agenixHostPrefix = mkOption {
-              type = types.str;
-              default = "/run/agenix-vms/${name}";
-              description = "host directory containing secrets to pass to the VM";
-            };
+              agenixHostPrefix = mkOption {
+                type = types.str;
+                default = "/run/agenix-vms/${name}";
+                description = "host directory containing secrets to pass to the VM";
+              };
 
-            restartIfChanged = mkOption {
-              type = types.bool;
-              default = true;
-              description = "Restart this MicroVM if the systemd units are changed, i.e. if it has been updated by rebuilding the host.";
-            };
+              restartIfChanged = mkOption {
+                type = types.bool;
+                default = true;
+                description = "Restart this MicroVM if the systemd units are changed, i.e. if it has been updated by rebuilding the host.";
+              };
 
-            requires = mkOption {
-              type = types.listOf types.str;
-              default = [];
-              description = "systemd Requires=";
-            };
+              requires = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = "systemd Requires=";
+              };
 
-            startDelay = mkOption {
-              type = types.nullOr types.int;
-              default = null;
-              description = "delay before booting the service, to ensure prerequisites are available and reduce load on system boot.";
+              startDelay = mkOption {
+                type = types.nullOr types.int;
+                default = null;
+                description = "delay before booting the service, to ensure prerequisites are available and reduce load on system boot.";
+              };
             };
-          };
-        }
-      ));
+          }
+        )
+      );
     };
   };
 
@@ -80,7 +93,10 @@ in {
 
     # bridge ethernet and VM interfaces
     systemd.network.networks."10-lan" = {
-      matchConfig.Name = [cfg.interfaceToBridge "vm-*"];
+      matchConfig.Name = [
+        cfg.interfaceToBridge
+        "vm-*"
+      ];
       networkConfig = {
         Bridge = "br0";
       };
@@ -106,7 +122,8 @@ in {
 
     # https://astro.github.io/microvm.nix/faq.html#how-to-centralize-logging-with-journald
     # create a symlink of each MicroVM's journal under the host's /var/log/journal
-    systemd.tmpfiles.rules = lib.mapAttrsToList (vmName: vmConfig:
+    systemd.tmpfiles.rules = lib.mapAttrsToList (
+      vmName: vmConfig:
       "L+ /var/log/journal/${vmConfig.machineId} - - - - /var/lib/microvms/${vmName}/journal/${vmConfig.machineId}"
     ) cfg.guests;
 
@@ -139,6 +156,11 @@ in {
           # the other nix configuration seems OK to ignore.
           "${self}/nixos/common/headless.nix"
 
+          {
+            # home-manager assumes that /nix is writeable.
+            diffeq.headless.enable-home-manager = false;
+          }
+
           "${self}/nixos/common/node-exporter.nix"
           "${self}/nixos/common/agenix-rekey.nix"
 
@@ -147,10 +169,10 @@ in {
           ./guests/${vmName}.nix
 
           (
-            let pubKey = config.diffeq.secretsPath + /ssh/host-${vmName}.pub;
-            in lib.optionalAttrs
-                (builtins.pathExists pubKey)
-                { age.rekey.hostPubkey = pubKey; }
+            let
+              pubKey = config.diffeq.secretsPath + /ssh/host-${vmName}.pub;
+            in
+            lib.optionalAttrs (builtins.pathExists pubKey) { age.rekey.hostPubkey = pubKey; }
           )
         ];
       };
@@ -159,7 +181,9 @@ in {
     # microvm@ service dependencies
     systemd.services = lib.mapAttrs' (vmName: vmConfig: {
       name = "microvm@${vmName}";
-      value = { requires = vmConfig.requires; };
+      value = {
+        requires = vmConfig.requires;
+      };
     }) cfg.guests;
   };
 }
