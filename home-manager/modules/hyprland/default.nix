@@ -409,6 +409,10 @@ in {
       bind = ALT, k, movefocus, u
       bind = ALT, l, movefocus, r
 
+      # switch monitor focus
+      bind = ALT, o, focusmonitor, 0
+      bind = ALT, e, focusmonitor, 1
+
       # resize the active window
       bind = SUPER CTRL, h, resizeactive, -36 0
       bind = SUPER CTRL, s, resizeactive, 36 0
