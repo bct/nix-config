@@ -159,6 +159,10 @@ in
           {
             # home-manager assumes that /nix is writeable.
             diffeq.headless.enable-home-manager = false;
+
+            # we can't do GC if /nix isn't writeable
+            # (possibly we should allow this if there's a writableStoreOverlay?)
+            nix.gc.automatic = false;
           }
 
           "${self}/nixos/common/node-exporter.nix"

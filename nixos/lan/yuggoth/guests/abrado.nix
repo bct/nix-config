@@ -1,12 +1,15 @@
-{ self, config, pkgs, ... }: {
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
+{
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
   ];
 
   system.stateVersion = "24.05";
-
-  # don't throw away our nix-based scraper deploys
-  nix.gc.automatic = false;
 
   nix.settings = {
     # Enable flakes and new 'nix' command
@@ -49,7 +52,7 @@
   };
 
   users = {
-    groups.abrado = {};
+    groups.abrado = { };
     users.abrado = {
       isNormalUser = true;
       group = "abrado";
@@ -62,7 +65,7 @@
   };
 
   systemd.timers.current-temp = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnBootSec = "30m";
       OnUnitActiveSec = "30m";
@@ -84,7 +87,7 @@
   };
 
   systemd.timers.exchange-rates = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "*-*-* 02:00:00 UTC";
       Unit = "exchange-rates.service";
@@ -105,7 +108,7 @@
   };
 
   systemd.timers.gas-rates = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "*-*-* 03:00:00 UTC";
       Unit = "gas-rates.service";
@@ -146,7 +149,7 @@
   };
 
   systemd.timers.cgwm = {
-  wantedBy = [ "timers.target" ];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "17:00 America/Edmonton";
       Unit = "cgwm.service";
