@@ -62,7 +62,17 @@
     grid-select.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, flake-parts, deploy-rs, nixos-generators, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      home-manager,
+      flake-parts,
+      deploy-rs,
+      nixos-generators,
+      ...
+    }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         inputs.agenix-rekey.flakeModule
@@ -78,39 +88,58 @@
         # "x86_64-darwin"
       ];
 
-      perSystem = { config, pkgs, system, ... }: {
-        # Your custom packages
-        # Acessible through 'nix build', 'nix shell', etc
-        packages = let
-            inherit (self) outputs;
-            pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-            generators = import ./generators { inherit inputs outputs nixpkgs nixos-generators; };
-          in import ./pkgs { inherit pkgs pkgs-unstable; } // generators;
+      perSystem =
+        {
+          config,
+          pkgs,
+          system,
+          ...
+        }:
+        {
+          # Your custom packages
+          # Acessible through 'nix build', 'nix shell', etc
+          packages =
+            let
+              inherit (self) outputs;
+              pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+              generators = import ./generators {
+                inherit
+                  inputs
+                  outputs
+                  nixpkgs
+                  nixos-generators
+                  ;
+              };
+            in
+            import ./pkgs { inherit pkgs pkgs-unstable; } // generators;
 
-        # Devshell for working on configs
-        # Acessible through 'nix develop'
-        devShells = import ./shell.nix { inherit config pkgs inputs; };
+          # Devshell for working on configs
+          # Acessible through 'nix develop'
+          devShells = import ./shell.nix { inherit config pkgs inputs; };
 
-        # agenix-rekey configuration
-        # see https://flake.parts/options/agenix-rekey
-        agenix-rekey.nodes = let
-          allVms = self.nixosConfigurations.yuggoth.config.microvm.vms;
-          agenixVms = nixpkgs.lib.filterAttrs
-            # only look at VMs with "age" attributes set.
-            (containerName: {config,...}: config.config ? age)
-            allVms;
-        in
-          {
-            inherit (self.nixosConfigurations)
-              aquilonia
-              medley
-              megahost-one
-              stereo
-              yuggoth;
-          } // nixpkgs.lib.mapAttrs
-                (containerName: instanceConfig: instanceConfig.config)
-                agenixVms;
-      };
+          # agenix-rekey configuration
+          # see https://flake.parts/options/agenix-rekey
+          agenix-rekey.nodes =
+            let
+              allVms = self.nixosConfigurations.yuggoth.config.microvm.vms;
+              agenixVms =
+                nixpkgs.lib.filterAttrs
+                  # only look at VMs with "age" attributes set.
+                  (containerName: { config, ... }: config.config ? age)
+                  allVms;
+            in
+            {
+              inherit (self.nixosConfigurations)
+                aquilonia
+                mail
+                medley
+                megahost-one
+                stereo
+                yuggoth
+                ;
+            }
+            // nixpkgs.lib.mapAttrs (containerName: instanceConfig: instanceConfig.config) agenixVms;
+        };
 
       flake = {
         # Your custom packages and modifications, exported as overlays
@@ -118,114 +147,162 @@
 
         # NixOS configuration entrypoint
         # Available through 'nixos-rebuild --flake .#your-hostname'
-        nixosConfigurations = let
-          inherit (self) outputs;
-          secretsPath = ./secrets;
-          # https://jade.fyi/blog/flakes-arent-real/
-          injectDeps = { lib, ... }: {
-            options.diffeq.secretsPath = lib.mkOption {
-              type = lib.types.path;
-            };
-            config.diffeq.secretsPath = secretsPath;
-          };
-        in
+        nixosConfigurations =
+          let
+            inherit (self) outputs;
+            secretsPath = ./secrets;
+            # https://jade.fyi/blog/flakes-arent-real/
+            injectDeps =
+              { lib, ... }:
+              {
+                options.diffeq.secretsPath = lib.mkOption {
+                  type = lib.types.path;
+                };
+                config.diffeq.secretsPath = secretsPath;
+              };
+          in
           {
-          # -- desktops
-          aquilonia = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ injectDeps ./nixos/aquilonia/configuration.nix ];
+            # -- desktops
+            aquilonia = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/aquilonia/configuration.nix
+              ];
+            };
+
+            cimmeria = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/cimmeria/configuration.nix
+              ];
+            };
+
+            stygia = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/stygia/configuration.nix
+              ];
+            };
+
+            # -- LAN hosts
+            mail = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/vms/mail/configuration.nix
+              ];
+            };
+
+            medley = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/vms/medley/configuration.nix
+              ];
+            };
+
+            stereo = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/lan/stereo/configuration.nix
+              ];
+            };
+
+            yuggoth = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/lan/yuggoth/configuration.nix
+              ];
+            };
+
+            # -- cloud hosts
+            megahost-one = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/cloud/megahost-one/configuration.nix
+              ];
+            };
           };
 
-          cimmeria = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ injectDeps ./nixos/cimmeria/configuration.nix ];
-          };
+        deploy =
+          let
+            mkNode =
+              {
+                hostname,
+                arch,
+                config,
+              }:
+              {
+                inherit hostname;
+                user = "root";
+                profiles.system.path = deploy-rs.lib."${arch}".activate.nixos config;
+              };
+          in
+          {
+            # -- lan hosts --
+            nodes.mail = mkNode {
+              hostname = "mail.domus.diffeq.com";
+              arch = "x86_64-linux";
+              config = self.nixosConfigurations.mail;
+            };
 
-          stygia = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ injectDeps ./nixos/stygia/configuration.nix ];
-          };
+            nodes.medley = mkNode {
+              hostname = "medley.domus.diffeq.com";
+              arch = "x86_64-linux";
+              config = self.nixosConfigurations.medley;
+            };
 
-          # -- LAN hosts
-          medley = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ injectDeps ./nixos/vms/medley/configuration.nix ];
-          };
+            nodes.stereo = mkNode {
+              hostname = "stereo.domus.diffeq.com";
+              arch = "aarch64-linux";
+              config = self.nixosConfigurations.stereo;
+            };
 
-          stereo = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ injectDeps ./nixos/lan/stereo/configuration.nix ];
-          };
+            nodes.yuggoth = mkNode {
+              hostname = "yuggoth.domus.diffeq.com";
+              arch = "x86_64-linux";
+              config = self.nixosConfigurations.yuggoth;
+            };
 
-          yuggoth = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ injectDeps ./nixos/lan/yuggoth/configuration.nix ];
+            # -- cloud hosts --
+            nodes.megahost-one = mkNode {
+              hostname = "megahost-one.diffeq.com";
+              arch = "x86_64-linux";
+              config = self.nixosConfigurations.megahost-one;
+            };
           };
-
-          # -- cloud hosts
-          megahost-one = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit self inputs outputs; };
-            modules = [ injectDeps ./nixos/cloud/megahost-one/configuration.nix ];
-          };
-        };
-
-        deploy = let
-          mkNode = { hostname, arch, config }: {
-            inherit hostname;
-            user = "root";
-            profiles.system.path = deploy-rs.lib."${arch}".activate.nixos config;
-          };
-        in {
-          # -- lan hosts --
-          nodes.medley = mkNode {
-            hostname = "medley.domus.diffeq.com";
-            arch     = "x86_64-linux";
-            config   = self.nixosConfigurations.medley;
-          };
-
-          nodes.stereo = mkNode {
-            hostname = "stereo.domus.diffeq.com";
-            arch     = "aarch64-linux";
-            config   = self.nixosConfigurations.stereo;
-          };
-
-          nodes.yuggoth = mkNode {
-            hostname = "yuggoth.domus.diffeq.com";
-            arch     = "x86_64-linux";
-            config   = self.nixosConfigurations.yuggoth;
-          };
-
-          # -- cloud hosts --
-          nodes.megahost-one = mkNode {
-            hostname = "megahost-one.diffeq.com";
-            arch     = "x86_64-linux";
-            config   = self.nixosConfigurations.megahost-one;
-          };
-        };
 
         # Standalone home-manager configuration entrypoint
         # Available through 'home-manager --flake .#your-username@your-hostname'
-        homeConfigurations = let
-          inherit (self) outputs;
-        in {
-          "bct@aquilonia" = home-manager.lib.homeManagerConfiguration {
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            extraSpecialArgs = { inherit inputs outputs; };
-            modules = [./home-manager/aquilonia];
-          };
+        homeConfigurations =
+          let
+            inherit (self) outputs;
+          in
+          {
+            "bct@aquilonia" = home-manager.lib.homeManagerConfiguration {
+              pkgs = nixpkgs.legacyPackages.x86_64-linux;
+              extraSpecialArgs = { inherit inputs outputs; };
+              modules = [ ./home-manager/aquilonia ];
+            };
 
-          "bct@cimmeria" = home-manager.lib.homeManagerConfiguration {
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            extraSpecialArgs = { inherit inputs outputs; };
-            modules = [./home-manager/cimmeria];
-          };
+            "bct@cimmeria" = home-manager.lib.homeManagerConfiguration {
+              pkgs = nixpkgs.legacyPackages.x86_64-linux;
+              extraSpecialArgs = { inherit inputs outputs; };
+              modules = [ ./home-manager/cimmeria ];
+            };
 
-          "bct@stygia" = home-manager.lib.homeManagerConfiguration {
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            extraSpecialArgs = { inherit inputs outputs; };
-            modules = [./home-manager/stygia];
+            "bct@stygia" = home-manager.lib.homeManagerConfiguration {
+              pkgs = nixpkgs.legacyPackages.x86_64-linux;
+              extraSpecialArgs = { inherit inputs outputs; };
+              modules = [ ./home-manager/stygia ];
+            };
           };
-        };
 
         checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
       };

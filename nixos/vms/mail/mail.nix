@@ -1,4 +1,10 @@
-{ self, inputs, config, pkgs, ... }:
+{
+  self,
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 let
   relayhost = "[smtppro.zoho.com]:587";
 in
@@ -8,24 +14,10 @@ in
 
     "${self}/nixos/modules/lego-proxy-client"
 
-    ./mail/borgmatic.nix
+    ./borgmatic.nix
   ];
 
-  system.stateVersion = "24.05";
   mailserver.stateVersion = 3;
-
-  microvm = {
-    vcpu = 1;
-    mem = 1536;
-
-    volumes = [
-      {
-        image = "/dev/mapper/fastpool-mail--var";
-        mountPoint = "/var";
-        autoCreate = false;
-      }
-    ];
-  };
 
   services.lego-proxy-client = {
     enable = true;
@@ -135,12 +127,14 @@ in
   };
 
   age.secrets = {
-    bct-hashed-password.rekeyFile = ./secrets/mail-bct-hashed-password.age;
-    paperless-hashed-password.rekeyFile = ./secrets/mail-paperless-hashed-password.age;
-    immich-hashed-password.rekeyFile = ./secrets/mail-immich-hashed-password.age;
-    lubelogger-hashed-password.rekeyFile = ./secrets/mail-lubelogger-hashed-password.age;
+    # mail account passwords
+    bct-hashed-password.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-bct-hashed-password.age;
+    paperless-hashed-password.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-paperless-hashed-password.age;
+    immich-hashed-password.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-immich-hashed-password.age;
+    lubelogger-hashed-password.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-lubelogger-hashed-password.age;
 
-    sasl-passwd.rekeyFile = ./secrets/mail-sasl-passwd.age;
+    # relay host password
+    sasl-passwd.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-sasl-passwd.age;
   };
 
   systemd.timers.getmail = {

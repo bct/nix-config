@@ -1,4 +1,10 @@
-{ self, inputs, pkgs, ... }: {
+{
+  self,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   imports = [
     inputs.disko.nixosModules.disko
 
@@ -46,7 +52,7 @@
         hostName = "abrado";
         tapInterfaceMac = "02:00:00:00:00:08";
         machineId = "6b044915f8a8c5a6c0e9b5401d9778cf";
-        requires = ["microvm@db.service"];
+        requires = [ "microvm@db.service" ];
         startDelay = 60;
       };
 
@@ -54,7 +60,7 @@
         hostName = "books";
         tapInterfaceMac = "02:00:00:00:00:16";
         machineId = "4335d74e7a5b1743ec13ad4d7b8241be";
-        requires = ["microvm@lego-proxy.service"];
+        requires = [ "microvm@lego-proxy.service" ];
         startDelay = 60;
       };
 
@@ -68,7 +74,10 @@
         hostName = "grafana";
         tapInterfaceMac = "02:00:00:00:00:06";
         machineId = "d2bf3078fe2744f57398cc02476228f9";
-        requires = ["microvm@db.service" "microvm@lego-proxy.service"];
+        requires = [
+          "microvm@db.service"
+          "microvm@lego-proxy.service"
+        ];
         startDelay = 60;
       };
 
@@ -76,7 +85,10 @@
         hostName = "immich";
         tapInterfaceMac = "02:00:00:00:00:09";
         machineId = "538b82e19deee1b600027ea47fe3e8dc";
-        requires = ["microvm@db.service" "microvm@lego-proxy.service"];
+        requires = [
+          "microvm@db.service"
+          "microvm@lego-proxy.service"
+        ];
         startDelay = 120;
       };
 
@@ -84,7 +96,10 @@
         hostName = "jellyfin";
         tapInterfaceMac = "02:00:00:00:00:13";
         machineId = "099112cbbe05544a6240c797d4c83e7a";
-        requires = ["microvm@db.service" "microvm@lego-proxy.service"];
+        requires = [
+          "microvm@db.service"
+          "microvm@lego-proxy.service"
+        ];
         startDelay = 120;
       };
 
@@ -92,22 +107,21 @@
         hostName = "lubelogger";
         tapInterfaceMac = "02:00:00:00:00:14";
         machineId = "136934c3334f852e7e2a506bc5484a2b";
-        requires = ["microvm@db.service" "microvm@lego-proxy.service"];
+        requires = [
+          "microvm@db.service"
+          "microvm@lego-proxy.service"
+        ];
         startDelay = 60;
-      };
-
-      mail = {
-        hostName = "mail";
-        tapInterfaceMac = "02:00:00:00:00:11";
-        machineId = "b1d942ead0d9d6afb175cedf4e416d22";
-        requires = ["microvm@lego-proxy.service"];
       };
 
       paperless = {
         hostName = "paperless";
         tapInterfaceMac = "02:00:00:00:00:10";
         machineId = "4e792125b5445ffd50e474ad64f5d30b";
-        requires = ["microvm@db.service" "microvm@lego-proxy.service"];
+        requires = [
+          "microvm@db.service"
+          "microvm@lego-proxy.service"
+        ];
         startDelay = 120;
       };
 
@@ -123,7 +137,7 @@
         tapInterfaceMac = "02:00:00:00:00:12";
         machineId = "5c5ab3a55d2518c2ab823096462194e4";
         restartIfChanged = false;
-        requires = ["microvm@lego-proxy.service"];
+        requires = [ "microvm@lego-proxy.service" ];
       };
 
       spectator = {
@@ -138,7 +152,10 @@
         tapInterfaceName = "vm-torrent-scra"; # <= 15 chars
         tapInterfaceMac = "02:00:00:00:00:02";
         machineId = "e5b7d8199d4a4a34fb6748faef793248";
-        requires = ["microvm@db.service" "microvm@lego-proxy.service"];
+        requires = [
+          "microvm@db.service"
+          "microvm@lego-proxy.service"
+        ];
         startDelay = 60;
       };
 

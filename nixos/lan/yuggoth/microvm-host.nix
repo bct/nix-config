@@ -38,6 +38,12 @@ in
           { config, name, ... }:
           {
             options = {
+              enable = mkOption {
+                type = types.bool;
+                default = true;
+                description = "Start this microvm when the system boots?";
+              };
+
               hostName = mkOption {
                 type = types.str;
                 default = name;
