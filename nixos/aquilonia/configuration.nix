@@ -1,22 +1,21 @@
 { self, pkgs, ... }:
 
 {
-  imports =
-    [
-      "${self}/nixos/common/agenix-rekey.nix"
+  imports = [
+    "${self}/nixos/common/agenix-rekey.nix"
 
-      "${self}/nixos/common/nix.nix"
-      "${self}/nixos/common/desktop"
+    "${self}/nixos/common/nix.nix"
+    "${self}/nixos/common/desktop"
 
-      "${self}/nixos/modules/wireguard-via-wgsd.nix"
+    "${self}/nixos/modules/wireguard-via-wgsd.nix"
 
-      ./hardware-configuration.nix
+    ./hardware-configuration.nix
 
-      ./borgmatic.nix
-      ./framework.nix
+    ./borgmatic.nix
+    ./framework.nix
 
-      "${self}/nixos/common/desktop/projects/android.nix"
-    ];
+    "${self}/nixos/common/desktop/projects/android.nix"
+  ];
 
   personal.user = "bct";
 
@@ -66,8 +65,6 @@
     enable = true;
     enable32Bit = true;
   };
-
-  hardware.xpadneo.enable = true;
 
   services.trezord.enable = true;
 
