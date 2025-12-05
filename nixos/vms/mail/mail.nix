@@ -3,6 +3,7 @@
   inputs,
   config,
   pkgs,
+  lib,
   ...
 }:
 let
@@ -53,6 +54,11 @@ in
       pkgs.lynx
       rspamc-deliver
     ];
+
+  # /var/vmail needs to be group-readable, otherwise users (and dovecot) can't access it.
+  # the systemd service does this when it starts, but sometimes when we deploy the permissions change.
+  # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/blob/1ccd57f177539ed8c207b893c3f9798d88f87d2e/mail-server/systemd.nix#L90
+  users.users.virtualMail = lib.mkForce { homeMode = "02770"; };
 
   mailserver = {
     enable = true;
