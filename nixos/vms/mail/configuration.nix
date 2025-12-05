@@ -15,7 +15,9 @@ in
 
     ./hardware-configuration.nix
 
+    ./borgmatic.nix
     ./mail.nix
+    ./mua.nix
 
     "${self}/nixos/modules/lego-proxy-client"
   ];
