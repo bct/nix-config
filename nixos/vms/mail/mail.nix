@@ -17,8 +17,6 @@ in
     ./borgmatic.nix
   ];
 
-  mailserver.stateVersion = 3;
-
   services.lego-proxy-client = {
     enable = true;
     domains = [ "mail" ];
@@ -58,6 +56,8 @@ in
 
   mailserver = {
     enable = true;
+    stateVersion = 3;
+
     fqdn = "mail.domus.diffeq.com";
     domains = [
       "diffeq.com"
@@ -68,6 +68,9 @@ in
     useFsLayout = true;
 
     certificateScheme = "acme";
+
+    # testing to see whether this fixes issues with resolving .domus.diffeq.com addresses.
+    localDnsResolver = false;
 
     # nix-shell -p mkpasswd --run 'mkpasswd -sm bcrypt'
     loginAccounts = {
