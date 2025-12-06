@@ -1,7 +1,12 @@
 # Shell for working on nix configs.
 # You can enter it through 'nix develop'
 
-{ config, pkgs ? (import ./nixpkgs.nix) { }, inputs ? {} }: {
+{
+  config,
+  pkgs ? (import ./nixpkgs.nix) { },
+  inputs ? { },
+}:
+{
   default = pkgs.mkShell {
     # Enable experimental features without having to specify the argument
     NIX_CONFIG = "experimental-features = nix-command flakes";
@@ -15,7 +20,7 @@
     nativeBuildInputs = [
       pkgs.nixos-anywhere
       config.agenix-rekey.package
-      inputs.deploy-rs.packages.${pkgs.system}.deploy-rs
+      inputs.deploy-rs.packages.${pkgs.stdenv.hostPlatform.system}.deploy-rs
     ];
   };
 }

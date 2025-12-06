@@ -25,7 +25,7 @@
     name = "gridselect-workspace";
     runtimeInputs = [
       config.wayland.windowManager.hyprland.package
-      inputs.grid-select.packages.${pkgs.system}.default
+      inputs.grid-select.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
     text = ''
       dispatcher=$1

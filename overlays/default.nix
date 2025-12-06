@@ -2,7 +2,7 @@
 { inputs, ... }:
   let
     unstable = final: import inputs.nixpkgs-unstable {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config.allowUnfree = true;
     };
   in
@@ -10,7 +10,6 @@
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs {
     pkgs = final;
-    pkgs-unstable = (unstable final);
   };
 
   # This one contains whatever you want to overlay

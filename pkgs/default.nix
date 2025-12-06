@@ -1,7 +1,7 @@
 # Custom packages, that can be defined similarly to ones from nixpkgs
 # You can build them using 'nix build .#example' or (legacy) 'nix-build -A example'
 
-{ pkgs, pkgs-unstable }: rec {
+{ pkgs }: rec {
   # my fork of the Hoon LSP
   # https://github.com/bct/hoon-language-server/tree/fix-issue-30
   hoonLanguageServer = let hoonLsp = pkgs.fetchFromGitHub {

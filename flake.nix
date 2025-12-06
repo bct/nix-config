@@ -92,7 +92,6 @@
         {
           config,
           pkgs,
-          system,
           ...
         }:
         {
@@ -101,7 +100,6 @@
           packages =
             let
               inherit (self) outputs;
-              pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
               generators = import ./generators {
                 inherit
                   inputs
@@ -111,7 +109,7 @@
                   ;
               };
             in
-            import ./pkgs { inherit pkgs pkgs-unstable; } // generators;
+            import ./pkgs { inherit pkgs; } // generators;
 
           # Devshell for working on configs
           # Acessible through 'nix develop'

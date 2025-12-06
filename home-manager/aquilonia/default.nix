@@ -23,8 +23,6 @@
 
     hoon-crib
 
-    inputs.deploy-rs.packages.${pkgs.system}.deploy-rs
-
     wine
     winetricks
     vulkan-tools

@@ -14,7 +14,7 @@ let
   airsonicRefixJukeboxWithEnv = pkgs.buildEnv {
     name = "airsonic-refix-jukebox-env";
     paths = [
-      inputs.airsonic-refix-jukebox.packages.${pkgs.system}.default
+      inputs.airsonic-refix-jukebox.packages.${pkgs.stdenv.hostPlatform.system}.default
       env-js
     ];
   };

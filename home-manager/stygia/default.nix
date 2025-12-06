@@ -1,4 +1,5 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, ... }:
+{
   imports = [
     ../desktop
   ];
@@ -20,8 +21,6 @@
 
     hoon-crib
 
-    inputs.deploy-rs.packages.${pkgs.system}.deploy-rs
-
     wine
     winetricks
     vulkan-tools
@@ -39,7 +38,9 @@
       Wants = [ "network-online.target" ];
     };
 
-    Install = { WantedBy = [ "default.target" ]; };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
 
     Mount = {
       What = "bct@mi-go.domus.diffeq.com:/mnt/bulk";
@@ -57,7 +58,9 @@
       Wants = [ "network-online.target" ];
     };
 
-    Install = { WantedBy = [ "default.target" ]; };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
 
     Mount = {
       What = "bct@mi-go.domus.diffeq.com:/mnt/bulk/beets";
@@ -106,7 +109,9 @@
 
   programs.oh-my-posh = {
     enable = true;
-    settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./oh-my-posh.json));
+    settings = builtins.fromJSON (
+      builtins.unsafeDiscardStringContext (builtins.readFile ./oh-my-posh.json)
+    );
   };
 
   programs.zathura = {
