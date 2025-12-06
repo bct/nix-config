@@ -41,6 +41,18 @@
     '';
   };
 in {
+  fonts.fontconfig.enable = true;
+
+  # Get AppImages (cura) working.
+  # "For the sandboxed apps to work correctly, desktop integration portals need to be installed."
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+      config.wayland.windowManager.hyprland.portalPackage
+    ];
+  };
+
   services.cliphist.enable = true;
 
   programs.waybar = {

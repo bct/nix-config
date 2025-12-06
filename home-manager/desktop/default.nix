@@ -1,12 +1,17 @@
-{ outputs, pkgs, ... }: {
+{ outputs, pkgs, ... }:
+{
   imports = [
     ../base
 
     ../modules/vim
+    ../modules/dunst
+    ../modules/rofi
+    ../modules/hyprland
 
     ./shell.nix
-    ./xorg.nix
     ./3d-print.nix
+
+    ./screen-break-reminder.nix
   ];
 
   nixpkgs = {
