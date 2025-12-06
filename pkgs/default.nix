@@ -41,7 +41,6 @@ rec {
 
   airsonic-refix = pkgs.callPackage ./airsonic-refix { };
   brscan-skey = pkgs.callPackage ./brscan-skey { };
-  goatcounter = pkgs.callPackage ./goatcounter { };
 
   pollymc-unwrapped = pkgs.qt6Packages.callPackage ./pollymc {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;

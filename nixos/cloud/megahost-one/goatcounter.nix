@@ -1,67 +1,70 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 let
   cfgContainerSecrets = config.megahost.container-secrets;
   cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
-in {
+in
+{
   containers.goatcounter = {
     autoStart = true;
     privateNetwork = true;
 
-    # note that we're not taking pkgs here - it doesn't have access to our overlays.
-    # instead we're using the outer pkgs.
-    # TODO: what does this all mean?
-    config = { config, ... }: {
-      system.stateVersion = "24.05";
+    config =
+      { config, pkgs, ... }:
+      {
+        system.stateVersion = "24.05";
 
-      networking.firewall.allowedTCPPorts = [ 4000 ];
+        networking.firewall.allowedTCPPorts = [ 4000 ];
 
-      systemd.services.goatcounter = {
-        wantedBy = ["multi-user.target"];
-        after = ["network.target"];
+        # TODO: there's a nixos module for this now.
+        systemd.services.goatcounter = {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
 
-        serviceConfig = {
-          Type = "simple";
-          DynamicUser = true;
+          serviceConfig = {
+            Type = "simple";
+            DynamicUser = true;
 
-          LoadCredential = [
-            "password-goatcounter:${cfgContainerSecrets.goatcounter.passwordGoatcounter.containerPath}"
-          ];
+            LoadCredential = [
+              "password-goatcounter:${cfgContainerSecrets.goatcounter.passwordGoatcounter.containerPath}"
+            ];
 
-          ExecStart = let
-            run-goatcounter = pkgs.writeShellScript "run-goatcounter" ''
-              set -euo pipefail
+            ExecStart =
+              let
+                run-goatcounter = pkgs.writeShellScript "run-goatcounter" ''
+                  set -euo pipefail
 
-              password=$(cat $CREDENTIALS_DIRECTORY/password-goatcounter | tr -d '\n')
+                  password=$(cat $CREDENTIALS_DIRECTORY/password-goatcounter | tr -d '\n')
 
-              # if we don't pass -email-from then it tries to look up the current
-              # username, which doesn't work due to the chroot etc. below
-              ${pkgs.goatcounter}/bin/goatcounter serve \
-                -listen *:4000 \
-                -db "postgresql+host=${cfgContainerNetwork.postgres.address6} password=$password sslmode=disable" \
-                -tls http \
-                -email-from goatcounter@m.diffeq.com
-            '';
+                  # if we don't pass -email-from then it tries to look up the current
+                  # username, which doesn't work due to the chroot etc. below
+                  ${pkgs.goatcounter}/bin/goatcounter serve \
+                    -listen *:4000 \
+                    -db "postgresql+host=${cfgContainerNetwork.postgres.address6} password=$password sslmode=disable" \
+                    -tls http \
+                    -email-from goatcounter@m.diffeq.com
+                '';
 
-          in "${run-goatcounter}";
+              in
+              "${run-goatcounter}";
 
-          Restart = "always";
+            Restart = "always";
 
-          RuntimeDirectory = "goatcounter";
-          RootDirectory = "/run/goatcounter";
-          ReadWritePaths = "";
-          BindReadOnlyPaths = [
-            "/bin"
-            builtins.storeDir
-          ];
+            RuntimeDirectory = "goatcounter";
+            RootDirectory = "/run/goatcounter";
+            ReadWritePaths = "";
+            BindReadOnlyPaths = [
+              "/bin"
+              builtins.storeDir
+            ];
 
-          PrivateDevices = true;
-          PrivateUsers = true;
+            PrivateDevices = true;
+            PrivateUsers = true;
 
-          CapabilityBoundingSet = "";
-          RestrictNamespaces = true;
+            CapabilityBoundingSet = "";
+            RestrictNamespaces = true;
+          };
         };
       };
-    };
   };
 
   age.secrets = {
