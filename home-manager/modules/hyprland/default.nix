@@ -41,8 +41,6 @@
     '';
   };
 in {
-  fonts.fontconfig.enable = true;
-
   # Get AppImages (cura) working.
   # "For the sandboxed apps to work correctly, desktop integration portals need to be installed."
   xdg.portal = {
