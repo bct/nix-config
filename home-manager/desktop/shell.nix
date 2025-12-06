@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 {
   home.sessionPath = [
@@ -29,7 +34,7 @@
 
   programs.bash = {
     enable = true;
-    historyControl = ["ignoredups"];
+    historyControl = [ "ignoredups" ];
   };
 
   programs.z-lua = {
@@ -63,7 +68,7 @@
     # https://docs.atuin.sh/configuration/config/
     # Writes ~/.config/atuin/config.toml
     settings = {
-      prefers_reduced_motion = true;  # No automatic time updates
+      prefers_reduced_motion = true; # No automatic time updates
       inline_height = 16; # Allow me to see some of the terminal history
       filter_mode_shell_up_key_binding = "session"; # Up only searches the current session
     };
@@ -84,4 +89,12 @@
     source "${pkgs.bash-preexec}/share/bash/bash-preexec.sh"
     eval "$(${config.programs.atuin.package}/bin/atuin init bash )"
   '';
+
+  programs.oh-my-posh = {
+    enable = true;
+    enableBashIntegration = true;
+    settings = builtins.fromJSON (
+      builtins.unsafeDiscardStringContext (builtins.readFile ./files/oh-my-posh.json)
+    );
+  };
 }
