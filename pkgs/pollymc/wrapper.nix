@@ -9,8 +9,10 @@
 , qtsvg
 , qtwayland
 , xorg
-, libpulseaudio
 , libGL
+, libpulseaudio
+, libusb1
+, mesa-demos
 , glfw
 , openal
 , jdk8
@@ -18,11 +20,10 @@
 , jdk21
 , gamemode
 , flite
-, glxinfo
 , pciutils
 , udev
 , vulkan-loader
-, libusb1
+, xrandr
 
 , msaClientID ? null
 , gamemodeSupport ? stdenv.isLinux
@@ -83,9 +84,9 @@ symlinkJoin {
       ++ additionalLibs;
 
       runtimePrograms = [
-        xorg.xrandr
-        glxinfo
+        mesa-demos
         pciutils # need lspci
+        xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       ]
       ++ additionalPrograms;
 
