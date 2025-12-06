@@ -95,7 +95,8 @@ in
             name = "mail";
             uuid = "6bdbad6f-540c-4114-a063-16fec1995347";
             memory = {
-              count = 512;
+              # 512MB would be fine for the mail server, but we need a little extra RAM to run borgmatic
+              count = 1024;
               unit = "MiB";
             };
             storage_vol = {
