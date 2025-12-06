@@ -8,6 +8,7 @@
     ../modules/rofi
     ../modules/hyprland
 
+    ./beets.nix
     ./fonts.nix
     ./nix.nix
     ./shell.nix

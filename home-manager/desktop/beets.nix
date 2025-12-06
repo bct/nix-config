@@ -1,0 +1,58 @@
+{ ... }:
+{
+  systemd.user.mounts.mnt-beets = {
+    Unit = {
+      Description = "Mount /mnt/beets";
+      After = [ "network-online.target" ];
+      Wants = [ "network-online.target" ];
+    };
+
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+
+    Mount = {
+      What = "bct@mi-go.domus.diffeq.com:/mnt/bulk/beets";
+      Where = "/mnt/beets";
+      Type = "fuse.sshfs";
+      Options = "_netdev,reconnect,ServerAliveInterval=30,ServerAliveCountMax=5,x-systemd.automount";
+      TimeoutSec = 60;
+    };
+  };
+
+  programs.beets = {
+    enable = true;
+    settings = {
+      library = "/mnt/beets/library.db";
+      directory = "/mnt/beets/library";
+
+      plugins = "fetchart inline lastgenre permissions";
+
+      import = {
+        copy = true;
+        log = "/mnt/beets/log/import.log";
+      };
+
+      per_disc_numbering = true;
+
+      pathfields = {
+        disc_and_track = "u'%01i-%02i' % (disc, track) if disctotal > 1 else u'%02i' % (track)";
+      };
+
+      paths = {
+        default = "%if{$albumartist_sort,$albumartist_sort,$albumartist}/$album%aunique{}/$disc_and_track - $title";
+        comp = "Compilations/$album%aunique{}/$disc_and_track - $artist - $title";
+      };
+
+      lastgenre = {
+        count = 2;
+        force = false;
+      };
+
+      permissions = {
+        file = 644;
+        dir = 755;
+      };
+    };
+  };
+}
