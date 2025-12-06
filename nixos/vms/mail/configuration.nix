@@ -1,19 +1,13 @@
 # see yuggoth/nixvirt.nix for memory & CPU settings.
-{ self, inputs, ... }:
-let
-  nixpkgs = inputs.nixpkgs;
-in
+{ self, ... }:
 {
   imports = [
-    "${nixpkgs}/nixos/modules/profiles/qemu-guest.nix"
-
+    "${self}/nixos/vms/common/qemu-vm.nix"
     "${self}/nixos/common/agenix-rekey.nix"
 
     "${self}/nixos/common/nix.nix"
     "${self}/nixos/common/headless.nix"
     "${self}/nixos/common/node-exporter.nix"
-
-    ./hardware-configuration.nix
 
     ./borgmatic.nix
     ./mail.nix
@@ -21,11 +15,6 @@ in
 
     "${self}/nixos/modules/lego-proxy-client"
   ];
-
-  # https://github.com/nix-community/nixos-generators/blob/master/formats/qcow.nix
-  boot.growPartition = true;
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.timeout = 0;
 
   time.timeZone = "Etc/UTC";
 
