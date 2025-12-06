@@ -150,16 +150,10 @@
         nixosConfigurations =
           let
             inherit (self) outputs;
-            secretsPath = ./secrets;
-            # https://jade.fyi/blog/flakes-arent-real/
-            injectDeps =
-              { lib, ... }:
-              {
-                options.diffeq.secretsPath = lib.mkOption {
-                  type = lib.types.path;
-                };
-                config.diffeq.secretsPath = secretsPath;
-              };
+            injectDeps = {
+              imports = [ ./nixos/common/injected-deps.nix ];
+              config.diffeq.secretsPath = ./secrets;
+            };
           in
           {
             # -- desktops

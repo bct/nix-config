@@ -21,6 +21,7 @@ in
     #     instance instead.
     # presumably the overlays are being passed through anyways.
     # the other nix configuration seems OK to ignore.
+    "${self}/nixos/common/injected-deps.nix"
     "${self}/nixos/common/headless.nix"
     "${self}/nixos/common/node-exporter.nix"
     "${self}/nixos/common/agenix-rekey.nix"

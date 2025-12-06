@@ -9,16 +9,6 @@
 
 let
   cfg = config.yuggoth.microvms;
-
-  # TODO: extract to a module.
-  # https://jade.fyi/blog/flakes-arent-real/
-  injectDeps =
-    { lib, ... }:
-    {
-      options.diffeq.secretsPath = lib.mkOption {
-        type = lib.types.path;
-      };
-    };
 in
 {
   imports = [
@@ -156,7 +146,6 @@ in
 
         imports = [
           "${self}/nixos/common/microvm.nix"
-          injectDeps
           ./guests/${vmName}.nix
         ];
       };
