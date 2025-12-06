@@ -9,8 +9,8 @@
 
 let
   cfg = config.yuggoth.microvms;
-  mkGuestModule = import ./microvm/mkGuestModule.nix;
 
+  # TODO: extract to a module.
   # https://jade.fyi/blog/flakes-arent-real/
   injectDeps =
     { lib, ... }:
@@ -18,7 +18,6 @@ let
       options.diffeq.secretsPath = lib.mkOption {
         type = lib.types.path;
       };
-      config.diffeq.secretsPath = config.diffeq.secretsPath;
     };
 in
 {
@@ -151,39 +150,14 @@ in
       restartIfChanged = vmConfig.restartIfChanged;
 
       config = {
+        diffeq.microvmName = vmName;
+        diffeq.microvmConfig = vmConfig;
+        diffeq.secretsPath = config.diffeq.secretsPath;
+
         imports = [
-          # note that we're not including "${self}/nixos/common/nix.nix" here
-          # it complains:
-          #     Your system configures nixpkgs with an externally created
-          #     instance.
-          #     `nixpkgs.config` options should be passed when creating the
-          #     instance instead.
-          # presumably the overlays are being passed through anyways.
-          # the other nix configuration seems OK to ignore.
-          "${self}/nixos/common/headless.nix"
-
-          {
-            # home-manager assumes that /nix is writeable.
-            diffeq.headless.enable-home-manager = false;
-
-            # we can't do GC if /nix isn't writeable
-            # (possibly we should allow this if there's a writableStoreOverlay?)
-            nix.gc.automatic = false;
-          }
-
-          "${self}/nixos/common/node-exporter.nix"
-          "${self}/nixos/common/agenix-rekey.nix"
-
+          "${self}/nixos/common/microvm.nix"
           injectDeps
-          (mkGuestModule vmName { inherit vmConfig lib; })
           ./guests/${vmName}.nix
-
-          (
-            let
-              pubKey = config.diffeq.secretsPath + /ssh/host-${vmName}.pub;
-            in
-            lib.optionalAttrs (builtins.pathExists pubKey) { age.rekey.hostPubkey = pubKey; }
-          )
         ];
       };
     }) cfg.guests;
