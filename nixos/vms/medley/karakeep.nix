@@ -1,6 +1,8 @@
-{ ... }: let
+{ ... }:
+let
   port = 3000;
-in {
+in
+{
   services.karakeep = {
     enable = true;
     extraEnvironment = {
@@ -8,6 +10,9 @@ in {
       PORT = toString port;
     };
   };
+
+  # attempt to automatically migrate the database when meilisearch is updated.
+  services.meilisearch.settings.enable_dumpless_upgrade = true;
 
   services.caddy = {
     enable = true;
