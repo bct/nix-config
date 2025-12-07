@@ -1,4 +1,5 @@
-{ self, config, ... }: {
+{ self, config, ... }:
+{
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
   ];
@@ -32,7 +33,10 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 
   services.grafana = {
     enable = true;

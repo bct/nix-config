@@ -1,4 +1,10 @@
-{ self, config, lib, ... }: {
+{
+  self,
+  config,
+  lib,
+  ...
+}:
+{
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
@@ -46,14 +52,18 @@
   fileSystems."/mnt/video" = {
     device = "//mi-go.domus.diffeq.com/video";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
 
-    # the defaults of a CIFS mount are not documented anywhere that I can see.
-    # you can run "mount" after mounting to see what options were actually used.
-    # cifsacl is required for the server-side permissions to show up correctly.
-    in ["${automount_opts},ro,cifsacl,uid=${config.services.jellyfin.user},credentials=${config.age.secrets.fs-mi-go-torrent-scraper.path}"];
+        # the defaults of a CIFS mount are not documented anywhere that I can see.
+        # you can run "mount" after mounting to see what options were actually used.
+        # cifsacl is required for the server-side permissions to show up correctly.
+      in
+      [
+        "${automount_opts},ro,cifsacl,uid=${config.services.jellyfin.user},credentials=${config.age.secrets.fs-mi-go-torrent-scraper.path}"
+      ];
   };
 
   age.secrets = {

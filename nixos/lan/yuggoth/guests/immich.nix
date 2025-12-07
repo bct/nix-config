@@ -1,4 +1,10 @@
-{ self, config, pkgs, ... }: {
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
+{
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
   ];
@@ -39,14 +45,18 @@
   fileSystems."/mnt/photos" = {
     device = "//mi-go.domus.diffeq.com/photos";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
 
-    # the defaults of a CIFS mount are not documented anywhere that I can see.
-    # you can run "mount" after mounting to see what options were actually used.
-    # cifsacl is required for the server-side permissions to show up correctly.
-    in ["${automount_opts},cifsacl,uid=${config.services.immich.user},credentials=${config.age.secrets.fs-mi-go-immich.path}"];
+        # the defaults of a CIFS mount are not documented anywhere that I can see.
+        # you can run "mount" after mounting to see what options were actually used.
+        # cifsacl is required for the server-side permissions to show up correctly.
+      in
+      [
+        "${automount_opts},cifsacl,uid=${config.services.immich.user},credentials=${config.age.secrets.fs-mi-go-immich.path}"
+      ];
   };
 
   services.immich = {
@@ -67,7 +77,10 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 
   services.caddy = {
     enable = true;

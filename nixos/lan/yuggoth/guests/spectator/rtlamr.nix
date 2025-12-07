@@ -1,4 +1,10 @@
-{ self, config, pkgs, ... }: {
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
+{
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
   ];
@@ -11,13 +17,13 @@
 
   hardware.rtl-sdr.enable = true;
 
-  users.groups.rtlamr = {};
+  users.groups.rtlamr = { };
 
   users.users = {
     rtlamr = {
       isSystemUser = true;
       group = "rtlamr";
-      extraGroups = ["plugdev"];
+      extraGroups = [ "plugdev" ];
     };
   };
 
@@ -32,7 +38,7 @@
 
   systemd.services.rtl_tcp = {
     description = "rtl_tcp";
-    wantedBy = ["multi-user.target"];
+    wantedBy = [ "multi-user.target" ];
 
     # wait until USB has been fully initialized - otherwise the dongle isn't
     # available in time.
@@ -58,7 +64,7 @@
       RTLAMR_FORMAT = "json";
       RTLAMR_MSGTYPE = "scm";
       RTLAMR_SERVER = "localhost:1234";
-      RTLAMR_FILTERID= "40010397,41946625";
+      RTLAMR_FILTERID = "40010397,41946625";
 
       # COLLECT_LOGLEVEL = "Debug";
       COLLECT_INFLUXDB_HOSTNAME = "http://influx.domus.diffeq.com:8086/";
@@ -67,10 +73,10 @@
       COLLECT_INFLUXDB_MEASUREMENT = "utilities";
     };
 
-    wantedBy = ["multi-user.target"];
-    bindsTo = ["rtl_tcp.service"];
-    after = ["rtl_tcp.service"];
-    partOf = ["rtl_tcp.service"];
+    wantedBy = [ "multi-user.target" ];
+    bindsTo = [ "rtl_tcp.service" ];
+    after = [ "rtl_tcp.service" ];
+    partOf = [ "rtl_tcp.service" ];
 
     serviceConfig = {
       WorkingDirectory = "/run/rtlamr-collect";

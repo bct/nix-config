@@ -1,4 +1,11 @@
-{ self, config, lib, pkgs, ... }: {
+{
+  self,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   imports = [
     ./db/borgmatic.nix
     ./db/postgres.nix

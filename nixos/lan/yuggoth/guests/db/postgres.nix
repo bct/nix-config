@@ -1,7 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  usersWithPasswords = [ "immich" "miniflux" "paperless" ];
-in {
+  usersWithPasswords = [
+    "immich"
+    "miniflux"
+    "paperless"
+  ];
+in
+{
   age.secrets = {
     db-password-db-postgres-immich = {
       generator.script = "alnum";
@@ -23,13 +33,14 @@ in {
     enable = true;
     enableTCPIP = true;
 
-    extensions = ps: with ps; [
-      pgvecto-rs # immich
-    ];
+    extensions =
+      ps: with ps; [
+        pgvecto-rs # immich
+      ];
 
     settings = {
       shared_preload_libraries = [ "vectors.so" ]; # immich
-      search_path = "\"$user\", public, vectors";  # immich
+      search_path = "\"$user\", public, vectors"; # immich
     };
 
     # https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
@@ -80,50 +91,52 @@ in {
     ];
   };
 
-  systemd.services.postgresql.serviceConfig.LoadCredential = builtins.map (userName:
-    "password-${userName}:${config.age.secrets."db-password-db-postgres-${userName}".path}") usersWithPasswords;
+  systemd.services.postgresql.serviceConfig.LoadCredential = builtins.map (
+    userName: "password-${userName}:${config.age.secrets."db-password-db-postgres-${userName}".path}"
+  ) usersWithPasswords;
 
-  systemd.services.postgresql.postStart = let
-    set-all-passwords = pkgs.writeShellScript "psql-set-password" ''
-      #!/bin/sh
+  systemd.services.postgresql.postStart =
+    let
+      set-all-passwords = pkgs.writeShellScript "psql-set-password" ''
+        #!/bin/sh
 
-      set -euo pipefail
+        set -euo pipefail
 
-      set_password() {
-        username=$1
-        password_path="$CREDENTIALS_DIRECTORY/password-$username"
-        password=$(cat $password_path | tr -d '\n')
+        set_password() {
+          username=$1
+          password_path="$CREDENTIALS_DIRECTORY/password-$username"
+          password=$(cat $password_path | tr -d '\n')
 
-        # ensure that our password won't break our weak quoting.
-        if ! (echo "$password" | egrep '^[a-zA-Z0-9]+$' >/dev/null); then
-          echo "passwords must be alphanumeric!"
-          exit 1
-        fi
+          # ensure that our password won't break our weak quoting.
+          if ! (echo "$password" | egrep '^[a-zA-Z0-9]+$' >/dev/null); then
+            echo "passwords must be alphanumeric!"
+            exit 1
+          fi
 
-        psql --port=${builtins.toString config.services.postgresql.settings.port} -tA <<EOF
-          ALTER USER "$username" WITH PASSWORD '$password';
-      EOF
-      }
+          psql --port=${builtins.toString config.services.postgresql.settings.port} -tA <<EOF
+            ALTER USER "$username" WITH PASSWORD '$password';
+        EOF
+        }
 
-      for username in $@; do
-        set_password "$username"
-      done
+        for username in $@; do
+          set_password "$username"
+        done
+      '';
+      immichSqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
+        CREATE EXTENSION IF NOT EXISTS unaccent;
+        CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        CREATE EXTENSION IF NOT EXISTS vectors;
+        CREATE EXTENSION IF NOT EXISTS cube;
+        CREATE EXTENSION IF NOT EXISTS earthdistance;
+        CREATE EXTENSION IF NOT EXISTS pg_trgm;
+        ALTER SCHEMA public OWNER TO immich;
+        ALTER SCHEMA vectors OWNER TO immich;
+        GRANT SELECT ON TABLE pg_vector_index_stat TO immich;
+        ALTER EXTENSION vectors UPDATE;
+      '';
+    in
+    lib.mkAfter ''
+      ${set-all-passwords} ${builtins.concatStringsSep " " usersWithPasswords}
+      ${lib.getExe' config.services.postgresql.package "psql"} -d "immich" -f "${immichSqlFile}"
     '';
-    immichSqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-      CREATE EXTENSION IF NOT EXISTS unaccent;
-      CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-      CREATE EXTENSION IF NOT EXISTS vectors;
-      CREATE EXTENSION IF NOT EXISTS cube;
-      CREATE EXTENSION IF NOT EXISTS earthdistance;
-      CREATE EXTENSION IF NOT EXISTS pg_trgm;
-      ALTER SCHEMA public OWNER TO immich;
-      ALTER SCHEMA vectors OWNER TO immich;
-      GRANT SELECT ON TABLE pg_vector_index_stat TO immich;
-      ALTER EXTENSION vectors UPDATE;
-    '';
-  in
-  lib.mkAfter ''
-    ${set-all-passwords} ${builtins.concatStringsSep " " usersWithPasswords}
-    ${lib.getExe' config.services.postgresql.package "psql"} -d "immich" -f "${immichSqlFile}"
-  '';
 }

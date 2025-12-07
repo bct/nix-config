@@ -1,4 +1,11 @@
-{ self, inputs, config, pkgs, ... }: {
+{
+  self,
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
+{
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
   ];
@@ -24,7 +31,10 @@
     group = "caddy";
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 
   services.caddy = {
     enable = true;

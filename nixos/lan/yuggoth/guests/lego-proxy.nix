@@ -1,4 +1,10 @@
-{ self, config, pkgs, lib, ... }:
+{
+  self,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   acme-zoneedit = pkgs.writeShellApplication {
@@ -49,7 +55,8 @@ let
         rm -rf /tmp/acme"
     '';
   };
-in {
+in
+{
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-host"
@@ -83,9 +90,11 @@ in {
 
     clients = lib.mapAttrsToList (name: clientConfig: {
       domain = clientConfig.domain;
-      pubKey = if clientConfig ? "pubKey"
-                then clientConfig.pubKey
-                else builtins.readFile (config.diffeq.secretsPath + /lego-proxy/${name}.pub);
+      pubKey =
+        if clientConfig ? "pubKey" then
+          clientConfig.pubKey
+        else
+          builtins.readFile (config.diffeq.secretsPath + /lego-proxy/${name}.pub);
     }) clients;
   };
 
@@ -98,10 +107,11 @@ in {
       EXEC_PATH=${acme-zoneedit-with-creds}
       EXEC_PROPAGATION_TIMEOUT=180
     '';
-    extraLegoRunFlags = ["--run-hook=${deploy-unifi}/bin/deploy-unifi"];
+    extraLegoRunFlags = [ "--run-hook=${deploy-unifi}/bin/deploy-unifi" ];
   };
 
   programs.ssh.knownHosts = {
-    "unifi.domus.diffeq.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDNJJO5UWuslJ4vKm8i+g1O+ElLsgCKKKXbUKp/2nh2/";
+    "unifi.domus.diffeq.com".publicKey =
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDNJJO5UWuslJ4vKm8i+g1O+ElLsgCKKKXbUKp/2nh2/";
   };
 }

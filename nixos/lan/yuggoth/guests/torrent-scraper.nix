@@ -1,4 +1,10 @@
-{ self, pkgs, config, ... }: {
+{
+  self,
+  pkgs,
+  config,
+  ...
+}:
+{
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
   ];
@@ -20,7 +26,11 @@
 
   services.lego-proxy-client = {
     enable = true;
-    domains = [ "flood" "radarr" "sonarr" ];
+    domains = [
+      "flood"
+      "radarr"
+      "sonarr"
+    ];
   };
 
   users.groups.video-writers = {
@@ -35,8 +45,8 @@
       # guarantee a stable UID, since /etc is not persistent.
       uid = 992;
     };
-    bct.extraGroups = ["video-writers"];
-    nginx.extraGroups = ["acme"];
+    bct.extraGroups = [ "video-writers" ];
+    nginx.extraGroups = [ "acme" ];
   };
 
   networking.firewall.allowedTCPPorts = [
@@ -64,14 +74,18 @@
   fileSystems."/mnt/video" = {
     device = "//mi-go.domus.diffeq.com/video";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
 
-    # the defaults of a CIFS mount are not documented anywhere that I can see.
-    # you can run "mount" after mounting to see what options were actually used.
-    # cifsacl is required for the server-side permissions to show up correctly.
-    in ["${automount_opts},cifsacl,uid=scraper,gid=video-writers,credentials=${config.age.secrets.fs-mi-go-torrent-scraper.path}"];
+        # the defaults of a CIFS mount are not documented anywhere that I can see.
+        # you can run "mount" after mounting to see what options were actually used.
+        # cifsacl is required for the server-side permissions to show up correctly.
+      in
+      [
+        "${automount_opts},cifsacl,uid=scraper,gid=video-writers,credentials=${config.age.secrets.fs-mi-go-torrent-scraper.path}"
+      ];
   };
 
   age.secrets = {
@@ -92,7 +106,7 @@
   };
 
   users.groups = {
-    rtorrent = {};
+    rtorrent = { };
   };
 
   services.flood = {
@@ -101,8 +115,8 @@
     host = "127.0.0.1";
   };
   systemd.services.flood.serviceConfig.SupplementaryGroups = [
-    "rtorrent"       # flood can access the rtorrent socket
-    "video-writers"  # flood can directly modify downloaded files
+    "rtorrent" # flood can access the rtorrent socket
+    "video-writers" # flood can directly modify downloaded files
   ];
 
   # https://gist.github.com/drmalex07/c0f9304deea566842490
@@ -144,7 +158,8 @@
   };
 
   programs.ssh.knownHosts = {
-    "torrent.domus.diffeq.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPDMeXYu6wbZFx9ONThqwQKbK6/mq6hluZqIB6w0knqK";
+    "torrent.domus.diffeq.com".publicKey =
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPDMeXYu6wbZFx9ONThqwQKbK6/mq6hluZqIB6w0knqK";
   };
 
   services.nginx = {
@@ -171,7 +186,12 @@
       # expose rtorrent XML-RPC over HTTP, adding authentication.
       rtorrent-xml-rpc = {
         serverName = "rtorrent.domus.diffeq.com";
-        listen = [{ addr = "127.0.0.1"; port = 8888; }];
+        listen = [
+          {
+            addr = "127.0.0.1";
+            port = 8888;
+          }
+        ];
 
         basicAuthFile = config.age.secrets.rtorrent-xml-rpc-nginx-auth.path;
 

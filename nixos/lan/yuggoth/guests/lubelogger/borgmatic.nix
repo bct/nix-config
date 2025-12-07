@@ -1,4 +1,9 @@
-{ self, config, pkgs, ... }:
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   var-backup = "/var/backups";
@@ -7,7 +12,7 @@ let
   # https://github.com/hargata/lubelog_scripts/blob/main/bash/makebackup.sh
   backup-lubelogger = pkgs.writeShellApplication {
     name = "backup-lubelogger";
-    runtimeInputs = [pkgs.curl];
+    runtimeInputs = [ pkgs.curl ];
     text = ''
       base_url="http://localhost:${toString config.services.lubelogger.port}"
       makebackup_output=$(curl -sL "$base_url/api/makebackup" | tr -d "\"")
@@ -15,7 +20,8 @@ let
       curl -sL "$base_url$makebackup_output" -o ${backup-lubelogger-zip-path}
     '';
   };
-in {
+in
+{
   imports = [ "${self}/nixos/modules/borgmatic" ];
 
   systemd.tmpfiles.rules = [

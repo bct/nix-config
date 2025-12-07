@@ -1,4 +1,10 @@
-{ self, config, pkgs, ... }: {
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
+{
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/modules/lego-proxy-client"
@@ -42,7 +48,11 @@
     # https://github.com/NixOS/nixpkgs/issues/405974
     package = pkgs.calibre-web.overridePythonAttrs (old: {
       # gevent may allow larger uploads
-      dependencies = old.dependencies ++ old.optional-dependencies.kobo ++ old.optional-dependencies.metadata ++ [pkgs.python3Packages.gevent];
+      dependencies =
+        old.dependencies
+        ++ old.optional-dependencies.kobo
+        ++ old.optional-dependencies.metadata
+        ++ [ pkgs.python3Packages.gevent ];
     });
   };
 
