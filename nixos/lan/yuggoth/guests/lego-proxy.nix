@@ -109,6 +109,15 @@ in
     '';
     extraLegoRunFlags = [ "--run-hook=${deploy-unifi}/bin/deploy-unifi" ];
   };
+  security.acme.certs."mi-go.domus.diffeq.com" = {
+    email = "s+acme@diffeq.com";
+    dnsProvider = "exec";
+    dnsResolver = "ns5.zoneedit.com";
+    environmentFile = pkgs.writeText "" ''
+      EXEC_PATH=${acme-zoneedit-with-creds}
+      EXEC_PROPAGATION_TIMEOUT=180
+    '';
+  };
 
   programs.ssh.knownHosts = {
     "unifi.domus.diffeq.com".publicKey =
