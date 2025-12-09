@@ -12,7 +12,7 @@ in
   };
 
   # attempt to automatically migrate the database when meilisearch is updated.
-  services.meilisearch.settings.enable_dumpless_upgrade = true;
+  services.meilisearch.settings.experimental_dumpless_upgrade = true;
 
   services.caddy = {
     enable = true;
