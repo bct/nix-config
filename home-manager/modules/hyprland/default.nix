@@ -17,7 +17,7 @@
   # format: "value,display"
   workspaceSelectors = pkgs.writeText "hyprland-workspaces-selectors" (
     lib.concatImapStrings
-      (wsId: ws: "${toString wsId},${ws.icon} ${ws.name}" + "\n")
+      (wsId: ws: "${toString wsId},${ws.icon}  ${ws.name}" + "\n")
       workspaces
   );
 
@@ -576,6 +576,15 @@ in {
   services.hypridle = {
     enable = true;
   };
+
+  xdg.configFile."grid-select/config.toml".text = ''
+    item_width = 80
+    item_height = 40
+    item_margin = 5
+
+    font_size = 15
+    font_name = "UbuntuMono Nerd Font"
+  '';
 
   xdg.configFile."hypr/hypridle.conf".text = ''
     general {
