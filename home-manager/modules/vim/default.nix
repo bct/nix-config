@@ -1,29 +1,9 @@
 { pkgs, lib, ... }:
 
 {
-  # Packages that should be installed to the user profile.
   home.packages = [
     pkgs.wl-clipboard # clipboard provider for Wayland
     pkgs.xclip # clipboard provider for X
-
-    # for telescope
-    pkgs.ripgrep
-
-    # formatters
-    pkgs.nodePackages.prettier
-
-    # LSP servers
-    pkgs.pyright
-    pkgs.nil
-    pkgs.nixd
-    pkgs.hoonLanguageServer
-    pkgs.gopls
-    pkgs.ruff
-    pkgs.terraform-ls
-    pkgs.tflint
-    pkgs.nodePackages.vscode-langservers-extracted
-    pkgs.typescript-language-server
-    pkgs.rust-analyzer
   ];
 
   programs.neovim = {
@@ -32,6 +12,28 @@
     # a helpful reference for config: https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
     extraLuaConfig = lib.fileContents ./files/init.lua;
     extraConfig = lib.fileContents ./files/extra-config.vim;
+
+    extraPackages = [
+      # for telescope
+      pkgs.ripgrep
+
+      # formatters
+      pkgs.nodePackages.prettier
+      pkgs.nixfmt
+
+      # LSP servers
+      pkgs.pyright
+      pkgs.nil
+      pkgs.nixd
+      pkgs.hoonLanguageServer
+      pkgs.gopls
+      pkgs.ruff
+      pkgs.terraform-ls
+      pkgs.tflint
+      pkgs.nodePackages.vscode-langservers-extracted
+      pkgs.typescript-language-server
+      pkgs.rust-analyzer
+    ];
 
     plugins =
       with pkgs.vimPlugins;
