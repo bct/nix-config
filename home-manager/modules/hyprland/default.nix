@@ -540,6 +540,8 @@ in {
           check_color = rgb(98971a)
           fail_color = rgb(cc241d)
 
+          fail_text = <i>lol no <b>($ATTEMPTS)</b></i>
+
           dots_size = 0.2
           dots_rounding = 0
           dots_spacing = 0.65
