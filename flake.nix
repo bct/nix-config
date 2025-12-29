@@ -4,8 +4,14 @@
   description = "bct's nix config";
 
   nixConfig = {
-    extra-substituters = [ "https://microvm.cachix.org" ];
-    extra-trusted-public-keys = [ "microvm.cachix.org-1:oXnBc6hRE3eX5rSYdRyMYXnfzcCxC7yKPTbZXALsqys=" ];
+    extra-substituters = [
+      "https://microvm.cachix.org"
+      "https://unmojang.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "microvm.cachix.org-1:oXnBc6hRE3eX5rSYdRyMYXnfzcCxC7yKPTbZXALsqys="
+      "unmojang.cachix.org-1:OfHnbBNduZ6Smx9oNbLFbYyvOWSoxb2uPcnXPj4EDQY="
+    ];
   };
 
   inputs = {
@@ -54,12 +60,17 @@
     # https://nixos-mailserver.readthedocs.io/en/latest/index.html
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.11";
 
+    # minecraft
+    nix-minecraft.url = "github:Infinidoge/nix-minecraft";
+
     # packages from flakes
     airsonic-refix-jukebox.url = "github:bct/airsonic-refix-jukebox";
     airsonic-refix-jukebox.inputs.nixpkgs.follows = "nixpkgs";
 
     grid-select.url = "github:bct/grid-select";
     grid-select.inputs.nixpkgs.follows = "nixpkgs";
+
+    fjord-launcher.url = "github:unmojang/FjordLauncher";
   };
 
   outputs =

@@ -15,6 +15,7 @@
     ./minio-instance.nix
     ./postgres.nix
     ./goatcounter.nix
+    ./minecraft.nix
     ./vikunja.nix
     ./wiki.nix
     ./wireguard-viator.nix

@@ -31,6 +31,8 @@
 
     obsidian
     koodo-reader
+
+    inputs.fjord-launcher.packages.${pkgs.stdenv.hostPlatform.system}.fjordlauncher
   ];
 
   systemd.user.mounts.bulk = {
