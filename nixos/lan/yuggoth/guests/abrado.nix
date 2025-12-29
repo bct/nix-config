@@ -18,7 +18,8 @@
 
   microvm = {
     vcpu = 1;
-    mem = 512;
+    # need a little extra because we're using "nix run".
+    mem = 1024;
 
     writableStoreOverlay = "/nix/.rw-store";
 
@@ -46,6 +47,12 @@
 
     config-fortis = {
       rekeyFile = ./abrado/secrets/config-fortis.age;
+      owner = "abrado";
+      group = "abrado";
+    };
+
+    config-cgwm = {
+      rekeyFile = ./abrado/secrets/config-cgwm.age;
       owner = "abrado";
       group = "abrado";
     };
@@ -152,6 +159,7 @@
     wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "17:00 America/Edmonton";
+      RandomizedDelaySec = "10m";
       Unit = "cgwm.service";
     };
   };
@@ -163,7 +171,8 @@
       WorkingDirectory = "/srv/scraper-data/cgwm";
 
       # using path: syntax so that the service doesn't need access to git.
-      ExecStart = "${config.nix.package}/bin/nix run path:/srv/scrapers/cgwm -- --scrape";
+      ExecStart = "${config.nix.package}/bin/nix run path:/srv/scrapers/cgwm -- --scrape --credentials-path ${config.age.secrets.config-cgwm.path}";
+      Restart = "no";
     };
   };
 }
