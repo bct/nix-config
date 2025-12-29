@@ -1,4 +1,9 @@
-{ self, pkgs, ... }:
+{
+  self,
+  inputs,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -12,7 +17,7 @@
     ./hardware-configuration.nix
 
     ./borgmatic.nix
-    ./framework.nix
+    inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
 
     "${self}/nixos/common/desktop/projects/android.nix"
   ];
@@ -52,14 +57,13 @@
     ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video $sys$devpath/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w $sys$devpath/brightness"
   '';
 
-  # power management
-  services.tlp.enable = true;
-
   services.syncthing = {
     enable = true;
     user = "bct";
     dataDir = "/home/bct";
   };
+
+  hardware.framework.enableKmod = true;
 
   hardware.graphics = {
     enable = true;

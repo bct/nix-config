@@ -48,6 +48,9 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
+    # nixos-hardware
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     # microvm
     # doesn't follow nixpkgs, so that we can take advantage of the cache.
     microvm.url = "github:astro/microvm.nix";
