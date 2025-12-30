@@ -1,8 +1,14 @@
-{ self, config, pkgs, ... }:
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
-in {
+in
+{
   imports = [ "${self}/nixos/modules/borgmatic" ];
 
   diffeq.borgmatic = {
@@ -41,28 +47,30 @@ in {
   };
 
   # override the borgmatic service to set password environment variables.
-  systemd.services.borgmatic.serviceConfig.ExecStart = let
-    run-borgmatic = pkgs.writeShellScript "run-borgmatic" ''
-      set -euo pipefail
+  systemd.services.borgmatic.serviceConfig.ExecStart =
+    let
+      run-borgmatic = pkgs.writeShellScript "run-borgmatic" ''
+        set -euo pipefail
 
-      password=$(cat ${config.age.secrets.password-postgres.path} | tr -d '\n')
+        password=$(cat ${config.age.secrets.password-postgres.path} | tr -d '\n')
 
-      export POSTGRES_PASSWORD="$password"
+        export POSTGRES_PASSWORD="$password"
 
-      # see:
-      # https://projects.torsion.org/borgmatic-collective/borgmatic/src/branch/main/sample/systemd/borgmatic.service
-      # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/pkgs/tools/backup/borgmatic/default.nix
-      ${pkgs.systemd}/bin/systemd-inhibit \
-        --who="borgmatic" \
-        --what="sleep:shutdown" \
-        --why="Prevent interrupting scheduled backup" \
-        ${pkgs.borgmatic}/bin/borgmatic --verbosity -2 --syslog-verbosity 1
-    '';
-  in [
-    # to override ExecStart we need to explicitly clear it first.
-    ""
-    "${run-borgmatic}"
-  ];
+        # see:
+        # https://projects.torsion.org/borgmatic-collective/borgmatic/src/branch/main/sample/systemd/borgmatic.service
+        # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/pkgs/tools/backup/borgmatic/default.nix
+        ${pkgs.systemd}/bin/systemd-inhibit \
+          --who="borgmatic" \
+          --what="sleep:shutdown" \
+          --why="Prevent interrupting scheduled backup" \
+          ${pkgs.borgmatic}/bin/borgmatic --verbosity -2 --syslog-verbosity 1
+      '';
+    in
+    [
+      # to override ExecStart we need to explicitly clear it first.
+      ""
+      "${run-borgmatic}"
+    ];
 
   # config check fails because POSTGRES_PASSWORD isn't set
   services.borgmatic.enableConfigCheck = false;
