@@ -1,7 +1,27 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  whitelist = {
+    # mojang
+    Underslunky = "fe8d63f2-96c7-45a0-9fc3-aa454d5d9faa"; # A.
+  };
+  operators = {
+    # drasl
+    gothgirl = "137bb49c-9bf5-4479-9003-19fedacd7357"; # J.
+    DukeRibbitIV = ""; # TODO
+
+    # mojang
+    StarchyPie = "458c712e-41cf-4b0a-9002-a112776661c9"; # F.
+  };
+in
 {
   imports = [
     inputs.nix-minecraft.nixosModules.minecraft-servers
+    ./minecraft/drasl.nix
   ];
 
   nixpkgs.overlays = [ inputs.nix-minecraft.overlay ];
@@ -16,29 +36,32 @@
     servers.felix = {
       enable = true;
       # max heap size 4G, initial heap size 2G
-      jvmOpts = "-Xmx4G -Xms2G";
+      jvmOpts = lib.concatStringsSep " " [
+        "-Xmx4G"
+        "-Xms2G"
+        "-Dminecraft.api.env=custom"
+        "-Dminecraft.api.auth.host=https://drasl.diffeq.com/auth"
+        "-Dminecraft.api.account.host=https://drasl.diffeq.com/account"
+        "-Dminecraft.api.profiles.host=https://drasl.diffeq.com/account"
+        "-Dminecraft.api.session.host=https://drasl.diffeq.com/session"
+        "-Dminecraft.api.services.host=https://drasl.diffeq.com/services"
+      ];
 
       # Specify the custom minecraft server package
       package = pkgs.paperServers.paper-1_21_11;
 
       serverProperties = {
         motd = "a cool MC server";
-        online-mode = false;
+        #online-mode = false;
+        online-mode = true;
         white-list = true;
         enforce-whitelist = true;
 
         hardcore = false;
       };
 
-      whitelist = {
-        # Alec
-        Underslunky = "59b6707e-dc42-3b37-94b9-efb133765fc3";
-      };
-
-      operators = {
-        daddio = "0212f24d-c226-3a71-8e78-eafbe4ff6fdf";
-        TheRizzlord = "63ad1f7c-d015-3726-934a-a33c8aa861c5";
-      };
+      whitelist = whitelist;
+      operators = operators;
     };
   };
 
