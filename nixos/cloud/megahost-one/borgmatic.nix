@@ -13,6 +13,7 @@ in {
     settings = {
       source_directories = [
         "/srv/data/"
+        "/srv/minecraft"
       ];
 
       postgresql_databases = [
