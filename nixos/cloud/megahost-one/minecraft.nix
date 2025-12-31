@@ -12,7 +12,7 @@ let
   operators = {
     # drasl
     gothgirl = "137bb49c-9bf5-4479-9003-19fedacd7357"; # J.
-    DukeRibbitIV = ""; # TODO
+    DukeRibbitIV = "709f1f59-2f07-4467-bcee-121e3f7755fc"; # B.
 
     # mojang
     StarchyPie = "458c712e-41cf-4b0a-9002-a112776661c9"; # F.

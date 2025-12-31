@@ -74,7 +74,7 @@ in
             Domain = "drasl.diffeq.com";
             BaseURL = "https://drasl.diffeq.com";
             ListenAddress = "0.0.0.0:${toString draslPort}";
-            DefaultAdmins = [ ];
+            DefaultAdmins = [ "DukeRibbitIV" ];
 
             RegistrationNewPlayer = {
               Allow = false;
