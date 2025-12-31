@@ -119,16 +119,13 @@
         vikunja = {
           suffix6 = "5";
         };
-      };
-    };
 
-    # I can't remember why this exists.
-    direct.containers = {
-      minio-escam-biz = {
-        prefix6 = "fd5d:2dbc:e792";
-      };
-      minio-diffeq-com = {
-        prefix6 = "fd3e:977a:c017";
+        minio-escam-biz = {
+          suffix6 = "6";
+        };
+        minio-diffeq-com = {
+          suffix6 = "7";
+        };
       };
     };
   };

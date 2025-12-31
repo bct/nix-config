@@ -5,60 +5,72 @@ with lib;
 let
   cfg = config.megahost.minio;
   cfgContainerSecrets = config.megahost.container-secrets;
-  cfgContainerNetwork = config.megahost.container-network.direct.containers;
+  cfgContainerNetwork = config.megahost.container-network.bridge-internal.containers;
   consoleSubdomain = "console";
   bucketPort = 9000;
   consolePort = 9001;
-in {
+in
+{
   options.megahost.minio = {
     enable = mkEnableOption "megahost.minio";
 
     instances = mkOption {
-      type = types.attrsOf (types.submodule (
-        {config, options, name, ...}: {
-          options = {
-            rootCredentialsPath = mkOption {
-              type = types.path;
-            };
+      type = types.attrsOf (
+        types.submodule (
+          {
+            config,
+            options,
+            name,
+            ...
+          }:
+          {
+            options = {
+              rootCredentialsPath = mkOption {
+                type = types.path;
+              };
 
-            minioDomain = mkOption {
-              type = types.str;
-            };
+              minioDomain = mkOption {
+                type = types.str;
+              };
 
-            buckets = mkOption {
-              type = types.listOf types.str;
+              buckets = mkOption {
+                type = types.listOf types.str;
+              };
             };
-          };
-        }
-      ));
+          }
+        )
+      );
     };
   };
 
   # set up a container to run minio
   config = lib.mkIf cfg.enable {
-    megahost.container-secrets = lib.mapAttrs (containerName: instanceConfig:
-      {
-        minioRootCredentials = {
-          hostPath = instanceConfig.rootCredentialsPath;
-        };
-      }
-    ) cfg.instances;
+    megahost.container-secrets = lib.mapAttrs (containerName: instanceConfig: {
+      minioRootCredentials = {
+        hostPath = instanceConfig.rootCredentialsPath;
+      };
+    }) cfg.instances;
 
     containers = lib.mapAttrs (containerName: instanceConfig: {
       autoStart = true;
       privateNetwork = true;
 
-      config = { config, pkgs, ... }: {
-        system.stateVersion = "24.05";
+      config =
+        { config, pkgs, ... }:
+        {
+          system.stateVersion = "24.05";
 
-        networking.firewall.allowedTCPPorts = [ bucketPort consolePort ];
+          networking.firewall.allowedTCPPorts = [
+            bucketPort
+            consolePort
+          ];
 
-        services.minio = {
-          enable = true;
-          rootCredentialsFile = cfgContainerSecrets.${containerName}.minioRootCredentials.containerPath;
+          services.minio = {
+            enable = true;
+            rootCredentialsFile = cfgContainerSecrets.${containerName}.minioRootCredentials.containerPath;
+          };
+          systemd.services.minio.environment.MINIO_DOMAIN = instanceConfig.minioDomain;
         };
-        systemd.services.minio.environment.MINIO_DOMAIN = instanceConfig.minioDomain;
-      };
     }) cfg.instances;
 
     # the host reverse proxies to each container.

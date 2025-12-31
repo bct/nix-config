@@ -6,38 +6,6 @@ let
 in
 {
   options.megahost.container-network = {
-    direct = {
-      containers = lib.mkOption {
-        type = lib.types.attrsOf (
-          lib.types.submodule (
-            {
-              config,
-              options,
-              name,
-              ...
-            }:
-            {
-              options = {
-                prefix6 = lib.mkOption {
-                  type = lib.types.str;
-                };
-
-                hostAddress6 = lib.mkOption {
-                  type = lib.types.str;
-                  default = "${config.prefix6}::1";
-                };
-
-                address6 = lib.mkOption {
-                  type = lib.types.str;
-                  default = "${config.prefix6}::2";
-                };
-              };
-            }
-          )
-        );
-      };
-    };
-
     bridge-internal = {
       prefix6 = lib.mkOption {
         type = lib.types.str;
@@ -104,14 +72,7 @@ in
             localAddress6 = "${networkConfig.address6}/${toString cfg.bridge-internal.netmask6}";
           }) cfg.bridge-internal.containers
         );
-
-        direct = (
-          lib.mapAttrs (containerName: instanceConfig: {
-            hostAddress6 = instanceConfig.hostAddress6;
-            localAddress6 = instanceConfig.address6;
-          }) cfg.direct.containers
-        );
       in
-      bridge-internal // direct;
+      bridge-internal;
   };
 }
