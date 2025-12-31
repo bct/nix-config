@@ -48,23 +48,21 @@ in
 
         networking.firewall.allowedTCPPorts = [ draslPort ];
 
-        services.resolved.enable = true;
         networking = {
-          useDHCP = false;
           defaultGateway = {
             address = hostAddress4;
             interface = "eth0";
           };
 
-          # Use systemd-resolved inside the container
-          # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-          useHostResolvConf = lib.mkForce false;
-
+          # use public DNS because I can't figure out how to get the host's DNS working right now.
           # https://developers.google.com/speed/public-dns/docs/using
           nameservers = [
             "8.8.8.8"
             "8.8.4.4"
           ];
+
+          # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+          useHostResolvConf = lib.mkForce false;
         };
 
         # See https://github.com/unmojang/drasl/blob/master/doc/recipes.md
