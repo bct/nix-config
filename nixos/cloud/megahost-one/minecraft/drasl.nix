@@ -1,36 +1,22 @@
 {
   inputs,
   lib,
-  config,
   ...
 }:
 let
-  cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
   draslPort = 27585;
   hostAddress4 = "10.0.0.1";
-  containerAddress4 = "10.0.0.6/24";
+  containerAddress4 = "10.0.0.6";
 in
 {
-  boot.kernel.sysctl = {
-    "net.ipv4.ip_forward" = 1;
-  };
-
-  # TODO: use ipv6 forwarding instead of NAT.
-  # mojang addresses are accessible via ipv6.
   networking.nat = {
     enable = true;
     externalInterface = "ens3";
-    internalInterfaces = [ "br0" ];
+    internalInterfaces = [ "ve-drasl" ];
   };
 
-  networking.interfaces.br0 = {
-    ipv4.addresses = [
-      {
-        address = hostAddress4;
-        prefixLength = 24;
-      }
-    ];
-  };
+  # Default: block forwarding
+  networking.nftables.enable = true;
 
   containers.drasl = {
     autoStart = true;
@@ -51,7 +37,10 @@ in
         services.resolved.enable = true;
         networking = {
           useDHCP = false;
-          defaultGateway = hostAddress4;
+          defaultGateway = {
+            address = hostAddress4;
+            interface = "eth0";
+          };
 
           # Use systemd-resolved inside the container
           # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
@@ -61,8 +50,6 @@ in
           nameservers = [
             "8.8.8.8"
             "8.8.4.4"
-            # "2001:4860:4860::8888"
-            # "2001:4860:4860::8844"
           ];
         };
 
@@ -104,7 +91,7 @@ in
   services.caddy = {
     enable = true;
     virtualHosts."drasl.diffeq.com".extraConfig = ''
-      reverse_proxy [${cfgContainerNetwork.drasl.address6}]:${toString draslPort}
+      reverse_proxy ${containerAddress4}:${toString draslPort}
     '';
   };
 }

@@ -101,7 +101,6 @@
         goatcounter = { suffix6 = "3"; };
         wiki        = { suffix6 = "4"; };
         vikunja     = { suffix6 = "5"; };
-        drasl       = { suffix6 = "6"; };
       };
     };
 
