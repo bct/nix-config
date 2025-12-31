@@ -5,14 +5,28 @@
 }:
 let
   draslPort = 27585;
-  hostAddress4 = "10.0.0.1";
+  hostAddress4 = "10.0.0.1"; # /24
   containerAddress4 = "10.0.0.6";
+
+  natBridgeName = "br-nat";
 in
 {
+  networking.bridges.${natBridgeName} = {
+    interfaces = [ ];
+  };
+  networking.interfaces.${natBridgeName} = {
+    ipv4.addresses = [
+      {
+        address = hostAddress4;
+        prefixLength = 24;
+      }
+    ];
+  };
+
   networking.nat = {
     enable = true;
     externalInterface = "ens3";
-    internalInterfaces = [ "ve-drasl" ];
+    internalInterfaces = [ natBridgeName ];
   };
 
   # Default: block forwarding
@@ -22,7 +36,7 @@ in
     autoStart = true;
     privateNetwork = true;
 
-    hostAddress = hostAddress4;
+    hostBridge = natBridgeName;
     localAddress = containerAddress4;
 
     config =
