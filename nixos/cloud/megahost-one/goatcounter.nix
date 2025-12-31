@@ -1,7 +1,7 @@
 { config, ... }:
 let
   cfgContainerSecrets = config.megahost.container-secrets;
-  cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
+  cfgContainerNetwork = config.megahost.container-network.bridge-internal.containers;
 in
 {
   containers.goatcounter = {

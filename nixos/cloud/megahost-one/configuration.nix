@@ -101,7 +101,8 @@
   };
 
   megahost.container-network = {
-    bridge0 = {
+    # an network for containers that communicate with the host & each other.
+    bridge-internal = {
       # https://unique-local-ipv6.com/#
       prefix6 = "fdf0:4612:c105";
 
@@ -121,6 +122,7 @@
       };
     };
 
+    # I can't remember why this exists.
     direct.containers = {
       minio-escam-biz = {
         prefix6 = "fd5d:2dbc:e792";

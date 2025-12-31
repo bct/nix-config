@@ -1,49 +1,59 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfgContainerSecrets = config.megahost.container-secrets;
-  cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
-in {
+  cfgContainerNetwork = config.megahost.container-network.bridge-internal.containers;
+in
+{
   containers.wiki = {
     autoStart = true;
     privateNetwork = true;
 
-    config = { config, ... }: {
-      system.stateVersion = "24.05";
+    config =
+      { config, ... }:
+      {
+        system.stateVersion = "24.05";
 
-      networking.firewall.allowedTCPPorts = [ 3000 ];
+        networking.firewall.allowedTCPPorts = [ 3000 ];
 
-      services.wiki-js = {
-        enable = true;
-        settings = {
-          bindIP = "::"; # listen on all IPv6 (and IPv4?) interfaces
-          port = 3000;
+        services.wiki-js = {
+          enable = true;
+          settings = {
+            bindIP = "::"; # listen on all IPv6 (and IPv4?) interfaces
+            port = 3000;
 
-          db = {
-            db = "wiki-js";
-            user = "wiki-js";
-            host = cfgContainerNetwork.postgres.address6;
-            pass = "$(DB_PASS)";
+            db = {
+              db = "wiki-js";
+              user = "wiki-js";
+              host = cfgContainerNetwork.postgres.address6;
+              pass = "$(DB_PASS)";
+            };
           };
         };
+
+        systemd.services.wiki-js.serviceConfig = {
+          LoadCredential = [
+            "password-wikijs:${cfgContainerSecrets.wiki.passwordWikijs.containerPath}"
+          ];
+
+          ExecStart =
+            let
+              run-wikijs = pkgs.writeShellScript "run-wikijs" ''
+                set -euo pipefail
+
+                export DB_PASS=$(cat $CREDENTIALS_DIRECTORY/password-wikijs | tr -d '\n')
+
+                ${pkgs.nodejs_22}/bin/node ${pkgs.wiki-js}/server
+              '';
+            in
+            lib.mkForce "${run-wikijs}";
+        };
       };
-
-      systemd.services.wiki-js.serviceConfig = {
-        LoadCredential = [
-          "password-wikijs:${cfgContainerSecrets.wiki.passwordWikijs.containerPath}"
-        ];
-
-        ExecStart = let
-          run-wikijs = pkgs.writeShellScript "run-wikijs" ''
-            set -euo pipefail
-
-            export DB_PASS=$(cat $CREDENTIALS_DIRECTORY/password-wikijs | tr -d '\n')
-
-            ${pkgs.nodejs_22}/bin/node ${pkgs.wiki-js}/server
-          '';
-          in lib.mkForce "${run-wikijs}";
-      };
-    };
   };
 
   megahost.container-secrets.wiki = {

@@ -2,6 +2,7 @@
 
 let
   cfg = config.megahost.container-network;
+  internalBridgeName = "br-int";
 in
 {
   options.megahost.container-network = {
@@ -37,14 +38,14 @@ in
       };
     };
 
-    bridge0 = {
+    bridge-internal = {
       prefix6 = lib.mkOption {
         type = lib.types.str;
       };
 
       hostAddress6 = lib.mkOption {
         type = lib.types.str;
-        default = "${cfg.bridge0.prefix6}::1";
+        default = "${cfg.bridge-internal.prefix6}::1";
       };
 
       netmask6 = lib.mkOption {
@@ -69,7 +70,7 @@ in
 
                 address6 = lib.mkOption {
                   type = lib.types.str;
-                  default = "${cfg.bridge0.prefix6}::${config.suffix6}";
+                  default = "${cfg.bridge-internal.prefix6}::${config.suffix6}";
                 };
               };
             }
@@ -81,27 +82,27 @@ in
 
   config = {
     # https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/containers-bridge.nix
-    networking.bridges.br0 = {
+    networking.bridges.${internalBridgeName} = {
       interfaces = [ ];
     };
-    networking.interfaces.br0 = {
+    networking.interfaces.${internalBridgeName} = {
       ipv6.addresses = [
         {
-          address = cfg.bridge0.hostAddress6;
-          prefixLength = cfg.bridge0.netmask6;
+          address = cfg.bridge-internal.hostAddress6;
+          prefixLength = cfg.bridge-internal.netmask6;
         }
       ];
     };
 
     containers =
       let
-        bridge0 = (
+        bridge-internal = (
           lib.mapAttrs (containerName: networkConfig: {
-            hostBridge = "br0";
+            hostBridge = internalBridgeName;
 
             # including the netmask here gives the container access to the entire bridge network.
-            localAddress6 = "${networkConfig.address6}/${toString cfg.bridge0.netmask6}";
-          }) cfg.bridge0.containers
+            localAddress6 = "${networkConfig.address6}/${toString cfg.bridge-internal.netmask6}";
+          }) cfg.bridge-internal.containers
         );
 
         direct = (
@@ -111,6 +112,6 @@ in
           }) cfg.direct.containers
         );
       in
-      bridge0 // direct;
+      bridge-internal // direct;
   };
 }

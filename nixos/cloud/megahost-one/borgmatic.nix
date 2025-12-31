@@ -6,7 +6,7 @@
 }:
 
 let
-  cfgContainerNetwork = config.megahost.container-network.bridge0.containers;
+  cfgContainerNetwork = config.megahost.container-network.bridge-internal.containers;
 in
 {
   imports = [ "${self}/nixos/modules/borgmatic" ];
