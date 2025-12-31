@@ -1,4 +1,10 @@
-{ self, inputs, config, ... }: {
+{
+  self,
+  inputs,
+  config,
+  ...
+}:
+{
   imports = [
     inputs.disko.nixosModules.disko
 
@@ -40,9 +46,9 @@
     s3-proxy-minio-root-credentials.rekeyFile =
       config.diffeq.secretsPath + /s3-proxy-minio-root-credentials.age;
 
-    password-postgres.rekeyFile    = config.diffeq.secretsPath + /db/password-megahost-postgres.age;
+    password-postgres.rekeyFile = config.diffeq.secretsPath + /db/password-megahost-postgres.age;
     password-goatcounter.rekeyFile = config.diffeq.secretsPath + /db/password-goatcounter.age;
-    password-wikijs.rekeyFile      = config.diffeq.secretsPath + /db/password-wikijs.age;
+    password-wikijs.rekeyFile = config.diffeq.secretsPath + /db/password-wikijs.age;
   };
 
   megahost.minio = {
@@ -56,7 +62,10 @@
 
       minio-diffeq-com = {
         minioDomain = "s3.diffeq.com";
-        buckets = [ "zardoz" "middel-salbyt" ];
+        buckets = [
+          "zardoz"
+          "middel-salbyt"
+        ];
         rootCredentialsPath = config.age.secrets.s3-proxy-minio-root-credentials.path;
       };
     };
@@ -97,16 +106,28 @@
       prefix6 = "fdf0:4612:c105";
 
       containers = {
-        postgres    = { suffix6 = "2"; };
-        goatcounter = { suffix6 = "3"; };
-        wiki        = { suffix6 = "4"; };
-        vikunja     = { suffix6 = "5"; };
+        postgres = {
+          suffix6 = "2";
+        };
+        goatcounter = {
+          suffix6 = "3";
+        };
+        wiki = {
+          suffix6 = "4";
+        };
+        vikunja = {
+          suffix6 = "5";
+        };
       };
     };
 
     direct.containers = {
-      minio-escam-biz  = { prefix6 = "fd5d:2dbc:e792"; };
-      minio-diffeq-com = { prefix6 = "fd3e:977a:c017"; };
+      minio-escam-biz = {
+        prefix6 = "fd5d:2dbc:e792";
+      };
+      minio-diffeq-com = {
+        prefix6 = "fd3e:977a:c017";
+      };
     };
   };
 
