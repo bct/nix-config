@@ -75,14 +75,24 @@ in
             ListenAddress = "0.0.0.0:${toString draslPort}";
             DefaultAdmins = [ "DukeRibbitIV" ];
 
+            ForwardSkins = true;
+
             RegistrationNewPlayer = {
-              Allow = false;
-              # Allow = true;
-              # RequireInvite = false;
+              Allow = true;
+              RequireInvite = true;
             };
 
             CreateNewPlayer = {
               AllowChoosingUUID = true;
+            };
+
+            ImportExistingPlayer = {
+              Allow = true;
+              Nickname = "Mojang";
+              SessionURL = "https://sessionserver.mojang.com";
+              AccountURL = "https://api.mojang.com";
+              SetSkinURL = "https://www.minecraft.net/msaprofile/mygames/editskin";
+              RequireSkinVerification = true;
             };
 
             FallbackAPIServers = [
