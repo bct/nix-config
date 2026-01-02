@@ -19,6 +19,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    # bug fixes
+    sweenu-lldap.url = "github:sweenu/nixpkgs/lldap_use_load_cred2";
+
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -144,6 +147,7 @@
             {
               inherit (self.nixosConfigurations)
                 aquilonia
+                auth
                 mail
                 medley
                 megahost-one
@@ -195,6 +199,14 @@
             };
 
             # -- LAN hosts
+            auth = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/vms/auth/configuration.nix
+              ];
+            };
+
             mail = nixpkgs.lib.nixosSystem {
               specialArgs = { inherit self inputs outputs; };
               modules = [
@@ -253,6 +265,12 @@
           in
           {
             # -- lan hosts --
+            nodes.auth = mkNode {
+              hostname = "auth.domus.diffeq.com";
+              arch = "x86_64-linux";
+              config = self.nixosConfigurations.auth;
+            };
+
             nodes.mail = mkNode {
               hostname = "mail.domus.diffeq.com";
               arch = "x86_64-linux";

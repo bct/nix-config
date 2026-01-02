@@ -1,3 +1,5 @@
+# see yuggoth/README.md for full instructions
+#
 # to generate UUIDs:
 #
 #     ruby -r securerandom -e "puts SecureRandom.uuid"
@@ -65,6 +67,29 @@ in
   ];
 
   virtualisation.libvirt.connections."qemu:///system".domains = [
+    {
+      definition = nixvirt.lib.domain.writeXML (
+        nixvirt.lib.domain.templates.linux {
+          name = "auth";
+          uuid = "277ae744-e184-46ec-bdfd-93992fa4241b";
+          memory = {
+            count = 1;
+            unit = "GiB";
+          };
+          storage_vol = {
+            pool = storagePool;
+            volume = "auth-root.qcow2";
+          };
+
+          # br0 is set up in microvm-host.nix
+          bridge_name = "br0";
+
+          # qemu fails to launch with a DRI error if virtio_video = true
+          virtio_video = false;
+        }
+      );
+    }
+
     {
       definition = nixvirt.lib.domain.writeXML (
         nixvirt.lib.domain.templates.linux {

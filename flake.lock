@@ -731,7 +731,8 @@
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvirt": "nixvirt",
-        "simple-nixos-mailserver": "simple-nixos-mailserver"
+        "simple-nixos-mailserver": "simple-nixos-mailserver",
+        "sweenu-lldap": "sweenu-lldap"
       }
     },
     "simple-nixos-mailserver": {
@@ -770,6 +771,22 @@
       "original": {
         "type": "git",
         "url": "https://spectrum-os.org/git/spectrum"
+      }
+    },
+    "sweenu-lldap": {
+      "locked": {
+        "lastModified": 1766844597,
+        "narHash": "sha256-x9rngqbwGQAABvyUQmYM6IFKRftwgM3nzs6nE7ux9c4=",
+        "owner": "sweenu",
+        "repo": "nixpkgs",
+        "rev": "73bc3ff24dfc39ea7bc9f3aff0660f0f742bb0a6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sweenu",
+        "ref": "lldap_use_load_cred2",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "systems": {

@@ -4,7 +4,8 @@
     scp result/nixos.qcow2 yuggoth:
 
     # on yuggoth, as root
-    DEST=/srv/libvirt/images/xxx-root.qcow2
+    VOL=xxx-root.qcow2
+    DEST=/srv/libvirt/images/$VOL
     DISK_SIZE=20G
 
     # set up the qcow image
@@ -14,8 +15,9 @@
     virsh pool-refresh default
 
     # resize the disk.
-    # possibly you could use "virsh vol-resize" here?
-    qemu-img resize $DEST $DISK_SIZE
+    virsh vol-resize $VOL 20G default
 
     # start your VM.
+    virsh start
+
     # now you should be able to deploy to it.
