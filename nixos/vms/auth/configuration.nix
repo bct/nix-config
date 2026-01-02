@@ -22,4 +22,18 @@
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID8MCMkvatrPkoxKMQA/GgjpNJaD1IoMQuOu1XiJVac2";
 
   system.stateVersion = "25.11";
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      "auth"
+      "ldap"
+    ];
+    group = "caddy";
+  };
+
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 }

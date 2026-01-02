@@ -1,6 +1,8 @@
 # lego-proxy whitelist.
 # keys in this attrset refer to entries in secrets/lego-proxy/
 {
+  auth.domain = "auth.domus.diffeq.com";
+
   books = {
     domain = "books.domus.diffeq.com";
   };
@@ -27,6 +29,8 @@
   jellyfin = {
     domain = "jellyfin.domus.diffeq.com";
   };
+
+  ldap.domain = "ldap.domus.diffeq.com";
 
   lubelogger = {
     domain = "lubelogger.domus.diffeq.com";
