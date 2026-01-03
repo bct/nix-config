@@ -731,8 +731,25 @@
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvirt": "nixvirt",
+        "shaunren-tinyauth": "shaunren-tinyauth",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "sweenu-lldap": "sweenu-lldap"
+      }
+    },
+    "shaunren-tinyauth": {
+      "locked": {
+        "lastModified": 1767381932,
+        "narHash": "sha256-HcW7O1MQukHDPZVCS3cnF79z3SQWbm0mWvzlgHJ7Eo8=",
+        "owner": "shaunren",
+        "repo": "nixpkgs",
+        "rev": "59fa76460ff420f1b32e594278abfbe58d37e7ad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shaunren",
+        "ref": "tinyauth",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "simple-nixos-mailserver": {

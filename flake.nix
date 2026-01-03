@@ -19,8 +19,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    # bug fixes
+    # bug fixes & new packages
     sweenu-lldap.url = "github:sweenu/nixpkgs/lldap_use_load_cred2";
+    shaunren-tinyauth.url = "github:shaunren/nixpkgs/tinyauth";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-25.11";

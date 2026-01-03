@@ -19,7 +19,7 @@ in
     # sets DEX_SEARCH_USER_PASSWORD
     environmentFile = config.age.secrets.dex-env.path;
     settings = {
-      issuer = "https://auth.domus.diffeq.com/";
+      issuer = "https://${config.diffeq.hostNames.oidc}/";
       web = {
         http = "127.0.0.1:${toString port}";
       };
@@ -75,8 +75,8 @@ in
 
   services.caddy = {
     enable = true;
-    virtualHosts."auth.domus.diffeq.com" = {
-      useACMEHost = "auth.domus.diffeq.com";
+    virtualHosts.${config.diffeq.hostNames.oidc} = {
+      useACMEHost = config.diffeq.hostNames.oidc;
       extraConfig = "reverse_proxy localhost:${toString port}";
     };
   };

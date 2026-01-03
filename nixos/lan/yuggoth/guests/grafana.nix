@@ -71,7 +71,7 @@
       # https://grafana.com/docs/grafana/latest/setup-grafana/configure-access/configure-authentication/generic-oauth/#set-up-oauth2-with-dex
       "auth.generic_oauth" =
         let
-          issuer = "https://auth.domus.diffeq.com";
+          issuer = "https://${config.diffeq.hostNames.oidc}";
         in
         {
           enabled = true;
@@ -84,7 +84,7 @@
           client_secret = "$__file{${config.age.secrets.dex-grafana-secret.path}}";
           disable_login_form = true; # only allow OAuth
           icon = "signin";
-          name = "auth.domus.diffeq.com";
+          name = config.diffeq.hostNames.oidc;
           oauth_allow_insecure_email_lookup = true; # otherwise updating the mail in ldap will break login
           use_refresh_token = true;
           role_attribute_path = "contains(groups[*], 'infra-owners') && 'GrafanaAdmin'";

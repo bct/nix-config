@@ -11,6 +11,7 @@
 
     ./ldap.nix
     ./dex.nix
+    ./tinyauth.nix
 
     "${self}/nixos/modules/lego-proxy-client"
   ];
@@ -26,8 +27,9 @@
   services.lego-proxy-client = {
     enable = true;
     domains = [
-      "auth"
-      "ldap"
+      "auth" # dex
+      "ldap" # lldap
+      "tinyauth" # tinyauth
     ];
     group = "caddy";
   };

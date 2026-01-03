@@ -71,4 +71,6 @@
     domain = "stereo.domus.diffeq.com";
     pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGps5WovLRtcOWuBupjj2CC2YxVtQsHjHa4UN686eU3Q stereo:lego-proxy-spectator";
   };
+
+  tinyauth.domain = "tinyauth.domus.diffeq.com";
 }
