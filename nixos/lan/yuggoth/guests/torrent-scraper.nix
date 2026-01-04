@@ -4,6 +4,10 @@
   config,
   ...
 }:
+let
+  rtSocketPort = 8888;
+  rtUnixSocketPath = "/run/rtorrent-socket/rtorrent.sock";
+in
 {
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
@@ -61,6 +65,9 @@
     openFirewall = false;
     user = "scraper";
     group = "video-writers";
+    # to support external auth, manually add this to the config XML:
+    # <AuthenticationMethod>External</AuthenticationMethod>
+    # <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
   };
 
   # port 8989
@@ -69,6 +76,9 @@
     openFirewall = false;
     user = "scraper";
     group = "video-writers";
+    # to support external auth, manually add this to the config XML:
+    # <AuthenticationMethod>External</AuthenticationMethod>
+    # <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
   };
 
   fileSystems."/mnt/video" = {
@@ -113,6 +123,10 @@
     enable = true;
     openFirewall = false;
     host = "127.0.0.1";
+    extraArgs = [
+      "--auth=none"
+      "--rtsocket=${rtUnixSocketPath}"
+    ];
   };
   systemd.services.flood.serviceConfig.SupplementaryGroups = [
     "rtorrent" # flood can access the rtorrent socket
@@ -162,60 +176,141 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPDMeXYu6wbZFx9ONThqwQKbK6/mq6hluZqIB6w0knqK";
   };
 
-  services.nginx = {
-    enable = true;
-    group = "rtorrent";
+  services.nginx =
+    let
+      reverseProxyWithTinyAuth =
+        {
+          port,
+          unauthed ? [ ],
+        }:
+        {
+          # https://tinyauth.app/docs/guides/nginx-proxy-manager/#advanced-configuration
+          "/" = {
+            proxyPass = "http://localhost:${toString port}";
+            proxyWebsockets = true;
+            extraConfig = ''
+              auth_request /tinyauth;
+              error_page 401 = @tinyauth_login;
+            '';
+          };
+          "/tinyauth" = {
+            proxyPass = "https://${config.diffeq.hostNames.auth}/api/auth/nginx";
+            extraConfig = ''
+              internal;
 
-    virtualHosts = {
-      # https://github.com/jesec/flood/blob/69feefe2f97be8727de6bd2e35c6715f341aa15b/distribution/shared/nginx.md
-      "flood.domus.diffeq.com" = {
-        useACMEHost = "flood.domus.diffeq.com";
-        forceSSL = true;
+              # ignore the request body, tinyauth isn't looking at it anyhow.
+              proxy_pass_request_body off;
+              proxy_set_header Content-Length "";
 
-        root = "${config.services.flood.package}/lib/node_modules/flood/dist/assets";
+              proxy_ssl_server_name on;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header X-Forwarded-Host $http_host;
+              proxy_set_header X-Forwarded-Uri $request_uri;
+            '';
+          };
 
-        locations."/" = {
-          tryFiles = "$uri /index.html";
+          "@tinyauth_login" = {
+            return = "302 https://${config.diffeq.hostNames.auth}/login?redirect_uri=$scheme://$http_host$request_uri";
+          };
+        }
+        // builtins.listToAttrs (
+          map (l: {
+            name = l;
+            value = {
+              proxyPass = "http://localhost:${toString port}";
+            };
+          }) unauthed
+        );
+    in
+    {
+      enable = true;
+      group = "rtorrent";
+
+      virtualHosts = {
+        # https://github.com/jesec/flood/blob/69feefe2f97be8727de6bd2e35c6715f341aa15b/distribution/shared/nginx.md
+        "flood.domus.diffeq.com" = {
+          useACMEHost = "flood.domus.diffeq.com";
+          forceSSL = true;
+
+          root = "${config.services.flood.package}/lib/node_modules/flood/dist/assets";
+
+          locations."/" = {
+            tryFiles = "$uri /index.html";
+            extraConfig = ''
+              auth_request /tinyauth;
+              error_page 401 = @tinyauth_login;
+            '';
+          };
+
+          locations."/api" = {
+            proxyPass = "http://127.0.0.1:${toString config.services.flood.port}";
+            proxyWebsockets = true;
+            extraConfig = ''
+              auth_request /tinyauth;
+              error_page 401 = @tinyauth_login;
+            '';
+          };
+
+          locations."/tinyauth" = {
+            proxyPass = "https://${config.diffeq.hostNames.auth}/api/auth/nginx";
+            extraConfig = ''
+              internal;
+
+              # ignore the request body, tinyauth isn't looking at it anyhow.
+              proxy_pass_request_body off;
+              proxy_set_header Content-Length "";
+
+              proxy_ssl_server_name on;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header X-Forwarded-Host $http_host;
+              proxy_set_header X-Forwarded-Uri $request_uri;
+            '';
+          };
+
+          locations."@tinyauth_login" = {
+            return = "302 https://${config.diffeq.hostNames.auth}/login?redirect_uri=$scheme://$http_host$request_uri";
+          };
         };
 
-        locations."/api" = {
-          proxyPass = "http://127.0.0.1:3000";
+        # expose rtorrent XML-RPC over HTTP, adding authentication.
+        rtorrent-xml-rpc = {
+          serverName = "rtorrent.domus.diffeq.com";
+          listen = [
+            {
+              addr = "127.0.0.1";
+              port = rtSocketPort;
+            }
+          ];
+
+          basicAuthFile = config.age.secrets.rtorrent-xml-rpc-nginx-auth.path;
+
+          locations."/RPC2" = {
+            extraConfig = ''
+              include ${config.services.nginx.package}/conf/scgi_params;
+              scgi_pass unix:${rtUnixSocketPath};
+            '';
+          };
         };
-      };
 
-      # expose rtorrent XML-RPC over HTTP, adding authentication.
-      rtorrent-xml-rpc = {
-        serverName = "rtorrent.domus.diffeq.com";
-        listen = [
-          {
-            addr = "127.0.0.1";
-            port = 8888;
-          }
-        ];
+        "radarr.domus.diffeq.com" = {
+          useACMEHost = "radarr.domus.diffeq.com";
+          forceSSL = true;
 
-        basicAuthFile = config.age.secrets.rtorrent-xml-rpc-nginx-auth.path;
-
-        locations."/RPC2" = {
-          extraConfig = ''
-            include ${config.services.nginx.package}/conf/scgi_params;
-            scgi_pass unix:/run/rtorrent-socket/rtorrent.sock;
-          '';
+          locations = reverseProxyWithTinyAuth {
+            port = config.services.radarr.settings.server.port;
+            unauthed = [ "~ (/radarr)?/api" ];
+          };
         };
-      };
 
-      "radarr.domus.diffeq.com" = {
-        useACMEHost = "radarr.domus.diffeq.com";
-        forceSSL = true;
+        "sonarr.domus.diffeq.com" = {
+          useACMEHost = "sonarr.domus.diffeq.com";
+          forceSSL = true;
 
-        locations."/".proxyPass = "http://localhost:7878";
-      };
-
-      "sonarr.domus.diffeq.com" = {
-        useACMEHost = "sonarr.domus.diffeq.com";
-        forceSSL = true;
-
-        locations."/".proxyPass = "http://localhost:8989";
+          locations = reverseProxyWithTinyAuth {
+            port = config.services.sonarr.settings.server.port;
+            unauthed = [ "~ (/sonarr)?/api" ];
+          };
+        };
       };
     };
-  };
 }
