@@ -1,6 +1,7 @@
 {
   inputs,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -10,18 +11,49 @@ let
   };
   operators = {
     # drasl
-    gothgirl = "137bb49c-9bf5-4479-9003-19fedacd7357"; # J.
+    GothGirl = "137bb49c-9bf5-4479-9003-19fedacd7357"; # J.
     DukeRibbitIV = "709f1f59-2f07-4467-bcee-121e3f7755fc"; # B.
 
-    # mojang
+    # mojang/drasl
     StarchyPie = "458c712e-41cf-4b0a-9002-a112776661c9"; # F.
   };
+
+  draslJvmOpts = [
+    "-Dminecraft.api.env=custom"
+    "-Dminecraft.api.auth.host=https://drasl.diffeq.com/auth"
+    "-Dminecraft.api.account.host=https://drasl.diffeq.com/account"
+    "-Dminecraft.api.profiles.host=https://drasl.diffeq.com/account"
+    "-Dminecraft.api.session.host=https://drasl.diffeq.com/session"
+    "-Dminecraft.api.services.host=https://drasl.diffeq.com/services"
+  ];
+
   hostAddress4 = "10.0.0.1"; # /24
   containerAddress4 = "10.0.0.2";
 
   natBridgeName = "br-nat";
 
-  felixPort = 25565;
+  coolWorldPort = 25565;
+  swemPort = 25566;
+
+  # https://github.com/Infinidoge/nix-minecraft/issues/122#issuecomment-2916427568
+  forge-1_20_1 =
+    let
+      version = "1.20.1-47.3.0";
+      installer = pkgs.fetchurl {
+        pname = "forge-installer";
+        inherit version;
+        url = "https://maven.minecraftforge.net/net/minecraftforge/forge/${version}/forge-${version}-installer.jar";
+        hash = "sha256-YBirzpXMBYdo42WGX9fPO9MbXFUyMdr4hdw4X81th1o=";
+      };
+      java = "${pkgs.jdk}/bin/java";
+    in
+    pkgs.writeShellScriptBin "server" ''
+      forge_path="libraries/net/minecraftforge/forge/${version}"
+      if ! [ -d "$forge_path" ]; then
+        ${java} -jar ${installer} --installServer
+      fi
+      exec ${java} $@ @"$forge_path"/unix_args.txt nogui
+    '';
 in
 {
   containers.minecraft-servers = {
@@ -32,7 +64,8 @@ in
     localAddress = containerAddress4;
 
     forwardPorts = [
-      { hostPort = felixPort; }
+      { hostPort = coolWorldPort; }
+      { hostPort = swemPort; }
     ];
 
     bindMounts = {
@@ -53,7 +86,10 @@ in
 
         nixpkgs.overlays = [ inputs.nix-minecraft.overlay ];
 
-        networking.firewall.allowedTCPPorts = [ felixPort ];
+        networking.firewall.allowedTCPPorts = [
+          coolWorldPort
+          swemPort
+        ];
         networking = {
           defaultGateway = {
             address = hostAddress4;
@@ -78,19 +114,16 @@ in
           # we'll open the firewall ourselves, so that rcon stays firewalled.
           openFirewall = false;
 
-          servers.felix = {
+          servers.cool-world = {
             enable = true;
             # max heap size 4G, initial heap size 2G
-            jvmOpts = lib.concatStringsSep " " [
-              "-Xmx4G"
-              "-Xms2G"
-              "-Dminecraft.api.env=custom"
-              "-Dminecraft.api.auth.host=https://drasl.diffeq.com/auth"
-              "-Dminecraft.api.account.host=https://drasl.diffeq.com/account"
-              "-Dminecraft.api.profiles.host=https://drasl.diffeq.com/account"
-              "-Dminecraft.api.session.host=https://drasl.diffeq.com/session"
-              "-Dminecraft.api.services.host=https://drasl.diffeq.com/services"
-            ];
+            jvmOpts = lib.concatStringsSep " " (
+              [
+                "-Xmx4G"
+                "-Xms2G"
+              ]
+              ++ draslJvmOpts
+            );
 
             # Specify the custom minecraft server package
             package = pkgs.paperServers.paper-1_21_11;
@@ -103,7 +136,36 @@ in
 
               hardcore = false;
 
-              server-port = felixPort;
+              server-port = coolWorldPort;
+            };
+
+            whitelist = whitelist;
+            operators = operators;
+          };
+
+          servers.swem = {
+            enable = true;
+            # max heap size 4G, initial heap size 2G
+            jvmOpts = lib.concatStringsSep " " (
+              [
+                "-Xmx4G"
+                "-Xms2G"
+              ]
+              ++ draslJvmOpts
+            );
+
+            # Specify the custom minecraft server package
+            package = forge-1_20_1;
+
+            serverProperties = {
+              motd = "horsies!";
+              online-mode = true;
+              white-list = true;
+              enforce-whitelist = true;
+
+              hardcore = false;
+
+              server-port = swemPort;
             };
 
             whitelist = whitelist;
