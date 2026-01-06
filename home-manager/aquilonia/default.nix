@@ -32,6 +32,8 @@
     obsidian
     koodo-reader
 
+    # games
+    steam
     inputs.fjord-launcher.packages.${pkgs.stdenv.hostPlatform.system}.fjordlauncher
   ];
 

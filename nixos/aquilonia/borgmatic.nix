@@ -23,6 +23,7 @@
 
       exclude_patterns = [
         "/home/*/.cache"
+        "/home/*/.local/share/Steam"
         "/home/bct/videos"
       ];
 
