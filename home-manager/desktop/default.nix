@@ -36,6 +36,9 @@
     imv
 
     # media
+    (unstable.supersonic.override { waylandSupport = true; })
+    # wayland is not working yet:
+    # https://github.com/dweymouth/supersonic/issues/560
     unstable.supersonic
 
     # chat
