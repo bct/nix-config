@@ -1,15 +1,8 @@
-{ inputs, config, ... }:
-# let
-#   ldaps_cert = config.security.acme.certs."auth.domus.diffeq.com";
-# in
+{ config, ... }:
+let
+  ldaps_cert = config.security.acme.certs."ldap.domus.diffeq.com";
+in
 {
-  # https://github.com/NixOS/nixpkgs/pull/474559
-  # fixes https://github.com/NixOS/nixpkgs/issues/438857
-  imports = [
-    "${inputs.sweenu-lldap}/nixos/modules/services/databases/lldap.nix"
-  ];
-  disabledModules = [ "services/databases/lldap.nix" ];
-
   age.secrets = {
     lldap-env.rekeyFile = ./secrets/lldap-env.age;
     lldap-user-pass.rekeyFile = ./secrets/lldap-user-pass.age;
@@ -25,27 +18,34 @@
 
       ldap_user_dn = "bct";
       ldap_user_email = "bct@diffeq.com";
+      ldap_user_pass_file = "/run/credentials/lldap.service/ldap-user-pass";
 
       http_port = 17170;
       http_host = "127.0.0.1";
-      # ldaps_options = {
-      #   enabled = true;
-      #   port = 636;
-      #   cert_file = "${ldaps_cert.directory}/cert.pem";
-      #   key_file = "${ldaps_cert.directory}/key.pem";
-      # };
+      ldaps_options = {
+        enabled = true;
+        port = 636;
+        cert_file = "/run/credentials/lldap.service/ldaps-cert";
+        key_file = "/run/credentials/lldap.service/ldaps-key";
+      };
     };
 
     # sets LLDAP_JWT_SECRET
     environmentFile = config.age.secrets.lldap-env.path;
-    environment.LLDAP_LDAP_USER_PASS_FILE = config.age.secrets.lldap-user-pass.path;
   };
+
+  systemd.services.lldap.serviceConfig.LoadCredential = [
+    "ldaps-cert:${ldaps_cert.directory}/cert.pem"
+    "ldaps-key:${ldaps_cert.directory}/key.pem"
+    "ldap-user-pass:${config.age.secrets.lldap-user-pass.path}"
+  ];
 
   # allow binding ports below 1024
   systemd.services.lldap.serviceConfig.AmbientCapabilities = "CAP_NET_BIND_SERVICE";
 
   networking.firewall.allowedTCPPorts = [
     config.services.lldap.settings.ldap_port
+    config.services.lldap.settings.ldaps_options.port
   ];
 
   services.caddy = {

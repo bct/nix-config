@@ -20,7 +20,6 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # bug fixes & new packages
-    sweenu-lldap.url = "github:sweenu/nixpkgs/lldap_use_load_cred2";
     shaunren-tinyauth.url = "github:shaunren/nixpkgs/tinyauth";
 
     # Home manager
@@ -85,7 +84,6 @@
     {
       self,
       nixpkgs,
-      nixpkgs-unstable,
       home-manager,
       flake-parts,
       deploy-rs,

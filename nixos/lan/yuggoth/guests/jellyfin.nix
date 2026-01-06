@@ -1,9 +1,4 @@
-{
-  self,
-  config,
-  lib,
-  ...
-}:
+{ self, config, ... }:
 {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"

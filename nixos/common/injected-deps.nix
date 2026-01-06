@@ -14,8 +14,8 @@
 
   config.diffeq = {
     hostNames = {
-      oidc = "auth.domus.diffeq.com"; # dex
-      auth = "tinyauth.domus.diffeq.com"; # tinyauth
+      oidc = "oidc.domus.diffeq.com"; # dex
+      auth = "auth.domus.diffeq.com"; # tinyauth
       ldap = "ldap.domus.diffeq.com"; # lldap
     };
   };

@@ -27,9 +27,9 @@
   services.lego-proxy-client = {
     enable = true;
     domains = [
-      "auth" # dex
+      "oidc" # dex
       "ldap" # lldap
-      "tinyauth" # tinyauth
+      "auth" # tinyauth
     ];
     group = "caddy";
   };
