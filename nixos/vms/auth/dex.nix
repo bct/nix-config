@@ -47,6 +47,7 @@ in
             bindPW = "$DEX_SEARCH_USER_PASSWORD";
             userSearch = {
               baseDN = "ou=people,dc=diffeq,dc=com";
+              filter = "(memberOf=people)";
               username = "uid";
               idAttr = "uid";
               emailAttr = "mail";
