@@ -12,6 +12,11 @@ in
       rekeyFile = config.diffeq.secretsPath + /dex/grafana.age;
       generator.script = "alnum";
     };
+
+    dex-immich-secret = {
+      rekeyFile = config.diffeq.secretsPath + /dex/immich.age;
+      generator.script = "alnum";
+    };
   };
 
   services.dex = {
@@ -68,6 +73,17 @@ in
           name = "Grafana";
           secretFile = config.age.secrets.dex-grafana-secret.path;
           redirectURIs = [ "https://grafana.domus.diffeq.com/login/generic_oauth" ];
+        }
+        # https://docs.immich.app/administration/oauth/
+        {
+          id = "immich";
+          name = "Immich";
+          secretFile = config.age.secrets.dex-immich-secret.path;
+          redirectURIs = [
+            "app.immich:///oauth-callback"
+            "https://immich.domus.diffeq.com/auth/login"
+            "https://immich.domus.diffeq.com/user-settings"
+          ];
         }
       ];
     };
