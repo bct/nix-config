@@ -150,6 +150,7 @@
                 mail
                 medley
                 megahost-one
+                mi-go
                 stereo
                 yuggoth
                 ;
@@ -211,6 +212,14 @@
               modules = [
                 injectDeps
                 ./nixos/vms/mail/configuration.nix
+              ];
+            };
+
+            mi-go = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/lan/mi-go/configuration.nix
               ];
             };
 
@@ -280,6 +289,12 @@
               hostname = "medley.domus.diffeq.com";
               arch = "x86_64-linux";
               config = self.nixosConfigurations.medley;
+            };
+
+            nodes.mi-go = mkNode {
+              hostname = "mi-go.domus.diffeq.com";
+              arch = "x86_64-linux";
+              config = self.nixosConfigurations.mi-go;
             };
 
             nodes.stereo = mkNode {
