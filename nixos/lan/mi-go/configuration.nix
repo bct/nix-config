@@ -9,8 +9,10 @@
     "${self}/nixos/common/agenix-rekey.nix"
     "${self}/nixos/common/node-exporter.nix"
 
+    ./accounts.nix
     ./hardware-configuration.nix
     ./microvm-host.nix
+    ./samba.nix
     ./zfs.nix
   ];
 
@@ -44,9 +46,6 @@
 
   users.users.bct = {
     extraGroups = [ "blackbeard" ];
-  };
-  users.groups.blackbeard = {
-    gid = 1005;
   };
 
   system.stateVersion = "25.11";
