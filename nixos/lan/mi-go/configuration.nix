@@ -47,6 +47,12 @@
         tapInterfaceMac = "02:00:00:00:01:01";
         machineId = "8115ded7ebad02ebc1f9541f1fd63312";
       };
+
+      torrent = {
+        hostName = "torrent";
+        tapInterfaceMac = "02:00:00:00:01:03";
+        machineId = "e015e63485604a4efda43823812f3dcd";
+      };
     };
   };
 

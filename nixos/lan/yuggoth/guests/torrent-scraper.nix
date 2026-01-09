@@ -153,7 +153,7 @@ in
         "-o StreamLocalBindMask=0117"
         "-i \${CREDENTIALS_DIRECTORY}/ssh-identity"
         "-N"
-        "-L \${RUNTIME_DIRECTORY}/rtorrent.sock:/home/bct/.rtorrent/rpc.sock bct@torrent.domus.diffeq.com"
+        "-L \${RUNTIME_DIRECTORY}/rtorrent.sock:/var/home/bct/.rtorrent/rpc.sock bct@torrent.domus.diffeq.com"
       ];
 
       # Restart every >2 seconds to avoid StartLimitInterval failure
@@ -172,8 +172,9 @@ in
   };
 
   programs.ssh.knownHosts = {
-    "torrent.domus.diffeq.com".publicKey =
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPDMeXYu6wbZFx9ONThqwQKbK6/mq6hluZqIB6w0knqK";
+    "torrent.domus.diffeq.com".publicKey = builtins.readFile (
+      config.diffeq.secretsPath + /ssh/host-torrent.pub
+    );
   };
 
   services.nginx =
