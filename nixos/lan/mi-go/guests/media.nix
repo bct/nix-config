@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 {
   system.stateVersion = "25.11";
 
@@ -16,18 +16,23 @@
     ];
   };
 
-  services.openssh.settings.PasswordAuthentication = lib.mkForce true;
+  services.openssh = {
+    settings.PasswordAuthentication = lib.mkForce true;
+    # TODO: add a chroot here.
+    extraConfig = ''
+      Match user blackbeard
+        ForceCommand internal-sftp
+    '';
+  };
 
   users.users.blackbeard = {
     isSystemUser = true;
     group = "blackbeard";
+    hashedPasswordFile = config.age.secrets.passwd-blackbeard.path;
 
     # system users default to nologin.
     # sshd won't let us execute commands without a shell.
     useDefaultShell = true;
-
-    # TODO: encrypt
-    hashedPassword = "$y$j9T$0WiCrDv62iZMo05odH3BA.$xe7b//zXv181597KDikqr6MI9ujkpV79aDEuM4GsTf3";
 
     # TODO: prune this list, automate it, limit it to SFTP
     openssh.authorizedKeys.keys = [
@@ -42,5 +47,10 @@
   users.groups.blackbeard = {
     gid = 1005;
     members = [ "blackbeard" ];
+  };
+
+  age.secrets = {
+    # a hashed password.
+    passwd-blackbeard.rekeyFile = ./secrets/passwd-media-blackbeard.age;
   };
 }
