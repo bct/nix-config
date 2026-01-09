@@ -21,6 +21,12 @@
         browseable = "no";
         "read only" = "no";
       };
+
+      paperless = {
+        path = "/mnt/bulk/home/paperless";
+        browseable = "no";
+        "read only" = "no";
+      };
     };
   };
 
@@ -31,12 +37,16 @@
     # as it is not in $PATH in the activation script's environment. The password
     # is repeated twice with newline characters as smbpasswd requires a password
     # confirmation even in non-interactive mode where input is piped in through stdin.
-    init_smbpasswd.text = ''
+    init_smbpasswd_immich.text = ''
       ${pkgs.coreutils}/bin/printf "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-immich.path})\n$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-immich.path})\n" | ${config.services.samba.package}/bin/smbpasswd -sa immich
+    '';
+    init_smbpasswd_paperless.text = ''
+      ${pkgs.coreutils}/bin/printf "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-paperless.path})\n$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-paperless.path})\n" | ${config.services.samba.package}/bin/smbpasswd -sa paperless
     '';
   };
 
   age.secrets = {
     passwd-immich.rekeyFile = ./secrets/passwd-immich.age;
+    passwd-paperless.rekeyFile = ./secrets/passwd-paperless.age;
   };
 }
