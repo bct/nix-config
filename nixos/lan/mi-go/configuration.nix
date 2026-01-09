@@ -36,6 +36,12 @@
     # to choose a MAC address:
     # Locally administered have one of 2/6/A/E in the second nibble.
     guests = {
+      borg = {
+        hostName = "borg";
+        tapInterfaceMac = "02:00:00:00:01:02";
+        machineId = "a2717cf46338fdb456749d51d6611e16";
+      };
+
       media = {
         hostName = "media";
         tapInterfaceMac = "02:00:00:00:01:01";
