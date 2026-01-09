@@ -27,6 +27,12 @@
         browseable = "no";
         "read only" = "no";
       };
+
+      video = {
+        path = "/mnt/bulk/video";
+        browseable = "no";
+        "read only" = "no";
+      };
     };
   };
 
@@ -43,10 +49,14 @@
     init_smbpasswd_paperless.text = ''
       ${pkgs.coreutils}/bin/printf "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-paperless.path})\n$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-paperless.path})\n" | ${config.services.samba.package}/bin/smbpasswd -sa paperless
     '';
+    init_smbpasswd_torrent-scraper.text = ''
+      ${pkgs.coreutils}/bin/printf "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-torrent-scraper.path})\n$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-torrent-scraper.path})\n" | ${config.services.samba.package}/bin/smbpasswd -sa torrent-scraper
+    '';
   };
 
   age.secrets = {
     passwd-immich.rekeyFile = ./secrets/passwd-immich.age;
     passwd-paperless.rekeyFile = ./secrets/passwd-paperless.age;
+    passwd-torrent-scraper.rekeyFile = ./secrets/passwd-torrent-scraper.age;
   };
 }
