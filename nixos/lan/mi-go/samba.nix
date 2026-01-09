@@ -10,8 +10,11 @@
     settings = {
       global = {
         # TODO: harden.
-        "server smb encrypt" = "required";
+        #"server smb encrypt" = "required"; # not compatible with guest access?
         "server min protocol" = "SMB3_00";
+        "map to guest" = "Bad User";
+        "guest account" = "nobody";
+        "invalid users" = [ "root" ];
         "guest ok" = "no";
         "security" = "user";
       };
@@ -32,6 +35,13 @@
         path = "/mnt/bulk/video";
         browseable = "no";
         "read only" = "no";
+      };
+
+      beets = {
+        path = "/mnt/bulk/beets/library";
+        browseable = "yes";
+        "read only" = "yes";
+        "guest ok" = "yes";
       };
     };
   };
