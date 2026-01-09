@@ -30,6 +30,10 @@
     isSystemUser = true;
     uid = 1003;
     group = "torrent-scraper";
+    extraGroups = [
+      "inbox-droppers"
+      "video-writers"
+    ];
   };
   users.groups.torrent-scraper = {
     gid = 1004;
@@ -43,6 +47,7 @@
     isSystemUser = true;
     uid = 1004;
     group = "rtorrent";
+    extraGroups = [ "video-writers" ];
   };
   users.groups.rtorrent = {
     gid = 1006;
