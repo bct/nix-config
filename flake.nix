@@ -136,7 +136,10 @@
           # see https://flake.parts/options/agenix-rekey
           agenix-rekey.nodes =
             let
-              allVms = self.nixosConfigurations.yuggoth.config.microvm.vms;
+              # TODO: what if the hosts have overlapping VM names?
+              allVms =
+                self.nixosConfigurations.yuggoth.config.microvm.vms
+                // self.nixosConfigurations.mi-go.config.microvm.vms;
               agenixVms =
                 nixpkgs.lib.filterAttrs
                   # only look at VMs with "age" attributes set.

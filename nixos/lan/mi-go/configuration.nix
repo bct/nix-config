@@ -10,6 +10,7 @@
     "${self}/nixos/common/node-exporter.nix"
 
     ./hardware-configuration.nix
+    ./microvm-host.nix
     ./zfs.nix
   ];
 
@@ -22,6 +23,31 @@
   networking.useNetworkd = true;
 
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKmvKCDSnW1IWz/qZAfw8HCdsEEKCNtD4gJXmuKM9pkg";
+
+  mi-go.microvms = {
+    interfaceToBridge = "enp8s0";
+
+    # to generate a machineId:
+    #
+    #   ruby -r securerandom -e 'puts SecureRandom.hex'
+    #
+    # to choose a MAC address:
+    # Locally administered have one of 2/6/A/E in the second nibble.
+    guests = {
+      media = {
+        hostName = "media";
+        tapInterfaceMac = "02:00:00:00:01:01";
+        machineId = "8115ded7ebad02ebc1f9541f1fd63312";
+      };
+    };
+  };
+
+  users.users.bct = {
+    extraGroups = [ "blackbeard" ];
+  };
+  users.groups.blackbeard = {
+    gid = 1005;
+  };
 
   system.stateVersion = "25.11";
 }

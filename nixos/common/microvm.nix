@@ -7,6 +7,7 @@
 }:
 let
   # mount point for secrets passed from the host to the VM
+  # TODO: complain if anything else is mounted directly to /mnt!
   agenixHostMountPoint = "/mnt/agenix-host";
   vmName = config.diffeq.microvmName;
   vmConfig = config.diffeq.microvmConfig;
