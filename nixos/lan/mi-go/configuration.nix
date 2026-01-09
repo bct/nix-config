@@ -42,6 +42,12 @@
         machineId = "a2717cf46338fdb456749d51d6611e16";
       };
 
+      git = {
+        hostName = "git";
+        tapInterfaceMac = "02:00:00:00:01:04";
+        machineId = "1e64c3582fc0370de9a282455d58a192";
+      };
+
       media = {
         hostName = "media";
         tapInterfaceMac = "02:00:00:00:01:01";

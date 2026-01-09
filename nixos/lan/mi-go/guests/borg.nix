@@ -75,7 +75,7 @@
 
     git = {
       authorizedKeys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDWs2kcH+P9V/PV3uoWNOmWX95s9kp+w2Trjea4HW+CpNR7bAPQK/N6l6ukv4VkzDuTvSj4dsf8z+Ch+OVm+CYDDewq+jP0Hm4HB2ts4H8rssP5z/dT3CHXlIY0QgaG6tEchfapZzO5aKY8UD6NnSHBwgXPC0b7ZoW8qDeR5Py70/6WXS8LPs8+Gs6wsZLahDceRszrJJmuqa0LOl1rGvmtTMesTgpq4dDjVvPFw3M4MTIssvIHEp0ZphbUo8q6yEd+AeCUIaflj9GdIxEI9LCLLP9p1MBfwudHuthC2efdhNXwhUGGuP6V05xGaaP/tv1VtFHZtUAvUT44w2Ap+LLL8COyKiPfVp9YF9CFShN2e8EurQ3RDdH7pQYcwZ0GCJRd1Nnb83PVaqItdXP/pHscCSb5rcex5cz6cJA588RrEmQbqHUQHW9lCLOt59zpRTEtylQWyFw+VnSBlMdvHg/hPs8IjF2q5XP5jhUNcgtUdZjJlM2hQpldNC2DtfeLE9c32rNG8SdOitibTWg9RoRBb9e8rgwyc7UEcKzLKIERyyAS8jTjWPJ7YMzY/wPi8IrQu0+3poN7C+qGIVZPqfbv3s+3Acw+wvEpPDTXDjqKIQNDaqZuTIwHt96Hbg7W4lunc3UX1A4y0zDt7Dp6thjq4O0NDgGzeAcTcsuecKBpow== borg (git)"
+        (builtins.readFile (config.diffeq.secretsPath + /ssh/borg-git.pub))
       ];
       path = "/srv/borg/git";
     };
