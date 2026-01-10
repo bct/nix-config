@@ -54,6 +54,12 @@
         machineId = "8115ded7ebad02ebc1f9541f1fd63312";
       };
 
+      syncthing = {
+        hostName = "syncthing";
+        tapInterfaceMac = "02:00:00:00:01:05";
+        machineId = "f4132f22d27e1890a42b3c1970e3eaac";
+      };
+
       torrent = {
         hostName = "torrent";
         tapInterfaceMac = "02:00:00:00:01:03";

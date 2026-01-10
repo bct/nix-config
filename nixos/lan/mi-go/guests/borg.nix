@@ -56,7 +56,7 @@
       authorizedKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGI6hdGD/VS7pPqdIiHKynFuXQgEnQ3VYKDhjZAyYB/b borg (megahost-one.diffeq.com)"
       ];
-      path = "/srv/borg/megahost-one";
+      path = "/srv/borg/megahost-one.diffeq.com";
     };
 
     mail = {
