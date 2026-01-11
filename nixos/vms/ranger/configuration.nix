@@ -18,5 +18,21 @@
 
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTNt/y26ZktCI1KNHV0eWhpP8uiDBoNh5sy0lxPLewj";
 
+  # TODO: centralize this
+  fileSystems."/mnt/video" = {
+    device = "/mnt/video";
+    fsType = "virtiofs";
+  };
+
+  fileSystems."/bulk/downloads/pth" = {
+    device = "/bulk/downloads/pth";
+    fsType = "virtiofs";
+  };
+
+  fileSystems."/bulk/downloads/ggn" = {
+    device = "/bulk/downloads/ggn";
+    fsType = "virtiofs";
+  };
+
   system.stateVersion = "25.11";
 }

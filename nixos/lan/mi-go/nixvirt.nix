@@ -17,8 +17,22 @@
       ranger = {
         uuid = "5de23a0d-8545-4b6c-ba0c-f3ba3b138e8c";
         memoryMB = 2048;
-        # volumes = [
-        # ];
+        mounts = [
+          {
+            source = "/mnt/bulk/video";
+            mountPoint = "/mnt/video";
+          }
+
+          {
+            source = "/mnt/bulk/media/downloads/pth";
+            mountPoint = "/bulk/downloads/pth";
+          }
+
+          {
+            source = "/mnt/bulk/software/downloads/ggn";
+            mountPoint = "/bulk/downloads/ggn";
+          }
+        ];
       };
     };
   };

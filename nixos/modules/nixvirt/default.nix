@@ -56,6 +56,26 @@ in
                 );
                 default = [ ];
               };
+
+              mounts = mkOption {
+                type = types.listOf (
+                  types.submodule (
+                    { ... }:
+                    {
+                      options = {
+                        source = mkOption {
+                          type = types.str;
+                        };
+                        # this is actually a "mount tag" - it's up to the guest to decide where to mount it.
+                        mountPoint = mkOption {
+                          type = types.str;
+                        };
+                      };
+                    }
+                  )
+                );
+                default = [ ];
+              };
             };
           }
         )
@@ -84,6 +104,7 @@ in
       qemu = {
         # "pkgs.qemu_kvm saves disk space allowing to emulate only host architectures."
         package = pkgs.qemu_kvm;
+        vhostUserPackages = [ pkgs.virtiofsd ];
         runAsRoot = false;
       };
     };
@@ -102,7 +123,7 @@ in
           };
         };
 
-        # these are valumes that should be created; if you're bootstrapping
+        # these are volumes that should be created; if you're bootstrapping
         # with an existing image you don't need to add it here.
         #
         # instead, create a qcow2 file in /srv/libvirt/images/, and run:
@@ -160,13 +181,37 @@ in
             bus = "virtio";
           };
         }) guest.disks;
+        # https://libvirt.org/kbase/virtiofs.html
+        mounts = map (mount: {
+          type = "mount";
+          accessmode = "passthrough";
+          driver = {
+            type = "virtiofs";
+          };
+          source = {
+            dir = mount.source;
+          };
+          target = {
+            dir = mount.mountPoint;
+          };
+        }) guest.mounts;
       in
       {
         definition = nixvirt.lib.domain.writeXML (
           baseXML
           // {
+            # if virtiofs is used we need to set up shared memory.
+            memoryBacking = lib.optionalAttrs (mounts != [ ]) {
+              source = {
+                type = "memfd";
+              };
+              access = {
+                mode = "shared";
+              };
+            };
             devices = baseXML.devices // {
               disk = baseXML.devices.disk ++ extraDisks;
+              filesystem = (baseXML.devices.filesystem or [ ]) ++ mounts;
             };
           }
         );
