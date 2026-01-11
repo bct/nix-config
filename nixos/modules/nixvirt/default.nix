@@ -8,6 +8,7 @@
 let
   nixvirt = inputs.nixvirt;
   storagePool = "default";
+  storagePoolDir = "/srv/libvirt/images";
   cfg = config.diffeq.nixvirt;
 in
 {
@@ -63,6 +64,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      # ensure that our storage pool exists, and is only accessible by root & qemu
+      # "-" means no automatic cleanup.
+      "d ${storagePoolDir} 0770 root qemu-libvirtd -"
+    ];
+
     # allow bct to use virsh
     users.users.${cfg.user} = {
       extraGroups = [ "libvirtd" ];
@@ -91,7 +98,7 @@ in
           uuid = "b9f64006-0c8e-4771-9535-eb6df709d579";
           type = "dir";
           target = {
-            path = "/srv/libvirt/images";
+            path = storagePoolDir;
           };
         };
 

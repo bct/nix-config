@@ -12,6 +12,7 @@
     ./accounts.nix
     ./hardware-configuration.nix
     ./microvm-host.nix
+    ./nixvirt.nix
     ./samba.nix
     ./zfs.nix
   ];

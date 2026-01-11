@@ -154,6 +154,7 @@
                 medley
                 megahost-one
                 mi-go
+                ranger
                 stereo
                 yuggoth
                 ;
@@ -234,6 +235,14 @@
               ];
             };
 
+            ranger = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/vms/ranger/configuration.nix
+              ];
+            };
+
             stereo = nixpkgs.lib.nixosSystem {
               specialArgs = { inherit self inputs outputs; };
               modules = [
@@ -298,6 +307,12 @@
               hostname = "mi-go.domus.diffeq.com";
               arch = "x86_64-linux";
               config = self.nixosConfigurations.mi-go;
+            };
+
+            nodes.ranger = mkNode {
+              hostname = "ranger.domus.diffeq.com";
+              arch = "x86_64-linux";
+              config = self.nixosConfigurations.ranger;
             };
 
             nodes.stereo = mkNode {
