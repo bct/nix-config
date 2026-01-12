@@ -38,6 +38,9 @@ in
   services.caddy = {
     enable = true;
     virtualHosts.${config.diffeq.hostNames.auth} = {
+      # any hostnames that aren't matched elsewhere will go to this vhost.
+      # this allows forward auth from other Caddys to work without annoying header manipulation.
+      serverAliases = [ ":443" ];
       useACMEHost = config.diffeq.hostNames.auth;
       extraConfig = "reverse_proxy localhost:${toString port}";
     };
