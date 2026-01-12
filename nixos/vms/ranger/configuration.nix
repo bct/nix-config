@@ -10,6 +10,10 @@
     "${self}/nixos/common/node-exporter.nix"
 
     "${self}/nixos/modules/lego-proxy-client"
+
+    ./accounts.nix
+    ./flood.nix
+    ./rtorrent.nix
   ];
 
   time.timeZone = "Etc/UTC";
@@ -17,6 +21,21 @@
   networking.hostName = "ranger";
 
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTNt/y26ZktCI1KNHV0eWhpP8uiDBoNh5sy0lxPLewj";
+
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      "flood"
+      "radarr"
+      "sonarr"
+    ];
+    group = "caddy";
+  };
+
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 
   # TODO: centralize this
   fileSystems."/mnt/video" = {

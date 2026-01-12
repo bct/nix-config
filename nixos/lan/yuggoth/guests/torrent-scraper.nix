@@ -31,7 +31,6 @@ in
   services.lego-proxy-client = {
     enable = true;
     domains = [
-      "flood"
       "radarr"
       "sonarr"
     ];
@@ -118,20 +117,6 @@ in
   users.groups = {
     rtorrent = { };
   };
-
-  services.flood = {
-    enable = true;
-    openFirewall = false;
-    host = "127.0.0.1";
-    extraArgs = [
-      "--auth=none"
-      "--rtsocket=${rtUnixSocketPath}"
-    ];
-  };
-  systemd.services.flood.serviceConfig.SupplementaryGroups = [
-    "rtorrent" # flood can access the rtorrent socket
-    "video-writers" # flood can directly modify downloaded files
-  ];
 
   # https://gist.github.com/drmalex07/c0f9304deea566842490
   systemd.services.rtorrent-socket = {
@@ -228,51 +213,6 @@ in
       group = "rtorrent";
 
       virtualHosts = {
-        # https://github.com/jesec/flood/blob/69feefe2f97be8727de6bd2e35c6715f341aa15b/distribution/shared/nginx.md
-        "flood.domus.diffeq.com" = {
-          useACMEHost = "flood.domus.diffeq.com";
-          forceSSL = true;
-
-          root = "${config.services.flood.package}/lib/node_modules/flood/dist/assets";
-
-          locations."/" = {
-            tryFiles = "$uri /index.html";
-            extraConfig = ''
-              auth_request /tinyauth;
-              error_page 401 = @tinyauth_login;
-            '';
-          };
-
-          locations."/api" = {
-            proxyPass = "http://127.0.0.1:${toString config.services.flood.port}";
-            proxyWebsockets = true;
-            extraConfig = ''
-              auth_request /tinyauth;
-              error_page 401 = @tinyauth_login;
-            '';
-          };
-
-          locations."/tinyauth" = {
-            proxyPass = "https://${config.diffeq.hostNames.auth}/api/auth/nginx";
-            extraConfig = ''
-              internal;
-
-              # ignore the request body, tinyauth isn't looking at it anyhow.
-              proxy_pass_request_body off;
-              proxy_set_header Content-Length "";
-
-              proxy_ssl_server_name on;
-              proxy_set_header X-Forwarded-Proto $scheme;
-              proxy_set_header X-Forwarded-Host $http_host;
-              proxy_set_header X-Forwarded-Uri $request_uri;
-            '';
-          };
-
-          locations."@tinyauth_login" = {
-            return = "302 https://${config.diffeq.hostNames.auth}/login?redirect_uri=$scheme://$http_host$request_uri";
-          };
-        };
-
         # expose rtorrent XML-RPC over HTTP, adding authentication.
         rtorrent-xml-rpc = {
           serverName = "rtorrent.domus.diffeq.com";
