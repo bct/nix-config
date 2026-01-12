@@ -13,17 +13,22 @@ in
     pkgs.rtorrent
   ];
 
+  # expose an XML-RPC endpoint to the network.
   services.nginx = {
     enable = true;
     group = "rtorrent";
 
     virtualHosts = {
       rtorrent-xml-rpc = {
+        useACMEHost = "rtorrent.domus.diffeq.com";
+        onlySSL = true;
+
         serverName = "rtorrent.domus.diffeq.com";
         listen = [
           {
-            addr = "127.0.0.1";
+            addr = "0.0.0.0";
             port = rtSocketPort;
+            ssl = true;
           }
         ];
 
@@ -46,4 +51,6 @@ in
       group = config.services.nginx.group;
     };
   };
+
+  networking.firewall.allowedTCPPorts = [ rtSocketPort ];
 }

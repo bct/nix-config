@@ -15,4 +15,9 @@
   users.groups.blackbeard.gid = 1001;
   users.groups.video-writers.gid = 1005;
   users.groups.rtorrent.gid = 1006;
+
+  users.users = {
+    caddy.extraGroups = [ "acme" ];
+    nginx.extraGroups = [ "acme" ];
+  };
 }

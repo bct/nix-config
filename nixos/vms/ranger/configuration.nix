@@ -26,10 +26,8 @@
     enable = true;
     domains = [
       "flood"
-      "radarr"
-      "sonarr"
+      "rtorrent"
     ];
-    group = "caddy";
   };
 
   networking.firewall.allowedTCPPorts = [

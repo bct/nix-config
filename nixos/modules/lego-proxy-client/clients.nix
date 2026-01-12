@@ -51,9 +51,8 @@
     pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7e7g8qEpc8BFv6MRdkZvlxHwrhusa9en98e4EhT/70 torrent-scraper:lego-proxy-radarr";
   };
 
-  recipes = {
-    domain = "recipes.domus.diffeq.com";
-  };
+  recipes.domain = "recipes.domus.diffeq.com";
+  rtorrent.domain = "rtorrent.domus.diffeq.com";
 
   spectator = {
     domain = "spectator.domus.diffeq.com";
