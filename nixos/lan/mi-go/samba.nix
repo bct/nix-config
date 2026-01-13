@@ -1,4 +1,9 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 {
   services.samba = {
     enable = true;
@@ -43,28 +48,80 @@
         "read only" = "yes";
         "guest ok" = "yes";
       };
+
+      time-machine-amanda-2020-12 = {
+        path = "/mnt/bulk/backups/time-machine-amanda-2020-12";
+        "valid users" = "amanda";
+        public = "no";
+        writeable = "yes";
+        "fruit:aapl" = "yes";
+        "fruit:time machine" = "yes";
+        "vfs objects" = "catia fruit streams_xattr";
+      };
+    };
+  };
+
+  # Ensure Time Machine can discover the share without `tmutil`
+  services.avahi = {
+    enable = true;
+    openFirewall = true;
+    publish.enable = true;
+    publish.userServices = true;
+    nssmdns4 = true;
+    extraServiceFiles = {
+      timemachine = ''
+        <?xml version="1.0" standalone='no'?>
+        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+        <service-group>
+          <name replace-wildcards="yes">%h</name>
+          <service>
+            <type>_smb._tcp</type>
+            <port>445</port>
+          </service>
+          <service>
+            <type>_device-info._tcp</type>
+            <port>0</port>
+            <txt-record>model=TimeCapsule8,119</txt-record>
+          </service>
+          <service>
+            <type>_adisk._tcp</type>
+            <!-- 
+              change tm_share to share name, if you changed it. 
+            --> 
+            <txt-record>dk0=adVN=time-machine-amanda-2020-12,adVF=0x82</txt-record>
+            <txt-record>sys=waMa=0,adVF=0x100</txt-record>
+          </service>
+        </service-group>
+      '';
     };
   };
 
   # set samba user passwords.
-  system.activationScripts = {
-    # The "init_smbpasswd" script name is arbitrary, but a useful label for tracking
-    # failed scripts in the build output. An absolute path to smbpasswd is necessary
-    # as it is not in $PATH in the activation script's environment. The password
-    # is repeated twice with newline characters as smbpasswd requires a password
-    # confirmation even in non-interactive mode where input is piped in through stdin.
-    init_smbpasswd_immich.text = ''
-      ${pkgs.coreutils}/bin/printf "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-immich.path})\n$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-immich.path})\n" | ${config.services.samba.package}/bin/smbpasswd -sa immich
-    '';
-    init_smbpasswd_paperless.text = ''
-      ${pkgs.coreutils}/bin/printf "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-paperless.path})\n$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-paperless.path})\n" | ${config.services.samba.package}/bin/smbpasswd -sa paperless
-    '';
-    init_smbpasswd_torrent-scraper.text = ''
-      ${pkgs.coreutils}/bin/printf "$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-torrent-scraper.path})\n$(${pkgs.coreutils}/bin/cat ${config.age.secrets.passwd-torrent-scraper.path})\n" | ${config.services.samba.package}/bin/smbpasswd -sa torrent-scraper
-    '';
-  };
+  system.activationScripts =
+    let
+      sambaPasswordPaths = {
+        amanda = config.age.secrets.passwd-amanda.path;
+        immich = config.age.secrets.passwd-immich.path;
+        paperless = config.age.secrets.passwd-paperless.path;
+        torrent-scraper = config.age.secrets.passwd-torrent-scraper.path;
+      };
+      # The "init_smbpasswd" script name is arbitrary, but a useful label for tracking
+      # failed scripts in the build output. An absolute path to smbpasswd is necessary
+      # as it is not in $PATH in the activation script's environment. The password
+      # is repeated twice with newline characters as smbpasswd requires a password
+      # confirmation even in non-interactive mode where input is piped in through stdin.
+    in
+    lib.mapAttrs' (
+      username: path:
+      lib.nameValuePair "init_smbpasswd_${username}" {
+        text = ''
+          ${pkgs.coreutils}/bin/printf "$(${pkgs.coreutils}/bin/cat ${path})\n$(${pkgs.coreutils}/bin/cat ${path})\n" | ${config.services.samba.package}/bin/smbpasswd -sa ${username}
+        '';
+      }
+    ) sambaPasswordPaths;
 
   age.secrets = {
+    passwd-amanda.rekeyFile = ./secrets/passwd-amanda.age;
     passwd-immich.rekeyFile = ./secrets/passwd-immich.age;
     passwd-paperless.rekeyFile = ./secrets/passwd-paperless.age;
     passwd-torrent-scraper.rekeyFile = ./secrets/passwd-torrent-scraper.age;
