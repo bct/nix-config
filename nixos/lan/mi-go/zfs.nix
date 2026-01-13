@@ -32,4 +32,8 @@ in
   # import & mount our pool.
   # alternatively we could use ZFS "legacy" mountpoints and and "fileSystems".
   boot.zfs.extraPools = [ "bulk" ];
+
+  services.zfs.autoScrub = {
+    enable = true;
+  };
 }
