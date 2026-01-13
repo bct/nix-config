@@ -17,6 +17,11 @@ in
       rekeyFile = config.diffeq.secretsPath + /dex/immich.age;
       generator.script = "alnum";
     };
+
+    dex-tandoor-secret = {
+      rekeyFile = config.diffeq.secretsPath + /dex/tandoor.age;
+      generator.script = "alnum";
+    };
   };
 
   services.dex = {
@@ -84,6 +89,14 @@ in
             "app.immich:///oauth-callback"
             "https://immich.domus.diffeq.com/auth/login"
             "https://immich.domus.diffeq.com/user-settings"
+          ];
+        }
+        {
+          id = "tandoor";
+          name = "Tandoor";
+          secretFile = config.age.secrets.dex-tandoor-secret.path;
+          redirectURIs = [
+            "https://recipes.domus.diffeq.com/accounts/oidc/oidc.domus.diffeq.com/login/callback/"
           ];
         }
       ];
