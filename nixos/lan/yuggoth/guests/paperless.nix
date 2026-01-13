@@ -2,6 +2,7 @@
   self,
   config,
   pkgs,
+  lib,
   ...
 }:
 {
@@ -39,10 +40,36 @@
     settings = {
       PAPERLESS_URL = "https://paperless.domus.diffeq.com";
       PAPERLESS_DBHOST = "db.domus.diffeq.com";
+
+      PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS = builtins.toJSON {
+        openid_connect = {
+          OAUTH_PKCE_ENABLED = "True";
+          APPS = [
+            {
+              provider_id = "oidc.domus.diffeq.com";
+              name = "oidc.domus.diffeq.com";
+              client_id = "paperless";
+              # we add "secret" in systemd.services.paperless-web.script.
+              settings.server_url = "https://${config.diffeq.hostNames.oidc}";
+            }
+          ];
+        };
+      };
     };
 
     package = pkgs.paperless-ngx;
   };
+
+  # Add secret to PAPERLESS_SOCIALACCOUNT_PROVIDERS
+  systemd.services.paperless-web.script = lib.mkBefore ''
+    oidcSecret=$(< ${config.age.secrets.dex-paperless-secret.path})
+    export PAPERLESS_SOCIALACCOUNT_PROVIDERS=$(
+      ${pkgs.jq}/bin/jq <<< "$PAPERLESS_SOCIALACCOUNT_PROVIDERS" \
+        --compact-output \
+        --arg oidcSecret "$oidcSecret" '.openid_connect.APPS.[0].secret = $oidcSecret'
+    )
+  '';
 
   age.secrets = {
     fs-mi-go-paperless = {
@@ -52,6 +79,12 @@
     paperless-env = {
       rekeyFile = ./secrets/paperless-env.age;
       owner = config.services.paperless.user;
+    };
+
+    dex-paperless-secret = {
+      rekeyFile = config.diffeq.secretsPath + /dex/paperless.age;
+      owner = config.services.paperless.user;
+      generator.script = "alnum";
     };
   };
 

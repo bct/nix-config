@@ -18,6 +18,11 @@ in
       generator.script = "alnum";
     };
 
+    dex-paperless-secret = {
+      rekeyFile = config.diffeq.secretsPath + /dex/paperless.age;
+      generator.script = "alnum";
+    };
+
     dex-tandoor-secret = {
       rekeyFile = config.diffeq.secretsPath + /dex/tandoor.age;
       generator.script = "alnum";
@@ -89,6 +94,14 @@ in
             "app.immich:///oauth-callback"
             "https://immich.domus.diffeq.com/auth/login"
             "https://immich.domus.diffeq.com/user-settings"
+          ];
+        }
+        {
+          id = "paperless";
+          name = "Paperless";
+          secretFile = config.age.secrets.dex-paperless-secret.path;
+          redirectURIs = [
+            "https://paperless.domus.diffeq.com/accounts/oidc/oidc.domus.diffeq.com/login/callback/"
           ];
         }
         {
