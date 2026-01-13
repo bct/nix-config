@@ -144,7 +144,7 @@ in
           };
 
           servers.swem = {
-            enable = true;
+            enable = false;
             # max heap size 4G, initial heap size 2G
             jvmOpts = lib.concatStringsSep " " (
               [
