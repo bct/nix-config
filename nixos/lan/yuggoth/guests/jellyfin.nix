@@ -22,7 +22,10 @@
 
   services.lego-proxy-client = {
     enable = true;
-    domains = [ "jellyfin" ];
+    domains = [
+      "jellyfin"
+      "jellyseerr"
+    ];
     group = "caddy";
   };
 
@@ -36,11 +39,20 @@
     openFirewall = false;
   };
 
+  services.jellyseerr = {
+    enable = true;
+    openFirewall = false;
+  };
+
   services.caddy = {
     enable = true;
     virtualHosts."jellyfin.domus.diffeq.com" = {
       useACMEHost = "jellyfin.domus.diffeq.com";
       extraConfig = "reverse_proxy localhost:8096";
+    };
+    virtualHosts."jellyseerr.domus.diffeq.com" = {
+      useACMEHost = "jellyseerr.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:${toString config.services.jellyseerr.port}";
     };
   };
 
