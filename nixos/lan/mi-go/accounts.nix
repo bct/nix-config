@@ -1,5 +1,12 @@
 { ... }:
 {
+  users.users.bct = {
+    extraGroups = [
+      "blackbeard"
+      "video-writers"
+      "syncthing"
+    ];
+  };
   users.groups.bct = {
     gid = 1000;
   };
@@ -72,4 +79,6 @@
   users.groups.paperless = {
     gid = 1008;
   };
+
+  users.groups.syncthing.gid = 983;
 }

@@ -69,12 +69,5 @@
     };
   };
 
-  users.users.bct = {
-    extraGroups = [
-      "blackbeard"
-      "video-writers"
-    ];
-  };
-
   system.stateVersion = "25.11";
 }
