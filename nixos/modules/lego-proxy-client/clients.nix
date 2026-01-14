@@ -68,6 +68,7 @@
   };
 
   syncthing.domain = "syncthing.domus.diffeq.com";
+  uptime.domain = "uptime.domus.diffeq.com";
 
   stereo = {
     domain = "stereo.domus.diffeq.com";

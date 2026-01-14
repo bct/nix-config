@@ -13,6 +13,7 @@
     ./homepage.nix
     ./karakeep.nix
     ./tandoor.nix
+    ./uptime-kuma.nix
 
     "${self}/nixos/modules/lego-proxy-client"
   ];
@@ -33,6 +34,7 @@
       "bookmarks"
       "homepage"
       "recipes"
+      "uptime"
     ];
     group = "caddy";
   };
