@@ -34,7 +34,7 @@
       pkgs.afew
       pkgs.msmtp
       pkgs.procmail
-      pkgs.lynx
+      pkgs.w3m
       rspamc-deliver
     ];
 
@@ -76,7 +76,7 @@
 
   home-manager.users.bct = {
     home.file.".mailcap".text = ''
-      text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -collapse_br_tags -dump %s; nametemplate=%s.html; copiousoutput
+      text/html; w3m -I %{charset} -T text/html -o display_link_number=1; nametemplate=%s.html; copiousoutput
     '';
 
     home.file.".procmailrc".text = ''

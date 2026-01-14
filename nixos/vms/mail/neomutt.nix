@@ -153,6 +153,8 @@ in
 
       set alias_file="~/.neomutt/alias"
       source "~/.neomutt/alias"
+
+      auto_view text/html
     '';
   };
 }
