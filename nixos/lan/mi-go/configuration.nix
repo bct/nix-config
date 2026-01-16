@@ -60,12 +60,6 @@
         tapInterfaceMac = "02:00:00:00:01:05";
         machineId = "f4132f22d27e1890a42b3c1970e3eaac";
       };
-
-      torrent = {
-        hostName = "torrent";
-        tapInterfaceMac = "02:00:00:00:01:03";
-        machineId = "e015e63485604a4efda43823812f3dcd";
-      };
     };
   };
 
