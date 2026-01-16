@@ -10,6 +10,7 @@
     "${self}/nixos/common/node-exporter.nix"
 
     ./borgmatic.nix
+    ./getmail.nix
     ./mail.nix
     ./mua.nix
 
