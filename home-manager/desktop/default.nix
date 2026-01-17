@@ -5,7 +5,7 @@
 
     ../modules/vim
     ../modules/dunst
-    ../modules/rofi
+    ../modules/launcher
     ../modules/hyprland
 
     ./beets.nix
@@ -29,7 +29,7 @@
     tmux
 
     # gui utilities
-    rofi-bluetooth
+    bzmenu
     rofi-network-manager
 
     # image viewer

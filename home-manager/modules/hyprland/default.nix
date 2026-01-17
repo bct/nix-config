@@ -291,7 +291,7 @@ in {
 
       # Set programs that you use
       $terminal = alacritty
-      $menu = rofi-launcher
+      $menu = fuzzel
 
 
       #################
