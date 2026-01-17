@@ -60,7 +60,7 @@ in
 
       [destination]
       type = MDA_external
-      path = /run/current-system/sw/bin/rspamc-deliver
+      path = ${rspamc-deliver}/bin/rspamc-deliver
 
       [options]
       received = false
@@ -74,7 +74,8 @@ in
       # We can leave this verbose because we'll pass --quiet in the cronjob
       verbose = 2
       message_log = ~/.getmail/logs/zoho-bct.log
-      #delete_after = 14
+      # delete messages 14 days after we saw them
+      delete_after = 14
     '';
 
     home.file.".getmail/zoho-catchall".text = ''
@@ -101,10 +102,10 @@ in
       #arguments = ("--mime", "--exec", "/nix/store/vhy8mkw6h8493cp8d7wfxg1qhy7jzjcz-dovecot-2.3.21.1/libexec/dovecot/deliver -e")
       #arguments = ("--connect", "/run/rspamd/worker-controller.sock", "--mime", "--exec", "/run/current-system/sw/bin/procmail",)
       # -- direct pass to procmail
-      #path = /run/current-system/sw/bin/procmail
-      #arguments = ("-f", "%(sender)")
-      #group = virtualMail
-      path = /run/current-system/sw/bin/rspamc-deliver
+      # path = ${pkgs.procmail}/bin/procmail
+      # arguments = ("-f", "%(sender)")
+      # group = virtualMail
+      path = ${rspamc-deliver}/bin/rspamc-deliver
 
       [options]
       received = false
@@ -118,7 +119,8 @@ in
       # We can leave this verbose because we'll pass --quiet in the cronjob
       verbose = 2
       message_log = ~/.getmail/logs/zoho-catchall.log
-      #delete_after = 14
+      # delete messages 14 days after we saw them
+      delete_after = 14
     '';
   };
 }
