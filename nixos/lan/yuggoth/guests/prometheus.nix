@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   system.stateVersion = "24.05";
 
@@ -31,14 +31,18 @@
         static_configs = [
           # hosts
           { targets = [ "fever-dreams.domus.diffeq.com:9100" ]; }
+          { targets = [ "mi-go.domus.diffeq.com:9100" ]; }
           { targets = [ "stereo.domus.diffeq.com:9100" ]; }
           { targets = [ "yuggoth.domus.diffeq.com:9100" ]; }
 
           # VMs
           { targets = [ "abrado.domus.diffeq.com:9100" ]; }
+          { targets = [ "auth.domus.diffeq.com:9100" ]; }
           { targets = [ "books.domus.diffeq.com:9100" ]; }
           { targets = [ "bookmarks.domus.diffeq.com:9100" ]; }
+          { targets = [ "borg.domus.diffeq.com:9100" ]; }
           { targets = [ "db.domus.diffeq.com:9100" ]; }
+          { targets = [ "git.domus.diffeq.com:9100" ]; }
           { targets = [ "grafana.domus.diffeq.com:9100" ]; }
           { targets = [ "immich.domus.diffeq.com:9100" ]; }
           { targets = [ "jellyfin.domus.diffeq.com:9100" ]; }
@@ -48,8 +52,9 @@
           { targets = [ "medley.domus.diffeq.com:9100" ]; }
           { targets = [ "paperless.domus.diffeq.com:9100" ]; }
           { targets = [ "prometheus.domus.diffeq.com:9100" ]; }
-          { targets = [ "recipes.domus.diffeq.com:9100" ]; }
+          { targets = [ "ranger.domus.diffeq.com:9100" ]; }
           { targets = [ "spectator.domus.diffeq.com:9100" ]; }
+          { targets = [ "syncthing.domus.diffeq.com:9100" ]; }
           { targets = [ "torrent-scraper.domus.diffeq.com:9100" ]; }
         ];
       }
