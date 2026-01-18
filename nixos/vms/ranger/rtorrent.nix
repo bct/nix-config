@@ -46,7 +46,7 @@ in
 
   age.secrets = {
     rtorrent-xml-rpc-nginx-auth = {
-      rekeyFile = ../../lan/yuggoth/guests/secrets/rtorrent-xml-rpc-nginx-auth.age;
+      rekeyFile = ./secrets/rtorrent-xml-rpc-nginx-auth.age;
       owner = config.services.nginx.user;
       group = config.services.nginx.group;
     };

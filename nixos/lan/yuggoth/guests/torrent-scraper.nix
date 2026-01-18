@@ -1,13 +1,8 @@
 {
   self,
-  pkgs,
   config,
   ...
 }:
-let
-  rtSocketPort = 8888;
-  rtUnixSocketPath = "/run/rtorrent-socket/rtorrent.sock";
-in
 {
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
@@ -102,64 +97,10 @@ in
       # username: torrent-scraper
       rekeyFile = config.diffeq.secretsPath + /fs/mi-go-torrent-scraper.age;
     };
-
-    ssh-client-rtorrent-socket = {
-      rekeyFile = config.diffeq.secretsPath + /ssh/client-rtorrent-socket.age;
-    };
-
-    rtorrent-xml-rpc-nginx-auth = {
-      rekeyFile = ./secrets/rtorrent-xml-rpc-nginx-auth.age;
-      owner = config.services.nginx.user;
-      group = config.services.nginx.group;
-    };
   };
 
   users.groups = {
     rtorrent = { };
-  };
-
-  # https://gist.github.com/drmalex07/c0f9304deea566842490
-  systemd.services.rtorrent-socket = {
-    enable = true;
-    description = "rTorrent socket tunnel";
-    serviceConfig = {
-      LoadCredential = [
-        "ssh-identity:${config.age.secrets.ssh-client-rtorrent-socket.path}"
-      ];
-      RuntimeDirectory = "rtorrent-socket";
-
-      ExecStart = builtins.concatStringsSep " " [
-        "${pkgs.openssh}/bin/ssh"
-        # ServerAliveInterval: check that the connection is alive
-        "-o ServerAliveInterval=60"
-        # ExitOnForwardfailure: close the connection if the tunnel fails
-        "-o ExitOnForwardFailure=yes"
-        # StreamLocalBindMask=0117: make a socket that group-writeable
-        "-o StreamLocalBindMask=0117"
-        "-i \${CREDENTIALS_DIRECTORY}/ssh-identity"
-        "-N"
-        "-L \${RUNTIME_DIRECTORY}/rtorrent.sock:/var/home/bct/.rtorrent/rpc.sock bct@torrent.domus.diffeq.com"
-      ];
-
-      # Restart every >2 seconds to avoid StartLimitInterval failure
-      RestartSec = 5;
-      Restart = "always";
-
-      DynamicUser = true;
-
-      # this is the group that will own the socket
-      Group = "rtorrent";
-    };
-
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-  };
-
-  programs.ssh.knownHosts = {
-    "torrent.domus.diffeq.com".publicKey = builtins.readFile (
-      config.diffeq.secretsPath + /ssh/host-torrent.pub
-    );
   };
 
   services.nginx =
@@ -213,26 +154,6 @@ in
       group = "rtorrent";
 
       virtualHosts = {
-        # expose rtorrent XML-RPC over HTTP, adding authentication.
-        rtorrent-xml-rpc = {
-          serverName = "rtorrent.domus.diffeq.com";
-          listen = [
-            {
-              addr = "127.0.0.1";
-              port = rtSocketPort;
-            }
-          ];
-
-          basicAuthFile = config.age.secrets.rtorrent-xml-rpc-nginx-auth.path;
-
-          locations."/RPC2" = {
-            extraConfig = ''
-              include ${config.services.nginx.package}/conf/scgi_params;
-              scgi_pass unix:${rtUnixSocketPath};
-            '';
-          };
-        };
-
         "radarr.domus.diffeq.com" = {
           useACMEHost = "radarr.domus.diffeq.com";
           forceSSL = true;
