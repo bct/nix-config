@@ -66,6 +66,10 @@
     # https://nixos-mailserver.readthedocs.io/en/latest/index.html
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.11";
 
+    # acme-dns-by-proxy
+    acme-dns-by-proxy.url = "github:bct/acme-dns-by-proxy";
+    acme-dns-by-proxy.inputs.nixpkgs.follows = "nixpkgs";
+
     # minecraft
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
 

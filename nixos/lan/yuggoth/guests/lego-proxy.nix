@@ -3,6 +3,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -59,7 +60,7 @@ in
 {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
-    "${self}/nixos/modules/lego-proxy-host"
+    inputs.acme-dns-by-proxy.nixosModules.host
   ];
 
   system.stateVersion = "24.05";
@@ -72,7 +73,7 @@ in
   age.secrets = {
     zoneedit = {
       rekeyFile = ./lego-proxy/secrets/zoneedit.age;
-      owner = "lego-proxy";
+      owner = config.services.acme-dns-proxy-host.user;
       group = "acme";
       mode = "440";
     };
@@ -84,12 +85,13 @@ in
     };
   };
 
-  services.lego-proxy-host = {
+  services.acme-dns-proxy-host = {
     enable = true;
-    execCommand = "${acme-zoneedit}/bin/acme-zoneedit";
 
-    clients = lib.mapAttrsToList (name: clientConfig: {
+    domains = lib.mapAttrsToList (name: clientConfig: {
       domain = clientConfig.domain;
+      execCommand = "${acme-zoneedit}/bin/acme-zoneedit";
+      environmentFile = config.age.secrets.zoneedit.path;
       pubKey =
         if clientConfig ? "pubKey" then
           clientConfig.pubKey
@@ -108,15 +110,6 @@ in
       EXEC_PROPAGATION_TIMEOUT=180
     '';
     extraLegoRunFlags = [ "--run-hook=${deploy-unifi}/bin/deploy-unifi" ];
-  };
-  security.acme.certs."mi-go.domus.diffeq.com" = {
-    email = "s+acme@diffeq.com";
-    dnsProvider = "exec";
-    dnsResolver = "ns5.zoneedit.com";
-    environmentFile = pkgs.writeText "" ''
-      EXEC_PATH=${acme-zoneedit-with-creds}
-      EXEC_PROPAGATION_TIMEOUT=180
-    '';
   };
 
   programs.ssh.knownHosts = {
