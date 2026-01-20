@@ -1,16 +1,12 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 let
   cfg = config.services.lego-proxy-client;
-
-  lego-proxy-client = pkgs.writeShellApplication {
-    name = "lego-proxy-client";
-    runtimeInputs = [ pkgs.openssh ];
-
-    text = ''
-      ssh -i "$SSH_IDENTITY" lego-proxy@lego-proxy.domus.diffeq.com "$@"
-    '';
-  };
 
   dnsResolver = "ns5.zoneedit.com";
   email = "s+acme@diffeq.com";
@@ -18,11 +14,12 @@ let
   clients = import ./clients.nix;
 
   proxyHostKey = builtins.readFile (config.diffeq.secretsPath + /ssh/host-lego-proxy.pub);
-in {
+in
+{
+  imports = [ inputs.acme-dns-by-proxy.nixosModules.client ];
+
   options.services.lego-proxy-client = with lib; {
     enable = mkEnableOption "lego-proxy-client";
-
-    # TODO: proxy username, proxy host, proxy known host
 
     domains = mkOption {
       type = types.listOf types.str;
@@ -36,8 +33,8 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    age.secrets = builtins.listToAttrs (builtins.map (domain:
-      {
+    age.secrets = builtins.listToAttrs (
+      builtins.map (domain: {
         name = "lego-proxy-${domain}";
         value = {
           generator.script = "ssh-ed25519-pubkey";
@@ -45,35 +42,31 @@ in {
           owner = "acme";
           group = "acme";
         };
-      }
-    ) cfg.domains);
-
-    programs.ssh.knownHosts = {
-      "lego-proxy.domus.diffeq.com".publicKey = proxyHostKey;
-    };
+      }) cfg.domains
+    );
 
     security.acme.acceptTerms = true;
 
-    security.acme.certs = builtins.listToAttrs (map (domain: let
-      identity = config.age.secrets."lego-proxy-${domain}".path;
-    in {
-      name = clients.${domain}.domain;
-      value = {
-        email = email;
-        group = cfg.group;
+    security.acme.certs = builtins.listToAttrs (
+      map (
+        domain:
+        lib.nameValuePair clients.${domain}.domain {
+          email = email;
+          group = cfg.group;
+          dnsResolver = dnsResolver;
+        }
+      ) cfg.domains
+    );
 
-        # set DNS TXT records by exec-ing acme-zoneedit.sh
-        # (configured below)
-        dnsProvider = "exec";
-
-        dnsResolver = dnsResolver;
-
-        environmentFile = pkgs.writeText "" ''
-          EXEC_PATH=${lego-proxy-client}/bin/lego-proxy-client
-          EXEC_PROPAGATION_TIMEOUT=180
-          SSH_IDENTITY=${identity}
-        '';
-      };
-    }) cfg.domains);
+    security.acme.dnsChallengeProxies = builtins.listToAttrs (
+      map (
+        domain:
+        lib.nameValuePair clients.${domain}.domain {
+          host = "lego-proxy.domus.diffeq.com";
+          sshIdentity = config.age.secrets."lego-proxy-${domain}".path;
+          hostKey = proxyHostKey;
+        }
+      ) cfg.domains
+    );
   };
 }
