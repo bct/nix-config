@@ -42,6 +42,8 @@ rec {
   airsonic-refix = pkgs.callPackage ./airsonic-refix { };
   brscan-skey = pkgs.callPackage ./brscan-skey { };
 
+  lego-acme-zoneedit = pkgs.callPackage ./lego-acme-zoneedit { };
+
   pollymc-unwrapped = pkgs.qt6Packages.callPackage ./pollymc {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };

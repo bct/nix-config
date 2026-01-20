@@ -8,11 +8,6 @@
 }:
 
 let
-  acme-zoneedit = pkgs.writeShellApplication {
-    name = "acme-zoneedit";
-    runtimeInputs = [ pkgs.curl ];
-    text = builtins.readFile ../../../modules/acme-zoneedit/acme-zoneedit.sh;
-  };
   clients = import ../../../modules/lego-proxy-client/clients.nix;
 
   deploy-unifi = pkgs.writeShellApplication {
@@ -82,7 +77,7 @@ in
 
     domains = lib.mapAttrsToList (name: clientConfig: {
       domain = clientConfig.domain;
-      execCommand = "${acme-zoneedit}/bin/acme-zoneedit";
+      execCommand = "${pkgs.lego-acme-zoneedit}/bin/lego-acme-zoneedit";
       environmentFile = config.age.secrets.zoneedit.path;
       pubKey =
         if clientConfig ? "pubKey" then
@@ -101,7 +96,7 @@ in
     extraLegoRunFlags = [ "--run-hook=${deploy-unifi}/bin/deploy-unifi" ];
   };
   systemd.services."acme-order-renew-unifi.domus.diffeq.com".environment = {
-    EXEC_PATH = "${acme-zoneedit}/bin/acme-zoneedit";
+    EXEC_PATH = "${pkgs.lego-acme-zoneedit}/bin/lego-acme-zoneedit";
     EXEC_PROPAGATION_TIMEOUT = "180";
   };
 
