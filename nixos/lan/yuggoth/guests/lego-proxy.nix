@@ -13,14 +13,6 @@ let
     runtimeInputs = [ pkgs.curl ];
     text = builtins.readFile ../../../modules/acme-zoneedit/acme-zoneedit.sh;
   };
-  acme-zoneedit-with-creds = pkgs.writeShellScript "acme-zoneedit-with-creds" ''
-    # source credentials to pass through to the script
-    set -a
-    source ${config.age.secrets.zoneedit.path}
-
-    # TODO: quoting?
-    ${acme-zoneedit}/bin/acme-zoneedit $@
-  '';
   clients = import ../../../modules/lego-proxy-client/clients.nix;
 
   deploy-unifi = pkgs.writeShellApplication {
@@ -105,11 +97,12 @@ in
     email = "s+acme@diffeq.com";
     dnsProvider = "exec";
     dnsResolver = "ns5.zoneedit.com";
-    environmentFile = pkgs.writeText "" ''
-      EXEC_PATH=${acme-zoneedit-with-creds}
-      EXEC_PROPAGATION_TIMEOUT=180
-    '';
+    environmentFile = config.age.secrets.zoneedit.path;
     extraLegoRunFlags = [ "--run-hook=${deploy-unifi}/bin/deploy-unifi" ];
+  };
+  systemd.services."acme-order-renew-unifi.domus.diffeq.com".environment = {
+    EXEC_PATH = "${acme-zoneedit}/bin/acme-zoneedit";
+    EXEC_PROPAGATION_TIMEOUT = "180";
   };
 
   programs.ssh.knownHosts = {
