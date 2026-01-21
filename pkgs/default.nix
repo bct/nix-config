@@ -40,7 +40,6 @@ rec {
     pkgs.callPackage "${pkg}/default.nix" { };
 
   airsonic-refix = pkgs.callPackage ./airsonic-refix { };
-  brscan-skey = pkgs.callPackage ./brscan-skey { };
 
   lego-acme-zoneedit = pkgs.callPackage ./lego-acme-zoneedit { };
 
