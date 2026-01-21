@@ -212,6 +212,15 @@ in
             devices = baseXML.devices // {
               disk = baseXML.devices.disk ++ extraDisks;
               filesystem = (baseXML.devices.filesystem or [ ]) ++ mounts;
+
+              # domains weren't autostarting due to a SPICE-related error.
+              # I'm not using this anyways, so let's just turn it off.
+              graphics = {
+                type = "spice";
+                listen = {
+                  type = "none";
+                };
+              };
             };
           }
         );
