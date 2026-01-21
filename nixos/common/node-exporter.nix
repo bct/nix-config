@@ -8,9 +8,12 @@
     enable = true;
     enabledCollectors = [
       "cpu"
+      "diskstats"
       "filesystem"
       "loadavg"
       "meminfo"
+      "netdev"
+      "swap"
     ];
     extraFlags = [
       "--collector.disable-defaults"
