@@ -10,7 +10,7 @@
   home.file.".xmobarrc".source = ./files/xmobarrc.hs;
 
   home.packages = with pkgs; [
-    pollymc
+    inputs.fjord-launcher.packages.${pkgs.stdenv.hostPlatform.system}.fjordlauncher
 
     brave
     libreoffice

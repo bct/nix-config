@@ -43,13 +43,6 @@ rec {
 
   lego-acme-zoneedit = pkgs.callPackage ./lego-acme-zoneedit { };
 
-  pollymc-unwrapped = pkgs.qt6Packages.callPackage ./pollymc {
-    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
-  };
-  pollymc = pkgs.qt6Packages.callPackage ./pollymc/wrapper.nix {
-    inherit pollymc-unwrapped;
-  };
-
   rtlamr = pkgs.callPackage ./rtlamr { };
   rtlamr-collect = pkgs.callPackage ./rtlamr-collect { };
   speedtest_exporter = pkgs.callPackage ./speedtest_exporter { };
