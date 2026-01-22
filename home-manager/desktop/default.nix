@@ -4,7 +4,7 @@
     ../base
 
     ../modules/vim
-    ../modules/dunst
+    ../modules/notifications
     ../modules/launcher
     ../modules/hyprland
 
