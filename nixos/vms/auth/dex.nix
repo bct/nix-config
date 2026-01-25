@@ -18,6 +18,11 @@ in
       generator.script = "alnum";
     };
 
+    dex-netbird-secret = {
+      rekeyFile = config.diffeq.secretsPath + /dex/netbird.age;
+      generator.script = "alnum";
+    };
+
     dex-paperless-secret = {
       rekeyFile = config.diffeq.secretsPath + /dex/paperless.age;
       generator.script = "alnum";
@@ -112,7 +117,26 @@ in
             "https://recipes.domus.diffeq.com/accounts/oidc/oidc.domus.diffeq.com/login/callback/"
           ];
         }
+        {
+          id = "netbird";
+          name = "Netbird";
+          public = true;
+          redirectURIs = [
+            # this is the URL documented at https://docs.netbird.io/selfhosted/identity-providers/generic-oidc
+            "https://viator.diffeq.com/oauth2/callback/oidc.domus.diffeq.com"
+            # this is the URL I see in practice
+            "https://viator.diffeq.com/#callback"
+            # android app / "netbird up"
+            "http://localhost:53000"
+          ];
+        }
       ];
+      web = {
+        allowedOrigins = [ "*" ];
+      };
+      oauth2 = {
+        responseTypes = [ "code" ];
+      };
     };
   };
 
