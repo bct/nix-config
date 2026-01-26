@@ -1,5 +1,20 @@
-{ config, ... }:
 {
+  inputs,
+  config,
+  ...
+}:
+{
+  # temporary because something is broken with my module disables
+  documentation.nixos.enable = false;
+
+  imports = [
+    "${inputs.schromp-netbird}/nixos/modules/services/networking/netbird/server.nix"
+  ];
+
+  disabledModules = [
+    "services/networking/netbird/server.nix"
+  ];
+
   # examples:
   # https://github.com/jvanbruegge/server-config/blob/1d77b8b57c6bb44ed9ab5d3bb9c7e3707ab70607/vps/services/netbird.nix
 
@@ -9,20 +24,9 @@
       rekeyFile = ./secrets/netbird-mgmt-data-enc.age;
     };
 
-    netbird-coturn-password = {
-      rekeyFile = ./secrets/netbird-coturn-password.age;
+    netbird-relay-secret = {
+      rekeyFile = ./secrets/netbird-relay-secret.age;
       generator.script = "alnum";
-      owner = config.services.netbird.server.coturn.user;
-      group = "netbird";
-      mode = "440";
-    };
-
-    netbird-coturn-secret = {
-      rekeyFile = ./secrets/netbird-coturn-secret.age;
-      generator.script = "alnum";
-      owner = config.services.netbird.server.coturn.user;
-      group = "netbird";
-      mode = "440";
     };
   };
 
@@ -38,27 +42,30 @@
         USE_AUTH0 = "false";
       };
     };
+    relay = {
+      # >= 0.64.1
+      package = inputs.nixos-unstable-small.legacyPackages.x86_64-linux.netbird-relay;
+      authSecretFile = config.age.secrets.netbird-relay-secret.path;
+      settings = {
+        NB_EXPOSED_ADDRESS = "rels://viator.diffeq.com:443/";
+        NB_ENABLE_STUN = "true";
+        NB_STUN_PORTS = "3478";
+      };
+    };
+
     management = {
       oidcConfigEndpoint = "https://${config.diffeq.hostNames.oidc}/.well-known/openid-configuration";
+      turnDomain = "viator.diffeq.com"; # TODO
       settings = {
         DataStoreEncryptionKey._secret = config.age.secrets.netbird-mgmt-data-enc.path;
+        Signal.URI = "viator.diffeq.com:443";
         TURNConfig = {
-          Secret._secret = config.age.secrets.netbird-coturn-secret.path;
-          Turns = [
-            {
-              Proto = "udp";
-              URI = "turn:viator.diffeq.com:3478";
-              Username = "netbird";
-              Password._secret = config.age.secrets.netbird-coturn-password.path;
-            }
-          ];
+          Turns = [ ];
         };
       };
     };
     coturn = {
-      enable = true;
-      domain = "viator.diffeq.com";
-      passwordFile = config.age.secrets.netbird-coturn-password.path;
+      enable = false;
     };
   };
 
@@ -66,7 +73,7 @@
     # https://docs.netbird.io/selfhosted/reverse-proxy#caddy-external
     extraConfig = ''
       # Relay (WebSocket)
-      #reverse_proxy /relay* netbird-relay:80
+      reverse_proxy /relay* localhost:${toString config.services.netbird.server.relay.port}
 
       # Signal WebSocket
       #reverse_proxy /ws-proxy/signal* netbird-signal:80
@@ -85,7 +92,7 @@
 
       # Dashboard (catch-all)
       root * ${config.services.netbird.server.dashboard.finalDrv}
-      try_files {path} {path}.html {path}/ /index.html
+      #try_files {path} {path}.html {path}/ /index.html
       file_server
 
       # TODO: allow navigation to non-root URLs
@@ -100,4 +107,6 @@
       }
     '';
   };
+
+  networking.firewall.allowedUDPPorts = [ 3478 ];
 }

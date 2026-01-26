@@ -564,6 +564,22 @@
         "type": "github"
       }
     },
+    "nixos-unstable-small": {
+      "locked": {
+        "lastModified": 1769434638,
+        "narHash": "sha256-4NVXUmdbTTZa13qX1MFCVbPxiMT1nzF7OnuRbPMk0lI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "9c2822d7024c032e66000a8b8a47e91b4e63ffc8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable-small",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1762363567,
@@ -746,11 +762,29 @@
         "nix-minecraft": "nix-minecraft",
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
+        "nixos-unstable-small": "nixos-unstable-small",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvirt": "nixvirt",
+        "schromp-netbird": "schromp-netbird",
         "shaunren-tinyauth": "shaunren-tinyauth",
         "simple-nixos-mailserver": "simple-nixos-mailserver"
+      }
+    },
+    "schromp-netbird": {
+      "locked": {
+        "lastModified": 1768856046,
+        "narHash": "sha256-bvJCb+Xxrt6Ot3L3Tf4aJ0usEpm4ReCN3aciL1QVa4Y=",
+        "owner": "schromp",
+        "repo": "nixpkgs",
+        "rev": "e79071615342d65c06cffc4765f0a0553afa7b69",
+        "type": "github"
+      },
+      "original": {
+        "owner": "schromp",
+        "ref": "fix-netbird",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "shaunren-tinyauth": {

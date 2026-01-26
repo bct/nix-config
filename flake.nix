@@ -21,6 +21,9 @@
 
     # bug fixes & new packages
     shaunren-tinyauth.url = "github:shaunren/nixpkgs/tinyauth";
+    # https://github.com/NixOS/nixpkgs/pull/354032
+    schromp-netbird.url = "github:schromp/nixpkgs/fix-netbird";
+    nixos-unstable-small.url = "github:nixos/nixpkgs?ref=nixos-unstable-small";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-25.11";
