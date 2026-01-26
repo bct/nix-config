@@ -18,11 +18,6 @@ in
       generator.script = "alnum";
     };
 
-    dex-netbird-secret = {
-      rekeyFile = config.diffeq.secretsPath + /dex/netbird.age;
-      generator.script = "alnum";
-    };
-
     dex-paperless-secret = {
       rekeyFile = config.diffeq.secretsPath + /dex/paperless.age;
       generator.script = "alnum";
