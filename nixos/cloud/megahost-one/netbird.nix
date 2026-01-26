@@ -4,9 +4,6 @@
   ...
 }:
 {
-  # temporary because something is broken with my module disables
-  documentation.nixos.enable = false;
-
   imports = [
     "${inputs.schromp-netbird}/nixos/modules/services/networking/netbird/server.nix"
   ];

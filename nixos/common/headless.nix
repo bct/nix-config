@@ -45,6 +45,9 @@ in
       pkgs.strace
     ];
 
+    # this documentation doesn't seem very valuable on a server.
+    documentation.nixos.enable = lib.mkDefault false;
+
     environment.variables.EDITOR = "vim";
 
     services.openssh = {
