@@ -54,7 +54,7 @@
     };
     guiAddress = "127.0.0.1:8384";
     key = config.age.secrets.syncthing-key.path;
-    cert = toString ./secrets/syncthing-cert.pem;
+    cert = toString (builtins.path { path = ./secrets/syncthing-cert.pem; });
 
     # we'll manage this in the GUI.
     overrideFolders = false;
