@@ -1,6 +1,7 @@
 {
   inputs,
   config,
+  pkgs,
   ...
 }:
 {
@@ -41,7 +42,7 @@
     };
     relay = {
       # >= 0.64.1
-      package = inputs.nixos-unstable-small.legacyPackages.x86_64-linux.netbird-relay;
+      package = pkgs.unstable.netbird-relay;
       authSecretFile = config.age.secrets.netbird-relay-secret.path;
       settings = {
         NB_EXPOSED_ADDRESS = "rels://viator.diffeq.com:443/";
