@@ -15,7 +15,7 @@ in
   system.stateVersion = "25.11";
 
   microvm = {
-    vcpu = 2;
+    vcpu = 4;
     mem = 2560;
 
     volumes = [
