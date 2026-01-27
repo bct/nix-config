@@ -39,7 +39,14 @@
     (unstable.supersonic.override { waylandSupport = true; })
     # wayland is not working yet:
     # https://github.com/dweymouth/supersonic/issues/560
-    unstable.supersonic
+    (unstable.supersonic.overrideAttrs (old: {
+      # work around https://github.com/dweymouth/supersonic/issues/316
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.makeWrapper ];
+      postInstall = old.postInstall + ''
+        wrapProgram $out/bin/supersonic \
+          --prefix PATH : ${pkgs.libnotify}/bin
+      '';
+    }))
 
     # chat
     webcord
