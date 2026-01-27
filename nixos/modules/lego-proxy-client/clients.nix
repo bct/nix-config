@@ -53,18 +53,17 @@
   recipes.domain = "recipes.domus.diffeq.com";
   rtorrent.domain = "rtorrent.domus.diffeq.com";
 
-  spectator = {
-    domain = "spectator.domus.diffeq.com";
-    pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFk2zCBoSRaNUJfUhFNGLI1r+H5EVtWNukvTG6Lq0z+J spectator:lego-proxy-spectator";
-  };
+  seerr.domain = "seerr.domus.diffeq.com";
+  shell-of-the-old.domain = "shell-of-the-old.domus.diffeq.com";
 
   sonarr = {
     domain = "sonarr.domus.diffeq.com";
     pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJobOIdFH71iFfj2IrMr63xh6r+Ydhc/SGkifV2wAIoc torrent-scraper:lego-proxy-sonarr";
   };
 
-  shell-of-the-old = {
-    domain = "shell-of-the-old.domus.diffeq.com";
+  spectator = {
+    domain = "spectator.domus.diffeq.com";
+    pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFk2zCBoSRaNUJfUhFNGLI1r+H5EVtWNukvTG6Lq0z+J spectator:lego-proxy-spectator";
   };
 
   syncthing.domain = "syncthing.domus.diffeq.com";

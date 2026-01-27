@@ -1,10 +1,27 @@
-{ config, lib, ... }:
 {
+  self,
+  config,
+  lib,
+  ...
+}:
+{
+  imports = [
+    "${self}/nixos/modules/lego-proxy-client"
+  ];
+
   system.stateVersion = "25.11";
 
   microvm = {
-    vcpu = 1;
-    mem = 512;
+    vcpu = 2;
+    mem = 2560;
+
+    volumes = [
+      {
+        image = "var.img";
+        mountPoint = "/var";
+        size = 8192;
+      }
+    ];
 
     shares = [
       {
@@ -14,6 +31,11 @@
         proto = "virtiofs";
       }
     ];
+  };
+
+  age.secrets = {
+    # a hashed password.
+    passwd-blackbeard.rekeyFile = ./secrets/passwd-media-blackbeard.age;
   };
 
   services.openssh = {
@@ -49,8 +71,39 @@
     members = [ "blackbeard" ];
   };
 
-  age.secrets = {
-    # a hashed password.
-    passwd-blackbeard.rekeyFile = ./secrets/passwd-media-blackbeard.age;
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [
+      "jellyfin"
+      "seerr"
+    ];
+    group = "caddy";
   };
+
+  services.jellyfin = {
+    enable = true;
+    openFirewall = false;
+  };
+
+  services.jellyseerr = {
+    enable = true;
+    openFirewall = false;
+  };
+
+  services.caddy = {
+    enable = true;
+    virtualHosts."jellyfin.domus.diffeq.com" = {
+      useACMEHost = "jellyfin.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:8096";
+    };
+    virtualHosts."seerr.domus.diffeq.com" = {
+      useACMEHost = "seerr.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:${toString config.services.jellyseerr.port}";
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 }

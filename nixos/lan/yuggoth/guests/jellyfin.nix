@@ -23,8 +23,8 @@
   services.lego-proxy-client = {
     enable = true;
     domains = [
-      "jellyfin"
-      "jellyseerr"
+      # "jellyfin"
+      # "jellyseerr"
     ];
     group = "caddy";
   };
