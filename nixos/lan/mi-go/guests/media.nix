@@ -4,6 +4,9 @@
   lib,
   ...
 }:
+let
+  jellyfinPort = 8096;
+in
 {
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
@@ -94,7 +97,7 @@
     enable = true;
     virtualHosts."jellyfin.domus.diffeq.com" = {
       useACMEHost = "jellyfin.domus.diffeq.com";
-      extraConfig = "reverse_proxy localhost:8096";
+      extraConfig = "reverse_proxy localhost:${toString jellyfinPort}";
     };
     virtualHosts."seerr.domus.diffeq.com" = {
       useACMEHost = "seerr.domus.diffeq.com";
@@ -112,5 +115,9 @@
   networking.firewall.allowedTCPPorts = [
     80
     443
+  ];
+
+  networking.firewall.interfaces."wt0".allowedTCPPorts = [
+    jellyfinPort
   ];
 }
