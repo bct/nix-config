@@ -17,8 +17,8 @@
       background-color = "#3c3836cc";
       text-color = "#ebdbb2";
       border-color = "#83a598cc";
-      border-radius = 6;
-      border-size = 2;
+      border-radius = 2;
+      border-size = 1;
       layer = "overlay";
     };
   };
