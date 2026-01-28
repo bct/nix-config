@@ -4,9 +4,6 @@
   lib,
   ...
 }:
-let
-  jellyfinPort = 8096;
-in
 {
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
@@ -15,16 +12,8 @@ in
   system.stateVersion = "25.11";
 
   microvm = {
-    vcpu = 4;
-    mem = 2560;
-
-    volumes = [
-      {
-        image = "var.img";
-        mountPoint = "/var";
-        size = 8192;
-      }
-    ];
+    vcpu = 1;
+    mem = 512;
 
     shares = [
       {
@@ -73,51 +62,4 @@ in
     gid = 1005;
     members = [ "blackbeard" ];
   };
-
-  services.lego-proxy-client = {
-    enable = true;
-    domains = [
-      "jellyfin"
-      "seerr"
-    ];
-    group = "caddy";
-  };
-
-  services.jellyfin = {
-    enable = true;
-    openFirewall = false;
-  };
-
-  services.jellyseerr = {
-    enable = true;
-    openFirewall = false;
-  };
-
-  services.caddy = {
-    enable = true;
-    virtualHosts."jellyfin.domus.diffeq.com" = {
-      useACMEHost = "jellyfin.domus.diffeq.com";
-      extraConfig = "reverse_proxy localhost:${toString jellyfinPort}";
-    };
-    virtualHosts."seerr.domus.diffeq.com" = {
-      useACMEHost = "seerr.domus.diffeq.com";
-      extraConfig = "reverse_proxy localhost:${toString config.services.jellyseerr.port}";
-    };
-  };
-
-  services.netbird.clients.default = {
-    port = 51820;
-    name = "netbird";
-    interface = "wt0";
-    hardened = true;
-  };
-
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-  ];
-
-  networking.firewall.interfaces."wt0".allowedTCPPorts = [
-    jellyfinPort
-  ];
 }

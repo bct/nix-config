@@ -1,4 +1,7 @@
 { self, config, ... }:
+let
+  jellyfinPort = 8096;
+in
 {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
@@ -20,11 +23,18 @@
     ];
   };
 
+  age.secrets = {
+    fs-mi-go-torrent-scraper = {
+      # username: torrent-scraper
+      rekeyFile = config.diffeq.secretsPath + /fs/mi-go-torrent-scraper.age;
+    };
+  };
+
   services.lego-proxy-client = {
     enable = true;
     domains = [
-      # "jellyfin"
-      # "jellyseerr"
+      "jellyfin"
+      "seerr"
     ];
     group = "caddy";
   };
@@ -32,6 +42,10 @@
   networking.firewall.allowedTCPPorts = [
     80
     443
+  ];
+
+  networking.firewall.interfaces."wt0".allowedTCPPorts = [
+    jellyfinPort
   ];
 
   services.jellyfin = {
@@ -48,10 +62,10 @@
     enable = true;
     virtualHosts."jellyfin.domus.diffeq.com" = {
       useACMEHost = "jellyfin.domus.diffeq.com";
-      extraConfig = "reverse_proxy localhost:8096";
+      extraConfig = "reverse_proxy localhost:${toString jellyfinPort}";
     };
-    virtualHosts."jellyseerr.domus.diffeq.com" = {
-      useACMEHost = "jellyseerr.domus.diffeq.com";
+    virtualHosts."seerr.domus.diffeq.com" = {
+      useACMEHost = "seerr.domus.diffeq.com";
       extraConfig = "reverse_proxy localhost:${toString config.services.jellyseerr.port}";
     };
   };
@@ -73,10 +87,10 @@
       ];
   };
 
-  age.secrets = {
-    fs-mi-go-torrent-scraper = {
-      # username: torrent-scraper
-      rekeyFile = config.diffeq.secretsPath + /fs/mi-go-torrent-scraper.age;
-    };
+  services.netbird.clients.default = {
+    port = 51820;
+    name = "netbird";
+    interface = "wt0";
+    hardened = true;
   };
 }
