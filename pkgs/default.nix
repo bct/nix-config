@@ -43,6 +43,7 @@ rec {
 
   lego-acme-zoneedit = pkgs.callPackage ./lego-acme-zoneedit { };
 
+  profilarr = pkgs.callPackage ./profilarr { };
   rtlamr = pkgs.callPackage ./rtlamr { };
   rtlamr-collect = pkgs.callPackage ./rtlamr-collect { };
   speedtest_exporter = pkgs.callPackage ./speedtest_exporter { };

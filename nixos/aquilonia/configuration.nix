@@ -18,6 +18,7 @@
 
     ./borgmatic.nix
     inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
+    ./profilarr.nix
 
     "${self}/nixos/common/desktop/projects/android.nix"
   ];
