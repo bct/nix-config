@@ -70,31 +70,43 @@
   services.caddy.virtualHosts."viator.diffeq.com" = {
     # https://docs.netbird.io/selfhosted/reverse-proxy#caddy-external
     extraConfig = ''
+      root * ${config.services.netbird.server.dashboard.finalDrv}
+
       # Relay (WebSocket)
-      reverse_proxy /relay* localhost:${toString config.services.netbird.server.relay.port}
+      handle /relay* {
+        reverse_proxy localhost:${toString config.services.netbird.server.relay.port}
+      }
 
       # Signal WebSocket
-      #reverse_proxy /ws-proxy/signal* netbird-signal:80
+      #handle /ws-proxy/signal* {
+      #reverse_proxy netbird-signal:80
+      #}
 
       # Signal gRPC (h2c for plaintext HTTP/2)
-      reverse_proxy /signalexchange.SignalExchange/* h2c://localhost:${toString config.services.netbird.server.signal.port}
+      handle /signalexchange.SignalExchange/* {
+        reverse_proxy h2c://localhost:${toString config.services.netbird.server.signal.port}
+      }
 
       # Management API
-      reverse_proxy /api/* localhost:${toString config.services.netbird.server.management.port}
+      handle /api/* {
+        reverse_proxy localhost:${toString config.services.netbird.server.management.port}
+      }
 
       # Management WebSocket
-      reverse_proxy /ws-proxy/management* localhost:${toString config.services.netbird.server.management.port}
+      handle /ws-proxy/management* {
+        reverse_proxy localhost:${toString config.services.netbird.server.management.port}
+      }
 
       # Management gRPC
-      reverse_proxy /management.ManagementService/* h2c://localhost:${toString config.services.netbird.server.management.port}
+      handle /management.ManagementService/* {
+        reverse_proxy h2c://localhost:${toString config.services.netbird.server.management.port}
+      }
 
       # Dashboard (catch-all)
-      root * ${config.services.netbird.server.dashboard.finalDrv}
-      #try_files {path} {path}.html {path}/ /index.html
-      file_server
-
-      # TODO: allow navigation to non-root URLs
-      # search for "netbird try_files caddy"
+      handle {
+        try_files {path} {path}.html {path}/ /index.html
+        file_server
+      }
 
       header * {
         Strict-Transport-Security "max-age=3600; includeSubDomains; preload"
