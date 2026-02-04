@@ -100,7 +100,7 @@
           "microvm@db.service"
           "microvm@lego-proxy.service"
         ];
-        startDelay = 120;
+        #startDelay = 120;
       };
 
       lubelogger = {

@@ -457,6 +457,22 @@
         "type": "github"
       }
     },
+    "jvanbruegge-booklore": {
+      "locked": {
+        "lastModified": 1762010100,
+        "narHash": "sha256-UQAfVj1bHnq3aOkAckefXY5+61atp0ZOUCoU7ETglM0=",
+        "owner": "jvanbruegge",
+        "repo": "nixpkgs",
+        "rev": "0da70f185354ef53271800663e26cdcd2c6fec71",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jvanbruegge",
+        "ref": "booklore",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "libnbtplusplus": {
       "flake": false,
       "locked": {
@@ -742,6 +758,7 @@
         "flake-parts": "flake-parts_2",
         "grid-select": "grid-select",
         "home-manager": "home-manager",
+        "jvanbruegge-booklore": "jvanbruegge-booklore",
         "microvm": "microvm",
         "nix-minecraft": "nix-minecraft",
         "nixos-generators": "nixos-generators",

@@ -3,13 +3,9 @@
 {
   auth.domain = "auth.domus.diffeq.com";
 
-  books = {
-    domain = "books.domus.diffeq.com";
-  };
-
-  bookmarks = {
-    domain = "bookmarks.domus.diffeq.com";
-  };
+  books.domain = "books.domus.diffeq.com";
+  booklore.domain = "booklore.domus.diffeq.com";
+  bookmarks.domain = "bookmarks.domus.diffeq.com";
 
   flood = {
     domain = "flood.domus.diffeq.com";

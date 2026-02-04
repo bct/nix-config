@@ -21,6 +21,23 @@ in
         autoCreate = false;
       }
     ];
+
+    devices = [
+      # # sudo lshw -C display
+      # {
+      #   bus = "pci";
+      #   path = "0000:0b:00.0";
+      #   #path = "vendorid=0x1002,productid=0x15d8";
+      # }
+      # {
+      #   bus = "pci";
+      #   path = "0000:0b:00.1";
+      # }
+      # {
+      #   bus = "pci";
+      #   path = "0000:0b:00.6";
+      # }
+    ];
   };
 
   age.secrets = {

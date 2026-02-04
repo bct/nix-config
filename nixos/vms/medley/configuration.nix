@@ -9,6 +9,7 @@
     "${self}/nixos/common/headless.nix"
     "${self}/nixos/common/node-exporter.nix"
 
+    ./booklore.nix
     ./borgmatic.nix
     ./homepage.nix
     ./karakeep.nix
@@ -31,6 +32,7 @@
   services.lego-proxy-client = {
     enable = true;
     domains = [
+      "booklore"
       "bookmarks"
       "homepage"
       "recipes"
