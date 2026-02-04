@@ -485,6 +485,23 @@
   "com/fasterxml/jackson/module#jackson-modules-java8/2.20.1": {
    "pom": "sha256-ARd18sV1jwGRus7bTlFDj6/crz2rJUi/xLfXlaRUNg0="
   },
+  "com/github/ben-manes/caffeine#caffeine/3.2.0": {
+   "jar": "sha256-7EEd/fDAPyUhhkjOiYYWMLcWgOWFippyeOusjlXKs9c=",
+   "module": "sha256-vikzQt2vVNO/ZtgRBQKF3Yic+t86wlPB8TzlExeU+aQ=",
+   "pom": "sha256-v0GKtnejF4JQIimo+zW/Vz+Io2Z47AdtbpM304Pl6uY="
+  },
+  "com/github/ben-manes/caffeine#caffeine/3.2.3": {
+   "module": "sha256-jZo7mA6b1wQS7jObJFYxNhezuK4uhon5s8vwZAzVjzw=",
+   "pom": "sha256-n3BPkIN5e099DB1chV00zSaNVEzwa0KD1c5CiKz8nuA="
+  },
+  "com/github/jai-imageio#jai-imageio-core/1.4.0": {
+   "jar": "sha256-itPGjp7/+xCsh/+LxYmt9ksEpynFGUwHnv0GQ2B/1yo=",
+   "pom": "sha256-Ac0LjPRGoe4kVuyeg8Q11gRH0G6fVJBMTm/sCPfO8qw="
+  },
+  "com/github/jai-imageio#jai-imageio-jpeg2000/1.4.0": {
+   "jar": "sha256-B/tuOjBAEiuEbF5SUgAzF1wyUeLsiDDfgvh8sh84i7E=",
+   "pom": "sha256-jQd0KBAHliclrx93swfN6BbP1+4loQxTI3nW41ZMvh4="
+  },
   "com/github/junrar#junrar/7.5.7": {
    "jar": "sha256-oF3kHF89iOFxGuTI6tDzQtuH2WvyaUQUPl/qnlT47J4=",
    "module": "sha256-xRIQlzZfYkaFCPSoRDHRW9Y8zkk/BVVjC0WRmdU25LA=",
@@ -493,6 +510,23 @@
   "com/github/stephenc/jcip#jcip-annotations/1.0-1": {
    "jar": "sha256-T8z/g4Kq/FiZYsTtsmL2qlleNPHhHmEFfRxqluj8cyM=",
    "pom": "sha256-aMKlqm6PNFdDCT5StbngGQuk1aUhXApZtNfTNkcgjLs="
+  },
+  "com/google/errorprone#error_prone_annotations/2.36.0": {
+   "jar": "sha256-d0QOJwsLyaJJkDxaB2w2pyLEiGyk9CZ18pA6HFPtYaU=",
+   "pom": "sha256-15z9N8hfdta3VMdQHuHchEe3smQsI4LXeCUhZr0zHpw="
+  },
+  "com/google/errorprone#error_prone_annotations/2.43.0": {
+   "pom": "sha256-T2uIia+o3r2+Hj/ipfjmbiIWygtWPya05UE4cw7s3IA="
+  },
+  "com/google/errorprone#error_prone_parent/2.36.0": {
+   "pom": "sha256-Okz8imvtYetI6Wl5b8MeoNJwtj5nBZmUamGIOttwlNw="
+  },
+  "com/google/errorprone#error_prone_parent/2.43.0": {
+   "pom": "sha256-u5LEWE0CEb1ZvspPsnYXD13FD+NGFG6TV40tqyYDPhA="
+  },
+  "com/h2database#h2/2.3.232": {
+   "jar": "sha256-ja5i0i24mCw9yzgm7bnHJ8XTAgY6Z+731j2C3kAfB9M=",
+   "pom": "sha256-7O2yquV8vtuMAhfSC5O9Ld6IAxGYwgQlGoEHu4Mr+fA="
   },
   "com/jayway/jsonpath#json-path/2.9.0": {
    "jar": "sha256-Eanub4i7MfFFAQjRz2RBN33shKygdetrsjQ74VdXW+o=",

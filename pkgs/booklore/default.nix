@@ -10,13 +10,13 @@
   openjdk21,
 }:
 let
-  version = "1.17.0";
+  version = "1.18.5";
 
   src = fetchFromGitHub {
     owner = "booklore-app";
     repo = "booklore";
     tag = "v${version}";
-    hash = "sha256-JPObz0K5gn2utfHWvdIaf0sWq87x2Nrj8AxSNrH9T90=";
+    hash = "sha256-6IJCtpkeqojfhJw/8zz1VfpIg37abmQlWjZ8sC2ceSY=";
   };
 
   webui = buildNpmPackage {
@@ -26,7 +26,7 @@ let
     src = src + "/booklore-ui";
 
     npmFlags = [ "--legacy-peer-deps" ];
-    npmDepsHash = "sha256-bNiz5eknEOP7dqo9PnIJY13yjQMEoPHaT+U0u3sf2vo=";
+    npmDepsHash = "sha256-5cpWoCBqoUpYY5Ru9YgoJuQN1zOCA2TLBkEfCOlcB+E=";
 
     installPhase = ''
       runHook preInstall
@@ -49,11 +49,10 @@ let
     src = src + "/booklore-api";
 
     postPatch = ''
-      sed -i "s/version: 'v.*'/version: 'v${version}'/" src/main/resources/application.yaml
-
       substituteInPlace src/main/resources/application.yaml \
         --replace-fail "'/app/data'" "\''${BOOKLORE_DATA_DIR:/var/lib/booklore/data}" \
-        --replace-fail "'/bookdrop'" "\''${BOOKLORE_BOOKDROP_DIR:/var/lib/booklore/bookdrop}"
+        --replace-fail "'/bookdrop'" "\''${BOOKLORE_BOOKDROP_DIR:/var/lib/booklore/bookdrop}" \
+        --replace-fail "version: 'development'" "version: 'v${version}'"
     '';
 
     nativeBuildInputs = [
