@@ -2,7 +2,7 @@
 # You can build them using 'nix build .#example' or (legacy) 'nix-build -A example'
 
 { pkgs }:
-rec {
+{
   # my fork of the Hoon LSP
   # https://github.com/bct/hoon-language-server/tree/fix-issue-30
   hoonLanguageServer =
@@ -40,6 +40,7 @@ rec {
     pkgs.callPackage "${pkg}/default.nix" { };
 
   airsonic-refix = pkgs.callPackage ./airsonic-refix { };
+  booklore = pkgs.callPackage ./booklore { };
 
   lego-acme-zoneedit = pkgs.callPackage ./lego-acme-zoneedit { };
 
