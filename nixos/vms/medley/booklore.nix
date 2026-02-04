@@ -22,10 +22,6 @@
     enable = true;
     package = pkgs.booklore;
 
-    environment = {
-      #SPRING_DATASOURCE_URL = "jdbc:mariadb://db.domus.diffeq.com:3306/booklore";
-    };
-
     database = {
       createLocally = false;
       name = "booklore";
