@@ -49,6 +49,13 @@
         "guest ok" = "yes";
       };
 
+      software = {
+        path = "/mnt/bulk/software";
+        browseable = "yes";
+        "read only" = "yes";
+        "guest ok" = "yes";
+      };
+
       time-machine-amanda-2020-12 = {
         path = "/mnt/bulk/backups/time-machine-amanda-2020-12";
         "valid users" = "amanda";
