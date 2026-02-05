@@ -50,6 +50,9 @@
     };
   };
 
+  # Start pipewire on system boot
+  systemd.services.pipewire.wantedBy = [ "multi-user.target" ];
+
   users.users.bct.extraGroups = [ "pipewire" ];
   users.users.mpd.extraGroups = [ "pipewire" ];
 }
