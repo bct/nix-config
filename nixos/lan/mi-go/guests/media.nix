@@ -4,6 +4,9 @@
   lib,
   ...
 }:
+let
+  gonicPort = 4747;
+in
 {
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
@@ -15,12 +18,28 @@
     vcpu = 1;
     mem = 512;
 
+    volumes = [
+      {
+        image = "var.img";
+        mountPoint = "/var";
+        size = 1024;
+      }
+    ];
+
     shares = [
       {
         tag = "video";
         source = "/mnt/bulk/video";
         mountPoint = "/mnt/video";
         proto = "virtiofs";
+      }
+
+      {
+        tag = "beets";
+        source = "/mnt/bulk/beets/library";
+        mountPoint = "/mnt/beets";
+        proto = "virtiofs";
+        readOnly = true;
       }
     ];
   };
@@ -30,6 +49,7 @@
     passwd-blackbeard.rekeyFile = ./secrets/passwd-media-blackbeard.age;
   };
 
+  # -- sshfs host --
   services.openssh = {
     settings.PasswordAuthentication = lib.mkForce true;
     # TODO: add a chroot here.
@@ -62,4 +82,33 @@
     gid = 1005;
     members = [ "blackbeard" ];
   };
+
+  # -- gonic / subsonic --
+  services.lego-proxy-client = {
+    enable = true;
+    domains = [ "media" ];
+  };
+
+  networking.firewall.allowedTCPPorts = [
+    gonicPort
+  ];
+
+  services.gonic = {
+    enable = true;
+    settings = {
+      listen-addr = "0.0.0.0:${toString gonicPort}";
+      cache-path = "/var/cache/gonic";
+
+      playlists-path = "/var/lib/gonic";
+      music-path = [ "/mnt/beets" ];
+      podcast-path = "/var/empty";
+      scan-interval = 60; # minutes
+
+      multi-value-genre = "delim ,";
+
+      tls-cert = "${config.security.acme.certs."media.domus.diffeq.com".directory}/fullchain.pem";
+      tls-key = "${config.security.acme.certs."media.domus.diffeq.com".directory}/key.pem";
+    };
+  };
+  systemd.services.gonic.serviceConfig.SupplementaryGroups = [ "acme" ];
 }

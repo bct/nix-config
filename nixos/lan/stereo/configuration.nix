@@ -1,7 +1,7 @@
 {
   self,
-  config,
   pkgs,
+  config,
   ...
 }:
 {
@@ -18,7 +18,6 @@
     ./hardware-configuration.nix
 
     "${self}/nixos/modules/airsonic-refix"
-    "${self}/nixos/modules/lego-proxy-client"
 
     ./audio.nix
     ./bluetooth.nix
@@ -54,32 +53,16 @@
     onkyo-ri-send-command
   ];
 
-  networking.firewall.enable = false;
+  networking.firewall.allowedTCPPorts = [
+    4646 # subsonic-action-proxy
+    config.services.mpd.network.port
+  ];
 
   # grant myself access to the sound card.
   users.users.bct.extraGroups = [
     "audio"
     "gpio"
   ];
-
-  services.gonic = {
-    enable = true;
-    settings = {
-      listen-addr = "0.0.0.0:4747";
-      cache-path = "/var/cache/gonic";
-
-      playlists-path = "/var/lib/gonic";
-      music-path = [ "/mnt/beets" ];
-      podcast-path = "/var/empty";
-      scan-interval = 60; # minutes
-
-      multi-value-genre = "delim ,";
-
-      tls-cert = "${config.security.acme.certs."stereo.domus.diffeq.com".directory}/fullchain.pem";
-      tls-key = "${config.security.acme.certs."stereo.domus.diffeq.com".directory}/key.pem";
-    };
-  };
-  systemd.services.gonic.serviceConfig.SupplementaryGroups = [ "acme" ];
 
   services.mpd = {
     enable = true;
@@ -96,6 +79,7 @@
     '';
   };
 
+  # TODO: replace this now that we're not using jukebox mode
   systemd.services.subsonic-action-proxy = {
     description = "subsonic-action-proxy";
     after = [ "network.target" ];
@@ -147,11 +131,6 @@
   };
 
   # services.airsonic-refix.enable = true;
-
-  services.lego-proxy-client = {
-    enable = true;
-    domains = [ "stereo" ];
-  };
 
   systemd.timers.mpc-update = {
     wantedBy = [ "timers.target" ];
