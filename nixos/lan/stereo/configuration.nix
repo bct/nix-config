@@ -1,4 +1,10 @@
-{ self, config, pkgs, ... }: {
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
+{
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
 
@@ -13,6 +19,9 @@
 
     "${self}/nixos/modules/airsonic-refix"
     "${self}/nixos/modules/lego-proxy-client"
+
+    ./audio.nix
+    ./bluetooth.nix
   ];
 
   networking.hostName = "stereo";
@@ -48,7 +57,10 @@
   networking.firewall.enable = false;
 
   # grant myself access to the sound card.
-  users.users.bct.extraGroups = ["audio" "gpio"];
+  users.users.bct.extraGroups = [
+    "audio"
+    "gpio"
+  ];
 
   services.gonic = {
     enable = true;
@@ -57,7 +69,7 @@
       cache-path = "/var/cache/gonic";
 
       playlists-path = "/var/lib/gonic";
-      music-path = ["/mnt/beets"];
+      music-path = [ "/mnt/beets" ];
       podcast-path = "/var/empty";
       scan-interval = 60; # minutes
 
@@ -67,7 +79,7 @@
       tls-key = "${config.security.acme.certs."stereo.domus.diffeq.com".directory}/key.pem";
     };
   };
-  systemd.services.gonic.serviceConfig.SupplementaryGroups = ["acme"];
+  systemd.services.gonic.serviceConfig.SupplementaryGroups = [ "acme" ];
 
   services.mpd = {
     enable = true;
@@ -79,31 +91,33 @@
         type "alsa"
         name "hifiberry"
         device "hw:1,0" # "hw:card,device", found using aplay -l
-        mixer_control "Analogue"
+        mixer_control "Master"
       }
     '';
   };
 
   systemd.services.subsonic-action-proxy = {
     description = "subsonic-action-proxy";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
-      ExecStart = let
-        onkyo-ri = riCmds: "${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0 26 ${riCmds}";
-      in
-        ''${pkgs.subsonic-action-proxy}/bin/subsonic-action-proxy \
-          -listen-addr 0.0.0.0:4646 \
-          -subsonic-addr https://stereo.domus.diffeq.com:4747/ \
-          -jukebox-set-command "${onkyo-ri "0xd9 0x20"}" \
-          -add-rpc "/ssap/power ${onkyo-ri "0x4"}" \
-          -add-rpc "/ssap/line-1 ${onkyo-ri "0x20"}" \
-          -add-rpc "/ssap/volume-up ${onkyo-ri "0x203 0x203 0x203 0x203 0x203"}" \
-          -add-rpc "/ssap/volume-down ${onkyo-ri "0x303 0x303 0x303 0x303 0x303"}"
+      ExecStart =
+        let
+          onkyo-ri = riCmds: "${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0 26 ${riCmds}";
+        in
+        ''
+          ${pkgs.subsonic-action-proxy}/bin/subsonic-action-proxy \
+                    -listen-addr 0.0.0.0:4646 \
+                    -subsonic-addr https://stereo.domus.diffeq.com:4747/ \
+                    -jukebox-set-command "${onkyo-ri "0xd9 0x20"}" \
+                    -add-rpc "/ssap/power ${onkyo-ri "0x4"}" \
+                    -add-rpc "/ssap/line-1 ${onkyo-ri "0x20"}" \
+                    -add-rpc "/ssap/volume-up ${onkyo-ri "0x203 0x203 0x203 0x203 0x203"}" \
+                    -add-rpc "/ssap/volume-down ${onkyo-ri "0x303 0x303 0x303 0x303 0x303"}"
         '';
       DynamicUser = true;
-      SupplementaryGroups = ["gpio"];
+      SupplementaryGroups = [ "gpio" ];
     };
   };
 
@@ -115,11 +129,13 @@
   fileSystems."/mnt/beets" = {
     device = "//mi-go.domus.diffeq.com/beets";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
 
-    in ["${automount_opts},guest"];
+      in
+      [ "${automount_opts},guest" ];
   };
 
   services.udev.extraRules = ''
@@ -127,7 +143,7 @@
   '';
 
   users.groups = {
-    gpio = {};
+    gpio = { };
   };
 
   # services.airsonic-refix.enable = true;
