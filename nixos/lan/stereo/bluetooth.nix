@@ -44,6 +44,7 @@
         ${pkgs.bluez}/bin/bluetoothctl <<EOF
         discoverable on
         pairable on
+        system-alias "Of Mice and Music"
         EOF
 
         ${pkgs.coreutils}/bin/yes | ${pkgs.bluez-tools}/bin/bt-agent -c NoInputNoOutput
