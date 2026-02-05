@@ -143,7 +143,18 @@
   systemd.services.mpc-update = {
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.mpc}/bin/mpc update";
+      ExecStart = pkgs.writeShellScript "mpc-update" ''
+        bt_connected=$(${pkgs.bluez}/bin/bluetoothctl devices Connected)
+        if [ -n "$bt_connected" ]; then
+          ${pkgs.mpc}/bin/mpc update
+        else
+          # if anybody is connected they might be playing audio.
+          # our bluetooth is a little unstable, and running an "mpc update" might push
+          # it over the edge.
+          echo "not running mpc update because BT devices are connected:"
+          echo "$bt_connected"
+        fi
+      '';
     };
   };
 
