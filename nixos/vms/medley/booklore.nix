@@ -65,4 +65,6 @@
       '';
     };
   };
+
+  users.users.bct.extraGroups = [ "booklore" ];
 }
