@@ -1,5 +1,8 @@
 # https://wiki.nixos.org/wiki/PipeWire
-{ ... }:
+{ pkgs, ... }:
+let
+  onkyo-ri = riCmds: "${pkgs.onkyo-ri-send-command}/bin/onkyo-ri-send-command 0 26 ${riCmds}";
+in
 {
   # rtkit (optional, recommended) allows Pipewire to use the realtime scheduler for increased performance.
   security.rtkit.enable = true;
@@ -52,6 +55,11 @@
 
   # Start pipewire on system boot
   systemd.services.pipewire.wantedBy = [ "multi-user.target" ];
+
+  # when a bluetooth client connects, turn on the stereo and switch to line1
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="bluetooth", RUN+="${onkyo-ri "0xd9 0x20"}"
+  '';
 
   users.users.bct.extraGroups = [ "pipewire" ];
   users.users.mpd.extraGroups = [ "pipewire" ];
