@@ -1,24 +1,29 @@
-{ config, inputs, lib, pkgs, ... }: let
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
+let
   workspaces = [
-    { name = "mon";   icon = ""; }
-    { name = "web";   icon = ""; }
-    { name = "proj";  icon = ""; }
-    { name = "chat";  icon = "󰭹"; }
-    { name = "mail";  icon = ""; }
+    { name = "mon"; icon = ""; }
+    { name = "web"; icon = ""; }
+    { name = "proj"; icon = ""; }
+    { name = "chat"; icon = "󰭹"; }
+    { name = "mail"; icon = ""; }
     { name = "notes"; icon = "󰷈"; }
-    { name = "kino";  icon = ""; }
-    { name = "3dp";   icon = ""; }
-    { name = "zap";   icon = ""; }
-    { name = "host";  icon = ""; }
-    { name = "img";   icon = ""; }
+    { name = "kino"; icon = ""; }
+    { name = "3dp"; icon = ""; }
+    { name = "zap"; icon = ""; }
+    { name = "host"; icon = ""; }
+    { name = "img"; icon = ""; }
   ];
 
   # prepare a list of workspaces for grid-select -d.
   # format: "value,display"
   workspaceSelectors = pkgs.writeText "hyprland-workspaces-selectors" (
-    lib.concatImapStrings
-      (wsId: ws: "${toString wsId},${ws.icon}  ${ws.name}" + "\n")
-      workspaces
+    lib.concatImapStrings (wsId: ws: "${toString wsId},${ws.icon}  ${ws.name}" + "\n") workspaces
   );
 
   gridselect-workspace = pkgs.writeShellApplication {
@@ -40,7 +45,8 @@
       fi
     '';
   };
-in {
+in
+{
   # Get AppImages (cura) working.
   # "For the sandboxed apps to work correctly, desktop integration portals need to be installed."
   xdg.portal = {
@@ -56,82 +62,106 @@ in {
   programs.waybar = {
     enable = true;
     systemd.enable = true;
-    settings = [{
-      # "layer": "top", # Waybar at top layer
-      # "position": "bottom", # Waybar position (top|bottom|left|right)
-      height = 30; # Waybar height (to be removed for auto height)
-      # "width": 1280, # Waybar width
-      spacing = 4; # Gaps between modules (4px)
+    settings = [
+      {
+        # "layer": "top", # Waybar at top layer
+        # "position": "bottom", # Waybar position (top|bottom|left|right)
+        height = 30; # Waybar height (to be removed for auto height)
+        # "width": 1280, # Waybar width
+        spacing = 4; # Gaps between modules (4px)
 
-      # Choose the order of the modules
-      modules-left = [
-        "hyprland/workspaces"
-        "hyprland/submap"
-      ];
+        # Choose the order of the modules
+        modules-left = [
+          "hyprland/workspaces"
+          "hyprland/submap"
+        ];
 
-      modules-center = [
-        "hyprland/window"
-      ];
+        modules-center = [
+          "hyprland/window"
+        ];
 
-      modules-right = [
-        "pulseaudio"
-        "network#wireless"
-        "network#wg"
-        "cpu"
-        "backlight"
-        "battery"
-        "clock"
-        "tray"
-      ];
+        modules-right = [
+          "pulseaudio"
+          "network#wireless"
+          "network#wg"
+          "cpu"
+          "backlight"
+          "battery"
+          "clock"
+          "tray"
+        ];
 
-      # Modules configuration
-      "hyprland/workspaces" = let
-        ws-icons = builtins.listToAttrs (map (ws: { name = ws.name; value = ws.icon; }) workspaces);
-      in {
-        format = "{icon}";
-        format-icons = ws-icons // {
-          "music" = "";
-          "urgent" = "";
-          "default" = "";
+        # Modules configuration
+        "hyprland/workspaces" =
+          let
+            ws-icons = builtins.listToAttrs (
+              map (ws: {
+                name = ws.name;
+                value = ws.icon;
+              }) workspaces
+            );
+          in
+          {
+            format = "{icon}";
+            format-icons = ws-icons // {
+              "music" = "";
+              "urgent" = "";
+              "default" = "";
+            };
+            show-special = true;
+            special-visible-only = true;
+          };
+        tray = {
+          # "icon-size": 21,
+          spacing = 10;
+          # "icons": {
+          #   "blueman": "bluetooth",
+          #   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
+          # }
         };
-        show-special = true;
-        special-visible-only = true;
-      };
-      tray = {
-        # "icon-size": 21,
-        spacing = 10;
-        # "icons": {
-        #   "blueman": "bluetooth",
-        #   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
-        # }
-      };
-      clock = {
-        tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-        format-alt = "{:%Y-%m-%d}";
-      };
-      cpu = {
-        format = "{usage}% ";
-        tooltip = false;
-      };
-      backlight = {
-        format = "{percent}% {icon}";
-        format-icons = ["" "" "" "" "" "" "" "" ""];
-      };
-      battery = {
-        states = {
-          warning = 30;
-          critical = 15;
+        clock = {
+          tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+          format-alt = "{:%Y-%m-%d}";
         };
-        # add extra space on the right because it looks bad with the background
-        # when critical
-        format = "{capacity}% {icon} ";
-        format-full = "{capacity}% {icon} ";
-        format-charging = "{capacity}% 󰢝" ;
-        format-plugged = "{capacity}%  ";
-        format-alt = "{time} {icon} ";
-        format-icons = ["" "" "" "" ""];
-      };
-      "network#wireless" = {
+        cpu = {
+          format = "{usage}% ";
+          tooltip = false;
+        };
+        backlight = {
+          format = "{percent}% {icon}";
+          format-icons = [
+            ""
+            ""
+            ""
+            ""
+            ""
+            ""
+            ""
+            ""
+            ""
+          ];
+        };
+        battery = {
+          states = {
+            warning = 30;
+            critical = 15;
+          };
+          # add extra space on the right because it looks bad with the background
+          # when critical
+          format = "{capacity}% {icon} ";
+          format-full = "{capacity}% {icon} ";
+          format-charging = "{capacity}% 󰢝";
+          format-plugged = "{capacity}%  ";
+          format-alt = "{time} {icon} ";
+          format-icons = [
+            ""
+            ""
+            ""
+            ""
+            ""
+          ];
+        };
+        "network#wireless" = {
           "interface" = "wlp*";
           "format-wifi" = "{signalStrength}% ";
           "format-ethernet" = "{ipaddr}/{cidr} ";
@@ -139,25 +169,30 @@ in {
           "format-linked" = "{ifname} (No IP) ";
           "format-disconnected" = "Disconnected ⚠";
           "format-alt" = "{ifname} = {ipaddr}/{cidr}";
-      };
-      "network#wg" = {
+        };
+        "network#wg" = {
           "interface" = "wg0";
           "format" = "󰌾";
           "tooltip-format" = "{ifname}";
           "format-linked" = "{ifname} (No IP) 󰌾";
           "format-disconnected" = "";
           "format-alt" = "{ifname} = {ipaddr}/{cidr} 󰌾";
-      };
-      pulseaudio = {
-        format = "{volume}% {icon}";
-        format-muted = "󰖁";
-        format-icons = {
-          "headphone" = "";
-          "default" = ["" "" ""];
         };
-        on-click = "pavucontrol";
-      };
-    }];
+        pulseaudio = {
+          format = "{volume}% {icon}";
+          format-muted = "󰖁";
+          format-icons = {
+            "headphone" = "";
+            "default" = [
+              ""
+              ""
+              ""
+            ];
+          };
+          on-click = "pavucontrol";
+        };
+      }
+    ];
 
     style = ''
       * {
@@ -260,6 +295,9 @@ in {
   wayland.windowManager.hyprland = {
     enable = true; # enable Hyprland
 
+    package = pkgs.unstable.hyprland;
+    portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
+
     # If you use the Home Manager module, make sure to disable the systemd integration, as it
     # conflicts with uwsm.
     # https://wiki.hypr.land/Useful-Utilities/Systemd-start/
@@ -271,239 +309,261 @@ in {
     ];
 
     # https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.conf
-    extraConfig = let
-      # we could use named workspaces, but this allows us to specify the order
-      workspaceRules = lib.concatLines (lib.imap1 (i: ws: "workspace = ${toString i}, defaultName:${ws.name}") workspaces);
-    in ''
-      ################
-      ### MONITORS ###
-      ################
+    extraConfig =
+      let
+        # we could use named workspaces, but this allows us to specify the order
+        workspaceRules = lib.concatLines (
+          lib.imap1 (i: ws: "workspace = ${toString i}, defaultName:${ws.name}") workspaces
+        );
+      in
+      ''
+        ################
+        ### MONITORS ###
+        ################
 
-      # See https://wiki.hypr.land/Configuring/Monitors/
-      monitor = desc:Dell Inc. DELL U2515H FJYC778B0XLL, preferred, auto, 1.333
-      monitor = ,preferred,auto,auto
+        # See https://wiki.hypr.land/Configuring/Monitors/
+        monitor = desc:Dell Inc. DELL U2515H FJYC778B0XLL, preferred, auto, 1.333
+        monitor = ,preferred,auto,auto
 
-      ###################
-      ### MY PROGRAMS ###
-      ###################
+        ###################
+        ### MY PROGRAMS ###
+        ###################
 
-      # See https://wiki.hypr.land/Configuring/Keywords/
+        # See https://wiki.hypr.land/Configuring/Keywords/
 
-      # Set programs that you use
-      $terminal = alacritty
-      $menu = fuzzel
-
-
-      #################
-      ### AUTOSTART ###
-      #################
-
-      # Autostart necessary processes (like notifications daemons, status bars, etc.)
-      # Or execute your favorite apps at launch like this:
-
-      # exec-once = $terminal
-      # exec-once = nm-applet &
-      # exec-once = waybar & hyprpaper & firefox
+        # Set programs that you use
+        $terminal = alacritty
+        $menu = fuzzel
 
 
-      #####################
-      ### LOOK AND FEEL ###
-      #####################
+        #################
+        ### AUTOSTART ###
+        #################
 
-      # See https://wiki.hypr.land/Configuring/Dwindle-Layout/ for more
-      dwindle {
-          pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
-          preserve_split = true # You probably want this
-      }
+        # Autostart necessary processes (like notifications daemons, status bars, etc.)
+        # Or execute your favorite apps at launch like this:
 
-      # See https://wiki.hypr.land/Configuring/Master-Layout/ for more
-      master {
-          new_status = master
-      }
+        # exec-once = $terminal
+        # exec-once = nm-applet &
+        # exec-once = waybar & hyprpaper & firefox
 
-      # https://wiki.hypr.land/Configuring/Variables/#misc
-      misc {
-          force_default_wallpaper = -1 # Set to 0 or 1 to disable the anime mascot wallpapers
-          disable_hyprland_logo = true # disable the random hyprland logo / anime girl background
-      }
 
-      decoration {
-        # when a special workspace is open, dim everything else a little more
-        dim_special = 0.4
-      }
+        #####################
+        ### LOOK AND FEEL ###
+        #####################
 
-      group {
-        col.border_active = rgb(ffffff)
-        col.border_inactive = rgba(444444ff)
-
-        groupbar {
-          keep_upper_gap = false
-
-          # give the group bar a background
-          # https://github.com/hyprwm/Hyprland/discussions/3284#discussioncomment-13620599
-          height = 1
-          font_size = 10
-
-          # about half the indicator height
-          text_offset = -12
-          indicator_height = 24
-
-          col.active = rgba(d7992166)
-          col.inactive = rgba(3c383666)
+        # See https://wiki.hypr.land/Configuring/Dwindle-Layout/ for more
+        dwindle {
+            pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+            preserve_split = true # You probably want this
         }
-      }
 
-      animations {
-        enabled = yes
+        # See https://wiki.hypr.land/Configuring/Master-Layout/ for more
+        master {
+            new_status = master
+        }
 
-        bezier = easeOutQuint,0.23,1,0.32,1
-        bezier = almostLinear,0.5,0.5,0.75,1.0
+        # https://wiki.hypr.land/Configuring/Variables/#misc
+        misc {
+            force_default_wallpaper = -1 # Set to 0 or 1 to disable the anime mascot wallpapers
+            disable_hyprland_logo = true # disable the random hyprland logo / anime girl background
+        }
 
-        #           NAME,             ONOFF, SPEED, CURVE,        [STYLE]
-        # switch workspaces instantly
-        animation = workspaces,       0
-        animation = specialWorkspace, 1,     1.94,  almostLinear, fade
-        animation = windowsIn,        1,     2.0,   easeOutQuint, popin 87%
-      }
+        decoration {
+          # when a special workspace is open, dim everything else a little more
+          dim_special = 0.4
+        }
 
-      misc {
-        # be less aggressive about popping up the "application not responding"
-        # dialog.
-        # default is 5.
-        anr_missed_pings = 10
-      }
+        group {
+          col.border_active = rgb(ffffff)
+          col.border_inactive = rgba(444444ff)
 
-      #############
-      ### INPUT ###
-      #############
+          groupbar {
+            keep_upper_gap = false
 
-      # https://wiki.hypr.land/Configuring/Variables/#input
-      input {
-          kb_layout = us,us
-          kb_variant = dvorak,
-          kb_model =
-          kb_options =
-          kb_rules =
+            # give the group bar a background
+            # https://github.com/hyprwm/Hyprland/discussions/3284#discussioncomment-13620599
+            height = 1
+            font_size = 10
 
-          follow_mouse = 1
+            # about half the indicator height
+            text_offset = -12
+            indicator_height = 24
 
-          sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
-
-          touchpad {
-              natural_scroll = false
+            col.active = rgba(d7992166)
+            col.inactive = rgba(3c383666)
           }
-      }
+        }
 
-      ###################
-      ### KEYBINDINGS ###
-      ###################
-##
-      # See https://wiki.hypr.land/Configuring/Keywords/
-      #$mainMod = SUPER # Sets "Windows" key as main modifier
-      $mainMod = ALT
+        animations {
+          enabled = yes
 
-      # Example binds, see https://wiki.hypr.land/Configuring/Binds/ for more
-      bind = SHIFT ALT, Return, exec, $terminal
-      bind = SHIFT ALT, C, killactive,
-      bind = SHIFT ALT, Q, exit,
-      #bind = $mainMod, V, togglefloating,
-      bind = $mainMod, P, exec, $menu
-      #bind = $mainMod, P, pseudo, # dwindle
-      bind = $mainMod, v, togglesplit, # dwindle
+          bezier = easeOutQuint,0.23,1,0.32,1
+          bezier = almostLinear,0.5,0.5,0.75,1.0
 
-      bind = $mainMod, F, fullscreenstate, 1 0
+          #           NAME,             ONOFF, SPEED, CURVE,        [STYLE]
+          # switch workspaces instantly
+          animation = workspaces,       0
+          animation = specialWorkspace, 1,     1.94,  almostLinear, fade
+          animation = windowsIn,        1,     2.0,   easeOutQuint, popin 87%
+        }
 
-      # Move focus with mainMod + arrow keys
-      bind = ALT, h, movefocus, l
-      bind = ALT, j, movefocus, d
-      bind = ALT, k, movefocus, u
-      bind = ALT, l, movefocus, r
+        misc {
+          # be less aggressive about popping up the "application not responding"
+          # dialog.
+          # default is 5.
+          anr_missed_pings = 10
+        }
 
-      # switch monitor focus
-      bind = ALT, o, focusmonitor, 0
-      bind = ALT, e, focusmonitor, 1
+        ecosystem {
+          no_update_news = true
+          no_donation_nag = true
+        }
 
-      # resize the active window
-      bind = SUPER CTRL, h, resizeactive, -36 0
-      bind = SUPER CTRL, s, resizeactive, 36 0
-      bind = SUPER CTRL, n, resizeactive, 0 -24
-      bind = SUPER CTRL, t, resizeactive, 0 24
+        #############
+        ### INPUT ###
+        #############
 
-      # Return to previous workspace
-      bind = ALT, r, workspace, previous
+        # https://wiki.hypr.land/Configuring/Variables/#input
+        input {
+            kb_layout = us,us
+            kb_variant = dvorak,
+            kb_model =
+            kb_options =
+            kb_rules =
 
-      # Switch workspace
-      bind = $mainMod, T, exec, ${gridselect-workspace}/bin/gridselect-workspace focusworkspaceoncurrentmonitor
+            follow_mouse = 1
 
-      # Send window to workspace
-      bind = $mainMod SHIFT, T, exec, ${gridselect-workspace}/bin/gridselect-workspace movetoworkspace
+            sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
 
-      # Special workspaces
-      bind = $mainMod, M, togglespecialworkspace, music
+            touchpad {
+                natural_scroll = false
+            }
+        }
 
-      # Tabbed layout
-      bind = $mainMod, G, togglegroup
-      bind = $mainMod CTRL, h, changegroupactive, b
-      bind = $mainMod CTRL, l, changegroupactive, f
-      bind = $mainMod SHIFT, h, movewindoworgroup, l
-      bind = $mainMod SHIFT, l, movewindoworgroup, r
-      bind = $mainMod SHIFT, k, movewindoworgroup, u
-      bind = $mainMod SHIFT, j, movewindoworgroup, d
+        ###################
+        ### KEYBINDINGS ###
+        ###################
 
-      # Move/resize windows with mainMod + LMB/RMB and dragging
-      bindm = $mainMod, mouse:272, movewindow
-      bindm = $mainMod, mouse:273, resizewindow
+        # See https://wiki.hypr.land/Configuring/Keywords/
+        #$mainMod = SUPER # Sets "Windows" key as main modifier
+        $mainMod = ALT
 
-      # Laptop multimedia keys for volume and LCD brightness
-      bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+
-      bindel = ,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-      bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-      bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
-      bindel = ,XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+
-      bindel = ,XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-
+        # Example binds, see https://wiki.hypr.land/Configuring/Binds/ for more
+        bind = SHIFT ALT, Return, exec, $terminal
+        bind = SHIFT ALT, C, killactive,
+        bind = SHIFT ALT, Q, exit,
+        #bind = $mainMod, V, togglefloating,
+        bind = $mainMod, P, exec, $menu
+        #bind = $mainMod, P, pseudo, # dwindle
+        bind = $mainMod, v, togglesplit, # dwindle
 
-      # Requires playerctl
-      bindl = , XF86AudioNext, exec, playerctl next
-      bindl = , XF86AudioPause, exec, playerctl play-pause
-      bindl = , XF86AudioPlay, exec, playerctl play-pause
-      bindl = , XF86AudioPrev, exec, playerctl previous
+        bind = $mainMod, F, fullscreenstate, 1 0
 
-      # Lock the screen
-      bind = SUPER CTRL, l, exec, hyprlock
+        # Move focus with mainMod + arrow keys
+        bind = ALT, h, movefocus, l
+        bind = ALT, j, movefocus, d
+        bind = ALT, k, movefocus, u
+        bind = ALT, l, movefocus, r
 
-      ##############################
-      ### WORKSPACES AND WINDOWS ###
-      ##############################
+        # switch monitor focus
+        bind = ALT, o, focusmonitor, 0
+        bind = ALT, e, focusmonitor, 1
 
-      # See https://wiki.hypr.land/Configuring/Workspace-Rules/ for workspace rules
+        # resize the active window
+        bind = SUPER CTRL, h, resizeactive, -36 0
+        bind = SUPER CTRL, s, resizeactive, 36 0
+        bind = SUPER CTRL, n, resizeactive, 0 -24
+        bind = SUPER CTRL, t, resizeactive, 0 24
 
-      ${workspaceRules}
-      workspace = special:music, on-created-empty:supersonic, gapsout:50
-      workspace = name:notes, on-created-empty:obsidian
-      workspace = name:web, gapsout:10 20 10 20
+        # Return to previous workspace
+        bind = ALT, r, workspace, previous
 
-      # See https://wiki.hypr.land/Configuring/Window-Rules/ for more
+        # Switch workspace
+        bind = $mainMod, T, exec, ${gridselect-workspace}/bin/gridselect-workspace focusworkspaceoncurrentmonitor
 
-      # Example windowrule
-      # windowrule = float,class:^(kitty)$,title:^(kitty)$
+        # Send window to workspace
+        bind = $mainMod SHIFT, T, exec, ${gridselect-workspace}/bin/gridselect-workspace movetoworkspace
 
-      # Ignore maximize requests from apps. You'll probably like this.
-      windowrule = suppressevent maximize, class:.*
+        # Special workspaces
+        bind = $mainMod, M, togglespecialworkspace, music
 
-      # Fix some dragging issues with XWayland
-      windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
+        # Tabbed layout
+        bind = $mainMod, G, togglegroup
+        bind = $mainMod CTRL, h, changegroupactive, b
+        bind = $mainMod CTRL, l, changegroupactive, f
+        bind = $mainMod SHIFT, h, movewindoworgroup, l
+        bind = $mainMod SHIFT, l, movewindoworgroup, r
+        bind = $mainMod SHIFT, k, movewindoworgroup, u
+        bind = $mainMod SHIFT, j, movewindoworgroup, d
 
-      # Chrome on workspace 2 gets grouped
-      windowrule = group set,workspace:2,class:^(chromium-browser)$
-      # Jellyfin opens on workspace 6
-      windowrule = workspace 6 silent,class:^(chromium-browser)$,title:^(Jellyfin)$
+        # Move/resize windows with mainMod + LMB/RMB and dragging
+        bindm = $mainMod, mouse:272, movewindow
+        bindm = $mainMod, mouse:273, resizewindow
 
-      windowrule = workspace special:music,class:Supersonic
+        # Laptop multimedia keys for volume and LCD brightness
+        bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+
+        bindel = ,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+        bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+        bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+        bindel = ,XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+
+        bindel = ,XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-
 
-      #debug {
-      #  disable_logs = false
-      #}
-    '';
+        # Requires playerctl
+        bindl = , XF86AudioNext, exec, playerctl next
+        bindl = , XF86AudioPause, exec, playerctl play-pause
+        bindl = , XF86AudioPlay, exec, playerctl play-pause
+        bindl = , XF86AudioPrev, exec, playerctl previous
+
+        # Lock the screen
+        bind = SUPER CTRL, l, exec, hyprlock
+
+        ##############################
+        ### WORKSPACES AND WINDOWS ###
+        ##############################
+
+        # See https://wiki.hypr.land/Configuring/Workspace-Rules/ for workspace rules
+
+        ${workspaceRules}
+        workspace = special:music, on-created-empty:supersonic, gapsout:50
+        workspace = name:notes, on-created-empty:obsidian
+        workspace = name:web, gapsout:10 20 10 20
+
+        # See https://wiki.hypr.land/Configuring/Window-Rules/ for more
+
+        windowrule {
+          # Ignore maximize requests from apps. You'll probably like this.
+          name = suppress-maximize-events
+          match:class = .*
+
+          suppress_event = maximize
+        }
+
+        windowrule {
+            # Fix some dragging issues with XWayland
+            name = fix-xwayland-drags
+            match:class = ^$
+            match:title = ^$
+            match:xwayland = true
+            match:float = true
+            match:fullscreen = false
+            match:pin = false
+
+            no_focus = true
+        }
+
+        # Chrome on workspace 2 gets grouped
+        windowrule = match:class ^(chromium-browser)$, match:workspace 2, group set
+
+        # Jellyfin opens on workspace 6
+        #windowrule = workspace 6 silent,class:^(chromium-browser)$,title:^(Jellyfin)$
+
+        windowrule = match:class Supersonic, workspace special:music
+
+        #debug {
+        #  disable_logs = false
+        #}
+      '';
   };
 
   programs.hyprlock = {
