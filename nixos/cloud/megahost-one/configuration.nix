@@ -23,7 +23,6 @@
     ./postgres.nix
     ./goatcounter.nix
     ./minecraft.nix
-    ./vikunja.nix
     ./wiki.nix
     ./wireguard-viator.nix
     ./wireguard-conductum.nix
@@ -75,7 +74,6 @@
   megahost.postgres = {
     databases = [
       "goatcounter"
-      "vikunja"
       "wiki-js"
     ];
 
@@ -86,11 +84,6 @@
 
       goatcounter = {
         passwordFile = config.age.secrets.password-goatcounter.path;
-        ensureDBOwnership = true;
-      };
-
-      vikunja = {
-        passwordFile = config.age.secrets.password-vikunja.path;
         ensureDBOwnership = true;
       };
 
@@ -117,10 +110,6 @@
         wiki = {
           suffix6 = "4";
         };
-        vikunja = {
-          suffix6 = "5";
-        };
-
         minio-escam-biz = {
           suffix6 = "6";
         };
