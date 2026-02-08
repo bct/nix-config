@@ -1,4 +1,5 @@
-{ config, ... }: {
+{ config, ... }:
+{
   services.homepage-dashboard = {
     enable = true;
     openFirewall = false;
@@ -8,6 +9,7 @@
     settings = {
     };
 
+    # https://gethomepage.dev/configs/services/#icons
     services = [
       {
         blackbeard = [
@@ -32,6 +34,13 @@
               siteMonitor = "https://sonarr.domus.diffeq.com/";
             };
           }
+          {
+            seerr = {
+              icon = "overseerr";
+              href = "https://seerr.domus.diffeq.com/";
+              siteMonitor = "https://seerr.domus.diffeq.com/";
+            };
+          }
         ];
       }
 
@@ -39,8 +48,8 @@
         media = [
           {
             books = {
-              icon = "calibre-web";
-              href = "https://books.domus.diffeq.com/";
+              icon = "booklore";
+              href = "https://booklore.domus.diffeq.com/";
               siteMonitor = "https://books.domus.diffeq.com/";
             };
           }
@@ -74,20 +83,19 @@
           }
 
           {
-            mi-go = {
-              icon = "truenas-core";
-              href = "http://mi-go.domus.diffeq.com/";
+            unifi = {
+              icon = "unifi";
+              href = "https://unifi.domus.diffeq.com/";
               # certificate doesn't work, but homepage can't handle the redirect
-              siteMonitor = "https://mi-go.domus.diffeq.com/";
+              siteMonitor = "https://unifi.domus.diffeq.com/";
             };
           }
 
           {
-            unifi = {
-              icon = "unifi";
-              href = "http://unifi.domus.diffeq.com/";
-              # certificate doesn't work, but homepage can't handle the redirect
-              siteMonitor = "https://unifi.domus.diffeq.com/";
+            uptime = {
+              icon = "uptime-kuma";
+              href = "https://uptime.domus.diffeq.com/";
+              siteMonitor = "https://uptime.domus.diffeq.com/";
             };
           }
         ];
@@ -166,8 +174,8 @@
           {
             tasks = {
               icon = "vikunja";
-              href = "https://tasks.diffeq.com/";
-              siteMonitor = "https://tasks.diffeq.com/";
+              href = "https://tasks.domus.diffeq.com/";
+              siteMonitor = "https://tasks.domus.diffeq.com/";
             };
           }
 
@@ -176,6 +184,14 @@
               icon = "sh-goatcounter";
               href = "https://m.diffeq.com/";
               siteMonitor = "https://m.diffeq.com/";
+            };
+          }
+
+          {
+            lldap = {
+              icon = "lldap";
+              href = "https://ldap.domus.diffeq.com/";
+              siteMonitor = "https://ldap.domus.diffeq.com/";
             };
           }
         ];
