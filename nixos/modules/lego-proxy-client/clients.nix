@@ -62,5 +62,6 @@
   };
 
   syncthing.domain = "syncthing.domus.diffeq.com";
+  tasks.domain = "tasks.domus.diffeq.com";
   uptime.domain = "uptime.domus.diffeq.com";
 }

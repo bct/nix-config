@@ -27,6 +27,11 @@ in
       rekeyFile = config.diffeq.secretsPath + /dex/tandoor.age;
       generator.script = "alnum";
     };
+
+    dex-vikunja-secret = {
+      rekeyFile = config.diffeq.secretsPath + /dex/vikunja.age;
+      generator.script = "alnum";
+    };
   };
 
   services.dex = {
@@ -110,6 +115,14 @@ in
           secretFile = config.age.secrets.dex-tandoor-secret.path;
           redirectURIs = [
             "https://recipes.domus.diffeq.com/accounts/oidc/oidc.domus.diffeq.com/login/callback/"
+          ];
+        }
+        {
+          id = "vikunja";
+          name = "Vikunja";
+          secretFile = config.age.secrets.dex-vikunja-secret.path;
+          redirectURIs = [
+            "https://${config.diffeq.hostNames.tasks}/auth/openid/domus"
           ];
         }
         {

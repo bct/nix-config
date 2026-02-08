@@ -14,9 +14,11 @@
 
   config.diffeq = {
     hostNames = {
+      db = "db.domus.diffeq.com";
       oidc = "oidc.domus.diffeq.com"; # dex
       auth = "auth.domus.diffeq.com"; # tinyauth
       ldap = "ldap.domus.diffeq.com"; # lldap
+      tasks = "tasks.domus.diffeq.com"; # vikunja
     };
   };
 }

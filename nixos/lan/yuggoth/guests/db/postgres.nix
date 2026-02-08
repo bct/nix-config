@@ -9,6 +9,7 @@ let
     "immich"
     "miniflux"
     "paperless"
+    "vikunja"
   ];
 in
 {
@@ -26,6 +27,11 @@ in
     db-password-db-postgres-paperless = {
       generator.script = "alnum";
       rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-paperless.age;
+    };
+
+    db-password-db-postgres-vikunja = {
+      generator.script = "alnum";
+      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-vikunja.age;
     };
   };
 
@@ -70,6 +76,7 @@ in
       "immich"
       "miniflux"
       "paperless"
+      "vikunja"
     ];
 
     ensureUsers = [
@@ -88,6 +95,11 @@ in
         name = "paperless";
         ensureDBOwnership = true;
       }
+
+      {
+        name = "vikunja";
+        ensureDBOwnership = true;
+      }
     ];
   };
 
@@ -104,6 +116,9 @@ in
 
         set_password() {
           username=$1
+
+          echo "setting password for $username..."
+
           password_path="$CREDENTIALS_DIRECTORY/password-$username"
           password=$(cat $password_path | tr -d '\n')
 

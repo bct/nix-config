@@ -30,6 +30,7 @@ in
           enable = true;
           frontendScheme = "https";
           frontendHostname = "tasks.diffeq.com";
+          package = pkgs.unstable.vikunja; # for 1.0
 
           database = {
             type = "postgres";
@@ -43,6 +44,9 @@ in
 
             # (•‿•)
             allowiconchanges = false;
+
+            # TODO: remove this once we're on a module version that sets it
+            publicurl = "https://tasks.domus.diffeq.com/";
           };
         };
 
