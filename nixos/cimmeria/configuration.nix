@@ -1,19 +1,18 @@
 { self, pkgs, ... }:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
+  imports = [
+    ./hardware-configuration.nix
 
-      "${self}/nixos/common/nix.nix"
-      "${self}/nixos/common/desktop"
+    "${self}/nixos/common/nix.nix"
+    "${self}/nixos/common/desktop"
 
-      "${self}/nixos/modules/wireguard-via-wgsd.nix"
+    "${self}/nixos/modules/wireguard-via-wgsd.nix"
 
-      ./borgmatic.nix
+    ./borgmatic.nix
 
-      "${self}/nixos/common/desktop/projects/android.nix"
-    ];
+    "${self}/nixos/common/desktop/projects/android.nix"
+  ];
 
   personal.user = "bct";
 
@@ -22,7 +21,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "cimmeria";
-  networking.firewall.enable = false;
 
   services.wireguard-via-wgsd.address = "192.168.8.17/32";
 
