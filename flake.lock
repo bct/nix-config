@@ -489,6 +489,22 @@
         "type": "github"
       }
     },
+    "lubelogger-1.6.0": {
+      "locked": {
+        "lastModified": 1770828164,
+        "narHash": "sha256-VQ87TJ7Tg/KsJMPDXZ8Bzyj/4LEg5RyFeTh0vslm14M=",
+        "owner": "bct",
+        "repo": "nixpkgs",
+        "rev": "8661ed7ffa9c8aa9dc67667201a3905fb40ae44e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bct",
+        "ref": "lubelogger-1.6.0",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "microvm": {
       "inputs": {
         "nixpkgs": "nixpkgs_3",
@@ -759,6 +775,7 @@
         "grid-select": "grid-select",
         "home-manager": "home-manager",
         "jvanbruegge-booklore": "jvanbruegge-booklore",
+        "lubelogger-1.6.0": "lubelogger-1.6.0",
         "microvm": "microvm",
         "nix-minecraft": "nix-minecraft",
         "nixos-generators": "nixos-generators",
