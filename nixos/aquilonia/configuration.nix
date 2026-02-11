@@ -26,6 +26,11 @@
   personal.user = "bct";
 
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKG0UT1vOHAbi9Rosdsu/ckvredKsdZ+vsAE9uLU1JNM";
+  # OpenSSH isn't enabled so we need to set this manually.
+  age.identityPaths = [
+    "/etc/ssh/ssh_host_rsa_key"
+    "/etc/ssh/ssh_host_ed25519_key"
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
