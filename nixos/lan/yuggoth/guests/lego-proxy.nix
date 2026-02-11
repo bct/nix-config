@@ -10,6 +10,30 @@
 let
   clients = import ../../../modules/lego-proxy-client/clients.nix;
 
+  deploy-openwrt = pkgs.writeShellApplication {
+    name = "deploy-openwrt";
+    runtimeInputs = [ pkgs.openssh ];
+    text = ''
+      set -euo pipefail
+
+      DEPLOY_KEY=${config.age.secrets.ssh-acme-deploy.path}
+      TARGET_HOST=router.domus.diffeq.com
+
+      ssh -i $DEPLOY_KEY root@$TARGET_HOST "rm -rf /tmp/acme && mkdir /tmp/acme"
+      # -O: use the legacy SCP protocol instead of SFTP
+      # (OpenWRT's Dropbear doesn't have SFTP)
+      scp -O -i $DEPLOY_KEY "$LEGO_CERT_PATH" root@$TARGET_HOST:/tmp/acme/cert.pem
+      scp -O -i $DEPLOY_KEY "$LEGO_CERT_KEY_PATH" root@$TARGET_HOST:/tmp/acme/key.pem
+
+      ssh -i $DEPLOY_KEY root@$TARGET_HOST \
+        "echo 'updating openwrt...' && \
+        cp /tmp/acme/key.pem /etc/uhttpd.key && \
+        cp /tmp/acme/cert.pem /etc/uhttpd.crt && \
+        /etc/init.d/uhttpd restart && \
+        rm -rf /tmp/acme"
+    '';
+  };
+
   deploy-unifi = pkgs.writeShellApplication {
     name = "deploy-unifi";
     runtimeInputs = [ pkgs.openssh ];
@@ -100,8 +124,23 @@ in
     EXEC_PROPAGATION_TIMEOUT = "180";
   };
 
+  security.acme.certs."router.domus.diffeq.com" = {
+    email = "s+acme@diffeq.com";
+    dnsProvider = "exec";
+    dnsResolver = "ns5.zoneedit.com";
+    environmentFile = config.age.secrets.zoneedit.path;
+    extraLegoRunFlags = [ "--run-hook=${deploy-openwrt}/bin/deploy-openwrt" ];
+  };
+  systemd.services."acme-order-renew-router.domus.diffeq.com".environment = {
+    EXEC_PATH = "${pkgs.lego-acme-zoneedit}/bin/lego-acme-zoneedit";
+    EXEC_PROPAGATION_TIMEOUT = "180";
+  };
+
   programs.ssh.knownHosts = {
     "unifi.domus.diffeq.com".publicKey =
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDNJJO5UWuslJ4vKm8i+g1O+ElLsgCKKKXbUKp/2nh2/";
+
+    "router.domus.diffeq.com".publicKey =
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnYU4bD2DWissh0NwhIgpTpRnMvUWOOMx0abJcBcWHZjt1TOu496wRQSxwNKqFP59Z9voFeTjTjYfMBzDnfdNI+2al4vy0vaGFmF3nK5waXkWPtoeQlGXcebueX0TltA25NC2S0SDS/H4mUggxFfuogdrX73PvXsi9jXfbIc7CFrRpnBJI5QvAgVbD82qidEKVFpI6LRU4ZkMPB9THVy12ieuksoJeWHvw5zuxUyHpSMjtDEZCpWQiHiS2qFCuQxlkn8MFK7Jft4cKjoOJ6EB9ZGLZcNvwY443dAt+TSVTvXnIaOxZ+aihj+8giNEkiDa8KXaVm3LJyrk6QSwtI5Sj";
   };
 }
