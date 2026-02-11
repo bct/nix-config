@@ -164,10 +164,10 @@ in
         "network#wireless" = {
           "interface" = "wlp*";
           "format-wifi" = "{signalStrength}% ";
-          "format-ethernet" = "{ipaddr}/{cidr} ";
+          "format-ethernet" = "{ipaddr}/{cidr} 󰈀";
           "tooltip-format" = "{ifname} via {gwaddr}";
-          "format-linked" = "{ifname} (No IP) ";
-          "format-disconnected" = "Disconnected ⚠";
+          "format-linked" = "{ifname} (No IP) 󰲊";
+          "format-disconnected" = "Disconnected 󰲛";
           "format-alt" = "{ifname} = {ipaddr}/{cidr}";
         };
         "network#wg" = {
