@@ -32,7 +32,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "aquilonia";
-  networking.firewall.enable = false;
 
   services.wireguard-via-wgsd.address = "192.168.8.18/32";
 
@@ -91,17 +90,6 @@
         ip = "192.168.4.246";
         model = "DCP-L2550DW";
       };
-    };
-  };
-
-  # TODO: disable me
-  services.openssh = {
-    enable = true;
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-      PermitRootLogin = "no";
-      AllowUsers = [ "bct" ];
     };
   };
 
