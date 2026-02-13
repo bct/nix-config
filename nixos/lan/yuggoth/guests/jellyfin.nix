@@ -10,6 +10,11 @@ in
 
   system.stateVersion = "24.05";
 
+  # hardware.enableRedistributableFirmware = true;
+  # hardware.graphics = {
+  #   enable = true;
+  # };
+
   microvm = {
     vcpu = 4;
     mem = 8192;
@@ -23,16 +28,37 @@ in
     ];
 
     devices = [
-      # # sudo lshw -C display
+      # give the GPU to jellyfin for efficient transcoding.
+      # GPU identified with: sudo lshw -C display
+
+      # # we need to pass through everything in IOMMU Group 1
+      # # as determined by https://github.com/neg-serg/ls-iommu
+      # # VGA compatible controller [0300] Advanced Micro Devices, Inc. [AMD/ATI] Picasso/Raven 2 [Radeon Vega Series / Radeon Vega Mobile Series] [1002:15d8] (rev da)
       # {
       #   bus = "pci";
       #   path = "0000:0b:00.0";
-      #   #path = "vendorid=0x1002,productid=0x15d8";
       # }
+      # # Audio device [0403] Advanced Micro Devices, Inc. [AMD/ATI] Raven/Raven2/Fenghuang HDMI/DP Audio Controller [1002:15de]
       # {
       #   bus = "pci";
       #   path = "0000:0b:00.1";
       # }
+      # # Encryption controller [1080] Advanced Micro Devices, Inc. [AMD] Raven/Raven2/FireFlight/Renoir/Cezanne Platform Security Processor [1022:15df]
+      # {
+      #   bus = "pci";
+      #   path = "0000:0b:00.2";
+      # }
+      # # USB controller [0c03] Advanced Micro Devices, Inc. [AMD] Raven USB 3.1 [1022:15e0]
+      # {
+      #   bus = "pci";
+      #   path = "0000:0b:00.3";
+      # }
+      # # USB controller [0c03] Advanced Micro Devices, Inc. [AMD] Raven USB 3.1 [1022:15e1]
+      # {
+      #   bus = "pci";
+      #   path = "0000:0b:00.4";
+      # }
+      # # Audio device [0403] Advanced Micro Devices, Inc. [AMD] Ryzen HD Audio Controller
       # {
       #   bus = "pci";
       #   path = "0000:0b:00.6";
