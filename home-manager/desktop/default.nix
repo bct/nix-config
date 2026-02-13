@@ -59,6 +59,19 @@
     # 2022-08-06 many hosts (e.g. mi-go) don't have alacritty terminfo
     Host *
       SetEnv TERM=xterm-256color
+
+    Host router.domus.diffeq.com router
+      User root
+
+    Host theatre.domus.diffeq.com theatre
+      User root
+
+    Host fever-dreams.domus.diffeq.com fever-dreams
+      User bazzite
+
+    # temporary - i can't connect directly to yuggoth for some reason.
+    #Host yuggoth.domus.diffeq.com yuggoth
+    #  ProxyJump root@router.domus.diffeq.com
   '';
 
   home.file."bin/mount-host".source = ./files/bin/mount-host;
