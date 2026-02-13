@@ -63,5 +63,10 @@
     };
   };
 
+  fileSystems."/home" = {
+    device = "/mnt/bulk/home/";
+    options = [ "bind" ];
+  };
+
   system.stateVersion = "25.11";
 }
