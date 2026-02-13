@@ -61,29 +61,12 @@ in
       extraBackends = [ pkgs.sane-airscan ];
     };
 
-    # Delegate X session configuration to home-manager.
-    services.xserver.enable = true;
-    services.displayManager.defaultSession = "xsession";
-    services.xserver.displayManager = {
-      # possibly required for greetd/tuigreet?
-      startx.enable = true;
-
-      session = [
-        {
-          manage = "desktop";
-          name = "xsession";
-          start = ''exec $HOME/.xsession'';
-        }
-      ];
-    };
-
     services.greetd = {
       enable = true;
-      # TODO: once on unstable
-      # useTextGreeter = true;
+      useTextGreeter = true;
       settings = {
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session --asterisks";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --asterisks --cmd start-hyprland";
           user = "greeter";
         };
       };
@@ -98,11 +81,12 @@ in
 
     programs.hyprland = {
       enable = true;
+      package = pkgs.unstable.hyprland;
 
       # Launch Hyprland with the UWSM (Universal Wayland Session Manager)
       # session manager. This has improved systemd support and is recommended
       # for most users.
-      # withUWSM = true;
+      withUWSM = true;
     };
 
     users.users.${cfgPersonal.user} = {
