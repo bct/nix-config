@@ -25,7 +25,7 @@
     schromp-netbird.url = "github:schromp/nixpkgs/fix-netbird";
     # https://github.com/NixOS/nixpkgs/pull/425872
     jvanbruegge-booklore.url = "github:jvanbruegge/nixpkgs/booklore";
-    "lubelogger-1.6.0".url = "github:bct/nixpkgs/lubelogger-1.6.0";
+    "lubelogger-1_6_0".url = "github:bct/nixpkgs/lubelogger-1.6.0";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-25.11";

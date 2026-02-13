@@ -48,7 +48,7 @@
 
   services.lubelogger = {
     enable = true;
-    package = inputs."lubelogger-1.6.0".legacyPackages.${pkgs.stdenv.hostPlatform.system}.lubelogger;
+    package = inputs."lubelogger-1_6_0".legacyPackages.${pkgs.stdenv.hostPlatform.system}.lubelogger;
     environmentFile = config.age.secrets.lubelogger-env.path;
     settings = {
       MailConfig__EmailServer = "mail.domus.diffeq.com";
