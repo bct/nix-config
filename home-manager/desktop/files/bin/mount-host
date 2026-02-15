@@ -26,4 +26,4 @@ TARGET_DIR="$HOME/mnt/$HOST_SHORT"
 HOST="${HOST_ALIAS[$HOST_SHORT]:-$HOST}"
 
 mkdir -p $TARGET_DIR
-sshfs $REMOTE_USER@$HOST:$REMOTE_DIR $TARGET_DIR -o reconnect
+sshfs $REMOTE_USER@$HOST:$REMOTE_DIR $TARGET_DIR -o reconnect,ServerAliveInterval=30
