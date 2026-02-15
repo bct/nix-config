@@ -34,6 +34,7 @@ in
     # sets LDAP_BIND_PASSWORD
     environmentFile = config.age.secrets.tinyauth-env.path;
   };
+  systemd.services.tinyauth.after = [ "lldap.service" ];
 
   services.caddy = {
     enable = true;
