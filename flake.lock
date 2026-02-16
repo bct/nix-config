@@ -489,22 +489,6 @@
         "type": "github"
       }
     },
-    "lubelogger-1_6_0": {
-      "locked": {
-        "lastModified": 1770828164,
-        "narHash": "sha256-VQ87TJ7Tg/KsJMPDXZ8Bzyj/4LEg5RyFeTh0vslm14M=",
-        "owner": "bct",
-        "repo": "nixpkgs",
-        "rev": "8661ed7ffa9c8aa9dc67667201a3905fb40ae44e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "bct",
-        "ref": "lubelogger-1.6.0",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "microvm": {
       "inputs": {
         "nixpkgs": "nixpkgs_3",
@@ -628,11 +612,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1770537093,
-        "narHash": "sha256-pF1quXG5wsgtyuPOHcLfYg/ft/QMr8NnX0i6tW2187s=",
+        "lastModified": 1771147098,
+        "narHash": "sha256-jpfPdBjKO232s5NueoNEvvVzpndiUzPLNYcH4/Ov0gY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "fef9403a3e4d31b0a23f0bacebbec52c248fbb51",
+        "rev": "e3cb16bccd9facebae3ba29c6a76a4cc1b73462a",
         "type": "github"
       },
       "original": {
@@ -775,7 +759,6 @@
         "grid-select": "grid-select",
         "home-manager": "home-manager",
         "jvanbruegge-booklore": "jvanbruegge-booklore",
-        "lubelogger-1_6_0": "lubelogger-1_6_0",
         "microvm": "microvm",
         "nix-minecraft": "nix-minecraft",
         "nixos-generators": "nixos-generators",
