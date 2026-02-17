@@ -77,8 +77,8 @@
           {
             router = {
               icon = "openwrt";
-              href = "http://router.domus.diffeq.com/";
-              siteMonitor = "http://router.domus.diffeq.com/";
+              href = "https://router.domus.diffeq.com/";
+              siteMonitor = "https://router.domus.diffeq.com/";
             };
           }
 
