@@ -1,7 +1,21 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  config,
+  ...
+}:
 let
-  port = 8123;
+  hassPort = 8123;
+  mqttPort = 1883;
+  zigbee2MqttPort = 8080;
   sslDirectory = "${config.security.acme.certs."spectator.domus.diffeq.com".directory}";
+  # zha-quirks-src = pkgs.fetchFromGitHub {
+  #   owner = "claudegel";
+  #   repo = "sinope-zha";
+  #   rev = "39b0dc6d42c98c197a3909b36043781ccaed64e2";
+  #   sha256 = "sha256-l6/FX4tQCzJw8on9IsFm6+J17HJcx4xR6vMWVamSCsI=";
+  # };
+  #
+  # zha-quirks = lib.sourceByRegex zha-quirks-src [ ".*\\.py$" ];
 in
 {
   age.secrets = {
@@ -18,7 +32,10 @@ in
     group = "hass";
   };
 
-  networking.firewall.allowedTCPPorts = [ port ];
+  networking.firewall.allowedTCPPorts = [
+    hassPort
+    zigbee2MqttPort
+  ];
 
   services.home-assistant = {
     enable = true;
@@ -31,14 +48,17 @@ in
       "backup"
 
       "octoprint"
-      "kodi"
-      "dlna_dmr"
       "openweathermap"
       "environment_canada"
       "esphome"
 
+      # Media
+      "dlna_dmr"
+      "kodi"
+      "mpd"
+
       # Zigbee
-      "zha"
+      "zha" # not used any more, but it complains at boot if it's not present
 
       # Printer
       "brother"
@@ -59,8 +79,8 @@ in
       homeassistant = {
         time_zone = "America/Edmonton";
         country = "CA";
-        external_url = "https://spectator.domus.diffeq.com:${toString port}";
-        internal_url = "https://spectator.domus.diffeq.com:${toString port}";
+        external_url = "https://spectator.domus.diffeq.com:${toString hassPort}";
+        internal_url = "https://spectator.domus.diffeq.com:${toString hassPort}";
       };
 
       http = {
@@ -107,23 +127,65 @@ in
           method = "POST";
         };
       };
+
+      # zha = {
+      #   database_path = "${config.services.home-assistant.configDir}/zigbee.db";
+      #   enable_quirks = true;
+      #   custom_quirks_path = toString zha-quirks;
+      # };
+
+      # logger = {
+      #   default = "warning";
+      #   logs = {
+      #     "homeassistant.components.mqtt" = "debug";
+      #   };
+      # };
     };
   };
 
   services.mosquitto = {
     enable = true;
+    #logType = [ "all" ];
 
     listeners = [
       {
+        port = mqttPort;
         users = {
           hass = {
+            acl = [ "readwrite #" ];
             password = "hass";
           };
           octopi = {
+            acl = [ "readwrite #" ];
             password = "octopi";
+          };
+          zigbee2mqtt = {
+            acl = [ "readwrite #" ];
+            password = "zigbee2mqtt";
           };
         };
       }
     ];
+  };
+
+  services.zigbee2mqtt = {
+    enable = true;
+    settings = {
+      mqtt = {
+        base_topic = "zigbee2mqtt";
+        server = "mqtt://localhost:${toString mqttPort}";
+        user = "zigbee2mqtt";
+        password = "zigbee2mqtt";
+      };
+      serial = {
+        port = "/dev/serial/by-id/usb-Silicon_Labs_Sonoff_Zigbee_3.0_USB_Dongle_Plus_0001-if00-port0";
+        adapter = "zstack";
+      };
+      frontend = {
+        enabled = true;
+        port = zigbee2MqttPort;
+      };
+      homeassistant.enabled = true;
+    };
   };
 }
