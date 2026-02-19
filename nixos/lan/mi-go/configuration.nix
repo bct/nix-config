@@ -65,7 +65,10 @@
 
   fileSystems."/home" = {
     device = "/mnt/bulk/home/";
-    options = [ "bind" ];
+    options = [
+      "bind"
+      "x-systemd-requires=/mnt/bulk/home"
+    ];
   };
 
   system.stateVersion = "25.11";
