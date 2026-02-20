@@ -134,12 +134,14 @@ in
       #   custom_quirks_path = toString zha-quirks;
       # };
 
-      # logger = {
-      #   default = "warning";
-      #   logs = {
-      #     "homeassistant.components.mqtt" = "debug";
-      #   };
-      # };
+      logger = {
+        default = "warning";
+        logs = {
+          # "homeassistant.components.mqtt" = "debug";
+          "homeassistant.components.kodi" = "debug";
+          "homeassistant.components.kodi.media_player" = "debug";
+        };
+      };
     };
   };
 
