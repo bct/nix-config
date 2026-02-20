@@ -1,9 +1,11 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }:
 let
+  zigbee2MqttFrontendEnabled = false;
   hassPort = 8123;
   mqttPort = 1883;
   zigbee2MqttPort = 8080;
@@ -34,8 +36,8 @@ in
 
   networking.firewall.allowedTCPPorts = [
     hassPort
-    zigbee2MqttPort
-  ];
+  ]
+  ++ lib.optional zigbee2MqttFrontendEnabled zigbee2MqttPort;
 
   services.home-assistant = {
     enable = true;
@@ -184,7 +186,7 @@ in
         adapter = "zstack";
       };
       frontend = {
-        enabled = true;
+        enabled = zigbee2MqttFrontendEnabled;
         port = zigbee2MqttPort;
       };
       homeassistant.enabled = true;
