@@ -144,6 +144,22 @@ in
       }
     ];
 
+    # https://libvirt.org/formatnetwork.html#using-an-existing-host-bridge
+    virtualisation.libvirt.connections."qemu:///system".networks = [
+      {
+        definition = nixvirt.lib.network.writeXML {
+          name = "default";
+          uuid = "06328f18-4c1e-4905-a02a-914dd6d13378";
+          forward.mode = "bridge";
+
+          # br0 is set up in microvm-host.nix
+          # TODO
+          bridge.name = "br0";
+        };
+        active = true;
+      }
+    ];
+
     virtualisation.libvirt.connections."qemu:///system".domains = lib.mapAttrsToList (
       name: guest:
       let
