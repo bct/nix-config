@@ -1,8 +1,16 @@
-{ inputs, lib, config, pkgs, ... }:
+{
+  inputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
-let cfgPersonal = config.personal;
-in {
-  imports = [];
+let
+  cfgPersonal = config.personal;
+in
+{
+  imports = [ ];
 
   options = {
     personal = {
@@ -18,7 +26,7 @@ in {
     };
   };
 
- config = {
+  config = {
     home = {
       username = cfgPersonal.user;
       homeDirectory = lib.mkDefault "/home/${cfgPersonal.user}";

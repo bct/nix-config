@@ -37,6 +37,10 @@
     historyControl = [ "ignoredups" ];
   };
 
+  programs.zsh = {
+    enable = true;
+  };
+
   programs.z-lua = {
     enable = true;
     enableAliases = true;
@@ -45,6 +49,7 @@
   programs.direnv = {
     enable = true;
     enableBashIntegration = true;
+    enableZshIntegration = true;
     nix-direnv.enable = true;
     config = {
       global = {
@@ -65,6 +70,8 @@
     # https://github.com/nix-community/home-manager/issues/5958
     # also see below.
     enableBashIntegration = false;
+    enableZshIntegration = true;
+
     # https://docs.atuin.sh/configuration/config/
     # Writes ~/.config/atuin/config.toml
     settings = {
@@ -93,6 +100,7 @@
   programs.oh-my-posh = {
     enable = true;
     enableBashIntegration = true;
+    enableZshIntegration = true;
     settings = builtins.fromJSON (
       builtins.unsafeDiscardStringContext (builtins.readFile ./files/oh-my-posh.json)
     );
