@@ -2,6 +2,7 @@
 {
   imports = [
     ../desktop
+    ./code.nix
     ./lutris.nix
   ];
 
