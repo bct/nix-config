@@ -137,15 +137,6 @@
           };
         };
 
-        jellyfin-var = {
-          name = "jellyfin-var";
-          size = "128G";
-          content = {
-            type = "filesystem";
-            format = "ext4";
-          };
-        };
-
         books-var = {
           name = "books-var";
           size = "5G";
@@ -178,7 +169,6 @@
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="books-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="bookmarks-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="immich-var" OWNER="microvm"
-    ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="jellyfin-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="prometheus-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="shelloftheold-root" OWNER="microvm"
   '';

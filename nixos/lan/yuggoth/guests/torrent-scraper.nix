@@ -27,6 +27,7 @@
     enable = true;
     domains = [
       "radarr"
+      "seerr"
       "sonarr"
     ];
   };
@@ -73,6 +74,11 @@
     # to support external auth, manually add this to the config XML:
     # <AuthenticationMethod>External</AuthenticationMethod>
     # <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
+  };
+
+  services.jellyseerr = {
+    enable = true;
+    openFirewall = false;
   };
 
   fileSystems."/mnt/video" = {
@@ -172,6 +178,12 @@
             port = config.services.sonarr.settings.server.port;
             unauthed = [ "~ (/sonarr)?/api" ];
           };
+        };
+
+        "seerr.domus.diffeq.com" = {
+          useACMEHost = "seerr.domus.diffeq.com";
+          forceSSL = true;
+          locations."/".proxyPass = "http://localhost:${toString config.services.jellyseerr.port}";
         };
       };
     };

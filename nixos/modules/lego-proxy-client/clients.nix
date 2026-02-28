@@ -23,7 +23,6 @@
   };
 
   jellyfin.domain = "jellyfin.domus.diffeq.com";
-  jellyseerr.domain = "jellyseerr.domus.diffeq.com";
 
   ldap.domain = "ldap.domus.diffeq.com";
 

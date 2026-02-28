@@ -45,7 +45,6 @@
           { targets = [ "git.domus.diffeq.com:9100" ]; }
           { targets = [ "grafana.domus.diffeq.com:9100" ]; }
           { targets = [ "immich.domus.diffeq.com:9100" ]; }
-          { targets = [ "jellyfin.domus.diffeq.com:9100" ]; }
           { targets = [ "lego-proxy.domus.diffeq.com:9100" ]; }
           { targets = [ "lubelogger.domus.diffeq.com:9100" ]; }
           { targets = [ "mail.domus.diffeq.com:9100" ]; }
