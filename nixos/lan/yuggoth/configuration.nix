@@ -2,7 +2,6 @@
   self,
   inputs,
   pkgs,
-  config,
   ...
 }:
 {
@@ -19,7 +18,6 @@
 
     ./microvm-host.nix
     ./nixvirt.nix
-    ./rffmpeg-host.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
