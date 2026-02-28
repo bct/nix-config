@@ -1,6 +1,29 @@
-{ self, config, ... }:
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
 let
   jellyfinPort = 8096;
+  nixos-rffmpeg = pkgs.symlinkJoin {
+    name = "nixos-rffmpeg";
+    paths = [
+      (pkgs.writeShellScriptBin "ffmpeg" ''
+        quoted=$(printf '%q ' "$@")
+        quoted=''${quoted% }
+        ${pkgs.openssh}/bin/ssh -i ${config.age.secrets.ssh-rffmpeg-yuggoth.path} rffmpeg@yuggoth.domus.diffeq.com "ffmpeg $quoted"
+      '')
+      (pkgs.writeShellScriptBin "ffprobe" ''
+        quoted=$(printf '%q ' "$@")
+        quoted=''${quoted% }
+        ${pkgs.openssh}/bin/ssh -i ${config.age.secrets.ssh-rffmpeg-yuggoth.path} rffmpeg@yuggoth.domus.diffeq.com "ffprobe $quoted"
+      '')
+    ];
+  };
+  jellyfin = pkgs.jellyfin.override {
+    jellyfin-ffmpeg = nixos-rffmpeg;
+  };
 in
 {
   imports = [
@@ -24,6 +47,15 @@ in
         image = "/dev/mapper/ssdpool-jellyfin--var";
         mountPoint = "/var";
         autoCreate = false;
+      }
+    ];
+
+    shares = [
+      {
+        tag = "jellyfin-cache";
+        source = "/var/cache/jellyfin";
+        mountPoint = "/var/cache/jellyfin";
+        proto = "virtiofs";
       }
     ];
 
@@ -67,9 +99,16 @@ in
   };
 
   age.secrets = {
+    # TODO: separate users?
     fs-mi-go-torrent-scraper = {
       # username: torrent-scraper
       rekeyFile = config.diffeq.secretsPath + /fs/mi-go-torrent-scraper.age;
+    };
+
+    ssh-rffmpeg-yuggoth = {
+      rekeyFile = config.diffeq.secretsPath + /ssh/rffmpeg-yuggoth.age;
+      generator.script = "ssh-ed25519-pubkey";
+      owner = config.services.jellyfin.user;
     };
   };
 
@@ -94,6 +133,7 @@ in
   services.jellyfin = {
     enable = true;
     openFirewall = false;
+    package = jellyfin;
   };
 
   services.jellyseerr = {
@@ -135,5 +175,10 @@ in
     name = "netbird";
     interface = "wt0";
     hardened = true;
+  };
+
+  programs.ssh.knownHosts = {
+    "yuggoth.domus.diffeq.com".publicKey =
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVYcCxqBIE6ppS6n7VQb3Qs4w1gEYtNhTdKu+21XO82";
   };
 }
