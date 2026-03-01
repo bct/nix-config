@@ -102,12 +102,12 @@ in
 
   age.secrets = {
     # mail account passwords
-    bct-hashed-password.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-bct-hashed-password.age;
-    paperless-hashed-password.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-paperless-hashed-password.age;
-    immich-hashed-password.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-immich-hashed-password.age;
-    lubelogger-hashed-password.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-lubelogger-hashed-password.age;
+    bct-hashed-password.rekeyFile = ./secrets/mail-bct-hashed-password.age;
+    paperless-hashed-password.rekeyFile = ./secrets/mail-paperless-hashed-password.age;
+    immich-hashed-password.rekeyFile = ./secrets/mail-immich-hashed-password.age;
+    lubelogger-hashed-password.rekeyFile = ./secrets/mail-lubelogger-hashed-password.age;
 
     # relay host password
-    sasl-passwd.rekeyFile = ../../lan/yuggoth/guests/secrets/mail-sasl-passwd.age;
+    sasl-passwd.rekeyFile = ./secrets/mail-sasl-passwd.age;
   };
 }
