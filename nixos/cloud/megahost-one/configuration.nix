@@ -19,7 +19,7 @@
     ./container-networking.nix
     ./container-secrets.nix
     ./minio-instance.nix
-    ./netbird.nix
+    #./netbird.nix
     ./postgres.nix
     ./goatcounter.nix
     ./minecraft.nix
