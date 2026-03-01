@@ -166,7 +166,6 @@
     ENV{DM_VG_NAME}=="fastpool" ENV{DM_LV_NAME}=="db-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="fastpool" ENV{DM_LV_NAME}=="mail-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="abrado-nix-store-overlay" OWNER="microvm"
-    ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="books-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="bookmarks-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="immich-var" OWNER="microvm"
     ENV{DM_VG_NAME}=="ssdpool"  ENV{DM_LV_NAME}=="prometheus-var" OWNER="microvm"
