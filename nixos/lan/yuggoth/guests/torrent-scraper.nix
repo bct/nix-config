@@ -45,11 +45,10 @@
       uid = 992;
     };
     bct.extraGroups = [ "video-writers" ];
-    nginx.extraGroups = [ "acme" ];
+    caddy.extraGroups = [ "acme" ];
   };
 
   networking.firewall.allowedTCPPorts = [
-    # nginx
     80
     443
   ];
@@ -109,82 +108,45 @@
     rtorrent = { };
   };
 
-  services.nginx =
-    let
-      reverseProxyWithTinyAuth =
-        {
-          port,
-          unauthed ? [ ],
-        }:
-        {
-          # https://tinyauth.app/docs/guides/nginx-proxy-manager/#advanced-configuration
-          "/" = {
-            proxyPass = "http://localhost:${toString port}";
-            proxyWebsockets = true;
-            extraConfig = ''
-              auth_request /tinyauth;
-              error_page 401 = @tinyauth_login;
-            '';
-          };
-          "/tinyauth" = {
-            proxyPass = "https://${config.diffeq.hostNames.auth}/api/auth/nginx";
-            extraConfig = ''
-              internal;
-
-              # ignore the request body, tinyauth isn't looking at it anyhow.
-              proxy_pass_request_body off;
-              proxy_set_header Content-Length "";
-
-              proxy_ssl_server_name on;
-              proxy_set_header X-Forwarded-Proto $scheme;
-              proxy_set_header X-Forwarded-Host $http_host;
-              proxy_set_header X-Forwarded-Uri $request_uri;
-            '';
-          };
-
-          "@tinyauth_login" = {
-            return = "302 https://${config.diffeq.hostNames.auth}/login?redirect_uri=$scheme://$http_host$request_uri";
-          };
+  services.caddy = {
+    enable = true;
+    virtualHosts."radarr.domus.diffeq.com" = {
+      useACMEHost = "radarr.domus.diffeq.com";
+      # https://github.com/openappssh/openapps/blob/main/projects/authentication/tinyauth.mdx#caddy-configuration
+      extraConfig = ''
+        # the API is authed with an API key that is obtained from the frontend.
+        # we only need to control access to the frontend.
+        @not-api {
+          not path_regexp (/radarr)?/api
         }
-        // builtins.listToAttrs (
-          map (l: {
-            name = l;
-            value = {
-              proxyPass = "http://localhost:${toString port}";
-            };
-          }) unauthed
-        );
-    in
-    {
-      enable = true;
-      group = "rtorrent";
-
-      virtualHosts = {
-        "radarr.domus.diffeq.com" = {
-          useACMEHost = "radarr.domus.diffeq.com";
-          forceSSL = true;
-
-          locations = reverseProxyWithTinyAuth {
-            port = config.services.radarr.settings.server.port;
-            unauthed = [ "~ (/radarr)?/api" ];
-          };
-        };
-
-        "sonarr.domus.diffeq.com" = {
-          useACMEHost = "sonarr.domus.diffeq.com";
-          forceSSL = true;
-
-          locations = reverseProxyWithTinyAuth {
-            port = config.services.sonarr.settings.server.port;
-            unauthed = [ "~ (/sonarr)?/api" ];
-          };
-        };
-
-        "seerr.domus.diffeq.com" = {
-          useACMEHost = "seerr.domus.diffeq.com";
-          forceSSL = true;
-          locations."/".proxyPass = "http://localhost:${toString config.services.jellyseerr.port}";
-        };
-      };
+        forward_auth @not-api https://auth.domus.diffeq.com {
+            uri /api/auth/caddy
+            copy_headers Remote-User Remote-Email Remote-Name
+        }
+        reverse_proxy localhost:${toString config.services.radarr.settings.server.port}
+      '';
     };
+
+    virtualHosts."sonarr.domus.diffeq.com" = {
+      useACMEHost = "sonarr.domus.diffeq.com";
+      # https://github.com/openappssh/openapps/blob/main/projects/authentication/tinyauth.mdx#caddy-configuration
+      extraConfig = ''
+        # the API is authed with an API key that is obtained from the frontend.
+        # we only need to control access to the frontend.
+        @not-api {
+          not path_regexp (/sonarr)?/api
+        }
+        forward_auth @not-api https://auth.domus.diffeq.com {
+            uri /api/auth/caddy
+            copy_headers Remote-User Remote-Email Remote-Name
+        }
+        reverse_proxy localhost:${toString config.services.sonarr.settings.server.port}
+      '';
+    };
+
+    virtualHosts."seerr.domus.diffeq.com" = {
+      useACMEHost = "seerr.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:${toString config.services.jellyseerr.port}";
+    };
+  };
 }
