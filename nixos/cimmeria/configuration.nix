@@ -63,6 +63,7 @@
     enable = true;
     user = "bct";
     dataDir = "/home/bct";
+    openDefaultPorts = true;
   };
 
   hardware.graphics = {
