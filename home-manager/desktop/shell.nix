@@ -11,13 +11,21 @@
     "$HOME/bin"
   ];
 
-  home.sessionVariables = {
-    EDITOR = "vim";
-    LANG = "en_CA.utf8";
+  home.sessionVariables =
+    let
+      XDG_DATA_HOME = config.xdg.dataHome;
+    in
+    {
+      EDITOR = "vim";
+      LANG = "en_CA.utf8";
 
-    # we can't run Pythons downloaded by uv, don't even attempt it.
-    UV_PYTHON_DOWNLOADS = "never";
-  };
+      # we can't run Pythons downloaded by uv, don't even attempt it.
+      UV_PYTHON_DOWNLOADS = "never";
+
+      GOPATH = "${XDG_DATA_HOME}/go";
+      CARGO_HOME = "${XDG_DATA_HOME}/cargo";
+      RUSTUP_HOME = "${XDG_DATA_HOME}/rustup";
+    };
 
   home.shellAliases = {
     # switch to qwerty
