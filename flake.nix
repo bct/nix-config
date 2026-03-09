@@ -20,7 +20,6 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # bug fixes & new packages
-    shaunren-tinyauth.url = "github:shaunren/nixpkgs/tinyauth";
     # https://github.com/NixOS/nixpkgs/pull/354032
     schromp-netbird.url = "github:schromp/nixpkgs/fix-netbird";
     # https://github.com/NixOS/nixpkgs/pull/425872

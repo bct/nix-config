@@ -9,7 +9,7 @@ let
 in
 {
   imports = [
-    "${inputs.shaunren-tinyauth}/nixos/modules/services/security/tinyauth.nix"
+    "${inputs.nixpkgs-unstable}/nixos/modules/services/security/tinyauth.nix"
   ];
 
   age.secrets = {
@@ -20,18 +20,17 @@ in
 
   services.tinyauth = {
     enable = true;
-    package = inputs.shaunren-tinyauth.legacyPackages.${pkgs.stdenv.hostPlatform.system}.tinyauth;
+    package = pkgs.unstable.tinyauth;
     settings = {
-      APP_URL = "https://${config.diffeq.hostNames.auth}";
+      APPURL = "https://${config.diffeq.hostNames.auth}";
       PORT = port;
-      DISABLE_ANALYTICS = true;
       LDAP_ADDRESS = "ldap://localhost:389/";
-      LDAP_BASE_DN = "ou=people,dc=diffeq,dc=com";
+      LDAP_BASEDN = "ou=people,dc=diffeq,dc=com";
 
-      LDAP_BIND_DN = "uid=ldap,ou=people,dc=diffeq,dc=com";
+      LDAP_BINDDN = "uid=ldap,ou=people,dc=diffeq,dc=com";
     };
 
-    # sets LDAP_BIND_PASSWORD
+    # sets TINYAUTH_LDAP_BINDPASSWORD
     environmentFile = config.age.secrets.tinyauth-env.path;
   };
   systemd.services.tinyauth.after = [ "lldap.service" ];
