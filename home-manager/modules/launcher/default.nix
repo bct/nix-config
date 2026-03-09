@@ -66,6 +66,13 @@ in
       terminal = false;
     };
 
+    jellyfin = {
+      name = "jellyfin";
+      genericName = "Jellyfin";
+      exec = "chromium --app=https://jellyfin.domus.diffeq.com/";
+      terminal = false;
+    };
+
     rofi-calc = {
       name = "rofi calculator";
       genericName = "Calculator";
