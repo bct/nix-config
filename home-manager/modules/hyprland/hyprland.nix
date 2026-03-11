@@ -164,6 +164,13 @@ in
           no_donation_nag = true
         }
 
+        xwayland {
+          force_zero_scaling = true
+        }
+
+        env = FYNE_SCALE,1.33
+        env = STEAM_FORCE_DESKTOPUI_SCALING,1.33
+
         #############
         ### INPUT ###
         #############
