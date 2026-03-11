@@ -15,6 +15,7 @@
     "${self}/nixos/hardware/vultr"
 
     ./disk-config.nix
+    ./cat-rater.nix
     ./coredns-wgsd.nix
     ./container-networking.nix
     ./container-secrets.nix
