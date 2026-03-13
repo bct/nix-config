@@ -24,6 +24,11 @@
           }
 
           {
+            source = "/mnt/bulk/beets";
+            mountPoint = "/mnt/beets";
+          }
+
+          {
             source = "/mnt/bulk/media/downloads/pth";
             mountPoint = "/bulk/downloads/pth";
           }

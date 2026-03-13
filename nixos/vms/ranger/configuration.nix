@@ -12,6 +12,7 @@
     "${self}/nixos/modules/lego-proxy-client"
 
     ./accounts.nix
+    ./beets.nix
     ./flood.nix
     ./rtorrent.nix
   ];
@@ -38,6 +39,11 @@
   # TODO: centralize this
   fileSystems."/mnt/video" = {
     device = "/mnt/video";
+    fsType = "virtiofs";
+  };
+
+  fileSystems."/mnt/beets" = {
+    device = "/mnt/beets";
     fsType = "virtiofs";
   };
 
