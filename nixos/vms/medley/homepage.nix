@@ -47,10 +47,18 @@
       {
         media = [
           {
-            books = {
+            booklore = {
               icon = "booklore";
               href = "https://booklore.domus.diffeq.com/";
-              siteMonitor = "https://books.domus.diffeq.com/";
+              siteMonitor = "https://booklore.domus.diffeq.com/";
+            };
+          }
+
+          {
+            gonic = {
+              icon = "gonic";
+              href = "https://media.domus.diffeq.com:4747/";
+              siteMonitor = "https://media.domus.diffeq.com:4747/";
             };
           }
 
