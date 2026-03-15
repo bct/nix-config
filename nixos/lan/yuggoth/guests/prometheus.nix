@@ -50,6 +50,7 @@
           { targets = [ "mail.domus.diffeq.com:9100" ]; }
           { targets = [ "media.domus.diffeq.com:9100" ]; }
           { targets = [ "medley.domus.diffeq.com:9100" ]; }
+          { targets = [ "minecraft.domus.diffeq.com:9100" ]; }
           { targets = [ "paperless.domus.diffeq.com:9100" ]; }
           { targets = [ "prometheus.domus.diffeq.com:9100" ]; }
           { targets = [ "ranger.domus.diffeq.com:9100" ]; }
