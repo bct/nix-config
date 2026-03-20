@@ -50,7 +50,7 @@ in
 {
   microvm = {
     vcpu = 1;
-    mem = 3072;
+    mem = 4608;
 
     volumes = [
       {
