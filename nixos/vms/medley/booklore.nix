@@ -54,6 +54,15 @@
           }
         }
 
+        handle /komga/* {
+          reverse_proxy localhost:${toString config.services.booklore.api.port} {
+            header_up X-Forwarded-Port 443
+
+            # https://booklore-app.github.io/booklore-docs/docs/integration/kobo#%EF%B8%8F-nginx-proxy-configuration
+            response_buffers 128k
+          }
+        }
+
         handle /ws {
           reverse_proxy localhost:${toString config.services.booklore.api.port}
         }
