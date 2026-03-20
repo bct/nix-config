@@ -213,9 +213,9 @@ in
 
         # Move focus with mainMod + arrow keys
         bind = ALT, h, movefocus, l
-        bind = ALT, j, movefocus, d
-        bind = ALT, k, movefocus, u
-        bind = ALT, l, movefocus, r
+        bind = ALT, t, movefocus, d
+        bind = ALT, n, movefocus, u
+        bind = ALT, s, movefocus, r
 
         # switch monitor focus
         bind = ALT, o, focusmonitor, 0
@@ -223,18 +223,18 @@ in
 
         # resize the active window
         bind = SUPER CTRL, h, resizeactive, -36 0
-        bind = SUPER CTRL, s, resizeactive, 36 0
-        bind = SUPER CTRL, n, resizeactive, 0 -24
         bind = SUPER CTRL, t, resizeactive, 0 24
+        bind = SUPER CTRL, n, resizeactive, 0 -24
+        bind = SUPER CTRL, s, resizeactive, 36 0
 
         # Return to previous workspace
         bind = ALT, r, workspace, previous
 
         # Switch workspace
-        bind = $mainMod, T, exec, ${gridselect-workspace}/bin/gridselect-workspace focusworkspaceoncurrentmonitor
+        bind = $mainMod, w, exec, ${gridselect-workspace}/bin/gridselect-workspace focusworkspaceoncurrentmonitor
 
         # Send window to workspace
-        bind = $mainMod SHIFT, T, exec, ${gridselect-workspace}/bin/gridselect-workspace movetoworkspace
+        bind = $mainMod SHIFT, w, exec, ${gridselect-workspace}/bin/gridselect-workspace movetoworkspace
 
         # Special workspaces
         bind = $mainMod, M, togglespecialworkspace, music
@@ -244,9 +244,9 @@ in
         bind = $mainMod CTRL, h, changegroupactive, b
         bind = $mainMod CTRL, l, changegroupactive, f
         bind = $mainMod SHIFT, h, movewindoworgroup, l
-        bind = $mainMod SHIFT, l, movewindoworgroup, r
-        bind = $mainMod SHIFT, k, movewindoworgroup, u
-        bind = $mainMod SHIFT, j, movewindoworgroup, d
+        bind = $mainMod SHIFT, t, movewindoworgroup, d
+        bind = $mainMod SHIFT, n, movewindoworgroup, u
+        bind = $mainMod SHIFT, s, movewindoworgroup, r
 
         # Move/resize windows with mainMod + LMB/RMB and dragging
         bindm = $mainMod, mouse:272, movewindow
