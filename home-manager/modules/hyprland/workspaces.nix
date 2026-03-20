@@ -4,6 +4,7 @@
     { name = "proj"; icon = ""; }
     { name = "chat"; icon = "󰭹"; }
     { name = "mail"; icon = ""; }
+    { name = "docs"; icon = "󰦨"; }
     { name = "notes"; icon = "󰷈"; }
     { name = "kino"; icon = ""; }
     { name = "3dp"; icon = ""; }
