@@ -73,6 +73,9 @@
     acme-dns-by-proxy.url = "github:bct/acme-dns-by-proxy";
     acme-dns-by-proxy.inputs.nixpkgs.follows = "nixpkgs";
 
+    # stump-nix
+    stump-nix.url = "github:bct/stump-nix";
+
     # minecraft
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
 

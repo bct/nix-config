@@ -154,6 +154,13 @@
         tapInterfaceMac = "02:00:00:00:00:05";
         machineId = "0c309b2d738728317e0dbc9725a64dc1";
       };
+
+      # TODO: temporary, for testing
+      stump = {
+        hostName = "stump";
+        tapInterfaceMac = "02:00:00:00:00:16";
+        machineId = "feac6be8d121e34143240f351a5a85ac";
+      };
     };
   };
 

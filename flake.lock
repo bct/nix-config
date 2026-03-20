@@ -106,34 +106,6 @@
         "type": "gitlab"
       }
     },
-    "cargo2nix": {
-      "inputs": {
-        "flake-compat": "flake-compat_5",
-        "flake-utils": "flake-utils_2",
-        "nixpkgs": [
-          "stump-nix",
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "stump-nix",
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1750364353,
-        "narHash": "sha256-l06DIwnB4JHwP1isUUXk85F+AHQkUSUyAWnAmRxXICg=",
-        "owner": "cargo2nix",
-        "repo": "cargo2nix",
-        "rev": "a709c74619e1a2b68ed12bb398e12fbe29d69657",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cargo2nix",
-        "ref": "release-0.12",
-        "repo": "cargo2nix",
-        "type": "github"
-      }
-    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat_2",
@@ -298,22 +270,6 @@
         "type": "github"
       }
     },
-    "flake-compat_5": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1696426674,
-        "narHash": "sha256-kvjfFW7WAETZlt09AgDn1MrtKzP7t90Vf7vypd3OL1U=",
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "rev": "0f9255e01c2351cc7d116c072cb317785dd33b33",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "type": "github"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -376,11 +332,11 @@
         "systems": "systems_6"
       },
       "locked": {
-        "lastModified": 1694529238,
-        "narHash": "sha256-zsNZZGTGnMOf9YpHKJqMSsa0dXbfmxeoJ7xHlrt+xmY=",
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "ff7b65b44d01cf9ba6a71320833626af21126384",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
         "type": "github"
       },
       "original": {
@@ -831,27 +787,6 @@
         "stump-nix": "stump-nix"
       }
     },
-    "rust-overlay": {
-      "inputs": {
-        "nixpkgs": [
-          "stump-nix",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1773371126,
-        "narHash": "sha256-SGnZQO8hnynR90Lo/1MVrTScsOPx9i26XjqSqoFOZ4E=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "475826b105eb52f39bd3281f60c052299e64d085",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
     "schromp-netbird": {
       "locked": {
         "lastModified": 1768856046,
@@ -908,44 +843,20 @@
     },
     "stump-nix": {
       "inputs": {
-        "cargo2nix": "cargo2nix",
-        "flake-utils": [
-          "stump-nix",
-          "cargo2nix",
-          "flake-utils"
-        ],
-        "nixpkgs": "nixpkgs_7",
-        "rust-overlay": "rust-overlay",
-        "stump-src": "stump-src"
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1773586379,
-        "narHash": "sha256-hI42uXGJph/H3viWB0lj21Wu/EHZdwtUXRva8XwMSMQ=",
+        "lastModified": 1774028727,
+        "narHash": "sha256-XnPoPc4hqtQlSyyUghSbCWu4V4Zh4zgDmkwbmMkALhM=",
         "owner": "bct",
         "repo": "stump-nix",
-        "rev": "5f2d2a3b12b9f6790b345458dec412ebe2e6bd5b",
+        "rev": "3220f5ff9d58691f47d34e04674cecebf40387d1",
         "type": "github"
       },
       "original": {
         "owner": "bct",
         "repo": "stump-nix",
-        "type": "github"
-      }
-    },
-    "stump-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1773445761,
-        "narHash": "sha256-3wkwiGuoCtfxRWTJyIAL+KASOMzpAcKrvPI3Nb2IeS0=",
-        "owner": "stumpapp",
-        "repo": "stump",
-        "rev": "67446fdcedb1d918f9fcad73ef5a23a30218784b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "stumpapp",
-        "ref": "experimental",
-        "repo": "stump",
         "type": "github"
       }
     },
