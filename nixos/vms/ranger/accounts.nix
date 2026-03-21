@@ -20,4 +20,14 @@
     caddy.extraGroups = [ "acme" ];
     nginx.extraGroups = [ "acme" ];
   };
+
+  # allow bct to have more open files (for rtorrent)
+  security.pam.loginLimits = [
+    {
+      domain = "bct";
+      type = "soft";
+      item = "nofile";
+      value = "8192";
+    }
+  ];
 }
