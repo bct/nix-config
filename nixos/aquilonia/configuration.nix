@@ -100,7 +100,7 @@
   };
 
   services.netbird = {
-    enable = true;
+    enable = false;
   };
 
   # This value determines the NixOS release from which the default
