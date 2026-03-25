@@ -37,6 +37,11 @@
             source = "/mnt/bulk/software/downloads/ggn";
             mountPoint = "/bulk/downloads/ggn";
           }
+
+          {
+            source = "/mnt/bulk/media/downloads/mam";
+            mountPoint = "/bulk/downloads/mam";
+          }
         ];
       };
     };

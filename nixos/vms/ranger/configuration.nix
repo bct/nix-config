@@ -57,5 +57,10 @@
     fsType = "virtiofs";
   };
 
+  fileSystems."/bulk/downloads/mam" = {
+    device = "/bulk/downloads/mam";
+    fsType = "virtiofs";
+  };
+
   system.stateVersion = "25.11";
 }
