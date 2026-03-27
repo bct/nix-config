@@ -27,6 +27,7 @@
     ruby
     pwgen
     tmux
+    sqlite-interactive
 
     # gui utilities
     bzmenu
