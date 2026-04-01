@@ -18,6 +18,7 @@
 
     ./microvm-host.nix
     ./jellyfin.nix
+    ./netbird.nix
     ./nixvirt.nix
   ];
 
