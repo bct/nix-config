@@ -1,4 +1,5 @@
-{ pkgs, config, ... }: {
+{ pkgs, config, ... }:
+{
   # make the "wg" command available for debugging.
   environment.systemPackages = with pkgs; [
     wireguard-tools
@@ -21,14 +22,11 @@
         # router
         {
           PublicKey = "pZ8XBJYx9gWz7emqNDkmBF+BMQ9IW9ESHCfZEj75VHw=";
-          AllowedIPs = [ "192.168.8.1/32" "192.168.0.0/16" ];
+          # we don't actually route anything to this network.
+          # LAN access goes via conductum.
+          AllowedIPs = [ "192.168.8.1/32" ];
         }
       ];
-    };
-
-    networks."20-wg0" = {
-      matchConfig.Name = "wg0";
-      address = ["192.168.8.254/24"];
     };
   };
 
