@@ -171,7 +171,7 @@
       WorkingDirectory = "/srv/scraper-data/cgwm";
 
       # using path: syntax so that the service doesn't need access to git.
-      ExecStart = "${config.nix.package}/bin/nix run path:/srv/scrapers/cgwm -- --scrape --credentials-path ${config.age.secrets.config-cgwm.path}";
+      ExecStart = "/nix/var/nix/profiles/per-user/root/cgwm/bin/cgwm-sync --scrape --credentials-path ${config.age.secrets.config-cgwm.path}";
       Restart = "no";
     };
   };
