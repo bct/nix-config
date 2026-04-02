@@ -151,7 +151,7 @@
       User = "abrado";
 
       # using path: syntax so that the service doesn't need access to git.
-      ExecStart = "${config.nix.package}/bin/nix run path:/srv/scrapers/fortis -- --config ${config.age.secrets.config-fortis.path}";
+      ExecStart = "/nix/var/nix/profiles/per-user/root/fortis/bin/fortis-sync --config ${config.age.secrets.config-fortis.path}";
     };
   };
 
