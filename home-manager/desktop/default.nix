@@ -37,7 +37,25 @@
     imv
 
     # media
-    (unstable.supersonic.override { waylandSupport = true; })
+    # https://github.com/dweymouth/supersonic/pull/898
+    ((unstable.supersonic.override { waylandSupport = true; }).overrideAttrs (old: {
+      version = "pr-898";
+      src = fetchFromGitHub {
+        owner = "ocelotsloth";
+        repo = "supersonic";
+        rev = "a2d3850b899a565861c46178cf3b24a5d2a4c965";
+        hash = "sha256-umOGwd9HlviYMlE9i5v0tc9wnluKJnJWkeYatj86OXA=";
+      };
+
+      vendorHash = "sha256-Qg5OWg+iFcGuD8E3/7YwmmciiRGdUFNSHLrEAaqRmnQ=";
+
+      # work around https://github.com/dweymouth/supersonic/issues/316
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.makeWrapper ];
+      postInstall = old.postInstall + ''
+        wrapProgram $out/bin/supersonic-wayland \
+          --prefix PATH : ${pkgs.libnotify}/bin
+      '';
+    }))
     # wayland is not working yet:
     # https://github.com/dweymouth/supersonic/issues/560
     (unstable.supersonic.overrideAttrs (old: {

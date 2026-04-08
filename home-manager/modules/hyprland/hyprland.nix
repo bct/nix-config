@@ -168,7 +168,6 @@ in
           force_zero_scaling = true
         }
 
-        env = FYNE_SCALE,1.33
         env = STEAM_FORCE_DESKTOPUI_SCALING,1.33
 
         #############
@@ -276,7 +275,7 @@ in
         # See https://wiki.hypr.land/Configuring/Workspace-Rules/ for workspace rules
 
         ${workspaceRules}
-        workspace = special:music, on-created-empty:supersonic, gapsout:50
+        workspace = special:music, on-created-empty:supersonic-wayland, gapsout:50
         workspace = name:notes, on-created-empty:obsidian
         workspace = name:web, gapsout:10 20 10 20
 
