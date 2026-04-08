@@ -25,6 +25,7 @@
         "/home/*/.cache"
         "/home/*/.local/share/Steam"
         "/home/bct/videos"
+        "/home/bct/mnt"
       ];
 
       # retention
