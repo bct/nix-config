@@ -28,6 +28,11 @@
         }
       ];
     };
+
+    networks."20-wg0" = {
+      matchConfig.Name = "wg0";
+      address = [ "192.168.8.1/32" ];
+    };
   };
 
   age.secrets = {
