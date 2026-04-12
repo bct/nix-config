@@ -121,7 +121,7 @@
         }
         forward_auth @not-api https://auth.domus.diffeq.com {
             uri /api/auth/caddy
-            copy_headers Remote-User Remote-Email Remote-Name
+            copy_headers Remote-User Remote-Email Remote-Name Remote-Groups
         }
         reverse_proxy localhost:${toString config.services.radarr.settings.server.port}
       '';
@@ -138,7 +138,7 @@
         }
         forward_auth @not-api https://auth.domus.diffeq.com {
             uri /api/auth/caddy
-            copy_headers Remote-User Remote-Email Remote-Name
+            copy_headers Remote-User Remote-Email Remote-Name Remote-Groups
         }
         reverse_proxy localhost:${toString config.services.sonarr.settings.server.port}
       '';

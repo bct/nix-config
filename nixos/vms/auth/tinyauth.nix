@@ -28,6 +28,8 @@ in
       LDAP_BASEDN = "ou=people,dc=diffeq,dc=com";
 
       LDAP_BINDDN = "uid=ldap,ou=people,dc=diffeq,dc=com";
+
+      #LOG_LEVEL = "debug";
     };
 
     # sets TINYAUTH_LDAP_BINDPASSWORD
@@ -38,11 +40,17 @@ in
   services.caddy = {
     enable = true;
     virtualHosts.${config.diffeq.hostNames.auth} = {
-      # any hostnames that aren't matched elsewhere will go to this vhost.
-      # this allows forward auth from other Caddys to work without annoying header manipulation.
-      serverAliases = [ ":443" ];
       useACMEHost = config.diffeq.hostNames.auth;
-      extraConfig = "reverse_proxy localhost:${toString port}";
+      extraConfig = ''
+        reverse_proxy localhost:${toString port} {
+          # ensure that the X-Forwarded-Host header is passed through.
+          # without this tinyauth won't redirect back to the original app.
+          #
+          # we could have the app talk directly to tinyauth rather than going
+          # through caddy, but then we wouldn't have HTTPS.
+          trusted_proxies private_ranges
+        }
+      '';
     };
   };
 }
