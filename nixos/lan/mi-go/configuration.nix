@@ -67,7 +67,7 @@
     device = "/mnt/bulk/home/";
     options = [
       "bind"
-      "x-systemd-requires=/mnt/bulk/home"
+      "x-systemd.requires=/mnt/bulk/home"
     ];
   };
 
