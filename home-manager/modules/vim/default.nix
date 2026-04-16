@@ -33,6 +33,7 @@
       pkgs.nodePackages.vscode-langservers-extracted
       pkgs.typescript-language-server
       pkgs.rust-analyzer
+      pkgs.clang-tools
     ];
 
     plugins =

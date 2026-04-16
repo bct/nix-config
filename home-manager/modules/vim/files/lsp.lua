@@ -40,6 +40,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end
 })
 
+-- C/C++
+vim.lsp.enable('clangd')
+
 -- golang
 vim.lsp.enable('gopls')
 
