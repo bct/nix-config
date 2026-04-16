@@ -1,0 +1,18 @@
+--- a/src/tracker/tracker_http.cc
++++ b/src/tracker/tracker_http.cc
+@@ -5,6 +5,7 @@
+ #include <iomanip>
+ #include <sstream>
+ #include <utility>
++#include <string>
+
+ #include "net/address_list.h"
+ #include "rak/string_manip.h"
+@@ -186,7 +187,7 @@ TrackerHttp::request_announce_url(tracker::TrackerState::event_enum state, Track
+     s << "&ipv4=" << sa_addr_str(local_inet_address.get());
+   }
+
+-  if (local_inet6_address != nullptr) {
++  if (local_inet6_address != nullptr && info().url.find("sthep") == std::string::npos) {
+     if (family == AF_INET)
+       s << "&ip=" << sa_addr_str(local_inet6_address.get());

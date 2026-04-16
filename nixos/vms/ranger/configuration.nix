@@ -14,6 +14,7 @@
     ./accounts.nix
     ./beets.nix
     ./flood.nix
+    ./pyrosimple.nix
     ./rtorrent.nix
   ];
 

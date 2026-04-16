@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 let
+  rtListenPort = 50000;
   rtSocketPort = 8888;
   rtUnixSocketDir = "/run/rtorrent";
   rtUnixSocketPath = "${rtUnixSocketDir}/rpc.sock";
@@ -10,7 +11,11 @@ in
   ];
 
   environment.systemPackages = [
-    pkgs.rtorrent
+    (pkgs.rtorrent.override {
+      libtorrent-rakshasa = pkgs.libtorrent-rakshasa.overrideAttrs (oldAttrs: {
+        patches = [ ./ipv6-announce.patch ];
+      });
+    })
   ];
 
   # expose an XML-RPC endpoint to the network.
@@ -52,5 +57,8 @@ in
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ rtSocketPort ];
+  networking.firewall.allowedTCPPorts = [
+    rtListenPort
+    rtSocketPort
+  ];
 }
