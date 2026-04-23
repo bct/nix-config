@@ -10,6 +10,7 @@
     extraConfig = {
       # https://docs.tandoor.dev/system/configuration/#gunicorn-media
       GUNICORN_MEDIA = "1";
+      ALLOWED_HOSTS = "recipes.domus.diffeq.com";
 
       SOCIAL_PROVIDERS = "allauth.socialaccount.providers.openid_connect";
       SOCIALACCOUNT_PROVIDERS_FILE = config.age.secrets.tandoor-allauth-py.path;
