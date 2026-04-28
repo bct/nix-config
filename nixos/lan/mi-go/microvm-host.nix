@@ -70,6 +70,12 @@ in
                 description = "systemd Requires=";
               };
 
+              after = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = "systemd After=";
+              };
+
               startDelay = mkOption {
                 type = types.nullOr types.int;
                 default = null;
@@ -156,6 +162,7 @@ in
       name = "microvm@${vmName}";
       value = {
         requires = vmConfig.requires;
+        after = vmConfig.after;
       };
     }) cfg.guests;
   };

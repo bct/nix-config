@@ -133,4 +133,7 @@
     passwd-paperless.rekeyFile = ./secrets/passwd-paperless.age;
     passwd-torrent-scraper.rekeyFile = ./secrets/passwd-torrent-scraper.age;
   };
+
+  systemd.services.samba-smbd.requires = [ "zfs-mount.service" ];
+  systemd.services.samba-smbd.after = [ "zfs-mount.service" ];
 }

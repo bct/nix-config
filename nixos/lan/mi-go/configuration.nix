@@ -41,24 +41,32 @@
         hostName = "borg";
         tapInterfaceMac = "02:00:00:00:01:02";
         machineId = "a2717cf46338fdb456749d51d6611e16";
+        requires = [ "zfs-mount.service" ];
+        after = [ "zfs-mount.service" ];
       };
 
       git = {
         hostName = "git";
         tapInterfaceMac = "02:00:00:00:01:04";
         machineId = "1e64c3582fc0370de9a282455d58a192";
+        requires = [ "zfs-mount.service" ];
+        after = [ "zfs-mount.service" ];
       };
 
       media = {
         hostName = "media";
         tapInterfaceMac = "02:00:00:00:01:01";
         machineId = "8115ded7ebad02ebc1f9541f1fd63312";
+        requires = [ "zfs-mount.service" ];
+        after = [ "zfs-mount.service" ];
       };
 
       syncthing = {
         hostName = "syncthing";
         tapInterfaceMac = "02:00:00:00:01:05";
         machineId = "f4132f22d27e1890a42b3c1970e3eaac";
+        requires = [ "zfs-mount.service" ];
+        after = [ "zfs-mount.service" ];
       };
     };
   };
