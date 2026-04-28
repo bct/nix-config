@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   users.users.bct = {
     extraGroups = [
@@ -7,18 +7,14 @@
       "syncthing"
     ];
   };
-  users.groups.bct = {
-    gid = 1000;
-  };
+  users.groups.bct.gid = config.diffeq.accounts.groupIds.bct;
 
   users.users.blackbeard = {
     isSystemUser = true;
-    uid = 1002;
+    uid = config.diffeq.accounts.userIds.blackbeard;
     group = "blackbeard";
   };
-  users.groups.blackbeard = {
-    gid = 1001;
-  };
+  users.groups.blackbeard.gid = config.diffeq.accounts.groupIds.blackbeard;
 
   users.users.amanda = {
     isNormalUser = true;
@@ -35,50 +31,40 @@
 
   users.users.torrent-scraper = {
     isSystemUser = true;
-    uid = 1003;
+    uid = config.diffeq.accounts.userIds.torrent-scraper;
     group = "torrent-scraper";
     extraGroups = [
       "inbox-droppers"
       "video-writers"
+      "blackbeard"
     ];
   };
-  users.groups.torrent-scraper = {
-    gid = 1004;
-  };
-
-  users.groups.video-writers = {
-    gid = 1005;
-  };
+  users.groups.torrent-scraper.gid = config.diffeq.accounts.groupIds.torrent-scraper;
+  users.groups.video-writers.gid = config.diffeq.accounts.groupIds.video-writers;
 
   users.users.rtorrent = {
     isSystemUser = true;
-    uid = 1004;
+    uid = config.diffeq.accounts.userIds.rtorrent;
     group = "rtorrent";
     extraGroups = [ "video-writers" ];
   };
-  users.groups.rtorrent = {
-    gid = 1006;
-  };
+  users.groups.rtorrent.gid = config.diffeq.accounts.groupIds.rtorrent;
 
   users.users.immich = {
     isSystemUser = true;
-    uid = 1005;
+    uid = config.diffeq.accounts.userIds.immich;
     group = "immich";
     home = "/mnt/bulk/home/photos/immich";
   };
-  users.groups.immich = {
-    gid = 1007;
-  };
+  users.groups.immich.gid = config.diffeq.accounts.groupIds.immich;
 
   users.users.paperless = {
     isSystemUser = true;
-    uid = 1006;
+    uid = config.diffeq.accounts.userIds.paperless;
     group = "paperless";
     home = "/mnt/bulk/home/photos/immich";
   };
-  users.groups.paperless = {
-    gid = 1008;
-  };
+  users.groups.paperless.gid = config.diffeq.accounts.groupIds.paperless;
 
   users.groups.syncthing.gid = 983;
 }

@@ -22,6 +22,8 @@
         "invalid users" = [ "root" ];
         "guest ok" = "no";
         "security" = "user";
+        "unix extensions" = "yes";
+        "smb3 unix extensions" = "yes";
       };
 
       photos = {

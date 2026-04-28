@@ -76,7 +76,7 @@ in
 
     microvm = {
       preStart = lib.mkIf (vmConfig.startDelay != null) ''
-        echo "executing ${toString vmConfig.startDelay} start delay..."
+        echo "executing ${toString vmConfig.startDelay}s start delay..."
         sleep ${toString vmConfig.startDelay}
         echo "start delay complete."
       '';

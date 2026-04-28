@@ -32,21 +32,23 @@
     ];
   };
 
-  users.groups.video-writers = {
-    # guarantee a stable GID, since /etc is not persistent.
-    gid = 989;
-  };
   users.users = {
-    scraper = {
+    torrent-scraper = {
       isSystemUser = true;
       group = "video-writers";
-
-      # guarantee a stable UID, since /etc is not persistent.
-      uid = 992;
+      uid = config.diffeq.accounts.userIds.torrent-scraper;
+      # we need to be able to read & write the downloads in order to create hard links to them.
+      # (kernel parameter fs.protected_hardlinks)
+      extraGroups = [ "blackbeard" ];
     };
-    bct.extraGroups = [ "video-writers" ];
+    bct.extraGroups = [
+      "blackbeard"
+      "video-writers"
+    ];
     caddy.extraGroups = [ "acme" ];
   };
+  users.groups.blackbeard.gid = config.diffeq.accounts.groupIds.blackbeard;
+  users.groups.video-writers.gid = config.diffeq.accounts.groupIds.video-writers;
 
   networking.firewall.allowedTCPPorts = [
     80
@@ -57,8 +59,8 @@
   services.radarr = {
     enable = true;
     openFirewall = false;
-    user = "scraper";
-    group = "video-writers";
+    user = "torrent-scraper";
+    group = "blackbeard";
     # to support external auth, manually add this to the config XML:
     # <AuthenticationMethod>External</AuthenticationMethod>
     # <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
@@ -68,8 +70,8 @@
   services.sonarr = {
     enable = true;
     openFirewall = false;
-    user = "scraper";
-    group = "video-writers";
+    user = "torrent-scraper";
+    group = "blackbeard";
     # to support external auth, manually add this to the config XML:
     # <AuthenticationMethod>External</AuthenticationMethod>
     # <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
@@ -90,10 +92,9 @@
 
         # the defaults of a CIFS mount are not documented anywhere that I can see.
         # you can run "mount" after mounting to see what options were actually used.
-        # cifsacl is required for the server-side permissions to show up correctly.
       in
       [
-        "${automount_opts},cifsacl,uid=scraper,gid=video-writers,credentials=${config.age.secrets.fs-mi-go-torrent-scraper.path}"
+        "${automount_opts},uid=torrent-scraper,gid=blackbeard,posix,file_mode=0664,dir_mode=0775,credentials=${config.age.secrets.fs-mi-go-torrent-scraper.path}"
       ];
   };
 

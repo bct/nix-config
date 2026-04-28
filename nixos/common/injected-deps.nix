@@ -10,6 +10,14 @@
     hostNames = lib.mkOption {
       type = lib.types.attrs;
     };
+
+    accounts.userIds = lib.mkOption {
+      type = lib.types.attrs;
+    };
+
+    accounts.groupIds = lib.mkOption {
+      type = lib.types.attrs;
+    };
   };
 
   config.diffeq = {
@@ -19,6 +27,26 @@
       auth = "auth.domus.diffeq.com"; # tinyauth
       ldap = "ldap.domus.diffeq.com"; # lldap
       tasks = "tasks.domus.diffeq.com"; # vikunja
+    };
+
+    accounts = {
+      userIds = {
+        blackbeard = 1002;
+        torrent-scraper = 1003;
+        rtorrent = 1004;
+        immich = 1005;
+        paperless = 1006;
+      };
+
+      groupIds = {
+        bct = 1000;
+        blackbeard = 1001;
+        torrent-scraper = 1004;
+        video-writers = 1005;
+        rtorrent = 1006;
+        immich = 1007;
+        paperless = 1008;
+      };
     };
   };
 }
