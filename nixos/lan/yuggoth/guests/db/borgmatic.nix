@@ -19,7 +19,7 @@
 
       # state directories must be on a persistent volume.
       borg_base_directory = "/var/lib/borg";
-      borgmatic_source_directory = "/var/lib/borgmatic";
+      user_state_directory = "/var/lib/borgmatic";
 
       mariadb_databases = [
         {

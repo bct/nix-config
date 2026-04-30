@@ -1,4 +1,5 @@
-{ self, config, ... }: {
+{ self, config, ... }:
+{
   imports = [ "${self}/nixos/modules/borgmatic" ];
 
   diffeq.borgmatic = {
@@ -14,7 +15,7 @@
 
       # state directories must be on a persistent volume.
       borg_base_directory = "/var/lib/borg";
-      borgmatic_source_directory = "/var/lib/borgmatic";
+      user_state_directory = "/var/lib/borgmatic";
 
       # retention
       keep_hourly = 24;
