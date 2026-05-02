@@ -2,7 +2,6 @@
   self,
   inputs,
   pkgs,
-  lib,
   ...
 }:
 
@@ -104,9 +103,9 @@
     enable = true;
   };
 
-  # >= 6.19.10 to fix https://github.com/ROCm/ROCm/issues/5844
-  # TODO: return to the default once we're past this.
-  boot.kernelPackages = lib.mkIf (lib.versionOlder pkgs.linux.version "6.19.10") pkgs.unstable.linuxPackages_6_19;
+  # attempting to fix https://github.com/ROCm/ROCm/issues/5844
+  # TODO: remove this once we're on a fixed kernel (> 6.19.10?)
+  boot.kernelParams = [ "amdgpu.cwsr_enable=0" ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
