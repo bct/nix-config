@@ -58,8 +58,8 @@
         "guest ok" = "yes";
       };
 
-      time-machine-amanda-2020-12 = {
-        path = "/mnt/bulk/backups/time-machine-amanda-2020-12";
+      time-machine-amanda-2026-05 = {
+        path = "/mnt/bulk/backups/time-machine-amanda-2026-05";
         "valid users" = "amanda";
         public = "no";
         writeable = "yes";
@@ -97,7 +97,7 @@
             <!-- 
               change tm_share to share name, if you changed it. 
             --> 
-            <txt-record>dk0=adVN=time-machine-amanda-2020-12,adVF=0x82</txt-record>
+            <txt-record>dk0=adVN=time-machine-amanda-2026-05,adVF=0x82</txt-record>
             <txt-record>sys=waMa=0,adVF=0x100</txt-record>
           </service>
         </service-group>
