@@ -46,10 +46,6 @@
     deploy-rs.url = "github:serokell/deploy-rs";
     deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
 
-    # nixos-generators
-    nixos-generators.url = "github:nix-community/nixos-generators";
-    nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
-
     # disko
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
@@ -97,7 +93,6 @@
       home-manager,
       flake-parts,
       deploy-rs,
-      nixos-generators,
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -132,7 +127,6 @@
                   inputs
                   outputs
                   nixpkgs
-                  nixos-generators
                   ;
               };
             in
