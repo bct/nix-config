@@ -71,6 +71,11 @@
     )
   '';
 
+  # do not immediately restart. if we crashed due to e.g. the network share being down, give it a little time to recover.
+  # hopefully this resolves the mount failing on boot.
+  systemd.services.paperless-scheduler.serviceConfig.RestartSec = "30";
+  systemd.services.paperless-task-queue.serviceConfig.RestartSec = "30";
+
   age.secrets = {
     fs-mi-go-paperless = {
       rekeyFile = config.diffeq.secretsPath + /fs/mi-go-paperless.age;
@@ -92,16 +97,9 @@
     device = "//mi-go.domus.diffeq.com/paperless";
     fsType = "cifs";
     options =
-      let
-        # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
-
-        # the defaults of a CIFS mount are not documented anywhere that I can see.
-        # you can run "mount" after mounting to see what options were actually used.
-        # cifsacl is required for the server-side permissions to show up correctly.
-      in
+      # cifsacl is required for the server-side permissions to show up correctly.
       [
-        "${automount_opts},cifsacl,uid=${config.services.paperless.user},credentials=${config.age.secrets.fs-mi-go-paperless.path}"
+        "cifsacl,uid=${config.services.paperless.user},credentials=${config.age.secrets.fs-mi-go-paperless.path}"
       ];
   };
 

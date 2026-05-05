@@ -101,7 +101,7 @@
     options =
       let
         # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,x-systemd.after=network-online.target";
+        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
       in
       [ "${automount_opts},guest" ];
