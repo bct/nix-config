@@ -20,6 +20,7 @@
     ./container-networking.nix
     ./container-secrets.nix
     ./minio-instance.nix
+    ./s3.nix
     #./netbird.nix
     ./postgres.nix
     ./goatcounter.nix
