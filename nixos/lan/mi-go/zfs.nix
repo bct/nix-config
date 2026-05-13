@@ -13,7 +13,15 @@
   # alternatively we could use ZFS "legacy" mountpoints and and "fileSystems".
   boot.zfs.extraPools = [ "bulk" ];
 
-  services.zfs.autoScrub = {
-    enable = true;
+  services.zfs = {
+    autoScrub = {
+      enable = true;
+    };
+
+    zed.settings = {
+      ZED_NOTIFY_VERBOSE = true;
+      ZED_NTFY_TOPIC = "doog4maechoh";
+      ZED_NTFY_URL = "https://ntfy.sh";
+    };
   };
 }
