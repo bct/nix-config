@@ -32,6 +32,11 @@
       allowUnfree = true;
       # Workaround for https://github.com/nix-community/home-manager/issues/2942
       allowUnfreePredicate = (_: true);
+
+      # temporary until 26.05 is out
+      permittedInsecurePackages = [
+        "python3.13-beets-2.5.1"
+      ];
     };
   };
 
