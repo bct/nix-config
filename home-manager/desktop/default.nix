@@ -76,8 +76,8 @@
 
   home.file.".ssh/config".text = ''
     # 2022-08-06 many hosts (e.g. mi-go) don't have alacritty terminfo
-    Host *
-      SetEnv TERM=xterm-256color
+    #Host *
+    #  SetEnv TERM=xterm-256color
 
     Host router.domus.diffeq.com router
       User root

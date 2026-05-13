@@ -37,6 +37,8 @@ in
       git
       tmux
       htop
+
+      alacritty.terminfo
     ];
 
     # don't install nano and perl
