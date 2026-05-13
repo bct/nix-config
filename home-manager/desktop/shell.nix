@@ -75,9 +75,7 @@
   programs.atuin = {
     enable = true;
 
-    # https://github.com/nix-community/home-manager/issues/5958
-    # also see below.
-    enableBashIntegration = false;
+    enableBashIntegration = true;
     enableZshIntegration = true;
 
     # https://docs.atuin.sh/configuration/config/
@@ -99,10 +97,6 @@
 
     # make ^L work
     bind -m vi-insert 'Control-l: clear-screen'
-
-    # like programs.atuin.enableBashIntegration.
-    source "${pkgs.bash-preexec}/share/bash/bash-preexec.sh"
-    eval "$(${config.programs.atuin.package}/bin/atuin init bash )"
   '';
 
   programs.oh-my-posh = {
