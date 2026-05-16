@@ -2,6 +2,7 @@
 # Set up a user who can log in via SSH.
 {
   inputs,
+  outputs,
   lib,
   pkgs,
   config,
@@ -84,7 +85,7 @@ in
     security.sudo.wheelNeedsPassword = false;
 
     home-manager = lib.mkIf cfg.enable-home-manager {
-      extraSpecialArgs = { inherit inputs; };
+      extraSpecialArgs = { inherit inputs outputs; };
       users = {
         bct = {
           imports = [

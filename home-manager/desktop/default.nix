@@ -10,12 +10,20 @@
 
     ./beets.nix
     ./fonts.nix
-    ./nix.nix
     ./shell.nix
     ./3d-print.nix
 
     ./screen-break-reminder.nix
   ];
+
+  nix = {
+    package = pkgs.nix;
+
+    settings = {
+      # Enable flakes and new 'nix' command
+      experimental-features = "nix-command flakes";
+    };
+  };
 
   home.packages = with pkgs; [
     # terminal

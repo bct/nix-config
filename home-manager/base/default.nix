@@ -1,8 +1,6 @@
 {
-  inputs,
   lib,
   config,
-  pkgs,
   ...
 }:
 
@@ -10,7 +8,7 @@ let
   cfgPersonal = config.personal;
 in
 {
-  imports = [ ];
+  imports = [ ./nix.nix ];
 
   options = {
     personal = {

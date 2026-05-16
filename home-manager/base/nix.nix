@@ -1,14 +1,5 @@
-{ outputs, pkgs, ... }:
+{ outputs, ... }:
 {
-  nix = {
-    package = pkgs.nix;
-
-    settings = {
-      # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
-    };
-  };
-
   nixpkgs = {
     # You can add overlays here
     overlays = [
@@ -32,11 +23,6 @@
       allowUnfree = true;
       # Workaround for https://github.com/nix-community/home-manager/issues/2942
       allowUnfreePredicate = (_: true);
-
-      # temporary until 26.05 is out
-      permittedInsecurePackages = [
-        "python3.13-beets-2.5.1"
-      ];
     };
   };
 
