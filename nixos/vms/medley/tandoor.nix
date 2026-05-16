@@ -10,6 +10,8 @@
     extraConfig = {
       # https://docs.tandoor.dev/system/configuration/#gunicorn-media
       GUNICORN_MEDIA = "1";
+      MEDIA_ROOT = "/var/lib/tandoor-recipes/media";
+
       ALLOWED_HOSTS = "recipes.domus.diffeq.com";
 
       SOCIAL_PROVIDERS = "allauth.socialaccount.providers.openid_connect";
