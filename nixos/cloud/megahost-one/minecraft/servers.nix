@@ -34,6 +34,7 @@ let
 
   coolWorldPort = 25565;
   swemPort = 25566;
+  sigmaServerPort = 25567;
 
   # https://github.com/Infinidoge/nix-minecraft/issues/122#issuecomment-2916427568
   forge-1_20_1 =
@@ -66,6 +67,7 @@ in
     forwardPorts = [
       { hostPort = coolWorldPort; }
       { hostPort = swemPort; }
+      { hostPort = sigmaServerPort; }
     ];
 
     bindMounts = {
@@ -85,10 +87,12 @@ in
         system.stateVersion = "25.11";
 
         nixpkgs.overlays = [ inputs.nix-minecraft.overlay ];
+        nixpkgs.config.allowUnfree = true;
 
         networking.firewall.allowedTCPPorts = [
           coolWorldPort
           swemPort
+          sigmaServerPort
         ];
         networking = {
           defaultGateway = {
@@ -166,6 +170,35 @@ in
               hardcore = false;
 
               server-port = swemPort;
+            };
+
+            whitelist = whitelist;
+            operators = operators;
+          };
+
+          servers.sigma-server = {
+            enable = true;
+            # max heap size 4G, initial heap size 2G
+            jvmOpts = lib.concatStringsSep " " (
+              [
+                "-Xmx4G"
+                "-Xms2G"
+              ]
+              ++ draslJvmOpts
+            );
+
+            # Specify the custom minecraft server package
+            package = pkgs.vanillaServers.vanilla-26_1_2;
+
+            serverProperties = {
+              motd = "B-)";
+              online-mode = true;
+              white-list = true;
+              enforce-whitelist = true;
+
+              hardcore = false;
+
+              server-port = sigmaServerPort;
             };
 
             whitelist = whitelist;
