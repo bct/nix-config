@@ -48,7 +48,11 @@ in
           #
           # we could have the app talk directly to tinyauth rather than going
           # through caddy, but then we wouldn't have HTTPS.
-          trusted_proxies private_ranges
+          #
+          # originally I had "trusted_proxies private_ranges" here, but my local
+          # DNS does not reliably return ULA IPv6 addresses (fdxx) before GUA (2xxx)
+          # this should still be safe, since only the LAN can talk to this host anyways.
+          trusted_proxies 0.0.0.0/0 ::/0
         }
       '';
     };
