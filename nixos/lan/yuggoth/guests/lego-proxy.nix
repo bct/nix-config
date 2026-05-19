@@ -82,8 +82,8 @@ in
   };
 
   age.secrets = {
-    zoneedit = {
-      rekeyFile = ./lego-proxy/secrets/zoneedit.age;
+    dnsimple = {
+      rekeyFile = ./lego-proxy/secrets/dnsimple.age;
       owner = config.services.acme-dns-proxy-host.user;
       group = "acme";
       mode = "440";
@@ -101,8 +101,8 @@ in
 
     domains = lib.mapAttrsToList (name: clientConfig: {
       domain = clientConfig.domain;
-      execCommand = "${pkgs.lego-acme-zoneedit}/bin/lego-acme-zoneedit";
-      environmentFile = config.age.secrets.zoneedit.path;
+      dnsProvider = "dnsimple";
+      environmentFile = config.age.secrets.dnsimple.path;
       pubKey =
         if clientConfig ? "pubKey" then
           clientConfig.pubKey
@@ -114,26 +114,16 @@ in
   security.acme.acceptTerms = true;
   security.acme.certs."unifi.domus.diffeq.com" = {
     email = "s+acme@diffeq.com";
-    dnsProvider = "exec";
-    dnsResolver = "ns5.zoneedit.com";
-    environmentFile = config.age.secrets.zoneedit.path;
+    dnsProvider = "dnsimple";
+    environmentFile = config.age.secrets.dnsimple.path;
     extraLegoRunFlags = [ "--run-hook=${deploy-unifi}/bin/deploy-unifi" ];
-  };
-  systemd.services."acme-order-renew-unifi.domus.diffeq.com".environment = {
-    EXEC_PATH = "${pkgs.lego-acme-zoneedit}/bin/lego-acme-zoneedit";
-    EXEC_PROPAGATION_TIMEOUT = "180";
   };
 
   security.acme.certs."router.domus.diffeq.com" = {
     email = "s+acme@diffeq.com";
-    dnsProvider = "exec";
-    dnsResolver = "ns5.zoneedit.com";
-    environmentFile = config.age.secrets.zoneedit.path;
+    dnsProvider = "dnsimple";
+    environmentFile = config.age.secrets.dnsimple.path;
     extraLegoRunFlags = [ "--run-hook=${deploy-openwrt}/bin/deploy-openwrt" ];
-  };
-  systemd.services."acme-order-renew-router.domus.diffeq.com".environment = {
-    EXEC_PATH = "${pkgs.lego-acme-zoneedit}/bin/lego-acme-zoneedit";
-    EXEC_PROPAGATION_TIMEOUT = "180";
   };
 
   programs.ssh.knownHosts = {

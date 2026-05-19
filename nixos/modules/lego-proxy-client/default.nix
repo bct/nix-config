@@ -8,7 +8,6 @@
 let
   cfg = config.services.lego-proxy-client;
 
-  dnsResolver = "ns5.zoneedit.com";
   email = "s+acme@diffeq.com";
 
   clients = import ./clients.nix;
@@ -53,7 +52,6 @@ in
         lib.nameValuePair clients.${domain}.domain {
           email = email;
           group = cfg.group;
-          dnsResolver = dnsResolver;
         }
       ) cfg.domains
     );

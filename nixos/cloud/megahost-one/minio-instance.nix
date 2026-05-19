@@ -79,7 +79,7 @@ in
 
       virtualHosts = lib.concatMapAttrs (containerName: instanceConfig: {
         # buckets are accessible on container port 9000
-        # TODO: use the acme-zoneedit module to get a wildcard certificate, so that
+        # TODO: get a wildcard certificate, so that
         # we don't need to explicitly list buckets here.
         ${instanceConfig.minioDomain} = {
           serverAliases = map (bucket: "${bucket}.${instanceConfig.minioDomain}") instanceConfig.buckets;
