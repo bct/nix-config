@@ -36,6 +36,7 @@
     pwgen
     tmux
     sqlite-interactive
+    bind
 
     # gui utilities
     bzmenu
