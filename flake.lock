@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779155089,
-        "narHash": "sha256-XMylmMffzP1ddQnb+oFHbqfyBVIwnU3Sg51pGVETBTY=",
+        "lastModified": 1779200489,
+        "narHash": "sha256-clt53GtaRPUFO4FtOOTFJeWoVRDPO/j08GiBZbfcw3I=",
         "owner": "bct",
         "repo": "acme-dns-by-proxy",
-        "rev": "ecf61cddd2614690d0043f7dcd984d0018041001",
+        "rev": "2a44d0df7a43c46b7f186e743bd497ce79410393",
         "type": "github"
       },
       "original": {
