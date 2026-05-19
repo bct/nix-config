@@ -2,6 +2,8 @@
 let
   cfgContainerSecrets = config.megahost.container-secrets;
   cfgContainerNetwork = config.megahost.container-network.bridge-internal.containers;
+
+  goatCounterPort = 4000;
 in
 {
   containers.goatcounter = {
@@ -13,55 +15,44 @@ in
       {
         system.stateVersion = "24.05";
 
-        networking.firewall.allowedTCPPorts = [ 4000 ];
+        networking.firewall.allowedTCPPorts = [ goatCounterPort ];
 
-        # TODO: there's a nixos module for this now.
+        services.goatcounter = {
+          enable = true;
+          address = "*";
+          port = goatCounterPort;
+          proxy = true;
+
+          extraArgs = [
+            "-db"
+            "postgresql+host=${cfgContainerNetwork.postgres.address6} sslmode=disable"
+          ];
+        };
+
         systemd.services.goatcounter = {
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
+          environment = {
+            PGPASSFILE = "/run/goatcounter/goatcounter.pgpass";
+          };
 
           serviceConfig = {
-            Type = "simple";
-            DynamicUser = true;
+            RuntimeDirectory = "goatcounter";
 
             LoadCredential = [
               "password-goatcounter:${cfgContainerSecrets.goatcounter.passwordGoatcounter.containerPath}"
             ];
 
-            ExecStart =
+            ExecStartPre =
               let
-                run-goatcounter = pkgs.writeShellScript "run-goatcounter" ''
+                write-pg-pass = pkgs.writeShellScript "write-pgpass" ''
                   set -euo pipefail
 
                   password=$(cat $CREDENTIALS_DIRECTORY/password-goatcounter | tr -d '\n')
 
-                  # if we don't pass -email-from then it tries to look up the current
-                  # username, which doesn't work due to the chroot etc. below
-                  ${pkgs.goatcounter}/bin/goatcounter serve \
-                    -listen *:4000 \
-                    -db "postgresql+host=${cfgContainerNetwork.postgres.address6} password=$password sslmode=disable" \
-                    -tls http \
-                    -email-from goatcounter@m.diffeq.com
+                  echo "*:*:*:*:$password" >$PGPASSFILE
+                  chmod 0600 $PGPASSFILE
                 '';
-
               in
-              "${run-goatcounter}";
-
-            Restart = "always";
-
-            RuntimeDirectory = "goatcounter";
-            RootDirectory = "/run/goatcounter";
-            ReadWritePaths = "";
-            BindReadOnlyPaths = [
-              "/bin"
-              builtins.storeDir
-            ];
-
-            PrivateDevices = true;
-            PrivateUsers = true;
-
-            CapabilityBoundingSet = "";
-            RestrictNamespaces = true;
+              "${write-pg-pass}";
           };
         };
       };
@@ -80,12 +71,11 @@ in
   services.caddy = {
     enable = true;
 
-    virtualHosts."m.diffeq.com".extraConfig = ''
-      reverse_proxy [${cfgContainerNetwork.goatcounter.address6}]:4000 {
-        # 2.5.0 has "-tls proxy" which should make this unnecessary
-        # https://github.com/arp242/goatcounter/issues/647#issuecomment-1345559928
-        header_down Set-Cookie "^(.*HttpOnly;) (SameSite=None)$" "$1 Secure; $2"
-      }
-    '';
+    virtualHosts."m.diffeq.com" = {
+      serverAliases = [ "m.cats.birdlor.biz" ];
+      extraConfig = ''
+        reverse_proxy [${cfgContainerNetwork.goatcounter.address6}]:${toString goatCounterPort}
+      '';
+    };
   };
 }
