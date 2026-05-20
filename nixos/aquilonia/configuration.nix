@@ -60,6 +60,10 @@
 
     # Give the "video" group access to the backlight
     ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video $sys$devpath/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w $sys$devpath/brightness"
+
+    # Webcam settings. Disable backlight compensation, it washes everything out.
+    # (you can test these with guvcview or camset)
+    ACTION=="add", SUBSYSTEM=="video4linux", ATTR{product}=="Laptop Webcam Module (2nd Gen)", RUN+="${pkgs.v4l-utils}/bin/v4l2-ctl -d $devnode --set-ctrl=backlight_compensation=0"
   '';
 
   services.syncthing = {
