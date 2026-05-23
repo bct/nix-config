@@ -100,7 +100,7 @@ in
         "scanner"
         "dialout"
       ];
-      shell = pkgs.zsh;
+      shell = pkgs.bash;
     };
 
     programs.zsh = {
