@@ -146,6 +146,10 @@ in
       # Ctrl-O – Open Highlighted Mailbox
       bind index,pager \CO sidebar-open
 
+      set query_command= "qcard -emailonly '%s'"
+      bind editor <Tab> complete-query
+      bind editor ^T complete
+
       # notmuch bindings
       macro index \\\\ "<vfolder-from-query>"  # looks up a hand made query
 

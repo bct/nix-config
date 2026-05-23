@@ -21,6 +21,10 @@
     pkgs.msmtp
     pkgs.procmail
     pkgs.w3m
+
+    # address book
+    # TODO: https://git.sr.ht/~ser/lbb ?
+    pkgs.qcard
   ];
 
   systemd.timers.notmuch-new = {
@@ -161,5 +165,17 @@
       #
       [maildir]
     '';
+
+    xdg.configFile."qcard/config.json".text = builtins.toJSON {
+      "Addressbooks" = [
+        {
+          "Url" = "https://dav.domus.diffeq.com/user/contacts/addressbook";
+          "Username" = "username";
+          "Password" = "supersecret";
+        }
+      ];
+      "DetailThreshold" = 3;
+      "SortByLastname" = false;
+    };
   };
 }
