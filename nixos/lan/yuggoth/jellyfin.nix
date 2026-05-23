@@ -39,7 +39,7 @@ in
     domains = [ "jellyfin" ];
     group = "caddy";
   };
-  #
+
   services.caddy = {
     enable = true;
     virtualHosts."jellyfin.domus.diffeq.com" = {

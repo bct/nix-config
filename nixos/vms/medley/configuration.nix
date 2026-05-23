@@ -16,6 +16,7 @@
     ./tandoor.nix
     ./uptime-kuma.nix
     ./vikunja.nix
+    ./xandikos.nix
 
     "${self}/nixos/modules/lego-proxy-client"
   ];
@@ -35,6 +36,7 @@
     domains = [
       "booklore"
       "bookmarks"
+      "dav"
       "homepage"
       "recipes"
       "tasks"

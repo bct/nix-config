@@ -2,10 +2,10 @@
 # keys in this attrset refer to entries in secrets/lego-proxy/
 {
   auth.domain = "auth.domus.diffeq.com";
-
   books.domain = "books.domus.diffeq.com";
   booklore.domain = "booklore.domus.diffeq.com";
   bookmarks.domain = "bookmarks.domus.diffeq.com";
+  dav.domain = "dav.domus.diffeq.com";
 
   flood = {
     domain = "flood.domus.diffeq.com";
@@ -17,27 +17,16 @@
   };
 
   homepage.domain = "homepage.domus.diffeq.com";
-
-  immich = {
-    domain = "immich.domus.diffeq.com";
-  };
-
+  immich.domain = "immich.domus.diffeq.com";
   jellyfin.domain = "jellyfin.domus.diffeq.com";
-
   ldap.domain = "ldap.domus.diffeq.com";
 
-  lubelogger = {
-    domain = "lubelogger.domus.diffeq.com";
-  };
-
+  lubelogger.domain = "lubelogger.domus.diffeq.com";
   oidc.domain = "oidc.domus.diffeq.com";
-
   mail.domain = "mail.domus.diffeq.com";
   media.domain = "media.domus.diffeq.com";
 
-  paperless = {
-    domain = "paperless.domus.diffeq.com";
-  };
+  paperless.domain = "paperless.domus.diffeq.com";
 
   radarr = {
     domain = "radarr.domus.diffeq.com";
