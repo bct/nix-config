@@ -75,6 +75,7 @@ in
 
   # bind mount data directory to the host for convenience
   fileSystems."/srv/data/wiki" = {
+    fsType = "none";
     device = "/var/lib/nixos-containers/wiki/var/lib/private/wiki-js/";
     options = [ "bind" ];
   };

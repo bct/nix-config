@@ -11,7 +11,7 @@
     home = "/var/home/bct";
 
     # give me access to the mailboxes
-    extraGroups = [ config.mailserver.vmailGroupName ];
+    extraGroups = [ config.mailserver.storage.group ];
   };
 
   environment.systemPackages = [

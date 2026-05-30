@@ -36,15 +36,21 @@ in
     ];
 
     indexDir = "/var/lib/dovecot/indices";
-    useFsLayout = true;
 
-    certificateScheme = "acme";
+    storage = {
+      # /var/vmail/example.com/user/folder/subfolder/
+      directoryLayout = "fs";
+    };
+
+    x509 = {
+      useACMEHost = "mail.domus.diffeq.com";
+    };
 
     # testing to see whether this fixes issues with resolving .domus.diffeq.com addresses.
     localDnsResolver = false;
 
     # nix-shell -p mkpasswd --run 'mkpasswd -sm bcrypt'
-    loginAccounts = {
+    accounts = {
       "bct@diffeq.com" = {
         aliases = [ "@diffeq.com" ];
         hashedPasswordFile = config.age.secrets.bct-hashed-password.path;
@@ -66,23 +72,33 @@ in
     mailboxes = {
       Drafts = {
         auto = "subscribe";
-        specialUse = "Drafts";
+        special_use = "\\Drafts";
       };
       Junk = {
         auto = "subscribe";
-        specialUse = "Junk";
+        special_use = "\\Junk";
       };
       Sent = {
         auto = "subscribe";
-        specialUse = "Sent";
+        special_use = "\\Sent";
       };
       Trash = {
         auto = "no";
-        specialUse = "Trash";
+        special_use = "\\Trash";
       };
       archive = {
         auto = "create";
-        specialUse = "Archive";
+        special_use = "\\Archive";
+      };
+    };
+
+    dkim = {
+      enable = true;
+      domains."diffeq.com".selectors = {
+        "domus-rsa-2026-05" = {
+          keyType = "rsa";
+          keyLength = 2048;
+        };
       };
     };
   };

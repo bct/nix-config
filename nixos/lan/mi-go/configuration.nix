@@ -72,6 +72,7 @@
   };
 
   fileSystems."/home" = {
+    fsType = "none";
     device = "/mnt/bulk/home/";
     options = [
       "bind"

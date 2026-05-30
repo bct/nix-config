@@ -6,17 +6,21 @@
 
   services.mpd = {
     enable = true;
-    network.listenAddress = "[::]"; # the default ("any") does not bind to IPv6
-    musicDirectory = "/mnt/beets";
+    openFirewall = false;
 
-    extraConfig = ''
-      audio_output {
-        type "alsa"
-        name "hifiberry"
-        device "hw:1,0" # "hw:card,device", found using aplay -l
-        mixer_control "Master"
-      }
-    '';
+    settings = {
+      bind_to_address = "[::]"; # the default ("any") does not bind to IPv6
+      music_directory = "/mnt/beets";
+
+      audio_output = [
+        {
+          type = "alsa";
+          name = "hifiberry";
+          device = "hw:1,0"; # "hw:card,device", found using aplay -l
+          mixer_control = "Master";
+        }
+      ];
+    };
   };
 
   systemd.timers.mpc-update = {

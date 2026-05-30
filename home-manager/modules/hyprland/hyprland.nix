@@ -52,6 +52,7 @@ in
       "XCURSOR_SIZE,18"
     ];
 
+    configType = "hyprlang"; # TODO: switch to lua
     # https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.conf
     extraConfig =
       let

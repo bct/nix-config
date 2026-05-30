@@ -45,7 +45,7 @@
   services.influxdb = {
     enable = true;
 
-    extraConfig = {
+    settings = {
       reporting-disabled = true;
 
       http = {

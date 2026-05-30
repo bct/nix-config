@@ -77,7 +77,7 @@
     # <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
   };
 
-  services.jellyseerr = {
+  services.seerr = {
     enable = true;
     openFirewall = false;
   };
@@ -147,7 +147,7 @@
 
     virtualHosts."seerr.domus.diffeq.com" = {
       useACMEHost = "seerr.domus.diffeq.com";
-      extraConfig = "reverse_proxy localhost:${toString config.services.jellyseerr.port}";
+      extraConfig = "reverse_proxy localhost:${toString config.services.seerr.port}";
     };
   };
 }

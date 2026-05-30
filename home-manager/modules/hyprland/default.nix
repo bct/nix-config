@@ -23,17 +23,15 @@
   services.cliphist.enable = true;
 
   home.packages = with pkgs; [
-    brightnessctl
+    brightnessctl # hyprland, hyprlock
+    playerctl
 
-    swww
+    awww # wallpaper
     capitaine-cursors
 
-    grim
+    grim # screenshots
 
     alacritty
-    light
-
-    playerctl
   ];
 
   home.pointerCursor = {

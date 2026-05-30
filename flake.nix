@@ -83,7 +83,6 @@
     grid-select.inputs.nixpkgs.follows = "nixpkgs";
 
     fjord-launcher.url = "github:unmojang/FjordLauncher";
-    drasl.url = "github:unmojang/drasl";
   };
 
   outputs =

@@ -48,15 +48,23 @@
     options =
       let
         # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        automount_opts = [
+          "x-systemd.automount"
+          "noauto"
+          "x-systemd.device-timeout=5s"
+          "x-systemd.mount-timeout=5s"
+        ];
 
         # the defaults of a CIFS mount are not documented anywhere that I can see.
         # you can run "mount" after mounting to see what options were actually used.
         # cifsacl is required for the server-side permissions to show up correctly.
       in
       [
-        "${automount_opts},cifsacl,uid=${config.services.immich.user},credentials=${config.age.secrets.fs-mi-go-immich.path}"
-      ];
+        "cifsacl"
+        "uid=${config.services.immich.user}"
+        "credentials=${config.age.secrets.fs-mi-go-immich.path}"
+      ]
+      ++ automount_opts;
   };
 
   services.immich = {

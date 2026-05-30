@@ -10,7 +10,7 @@
     enable = true;
 
     # a helpful reference for config: https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
-    extraLuaConfig = lib.fileContents ./files/init.lua;
+    initLua = lib.fileContents ./files/init.lua;
     extraConfig = lib.fileContents ./files/extra-config.vim;
 
     extraPackages = [
@@ -18,7 +18,7 @@
       pkgs.ripgrep
 
       # formatters
-      pkgs.nodePackages.prettier
+      pkgs.prettier
       pkgs.nixfmt
 
       # LSP servers
@@ -30,7 +30,7 @@
       pkgs.ruff
       pkgs.terraform-ls
       pkgs.tflint
-      pkgs.nodePackages.vscode-langservers-extracted
+      pkgs.vscode-langservers-extracted
       pkgs.typescript-language-server
       pkgs.rust-analyzer
       pkgs.clang-tools
@@ -171,7 +171,7 @@
               formatters = {
                 black = { command = "${pkgs.black}/bin/black" },
                 isort = { command = "${pkgs.isort}/bin/isort" },
-                prettier = { command = "${pkgs.nodePackages.prettier}/bin/prettier" },
+                prettier = { command = "${pkgs.prettier}/bin/prettier" },
               },
 
               formatters_by_ft = {
@@ -341,6 +341,7 @@
       ]; # Only loaded if programs.neovim.extraConfig is set
 
     withPython3 = true;
+    withRuby = false;
 
     extraPython3Packages =
       ps: with ps; [

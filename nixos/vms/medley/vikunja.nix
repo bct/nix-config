@@ -25,7 +25,7 @@
     enable = true;
     frontendScheme = "https";
     frontendHostname = "tasks.domus.diffeq.com";
-    package = pkgs.unstable.vikunja; # for 1.0
+    package = pkgs.vikunja;
 
     settings = {
       auth.local.enabled = false;

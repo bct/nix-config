@@ -68,6 +68,12 @@
         password = "$__file{${config.age.secrets.db-password-domus-grafana.path}}";
       };
 
+      # TODO: rotate?
+      # https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key
+      # for more information.
+      # See https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-database-encryption/#re-encrypt-secrets on how to re-encrypt.
+      security.secret_key = "SW2YcwTIb9zpOOhoPsMm";
+
       # https://grafana.com/docs/grafana/latest/setup-grafana/configure-access/configure-authentication/generic-oauth/#set-up-oauth2-with-dex
       "auth.generic_oauth" =
         let

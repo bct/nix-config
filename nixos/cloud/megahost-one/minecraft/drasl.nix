@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   ...
 }:
@@ -42,8 +41,6 @@ in
     config =
       { ... }:
       {
-        imports = [ inputs.drasl.nixosModules.drasl ];
-
         system.stateVersion = "25.11";
 
         networking.firewall.allowedTCPPorts = [ draslPort ];

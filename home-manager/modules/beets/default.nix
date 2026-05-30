@@ -2,8 +2,7 @@
 {
   programs.beets = {
     enable = true;
-    # TODO(26.05): switch to stable
-    package = pkgs.unstable.beets;
+    package = pkgs.beets;
     settings = {
       library = "/mnt/beets/library.db";
       directory = "/mnt/beets/library";

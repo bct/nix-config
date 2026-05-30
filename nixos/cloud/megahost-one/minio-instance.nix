@@ -60,6 +60,10 @@ in
         {
           system.stateVersion = "24.05";
 
+          nixpkgs.config.permittedInsecurePackages = [
+            "minio-2025-10-15T17-29-55Z"
+          ];
+
           networking.firewall.allowedTCPPorts = [
             bucketPort
             consolePort

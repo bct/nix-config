@@ -41,11 +41,14 @@ in
 
     extensions =
       ps: with ps; [
-        pgvecto-rs # immich
+        pgvector # immich
+        vectorchord # immich
       ];
 
     settings = {
-      shared_preload_libraries = [ "vectors.so" ]; # immich
+      shared_preload_libraries = [
+        "vchord.so" # immich
+      ];
       search_path = "\"$user\", public, vectors"; # immich
     };
 
@@ -137,17 +140,30 @@ in
           set_password "$username"
         done
       '';
+
+      extensions = [
+        "unaccent"
+        "uuid-ossp"
+        "cube"
+        "earthdistance"
+        "pg_trgm"
+        "vector"
+        "vchord"
+      ];
       immichSqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-        CREATE EXTENSION IF NOT EXISTS unaccent;
-        CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-        CREATE EXTENSION IF NOT EXISTS vectors;
-        CREATE EXTENSION IF NOT EXISTS cube;
-        CREATE EXTENSION IF NOT EXISTS earthdistance;
-        CREATE EXTENSION IF NOT EXISTS pg_trgm;
+        SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+        ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
+        ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
         ALTER SCHEMA public OWNER TO immich;
-        ALTER SCHEMA vectors OWNER TO immich;
-        GRANT SELECT ON TABLE pg_vector_index_stat TO immich;
-        ALTER EXTENSION vectors UPDATE;
+
+        SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+        SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
+        \if :has_vchord_updated
+          REINDEX INDEX face_index;
+          REINDEX INDEX clip_index;
+        \endif
       '';
     in
     lib.mkAfter ''

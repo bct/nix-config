@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   pkgs,
   ...
 }:
@@ -8,10 +7,6 @@ let
   port = 3000;
 in
 {
-  imports = [
-    "${inputs.nixpkgs-unstable}/nixos/modules/services/security/tinyauth.nix"
-  ];
-
   age.secrets = {
     tinyauth-env = {
       rekeyFile = ./secrets/tinyauth-env.age;
@@ -20,7 +15,7 @@ in
 
   services.tinyauth = {
     enable = true;
-    package = pkgs.unstable.tinyauth;
+    package = pkgs.tinyauth;
     settings = {
       APPURL = "https://${config.diffeq.hostNames.auth}";
       PORT = port;
