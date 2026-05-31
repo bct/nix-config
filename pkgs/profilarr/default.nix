@@ -83,7 +83,7 @@ python3.pkgs.buildPythonPackage {
       regex
     ]
     ++ (with pkgs; [
-      pkgs.jellyseerr
+      pkgs.seerr
     ]);
 
   pythonImportsCheck = [
