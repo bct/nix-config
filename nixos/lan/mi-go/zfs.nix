@@ -9,9 +9,13 @@
   #     head -c4 /dev/urandom | od -A none -t x4
   networking.hostId = "48d29ee6";
 
-  # import & mount our pool.
-  # alternatively we could use ZFS "legacy" mountpoints and and "fileSystems".
-  boot.zfs.extraPools = [ "bulk" ];
+  boot.zfs = {
+    forceImportRoot = false;
+
+    # import & mount our pool.
+    # alternatively we could use ZFS "legacy" mountpoints and "fileSystems".
+    extraPools = [ "bulk" ];
+  };
 
   services.zfs = {
     autoScrub = {

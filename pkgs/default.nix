@@ -33,8 +33,8 @@
       pkg = pkgs.fetchFromGitHub {
         owner = "bct";
         repo = "onkyo-ri-send-command";
-        rev = "bb662ef1d45357db0f205c0b8b8acf460b1bdae1";
-        sha256 = "0d6mr08d1gvpghd440sgi3j0cz4xsrdcickdnv28in21xpj34a5z";
+        rev = "88a92196783f641ec8ee8cd8173dbe64f555f2ae";
+        sha256 = "sha256-2YgxN5PxXbcAkE6cC0TV6nX9u5mwjM2AAnGCuqHzPHc=";
       };
     in
     pkgs.callPackage "${pkg}/default.nix" { };

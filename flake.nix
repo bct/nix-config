@@ -18,12 +18,14 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-2511.url = "github:nixos/nixpkgs/nixos-25.11";
 
     # bug fixes & new packages
     # https://github.com/NixOS/nixpkgs/pull/354032
     schromp-netbird.url = "github:schromp/nixpkgs/fix-netbird";
+    # my clone of jvanbruegge's branch
     # https://github.com/NixOS/nixpkgs/pull/425872
-    jvanbruegge-booklore.url = "github:jvanbruegge/nixpkgs/booklore";
+    jvanbruegge-booklore.url = "github:bct/nixpkgs/booklore";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-26.05";

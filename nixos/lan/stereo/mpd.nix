@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 {
   networking.firewall.allowedTCPPorts = [
-    config.services.mpd.network.port
+    config.services.mpd.settings.port
   ];
 
   services.mpd = {

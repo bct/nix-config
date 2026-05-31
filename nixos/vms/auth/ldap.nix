@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
   ldaps_cert = config.security.acme.certs."ldap.domus.diffeq.com";
 in
@@ -41,6 +41,7 @@ in
   ];
 
   # allow binding ports below 1024
+  systemd.services.lldap.serviceConfig.CapabilityBoundingSet = lib.mkForce "CAP_NET_BIND_SERVICE";
   systemd.services.lldap.serviceConfig.AmbientCapabilities = "CAP_NET_BIND_SERVICE";
 
   networking.firewall.allowedTCPPorts = [
