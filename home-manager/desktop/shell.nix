@@ -5,6 +5,8 @@
 }:
 
 {
+  personal.enableFancyShell = true;
+
   home.sessionPath = [
     "$HOME/.local/share/gem/ruby/3.0.0/bin"
     "$HOME/bin"
@@ -63,12 +65,6 @@
         hide_env_diff = true;
       };
     };
-  };
-
-  programs.eza = {
-    enable = true;
-    icons = "auto";
-    git = true;
   };
 
   programs.atuin = {

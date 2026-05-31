@@ -80,5 +80,9 @@
     ];
   };
 
+  home-manager.users.bct = {
+    personal.enableFancyShell = true;
+  };
+
   system.stateVersion = "25.11";
 }

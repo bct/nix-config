@@ -46,6 +46,8 @@
   };
 
   home-manager.users.bct = {
+    personal.enableFancyShell = true;
+
     home.file.".mailcap".text = ''
       text/html; w3m -I %{charset} -T text/html -o display_link_number=1; nametemplate=%s.html; copiousoutput
     '';

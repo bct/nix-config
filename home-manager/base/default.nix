@@ -21,6 +21,11 @@ in
         type = lib.types.str;
         description = "Email for the primary user.";
       };
+
+      enableFancyShell = lib.mkOption {
+        type = lib.types.bool;
+        description = "Enable fancy shell settings?";
+      };
     };
   };
 
@@ -69,6 +74,12 @@ in
 
     programs.bash = {
       enable = true;
+    };
+
+    programs.eza = lib.mkIf cfgPersonal.enableFancyShell {
+      enable = true;
+      icons = "auto";
+      git = true;
     };
 
     home.sessionVariables = {
