@@ -1,5 +1,9 @@
-{ lib, pkgs, ... }:
-
+# TODO: prefer e.g. inputs.nixos-hardware.nixosModules.raspberry-pi-3
+{
+  lib,
+  pkgs,
+  ...
+}:
 {
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
@@ -10,7 +14,12 @@
   hardware.enableRedistributableFirmware = true;
 
   # add some swap to speed up nixos-rebuild
-  swapDevices = [ { device = "/var/lib/swapfile"; size = 1*1024; } ];
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 1 * 1024;
+    }
+  ];
 
   environment.systemPackages = with pkgs; [
     libraspberrypi

@@ -7,7 +7,7 @@
     defaults.ctl.!card 1
   '';
 
-   # We need to use the vendor kernel, mainline doesn't have a driver for the HifiBerry DAC+.
+  # We need to use the vendor kernel, mainline doesn't have a driver for the HifiBerry DAC+.
   boot.kernelPackages = pkgs.linuxPackages_rpi3;
 
   hardware.deviceTree = {
@@ -28,16 +28,6 @@
 
   nixpkgs = {
     overlays = [
-      # fix for kernel build failure:
-      #
-      #     modprobe: FATAL: Module ahci not found in directory
-      #
-      # https://github.com/NixOS/nixpkgs/issues/154163
-      (final: super: {
-        makeModulesClosure = x:
-          super.makeModulesClosure (x // { allowMissing = true; });
-      })
-
       # fdtoverlay does not support the DTS overlay file I'm using above
       # (it exits with FDT_ERR_NOTFOUND)
       # https://github.com/raspberrypi/firmware/issues/1718

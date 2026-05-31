@@ -1,7 +1,7 @@
 {
+  inputs,
   self,
   pkgs,
-  config,
   ...
 }:
 {
@@ -12,7 +12,7 @@
     "${self}/nixos/common/headless.nix"
     "${self}/nixos/common/node-exporter.nix"
 
-    "${self}/nixos/hardware/raspberry-pi"
+    inputs.nixos-hardware.nixosModules.raspberry-pi-3
     "${self}/nixos/hardware/raspberry-pi/hifiberry-dac-plus.nix"
 
     ./hardware-configuration.nix
@@ -49,6 +49,7 @@
   time.timeZone = "America/Edmonton";
 
   environment.systemPackages = with pkgs; [
+    libraspberrypi
     cifs-utils
 
     onkyo-ri-send-command
@@ -118,6 +119,15 @@
   # services.airsonic-refix.enable = true;
 
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+0o3CDs78/NW73QxiZ4gJtXgZ5U+NAu8o9lNhzmLwl";
+
+  hardware.enableRedistributableFirmware = true;
+
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 1 * 1024;
+    }
+  ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";
