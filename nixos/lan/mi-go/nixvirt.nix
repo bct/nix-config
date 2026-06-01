@@ -12,6 +12,7 @@
 
   diffeq.nixvirt = {
     enable = true;
+    waitForZfs = true;
     user = "bct";
     guests = {
       ranger = {

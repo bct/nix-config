@@ -19,6 +19,12 @@ in
   options.diffeq.nixvirt = with lib; {
     enable = mkEnableOption "qemu host";
 
+    waitForZfs = mkOption {
+      type = types.bool;
+      description = mdDoc "Wait for ZFS mounts before launching guests?";
+      default = false;
+    };
+
     user = mkOption {
       type = types.str;
       description = mdDoc "User who is allowed to use virsh.";
@@ -107,6 +113,11 @@ in
         vhostUserPackages = [ pkgs.virtiofsd ];
         runAsRoot = false;
       };
+    };
+
+    systemd.services.libvirt-guests = lib.mkIf cfg.waitForZfs {
+      requires = lib.mkAfter [ "zfs.target" ];
+      after = lib.mkAfter [ "zfs.target" ];
     };
 
     virtualisation.libvirt.enable = true;

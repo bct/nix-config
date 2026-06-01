@@ -16,6 +16,12 @@ in
   ];
 
   options.mi-go.microvms = with lib; {
+    waitForZfs = mkOption {
+      type = types.bool;
+      description = mdDoc "Wait for ZFS mounts before launching guests?";
+      default = false;
+    };
+
     interfaceToBridge = mkOption {
       type = types.str;
       description = "The host interface that should be connected to the br0 bridge.";
@@ -158,11 +164,15 @@ in
     }) cfg.guests;
 
     # microvm@ service dependencies
-    systemd.services = lib.mapAttrs' (vmName: vmConfig: {
-      name = "microvm@${vmName}";
-      value = {
+    systemd.services = lib.concatMapAttrs (vmName: vmConfig: {
+      "microvm@${vmName}" = {
         requires = vmConfig.requires;
         after = vmConfig.after;
+      };
+
+      "microvm-virtiofsd@${vmName}" = lib.mkIf cfg.waitForZfs {
+        requires = lib.mkAfter [ "zfs.target" ];
+        after = lib.mkAfter [ "zfs.target" ];
       };
     }) cfg.guests;
   };
