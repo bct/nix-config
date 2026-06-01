@@ -57,12 +57,11 @@
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [
-        "/home/bct/images/wallpaper/View_of_Vent_in_the_Ventertal.jpg"
-      ];
-
       wallpaper = [
-        ",/home/bct/images/wallpaper/View_of_Vent_in_the_Ventertal.jpg"
+        {
+          monitor = "";
+          path = "/home/bct/images/wallpaper/View_of_Vent_in_the_Ventertal.jpg";
+        }
       ];
     };
   };
