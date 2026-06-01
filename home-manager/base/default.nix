@@ -25,6 +25,7 @@ in
       enableFancyShell = lib.mkOption {
         type = lib.types.bool;
         description = "Enable fancy shell settings?";
+        default = false;
       };
     };
   };
