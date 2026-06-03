@@ -18,6 +18,11 @@
       pkgs.xdg-desktop-portal-gtk
       config.wayland.windowManager.hyprland.portalPackage
     ];
+    # attempt to fix screensharing on hyprland.
+    config.hyprland.default = [
+      "hyprland"
+      "gtk"
+    ];
   };
 
   services.cliphist.enable = true;
@@ -52,6 +57,13 @@
 
     font_size = 15
     font_name = "UbuntuMono Nerd Font"
+  '';
+
+  # Fix screensharing double menu
+  xdg.configFile."hypr/xdph.conf".text = ''
+    screencopy {
+      allow_token_by_default = true
+    }
   '';
 
   services.hyprpaper = {
