@@ -55,6 +55,8 @@
       ExecStart = "${pkgs.rtl-sdr}/bin/rtl_tcp";
       User = "rtlamr";
       Group = "plugdev";
+      Restart = "always";
+      RestartSec = "30";
     };
   };
 
@@ -62,9 +64,12 @@
     description = "RTLAMR Collector";
     environment = {
       RTLAMR_FORMAT = "json";
-      RTLAMR_MSGTYPE = "scm";
+      RTLAMR_MSGTYPE = "scm,scm+";
       RTLAMR_SERVER = "localhost:1234";
-      RTLAMR_FILTERID = "40010397,41946625";
+      # find IDs by running "rtlamr -msgtype=all"
+      # 80608494: barn (changed from 40010397 in 2025)
+      # 41946625: house
+      RTLAMR_FILTERID = "80608494,41946625";
 
       # COLLECT_LOGLEVEL = "Debug";
       COLLECT_INFLUXDB_HOSTNAME = "http://influx.domus.diffeq.com:8086/";
