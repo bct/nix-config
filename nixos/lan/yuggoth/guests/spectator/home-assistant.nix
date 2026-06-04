@@ -53,6 +53,7 @@ in
       "openweathermap"
       "environment_canada"
       "esphome"
+      "roomba"
 
       # Media
       "dlna_dmr"
