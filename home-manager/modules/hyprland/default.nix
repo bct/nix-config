@@ -7,6 +7,7 @@
   imports = [
     ./hyprland.nix
     ./hyprlock.nix
+    ./theme.nix
     ./waybar.nix
   ];
 
@@ -31,21 +32,10 @@
     brightnessctl # hyprland, hyprlock
     playerctl
 
-    awww # wallpaper
-    capitaine-cursors
-
     grim # screenshots
 
     alacritty
   ];
-
-  home.pointerCursor = {
-    package = pkgs.capitaine-cursors;
-    name = "capitaine-cursors";
-    size = 18;
-    gtk.enable = true;
-    x11.enable = true;
-  };
 
   # Optional, hint Electron apps to use Wayland:
   home.sessionVariables.NIXOS_OZONE_WL = "1";
@@ -65,24 +55,4 @@
       allow_token_by_default = true
     }
   '';
-
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      wallpaper = [
-        {
-          monitor = "";
-          path = "/home/bct/images/wallpaper/View_of_Vent_in_the_Ventertal.jpg";
-        }
-      ];
-    };
-  };
-
-  gtk = {
-    enable = true;
-    font = {
-      name = "Ubuntu";
-      size = 8;
-    };
-  };
 }
