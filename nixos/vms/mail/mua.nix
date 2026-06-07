@@ -91,6 +91,7 @@
       # For more information about notmuch, see https://notmuchmail.org
       # Database configuration
       #
+      # TODO: this comment is not true any more
       # The only value supported here is 'path' which should be the top-level
       # directory where your mail currently exists and to where mail will be
       # delivered in the future. Files should be individual email messages.
@@ -98,7 +99,7 @@
       # configured here named ".notmuch".
       #
       [database]
-      path=/var/vmail/diffeq.com/bct/mail
+      mail_root=/var/vmail/diffeq.com/bct/mail
       # User configuration
       #
       # Here is where you can let notmuch know how you would like to be

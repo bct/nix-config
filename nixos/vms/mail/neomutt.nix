@@ -151,6 +151,7 @@ in
       bind editor ^T complete
 
       # notmuch bindings
+      set nm_default_url = "notmuch:///var/home/bct/.local/share/notmuch/default"
       macro index \\\\ "<vfolder-from-query>"  # looks up a hand made query
 
       source ${colours-gruvbox}

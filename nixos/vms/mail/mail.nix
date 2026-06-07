@@ -29,6 +29,8 @@ in
     enable = true;
     stateVersion = 3;
 
+    #debug.dovecot = true;
+
     fqdn = "mail.domus.diffeq.com";
     domains = [
       "diffeq.com"
