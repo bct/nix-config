@@ -1,9 +1,4 @@
-{ inputs, pkgs, ... }:
-let
-  # our old version of github.com/mdlayher/netlink is not compatible with newer versions of Go
-  # TODO: upstream a PR for wgsd?
-  coredns = inputs.nixpkgs-2511.legacyPackages.${pkgs.stdenv.hostPlatform.system}.coredns;
-in
+{ pkgs, ... }:
 {
   networking.firewall.allowedUDPPorts = [ 53 ];
 
@@ -22,18 +17,19 @@ in
       }
     '';
 
-    package = coredns.override {
+    package = pkgs.coredns.override {
+      # my fork that updated the golang version
       externalPlugins = [
         {
           name = "wgsd";
-          repo = "github.com/jwhited/wgsd";
-          version = "v0.3.6";
+          repo = "github.com/bct/wgsd";
+          version = "cc86123275990ea54ed86d38524b9db0e8dadd1f";
         }
       ];
       # the vendorHash needs to be updated every time pkgs.coredns updates,
       # due to the way the core & plugin packages are combined when vendored.
       # I spent a couple of days trying to fix this, and eventually gave up.
-      vendorHash = "sha256-pauVp0pa/dSY2ACoaTRzlW6lI9DuwG3miO7uz9Cbr4k=";
+      vendorHash = "sha256-XTAMD0iOKEj6JC3vqq0Sq/frr+Qofst7XPJtdLuyd4o=";
     };
   };
 

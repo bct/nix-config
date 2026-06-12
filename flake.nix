@@ -18,7 +18,6 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-2511.url = "github:nixos/nixpkgs/nixos-25.11";
 
     # bug fixes & new packages
     # https://github.com/NixOS/nixpkgs/pull/354032
