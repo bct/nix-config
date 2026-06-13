@@ -8,6 +8,8 @@ let
   whitelist = {
     # mojang
     Underslunky = "fe8d63f2-96c7-45a0-9fc3-aa454d5d9faa"; # A.
+    iggypop7 = "ba167872-95d2-44a4-a061-fd1da862ed68"; # I.
+    Wblaikiebee = "6a3da427-b081-456a-a4cd-2c08a61e5780"; # I's friend B.
   };
   operators = {
     # drasl
