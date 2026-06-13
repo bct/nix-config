@@ -1,4 +1,10 @@
-{ self, config, lib, pkgs, ... }:
+{
+  self,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [ "${self}/nixos/modules/borgmatic" ];
@@ -17,8 +23,9 @@
 
     settings = {
       source_directories = [
-        "/var/lib/tandoor-recipes/recipes"
         "/var/lib/karakeep"
+        "/var/lib/tandoor-recipes"
+        "/var/lib/vikunja"
       ];
 
       sqlite_databases = [
