@@ -190,8 +190,8 @@ in
           # TODO
           bridge_name = "br0";
 
-          # qemu fails to launch with a DRI error if virtio_video = true
-          virtio_video = false;
+          # this is undocumented, but it seems to turn on virtio_video while turning off DRM.
+          virtio_video = null;
         };
         extraDisks = map (disk: {
           type = "block";
@@ -239,15 +239,6 @@ in
             devices = baseXML.devices // {
               disk = baseXML.devices.disk ++ extraDisks;
               filesystem = (baseXML.devices.filesystem or [ ]) ++ mounts;
-
-              # domains weren't autostarting due to a SPICE-related error.
-              # I'm not using this anyways, so let's just turn it off.
-              graphics = {
-                type = "spice";
-                listen = {
-                  type = "none";
-                };
-              };
             };
           }
         );
