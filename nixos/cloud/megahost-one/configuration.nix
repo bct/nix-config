@@ -24,7 +24,6 @@
     ./postgres.nix
     ./goatcounter.nix
     ./minecraft.nix
-    ./wiki.nix
     ./wireguard-viator.nix
     ./wireguard-conductum.nix
 
@@ -49,7 +48,6 @@
 
     password-postgres.rekeyFile = config.diffeq.secretsPath + /db/password-megahost-postgres.age;
     password-goatcounter.rekeyFile = config.diffeq.secretsPath + /db/password-goatcounter.age;
-    password-wikijs.rekeyFile = config.diffeq.secretsPath + /db/password-wikijs.age;
   };
 
   megahost.minio = {
@@ -75,7 +73,6 @@
   megahost.postgres = {
     databases = [
       "goatcounter"
-      "wiki-js"
     ];
 
     users = {
@@ -85,11 +82,6 @@
 
       goatcounter = {
         passwordFile = config.age.secrets.password-goatcounter.path;
-        ensureDBOwnership = true;
-      };
-
-      wiki-js = {
-        passwordFile = config.age.secrets.password-wikijs.path;
         ensureDBOwnership = true;
       };
     };
@@ -107,9 +99,6 @@
         };
         goatcounter = {
           suffix6 = "3";
-        };
-        wiki = {
-          suffix6 = "4";
         };
         minio-escam-biz = {
           suffix6 = "6";
