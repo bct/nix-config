@@ -34,6 +34,7 @@
       pkgs.typescript-language-server
       pkgs.rust-analyzer
       pkgs.clang-tools
+      pkgs.emmylua-ls
     ];
 
     plugins =
@@ -172,9 +173,11 @@
                 black = { command = "${pkgs.black}/bin/black" },
                 isort = { command = "${pkgs.isort}/bin/isort" },
                 prettier = { command = "${pkgs.prettier}/bin/prettier" },
+                stylua = { command = "${pkgs.stylua}/bin/stylua" },
               },
 
               formatters_by_ft = {
+                lua = { "stylua" },
                 -- run isort, then black
                 python = { "isort", "black" },
               },
