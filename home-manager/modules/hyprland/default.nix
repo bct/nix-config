@@ -35,6 +35,8 @@
     grim # screenshots
 
     alacritty
+
+    hyprshutdown # utilities
   ];
 
   # Optional, hint Electron apps to use Wayland:
