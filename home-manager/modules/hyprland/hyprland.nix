@@ -56,16 +56,10 @@ in
     # https://wiki.hypr.land/Useful-Utilities/Systemd-start/
     #systemd.enable = false;
 
-    # settings.env = [
-    #   "XCURSOR_THEME,capitaine-cursors"
-    #   "XCURSOR_SIZE,18"
-    # ];
-
     configType = "lua";
 
     # TODO: use extraLuaFiles once that's available
     extraConfig = ''
-      local hm_xdg_config_home = os.getenv("XDG_CONFIG_HOME")
       require("00-workspaces")
     ''
     + builtins.readFile ./hyprland.lua;
