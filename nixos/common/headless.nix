@@ -48,6 +48,11 @@ in
       pkgs.strace
     ];
 
+    # reduce closure size: avoid dependencies on X
+    programs.ssh.setXAuthLocation = false;
+    security.pam.services.su.forwardXAuth = lib.mkForce false;
+    fonts.fontconfig.enable = false;
+
     # this documentation doesn't seem very valuable on a server.
     documentation.nixos.enable = lib.mkDefault false;
 
