@@ -75,6 +75,11 @@
       * ^From: .*@github.com
       github/
 
+      ### aliexpress
+      :0:
+      * ^From: .*aliexpress.com
+      aliexpress/
+
       ### mailing list catch-all
       :0:
       * ^(Mailing-List|List-Id):.*
