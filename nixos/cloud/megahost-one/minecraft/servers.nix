@@ -190,7 +190,7 @@ in
             );
 
             # Specify the custom minecraft server package
-            package = pkgs.vanillaServers.vanilla-26_1_2;
+            package = pkgs.vanillaServers.vanilla-26_2;
 
             serverProperties = {
               motd = "B-)";
