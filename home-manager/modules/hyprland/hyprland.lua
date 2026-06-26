@@ -312,10 +312,10 @@ hl.bind(mainMod .. " + O", hl.dsp.focus({ monitor = "0" }))
 hl.bind(mainMod .. " + E", hl.dsp.focus({ monitor = "1" }))
 
 -- resize the active window
-hl.bind("SUPER + CTRL + H", hl.dsp.window.resize({ x = -36, y = 0 }))
-hl.bind("SUPER + CTRL + T", hl.dsp.window.resize({ x = 0, y = 24 }))
-hl.bind("SUPER + CTRL + N", hl.dsp.window.resize({ x = 0, y = -24 }))
-hl.bind("SUPER + CTRL + N", hl.dsp.window.resize({ x = 36, y = 0 }))
+hl.bind("SUPER + CTRL + H", hl.dsp.window.resize({ x = -36, y = 0, relative = true }))
+hl.bind("SUPER + CTRL + T", hl.dsp.window.resize({ x = 0, y = 24, relative = true }))
+hl.bind("SUPER + CTRL + N", hl.dsp.window.resize({ x = 0, y = -24, relative = true }))
+hl.bind("SUPER + CTRL + S", hl.dsp.window.resize({ x = 36, y = 0, relative = true }))
 
 -- return to previous workspace
 hl.bind(mainMod .. " + R", hl.dsp.focus({ workspace = "previous" }))
