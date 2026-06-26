@@ -72,6 +72,7 @@ in
             ListenAddress = "0.0.0.0:${toString draslPort}";
             DefaultAdmins = [ "DukeRibbitIV" ];
 
+            SignPublicKeys = false;
             ForwardSkins = true;
 
             RegistrationNewPlayer = {

@@ -7,14 +7,15 @@
 let
   whitelist = {
     # mojang
-    Underslunky = "fe8d63f2-96c7-45a0-9fc3-aa454d5d9faa"; # A.
+    Underslunky = "fe8d63f2-96c7-45a0-9fc3-aa454d5d9faa"; # J's son A.
     iggypop7 = "ba167872-95d2-44a4-a061-fd1da862ed68"; # I.
     Wblaikiebee = "6a3da427-b081-456a-a4cd-2c08a61e5780"; # I's friend B.
+    MrDoughnutPlayz = "43d53948-7feb-4f44-9aa7-dec673e048b1"; # F.'s schoolmate B.
   };
   operators = {
     # drasl
     GothGirl = "137bb49c-9bf5-4479-9003-19fedacd7357"; # J.
-    DukeRibbitIV = "709f1f59-2f07-4467-bcee-121e3f7755fc"; # B.
+    DukeRibbitIV = "709f1f59-2f07-4467-bcee-121e3f7755fc"; # me.
 
     # mojang/drasl
     StarchyPie = "458c712e-41cf-4b0a-9002-a112776661c9"; # F.
@@ -139,6 +140,7 @@ in
               online-mode = true;
               white-list = true;
               enforce-whitelist = true;
+              enforce-secure-profile = false;
 
               hardcore = false;
 
@@ -168,6 +170,7 @@ in
               online-mode = true;
               white-list = true;
               enforce-whitelist = true;
+              enforce-secure-profile = false;
 
               hardcore = false;
 
@@ -181,13 +184,11 @@ in
           servers.sigma-server = {
             enable = true;
             # max heap size 4G, initial heap size 2G
-            jvmOpts = lib.concatStringsSep " " (
-              [
-                "-Xmx4G"
-                "-Xms2G"
-              ]
-              ++ draslJvmOpts
-            );
+            # no drasl
+            jvmOpts = lib.concatStringsSep " " [
+              "-Xmx4G"
+              "-Xms2G"
+            ];
 
             # Specify the custom minecraft server package
             package = pkgs.vanillaServers.vanilla-26_2;
