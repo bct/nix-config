@@ -8,6 +8,7 @@ let
   whitelist = {
     # mojang
     Underslunky = "fe8d63f2-96c7-45a0-9fc3-aa454d5d9faa"; # J's son A.
+    ArEnKay = "ef80c5d3-6d9b-47c0-a69c-d1c69ecdb09b"; # J's husband R.
     iggypop7 = "ba167872-95d2-44a4-a061-fd1da862ed68"; # I.
     Wblaikiebee = "6a3da427-b081-456a-a4cd-2c08a61e5780"; # I's friend B.
     MrDoughnutPlayz = "43d53948-7feb-4f44-9aa7-dec673e048b1"; # F.'s schoolmate B.
