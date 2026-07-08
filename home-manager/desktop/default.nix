@@ -46,32 +46,28 @@
     imv
 
     # media
-    # https://github.com/dweymouth/supersonic/pull/898
-    ((unstable.supersonic.override { waylandSupport = true; }).overrideAttrs (old: {
-      version = "pr-898";
+    # https://github.com/dweymouth/supersonic/issues/560#issuecomment-4898869840
+    (unstable.supersonic-wayland.overrideAttrs (old: rec {
+      version = "b3d695c98d319fb4d8461f62469267d399cbd552";
       src = fetchFromGitHub {
-        owner = "ocelotsloth";
+        owner = "dweymouth";
         repo = "supersonic";
-        rev = "a2d3850b899a565861c46178cf3b24a5d2a4c965";
-        hash = "sha256-umOGwd9HlviYMlE9i5v0tc9wnluKJnJWkeYatj86OXA=";
+        rev = version;
+        hash = "sha256-KGHtM507bAwCEyLXpFAbyZT/O8ilxW1NMl3S3+Xp7a8=";
       };
 
-      vendorHash = "sha256-Qg5OWg+iFcGuD8E3/7YwmmciiRGdUFNSHLrEAaqRmnQ=";
+      vendorHash = "sha256-W5Uwma72lqJB+QHkSasi7WArsYlfXLVPph9TlDSxFEk=";
+      # "go mod vendor" fails to build; go-gl/glfw fails with an error like:
+      # xdg-shell-client-protocol.h: No such file or directory
+      proxyVendor = true;
 
       # work around https://github.com/dweymouth/supersonic/issues/316
-      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.makeWrapper ];
+      nativeBuildInputs = old.nativeBuildInputs ++ [
+        pkgs.makeWrapper
+      ];
+
       postInstall = old.postInstall + ''
         wrapProgram $out/bin/supersonic-wayland \
-          --prefix PATH : ${pkgs.libnotify}/bin
-      '';
-    }))
-    # wayland is not working yet:
-    # https://github.com/dweymouth/supersonic/issues/560
-    (unstable.supersonic.overrideAttrs (old: {
-      # work around https://github.com/dweymouth/supersonic/issues/316
-      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.makeWrapper ];
-      postInstall = old.postInstall + ''
-        wrapProgram $out/bin/supersonic \
           --prefix PATH : ${pkgs.libnotify}/bin
       '';
     }))
