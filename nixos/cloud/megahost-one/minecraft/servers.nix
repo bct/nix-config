@@ -12,6 +12,7 @@ let
     iggypop7 = "ba167872-95d2-44a4-a061-fd1da862ed68"; # I.
     Wblaikiebee = "6a3da427-b081-456a-a4cd-2c08a61e5780"; # I's friend B.
     MrDoughnutPlayz = "43d53948-7feb-4f44-9aa7-dec673e048b1"; # F.'s schoolmate B.
+    GothGirlJ = "b6ce94fa-6d2a-4fb7-affd-9a8c5abb2277"; # J.
   };
   operators = {
     # drasl
