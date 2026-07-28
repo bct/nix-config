@@ -59,6 +59,11 @@
       #VERBOSE=on
       UMASK=007
 
+      ### aliexpress
+      :0:
+      * ^From: .*aliexpress.com
+      aliexpress/
+
       ### spam can go to hell
       :0:
       * ^X-Spam: yes
@@ -74,11 +79,6 @@
       :0:
       * ^From: .*@github.com
       github/
-
-      ### aliexpress
-      :0:
-      * ^From: .*aliexpress.com
-      aliexpress/
 
       ### mailing list catch-all
       :0:
