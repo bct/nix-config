@@ -95,6 +95,8 @@ hl.config({
 		col = {
 			active_border = "#ffffff",
 			inactive_border = "rgba(444444ff)",
+			nogroup_border = "#d65d0e",
+			-- nogroup_border_active = "#fe8019",
 		},
 
 		-- Set to true to enable resizing windows by clicking and dragging on borders and gaps
@@ -437,3 +439,5 @@ hl.window_rule({
 	match = { class = "Supersonic" },
 	workspace = "special:music",
 })
+
+hl.window_rule({ match = { title = "^Picture-in-picture$" }, float = true, group = "deny" })
