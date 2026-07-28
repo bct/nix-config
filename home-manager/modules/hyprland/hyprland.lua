@@ -299,7 +299,7 @@ hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(menu))
 -- hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + V", hl.dsp.layout("togglesplit")) -- dwindle only
 
-hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen_state({ internal = 1, client = 0 }))
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen_state({ internal = 1, client = 0, action = "toggle" }))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
