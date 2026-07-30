@@ -21,4 +21,9 @@ in
       extraConfig = "reverse_proxy localhost:${toString port}";
     };
   };
+
+  # temporary until we're on a newer version of karakeep
+  nixpkgs.config.permittedInsecurePackages = [
+    "pnpm-9.15.9"
+  ];
 }
