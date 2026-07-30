@@ -48,12 +48,12 @@
     # media
     # https://github.com/dweymouth/supersonic/issues/560#issuecomment-4898869840
     (unstable.supersonic-wayland.overrideAttrs (old: rec {
-      version = "b3d695c98d319fb4d8461f62469267d399cbd552";
+      version = "0.22.0";
       src = fetchFromGitHub {
         owner = "dweymouth";
         repo = "supersonic";
         rev = version;
-        hash = "sha256-KGHtM507bAwCEyLXpFAbyZT/O8ilxW1NMl3S3+Xp7a8=";
+        hash = "sha256-Ynw/NLDk2AVmn30llFtt/A9hEheUZ+/VZqXOIdiUSxQ=";
       };
 
       vendorHash = "sha256-W5Uwma72lqJB+QHkSasi7WArsYlfXLVPph9TlDSxFEk=";
