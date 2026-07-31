@@ -100,6 +100,12 @@
 
   home.file."bin/mount-host".source = ./files/bin/mount-host;
 
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      gtk-enable-primary-paste = true;
+    };
+  };
+
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 }
