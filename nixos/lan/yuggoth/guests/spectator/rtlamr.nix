@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+let
+  rtlTcpPort = 1234;
+in
 {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
@@ -65,7 +68,7 @@
     environment = {
       RTLAMR_FORMAT = "json";
       RTLAMR_MSGTYPE = "scm,scm+";
-      RTLAMR_SERVER = "localhost:1234";
+      RTLAMR_SERVER = "localhost:${toString rtlTcpPort}";
       # find IDs by running "rtlamr -msgtype=all"
       # 80608494: barn (changed from 40010397 in 2025)
       # 41946625: house
@@ -79,7 +82,6 @@
     };
 
     wantedBy = [ "multi-user.target" ];
-    bindsTo = [ "rtl_tcp.service" ];
     after = [ "rtl_tcp.service" ];
     partOf = [ "rtl_tcp.service" ];
 
@@ -87,6 +89,11 @@
       WorkingDirectory = "/run/rtlamr-collect";
       RuntimeDirectory = "rtlamr-collect";
       EnvironmentFile = config.age.secrets.rtlamr-collect-env.path;
+      ExecStartPre = toString (
+        pkgs.writeShellScript "wait-rtl-tcp" ''
+          until ${pkgs.netcat}/bin/nc -z 127.0.0.1 ${toString rtlTcpPort}; do sleep 1; done
+        ''
+      );
       ExecStart = ''/bin/sh -c "${pkgs.rtlamr}/bin/rtlamr | ${pkgs.rtlamr-collect}/bin/rtlamr-collect"'';
       Restart = "always";
       RestartSec = "30";
