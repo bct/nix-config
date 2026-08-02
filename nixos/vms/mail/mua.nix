@@ -80,6 +80,18 @@
       * ^From: .*@github.com
       github/
 
+      ### flyers
+      :0:
+      * ^From: .*@facebookmail.com|
+        ^From: .*@mec.ca|
+        ^From: .*linkedin.com
+      flyers/
+
+      ### school
+      :0:
+      * ^From: .*@psd.ca
+      school/
+
       ### mailing list catch-all
       :0:
       * ^(Mailing-List|List-Id):.*

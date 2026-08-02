@@ -154,6 +154,11 @@ in
       set nm_default_url = "notmuch:///var/home/bct/.local/share/notmuch/default"
       macro index \\\\ "<vfolder-from-query>"  # looks up a hand made query
 
+      set index_format = "%4C %Z %<[1y?%[%b %d]&%[%Y-%m-%d]> %-15.15L (%<l?%4l&%4c>) %s"
+
+      # show extra headers
+      unignore Folder
+
       source ${colours-gruvbox}
 
       set alias_file="~/.neomutt/alias"
