@@ -41,4 +41,6 @@ in
     unzip
     unrar
   ];
+
+  programs.zoom-us.enable = true;
 }
