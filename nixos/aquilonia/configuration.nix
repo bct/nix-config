@@ -51,10 +51,11 @@
   # Enable touchpad support (enabled by default in most desktopManager).
   services.libinput.enable = true;
 
-  services.udev.extraRules = ''
-    # Suspend the system when battery level drops to 5% or lower
-    SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl suspend"
+  services.upower = {
+    enable = true;
+  };
 
+  services.udev.extraRules = ''
     # USBtinyISP: https://learn.adafruit.com/usbtinyisp/avrdude
     SUBSYSTEMS=="usb", ATTR{product}=="USBtiny", ATTR{idVendor}=="1781", ATTR{idProduct}=="0c9f", GROUP="users", MODE="0666"
 
