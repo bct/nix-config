@@ -88,23 +88,6 @@ in
 
       [destination]
       type = MDA_external
-      # -- direct delivery with dovecot
-      # doesn't work because of permissions / ownership
-      #path = /nix/store/vhy8mkw6h8493cp8d7wfxg1qhy7jzjcz-dovecot-2.3.21.1/libexec/dovecot/deliver
-      #arguments = ("-e", "-f", "%(sender)", "-d", "bct@diffeq.com")
-      # -- injection with sendmail
-      # works, but skips rspamd
-      #path = /run/wrappers/bin/sendmail
-      #arguments = ("-i", "-t")
-      # -- injection via rspamc
-      #path = /run/current-system/sw/bin/rspamc
-      #arguments = ("--mime", "--exec", "/nix/store/vhy8mkw6h8493cp8d7wfxg1qhy7jzjcz-dovecot-2.3.21.1/libexec/dovecot/deliver -e -d bct@diffeq.com")
-      #arguments = ("--mime", "--exec", "/nix/store/vhy8mkw6h8493cp8d7wfxg1qhy7jzjcz-dovecot-2.3.21.1/libexec/dovecot/deliver -e")
-      #arguments = ("--connect", "/run/rspamd/worker-controller.sock", "--mime", "--exec", "/run/current-system/sw/bin/procmail",)
-      # -- direct pass to procmail
-      # path = ${pkgs.procmail}/bin/procmail
-      # arguments = ("-f", "%(sender)")
-      # group = virtualMail
       path = ${rspamc-deliver}/bin/rspamc-deliver
 
       [options]

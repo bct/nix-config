@@ -82,9 +82,9 @@
 
       ### flyers
       :0:
-      * ^From: .*@facebookmail.com|
-        ^From: .*@mec.ca|
-        ^From: .*linkedin.com
+      * ^From: .*@facebookmail.com|\
+        ^From: .*@mec.ca|\
+        ^From: .*@linkedin.com
       flyers/
 
       ### school

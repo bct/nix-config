@@ -146,6 +146,12 @@ in
       # Ctrl-O – Open Highlighted Mailbox
       bind index,pager \CO sidebar-open
 
+      # Hide sidebar when viewing any message
+      message-hook ~A "set sidebar_visible = no"
+
+      # Macro to restore sidebar visibility upon exiting the pager
+      macro pager q "<exit><enter-command>set sidebar_visible = yes<return><refresh>"
+
       set query_command= "qcard -emailonly '%s'"
       bind editor <Tab> complete-query
       bind editor ^T complete
@@ -158,6 +164,9 @@ in
 
       # show extra headers
       unignore Folder
+
+      # do not add +s when you wrap lines. that breaks long links in dumped HTML.
+      unset markers
 
       source ${colours-gruvbox}
 
