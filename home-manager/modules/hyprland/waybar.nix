@@ -10,9 +10,9 @@ in
       {
         # "layer": "top", # Waybar at top layer
         # "position": "bottom", # Waybar position (top|bottom|left|right)
-        height = 30; # Waybar height (to be removed for auto height)
+        height = 24; # Waybar height (to be removed for auto height)
         # "width": 1280, # Waybar width
-        spacing = 4; # Gaps between modules (4px)
+        spacing = 0; # Gaps between modules (4px)
 
         # Choose the order of the modules
         modules-left = [
@@ -55,6 +55,7 @@ in
             show-special = true;
             special-visible-only = true;
           };
+
         tray = {
           # "icon-size": 21,
           spacing = 10;
@@ -65,6 +66,7 @@ in
         };
         clock = {
           tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+          format = "{:%H:%M %b %d}";
           format-alt = "{:%Y-%m-%d}";
         };
         cpu = {
@@ -72,7 +74,7 @@ in
           tooltip = false;
         };
         backlight = {
-          format = "{percent}% {icon}";
+          format = "{icon}";
           format-icons = [
             ""
             ""
@@ -140,19 +142,22 @@ in
 
     style = ''
       * {
-        font-family: "UbuntuMono Nerd Font";
+        font-family: "UbuntuMono Nerd Font Propo";
         font-size: 13px;
+        box-shadow: none;
       }
 
       window#waybar {
-        background: rgba(40, 40, 40, 0.9);
+        background: transparent;
         color: #ebdbb2;
+        padding: 0;
       }
 
       #window {
         background: #458588;
         color: #ebdbb2;
         padding: 0 10px;
+        margin: 0;
       }
 
       #workspaces {
@@ -163,7 +168,7 @@ in
         background: transparent;
         color: #ebdbb2;
         margin: 0;
-        padding: 0 9px 0 5px;
+        padding: 0 5px;
         border: 0;
         border-radius: 0;
       }
@@ -186,7 +191,7 @@ in
       #tray,
       #bluetooth {
         padding: 0 10px;
-        margin: 0 5px;
+        margin: 0;
       }
 
       #battery.charging {
@@ -200,6 +205,10 @@ in
       #battery.critical:not(.charging) {
         color: #d65d0e;
         animation: blink 0.5s linear infinite alternate;
+      }
+
+      #clock {
+        background-color: #d65d0e;
       }
 
       @keyframes blink {
