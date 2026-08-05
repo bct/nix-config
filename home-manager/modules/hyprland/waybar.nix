@@ -21,7 +21,9 @@ in
         ];
 
         modules-center = [
+          "custom/sep-window-left"
           "hyprland/window"
+          "custom/sep-window-right"
         ];
 
         modules-right = [
@@ -31,6 +33,7 @@ in
           "cpu"
           "backlight"
           "battery"
+          "custom/sep-clock-left"
           "clock"
           "tray"
         ];
@@ -137,6 +140,21 @@ in
           };
           on-click = "pavucontrol";
         };
+
+        "custom/sep-window-left" = {
+          "format" = " ";
+          "tooltip" = false;
+        };
+
+        "custom/sep-window-right" = {
+          "format" = " ";
+          "tooltip" = false;
+        };
+
+        "custom/sep-clock-left" = {
+          "format" = " ";
+          "tooltip" = false;
+        };
       }
     ];
 
@@ -153,11 +171,21 @@ in
         padding: 0;
       }
 
+      #custom-sep-window-left {
+        min-width: 20px;
+        background: linear-gradient(70deg,rgba(0, 0, 0, 0) 50%, rgba(69, 133, 136, 1) 50%);
+      }
+
       #window {
         background: #458588;
         color: #ebdbb2;
-        padding: 0 10px;
+        padding: 0 4px;
         margin: 0;
+      }
+
+      #custom-sep-window-right {
+        min-width: 20px;
+        background: linear-gradient(70deg, rgba(69, 133, 136, 1) 50%, rgba(0, 0, 0, 0) 50%);
       }
 
       #workspaces {
@@ -207,8 +235,14 @@ in
         animation: blink 0.5s linear infinite alternate;
       }
 
+      #custom-sep-clock-left {
+        min-width: 20px;
+        background: linear-gradient(70deg,rgba(0, 0, 0, 0) 50%, rgba(214, 93, 14, 1) 50%);
+      }
+
       #clock {
         background-color: #d65d0e;
+        padding-left: 0;
       }
 
       @keyframes blink {
