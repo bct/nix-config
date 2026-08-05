@@ -384,7 +384,7 @@ hl.bind("SUPER + CTRL + L", hl.dsp.exec_cmd("hyprlock"), { locked = true })
 -- See https://wiki.hypr.land/Configuring/Basics/Window-Rules/
 -- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 
-hl.workspace_rule({ workspace = "special:music", on_created_empty = "supersonic-wayland", gaps_out = 50 })
+hl.workspace_rule({ workspace = "special:music", on_created_empty = "supersonic", gaps_out = 50 })
 hl.workspace_rule({ workspace = "name:notes", on_created_empty = "obsidian" })
 hl.workspace_rule({ workspace = "name:web", gaps_out = { 10, 0, 10, 0 } })
 

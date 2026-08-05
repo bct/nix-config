@@ -46,28 +46,12 @@
     imv
 
     # media
-    # https://github.com/dweymouth/supersonic/issues/560#issuecomment-4898869840
-    (unstable.supersonic-wayland.overrideAttrs (old: rec {
-      version = "0.22.0";
-      src = fetchFromGitHub {
-        owner = "dweymouth";
-        repo = "supersonic";
-        rev = version;
-        hash = "sha256-Ynw/NLDk2AVmn30llFtt/A9hEheUZ+/VZqXOIdiUSxQ=";
-      };
-
-      vendorHash = "sha256-W5Uwma72lqJB+QHkSasi7WArsYlfXLVPph9TlDSxFEk=";
-      # "go mod vendor" fails to build; go-gl/glfw fails with an error like:
-      # xdg-shell-client-protocol.h: No such file or directory
-      proxyVendor = true;
-
+    (unstable.supersonic.overrideAttrs (old: {
       # work around https://github.com/dweymouth/supersonic/issues/316
-      nativeBuildInputs = old.nativeBuildInputs ++ [
-        pkgs.makeWrapper
-      ];
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.makeWrapper ];
 
       postInstall = old.postInstall + ''
-        wrapProgram $out/bin/supersonic-wayland \
+        wrapProgram $out/bin/supersonic \
           --prefix PATH : ${pkgs.libnotify}/bin
       '';
     }))
