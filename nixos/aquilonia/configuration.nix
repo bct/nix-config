@@ -112,6 +112,10 @@
   # TODO: remove this once we're on a fixed kernel (> 6.19.10?)
   boot.kernelParams = [ "amdgpu.cwsr_enable=0" ];
 
+  # framework explicitly recommends against using TLP, at least for earlier Ryzen chips:
+  # https://knowledgebase.frame.work/en_us/optimizing-ubuntu-battery-life-Sye_48Lg3
+  services.tlp.enable = false;
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It's perfectly fine and recommended to leave
