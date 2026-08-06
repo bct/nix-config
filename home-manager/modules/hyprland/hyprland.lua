@@ -215,6 +215,12 @@ hl.window_rule({
 	rounding = 0,
 })
 
+hl.window_rule({
+	name = "feh",
+	match = { class = "feh" },
+	float = true,
+})
+
 -- See https://wiki.hypr.land/Configuring/Layouts/Dwindle-Layout/ for more
 hl.config({
 	dwindle = {

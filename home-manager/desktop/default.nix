@@ -44,6 +44,7 @@
 
     # image viewer
     imv
+    feh
 
     # media
     (unstable.supersonic.overrideAttrs (old: {
