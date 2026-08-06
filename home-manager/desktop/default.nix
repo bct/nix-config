@@ -58,7 +58,7 @@
     }))
 
     # chat
-    webcord
+    unstable.webcord # unstable fixes a blank screen
   ];
 
   # Raw configuration files
