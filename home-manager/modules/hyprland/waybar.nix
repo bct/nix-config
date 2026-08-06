@@ -238,11 +238,13 @@ in
       #custom-sep-clock-left {
         min-width: 20px;
         background: linear-gradient(70deg,rgba(0, 0, 0, 0) 50%, rgba(214, 93, 14, 1) 50%);
+        opacity: 0.8;
       }
 
       #clock {
         background-color: #d65d0e;
         padding-left: 0;
+        opacity: 0.8;
       }
 
       @keyframes blink {
