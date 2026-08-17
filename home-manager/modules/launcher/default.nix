@@ -86,5 +86,12 @@ in
       exec = "rofi-network-manager";
       terminal = false;
     };
+
+    paintergrowth-slack = {
+      name = "paintergrowth slack";
+      genericName = "PainterGrowth Slack";
+      exec = "chromium --app=https://paintergrowth.slack.com/ \"--profile-directory=Profile 1\"";
+      terminal = false;
+    };
   };
 }
