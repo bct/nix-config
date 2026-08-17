@@ -447,3 +447,23 @@ hl.window_rule({
 })
 
 hl.window_rule({ match = { title = "^Picture-in-picture$" }, float = true, group = "deny" })
+
+-- Hyprland Share Picker
+hl.window_rule({
+	name = "hyprland-share-picker",
+	match = { title = "Select what to share" },
+	float = true,
+	pin = true,
+	center = true,
+	size = "600 400",
+	group = "deny",
+})
+
+-- GTK File and Folder Picker
+hl.window_rule({
+	name = "xdg-desktop-portal-gtk",
+	match = { class = "xdg-desktop-portal-gtk" },
+	float = true,
+	center = false,
+	size = "800 600",
+})

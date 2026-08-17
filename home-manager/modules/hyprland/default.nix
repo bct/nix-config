@@ -51,9 +51,9 @@
     font_name = "UbuntuMono Nerd Font"
   '';
 
-  # Fix screensharing double menu
   xdg.configFile."hypr/xdph.conf".text = ''
     screencopy {
+      # fix screensharing double menu
       allow_token_by_default = true
     }
   '';
