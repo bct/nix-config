@@ -1,6 +1,7 @@
 # lego-proxy whitelist.
 # keys in this attrset refer to entries in secrets/lego-proxy/
 {
+  audiobooks.domain = "audiobooks.domus.diffeq.com";
   auth.domain = "auth.domus.diffeq.com";
   books.domain = "books.domus.diffeq.com";
   booklore.domain = "booklore.domus.diffeq.com";

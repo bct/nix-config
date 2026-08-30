@@ -9,6 +9,7 @@
     "${self}/nixos/common/headless.nix"
     "${self}/nixos/common/node-exporter.nix"
 
+    ./audiobookshelf.nix
     ./booklore.nix
     ./borgmatic.nix
     ./homepage.nix
@@ -34,6 +35,7 @@
   services.lego-proxy-client = {
     enable = true;
     domains = [
+      "audiobooks"
       "booklore"
       "bookmarks"
       "dav"
