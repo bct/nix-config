@@ -66,6 +66,36 @@ in
   programs.claude-code = {
     enable = true;
     package = pkgs.unstable.claude-code;
+
+    settings = {
+      syntaxHighlightingDisabled = false;
+      effortLevel = "medium";
+      theme = "dark";
+      hooks = {
+        Stop = [
+          {
+            hooks = [
+              {
+                # this doesn't work because DBUS isn't available?
+                type = "command";
+                command = "dunstify 'Claude Code' 'Task completed!'";
+              }
+            ];
+          }
+        ];
+        Notification = [
+          {
+            hooks = [
+              {
+                # this doesn't work because DBUS isn't available?
+                type = "command";
+                command = "dunstify 'Claude Code' 'Awaiting your input!'";
+              }
+            ];
+          }
+        ];
+      };
+    };
   };
 
   services.podman = {
