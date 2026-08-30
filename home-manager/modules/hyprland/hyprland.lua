@@ -336,6 +336,7 @@ hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("gridselect-workspace move"))
 
 -- special workspaces
 hl.bind(mainMod .. " + M", hl.dsp.workspace.toggle_special("music"))
+hl.bind("SUPER + grave", hl.dsp.workspace.toggle_special("dropdown"))
 
 -- tabbed layout
 hl.bind(mainMod .. " + G", hl.dsp.group.toggle())
@@ -447,6 +448,15 @@ hl.window_rule({
 })
 
 hl.window_rule({ match = { title = "^Picture-in-picture$" }, float = true, group = "deny" })
+
+hl.window_rule({
+	name = "dropdown",
+	match = { class = "^dropdown$" },
+	float = true,
+	workspace = "special:dropdown",
+	size = "99% 50%",
+	move = "0.5% 0%",
+})
 
 -- Hyprland Share Picker
 hl.window_rule({

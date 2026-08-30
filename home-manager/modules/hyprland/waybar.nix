@@ -52,6 +52,7 @@ in
             format = "{icon}";
             format-icons = ws-icons // {
               "music" = "";
+              "dropdown" = "󰜥";
               "urgent" = "";
               "default" = "";
             };
