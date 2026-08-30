@@ -55,6 +55,14 @@
     enable = true;
   };
 
+  # Suspend on lid close even when an external monitor is connected
+  # (logind's default "docked" detection otherwise ignores the lid switch).
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend";
+    HandleLidSwitchExternalPower = "suspend";
+    HandleLidSwitchDocked = "suspend";
+  };
+
   services.udev.extraRules = ''
     # USBtinyISP: https://learn.adafruit.com/usbtinyisp/avrdude
     SUBSYSTEMS=="usb", ATTR{product}=="USBtiny", ATTR{idVendor}=="1781", ATTR{idProduct}=="0c9f", GROUP="users", MODE="0666"
