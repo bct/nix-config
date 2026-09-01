@@ -22,6 +22,12 @@
 # --ro-bind ~/.ssh/known_hosts    host key verification for SSH git remotes
 # --bind $SSH_AUTH_SOCK                ssh agent socket (set by UWSM) for git push/pull over ssh urls
 # --bind $PWD          read-write access to the project directory
+# xdg-dbus-proxy       proxies the real D-Bus session bus through a filtered
+#                      socket that only allows org.freedesktop.Notifications,
+#                      so hooks can call dunstify without granting the sandbox
+#                      full session bus access (which could talk to any app)
+# --ro-bind .../bus    bind-mount the *filtered* proxy socket (not the real
+#                      bus) into the sandbox at the expected bus path
 let
   claude-sandbox = pkgs.writeShellScriptBin "claude-sandbox" ''
     mkdir -p "$HOME/.claude"
@@ -35,7 +41,17 @@ let
       exit
     fi
 
-    exec ${lib.getExe pkgs.bubblewrap} \
+    proxy_dir=$(mktemp -d)
+    trap 'kill "$proxy_pid" 2>/dev/null; rm -rf "$proxy_dir"' EXIT
+
+    ${lib.getExe pkgs.xdg-dbus-proxy} \
+      "$DBUS_SESSION_BUS_ADDRESS" "$proxy_dir/bus" \
+      --filter --talk=org.freedesktop.Notifications &
+    proxy_pid=$!
+
+    until [ -S "$proxy_dir/bus" ]; do sleep 0.05; done
+
+    ${lib.getExe pkgs.bubblewrap} \
       --unshare-all --share-net \
       --uid "$(id -u)" --gid "$(id -g)" \
       --proc /proc --dev /dev --tmpfs /tmp \
@@ -48,7 +64,10 @@ let
       --ro-bind "$HOME/.nix-profile" "$HOME/.nix-profile" \
       --bind "$HOME/.claude" "$HOME/.claude" --bind "$HOME/.claude.json" "$HOME/.claude.json" \
       --bind "$PWD" "$PWD" --chdir "$PWD" \
+      --ro-bind "$proxy_dir/bus" "/run/user/$(id -u)/bus" \
+      --setenv DBUS_SESSION_BUS_ADDRESS "unix:path=/run/user/$(id -u)/bus" \
       -- ${lib.getExe pkgs.unstable.claude-code} "$@"
+    exit $?
 
       #--ro-bind-try "$HOME/.config/git/config" "$HOME/.config/git/config" \
       #--ro-bind-try "$HOME/.config/git/ignore" "$HOME/.config/git/ignore" \
