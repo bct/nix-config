@@ -29,7 +29,7 @@
       # the vendorHash needs to be updated every time pkgs.coredns updates,
       # due to the way the core & plugin packages are combined when vendored.
       # I spent a couple of days trying to fix this, and eventually gave up.
-      vendorHash = "sha256-XTAMD0iOKEj6JC3vqq0Sq/frr+Qofst7XPJtdLuyd4o=";
+      vendorHash = "sha256-mHsNcehU6QjbuiSuP42ejLPSo3t14Oz9mWaJKk7qYVE=";
     };
   };
 
