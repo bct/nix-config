@@ -106,9 +106,11 @@ in
           {
             hooks = [
               {
-                # this doesn't work because DBUS isn't available?
                 type = "command";
-                command = "dunstify 'Claude Code' 'Awaiting your input!'";
+                command = ''
+                  message="$(${lib.getExe pkgs.jq} -r '.message')"
+                  dunstify 'Claude Code' "$message"
+                '';
               }
             ];
           }
