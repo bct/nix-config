@@ -37,6 +37,9 @@ in
           }
         ];
 
+        # you could do this to generate an entry:
+        #   nix-shell --packages apacheHttpd --run 'htpasswd -B -n USERNAME'
+        # or you could just append an entry like "USERNAME:{PLAIN}PASSWORD"
         basicAuthFile = config.age.secrets.rtorrent-xml-rpc-nginx-auth.path;
 
         locations."/RPC2" = {
