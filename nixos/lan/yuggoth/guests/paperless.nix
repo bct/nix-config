@@ -98,8 +98,15 @@
     fsType = "cifs";
     options =
       # cifsacl is required for the server-side permissions to show up correctly.
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        # wait for real network (incl. DNS) before the mount unit runs, so it doesn't
+        # fail to resolve the server hostname during early boot and get stuck failed.
+        network_opts = "x-systemd.requires=network-online.target,x-systemd.after=network-online.target";
+      in
       [
-        "cifsacl,uid=${config.services.paperless.user},credentials=${config.age.secrets.fs-mi-go-paperless.path}"
+        "${automount_opts},${network_opts},cifsacl,uid=${config.services.paperless.user},credentials=${config.age.secrets.fs-mi-go-paperless.path}"
       ];
   };
 
