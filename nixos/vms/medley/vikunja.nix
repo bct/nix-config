@@ -61,6 +61,8 @@
   };
 
   systemd.services.vikunja = {
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
     serviceConfig = {
       LoadCredential = [
         "db-password:${config.age.secrets.vikunja-db-password.path}"
