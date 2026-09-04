@@ -185,6 +185,7 @@ hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQ
 hl.animation({ leaf = "windows", enabled = true, speed = 4.79, spring = "easy" })
 hl.animation({ leaf = "windowsIn", enabled = true, speed = 4.1, spring = "easy", style = "popin 87%" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.49, bezier = "linear", style = "popin 87%" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 1.49, bezier = "linear", style = "popin 87%" })
 hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.73, bezier = "almostLinear" })
 hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.46, bezier = "almostLinear" })
 hl.animation({ leaf = "fade", enabled = true, speed = 3.03, bezier = "quick" })
@@ -302,10 +303,10 @@ hl.bind(
 	"SHIFT + ALT + Q",
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
--- hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(menu))
 -- hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + V", hl.dsp.layout("togglesplit")) -- dwindle only
+hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
 
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen_state({ internal = 1, client = 0, action = "toggle" }))
 
