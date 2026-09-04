@@ -20,6 +20,16 @@
       border-radius = 2;
       border-size = 1;
       layer = "overlay";
+
+      "summary=\"Claude Code\"" =
+        let
+          sound = pkgs.writeShellScript "play-sound" ''
+            ${pkgs.pipewire}/bin/pw-play --volume 1.0 ${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga
+          '';
+        in
+        {
+          on-notify = "exec ${toString sound}";
+        };
     };
   };
 }
