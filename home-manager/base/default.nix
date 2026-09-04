@@ -75,12 +75,22 @@ in
 
     programs.bash = {
       enable = true;
+
+      initExtra = ''
+        # make ^L work
+        bind -m vi-insert 'Control-l: clear-screen'
+      '';
     };
 
     programs.eza = lib.mkIf cfgPersonal.enableFancyShell {
       enable = true;
       icons = "auto";
       git = true;
+    };
+
+    programs.z-lua = lib.mkIf cfgPersonal.enableFancyShell {
+      enable = true;
+      enableAliases = true;
     };
 
     home.sessionVariables = {

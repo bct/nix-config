@@ -1,5 +1,4 @@
 {
-  lib,
   config,
   ...
 }:
@@ -46,19 +45,10 @@
     historyControl = [ "ignoredups" ];
   };
 
-  programs.zsh = {
-    enable = true;
-  };
-
-  programs.z-lua = {
-    enable = true;
-    enableAliases = true;
-  };
-
   programs.direnv = {
     enable = true;
     enableBashIntegration = true;
-    enableZshIntegration = true;
+
     nix-direnv.enable = true;
     config = {
       global = {
@@ -69,9 +59,7 @@
 
   programs.atuin = {
     enable = true;
-
     enableBashIntegration = true;
-    enableZshIntegration = true;
 
     # https://docs.atuin.sh/configuration/config/
     # Writes ~/.config/atuin/config.toml
@@ -82,22 +70,10 @@
     };
   };
 
-  # ensure that we source bash-preexec after direnv - otherwise atuin doesn't work.
-  # https://github.com/nix-community/home-manager/issues/5958
-  programs.bash.initExtra = lib.mkOrder 1510 ''
-    # go to the root of the current repository
-    r() {
-      cd "$(git rev-parse --show-toplevel 2>/dev/null)"
-    }
-
-    # make ^L work
-    bind -m vi-insert 'Control-l: clear-screen'
-  '';
-
   programs.oh-my-posh = {
     enable = true;
     enableBashIntegration = true;
-    enableZshIntegration = true;
+
     settings = builtins.fromJSON (
       builtins.unsafeDiscardStringContext (builtins.readFile ./files/oh-my-posh.json)
     );
