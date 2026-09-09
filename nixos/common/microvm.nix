@@ -44,9 +44,21 @@ in
     networking.hostName = vmConfig.hostName;
 
     systemd.network.enable = true;
+
+    # microvm.nix disables wait-online, citing
+    # https://github.com/systemd/systemd/issues/29388
+    # as long as we have one network (e.g. "20-lan" below)
+    # that sets RequiredForOnline, we should be able to re-enable it.
+    systemd.network.wait-online.enable = true;
     systemd.network.networks."20-lan" = {
       matchConfig.Type = "ether";
       networkConfig.DHCP = "yes";
+      # by default network-online.target can be reached before DHCP actually completes,
+      # which causes early DNS lookups (e.g. for CIFS mounts) to fail.
+      # instead, wait for an actual routable address.
+      linkConfig = {
+        RequiredForOnline = "routable";
+      };
     };
 
     environment.etc."machine-id" = {

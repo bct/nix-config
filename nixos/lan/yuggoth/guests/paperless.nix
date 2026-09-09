@@ -71,11 +71,6 @@
     )
   '';
 
-  # do not immediately restart. if we crashed due to e.g. the network share being down, give it a little time to recover.
-  # hopefully this resolves the mount failing on boot.
-  systemd.services.paperless-scheduler.serviceConfig.RestartSec = "30";
-  systemd.services.paperless-task-queue.serviceConfig.RestartSec = "30";
-
   age.secrets = {
     fs-mi-go-paperless = {
       rekeyFile = config.diffeq.secretsPath + /fs/mi-go-paperless.age;
