@@ -112,10 +112,6 @@
     };
   };
 
-  services.netbird = {
-    enable = true;
-  };
-
   # attempting to fix https://github.com/ROCm/ROCm/issues/5844
   # TODO: remove this once we're on a fixed kernel (> 6.19.10?)
   boot.kernelParams = [ "amdgpu.cwsr_enable=0" ];
