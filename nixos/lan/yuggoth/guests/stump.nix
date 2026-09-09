@@ -1,17 +1,36 @@
-{ inputs, ... }:
 {
-  system.stateVersion = "25.11";
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
+{
+  system.stateVersion = "26.05";
 
   imports = [
-    inputs.stump-nix.nixosModules.stump
+    "${inputs.nixpkgs-unstable}/nixos/modules/services/web-apps/stump.nix"
   ];
 
-  networking.firewall.allowedTCPPorts = [ 10801 ];
+  networking.firewall.allowedTCPPorts = [ config.services.stump.port ];
 
   services.stump = {
     enable = true;
-    environment = {
-      STUMP_PORT = "10801";
-    };
+    package = pkgs.unstable.stump;
   };
+
+  # TODO: hook up acme
+
+  # services.lego-proxy-client = {
+  #   enable = true;
+  #   domains = [ "stump" ];
+  #   group = "caddy";
+  # };
+  #
+  # services.caddy = {
+  #   enable = true;
+  #   virtualHosts."stump.domus.diffeq.com" = {
+  #     useACMEHost = "stump.domus.diffeq.com";
+  #     extraConfig = "reverse_proxy localhost:${toString config.services.stump.port}";
+  #   };
+  # };
 }
