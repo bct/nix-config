@@ -1,10 +1,18 @@
-{ ... }:
+{ pkgs, lib, ... }:
 let
   port = 3000;
 in
 {
+  # attempting to fix crash in karakeep browser
+  # Sep 08 18:31:22 medley karakeep-browser-start[19485]: [19474:19509:0908/183122.384202:FATAL:third_party/skia/src/ports/SkFontMgr_FontConfigInterface.cpp:163] Not implemented.
+  fonts.fontconfig.enable = lib.mkForce true;
+
   services.karakeep = {
     enable = true;
+
+    # https://github.com/NixOS/nixpkgs/pull/554776
+    package = pkgs.unstable.karakeep;
+
     extraEnvironment = {
       NEXTAUTH_URL = "https://bookmarks.domus.diffeq.com/";
       PORT = toString port;
@@ -21,9 +29,4 @@ in
       extraConfig = "reverse_proxy localhost:${toString port}";
     };
   };
-
-  # temporary until we're on a newer version of karakeep
-  nixpkgs.config.permittedInsecurePackages = [
-    "pnpm-9.15.9"
-  ];
 }
