@@ -1,5 +1,6 @@
 {
   self,
+  inputs,
   config,
   pkgs,
   ...
@@ -7,7 +8,9 @@
 {
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
+    "${inputs.nixpkgs-unstable}/nixos/modules/services/web-apps/immich.nix"
   ];
+  disabledModules = [ "services/web-apps/immich.nix" ];
 
   system.stateVersion = "24.05";
 
@@ -69,7 +72,7 @@
 
   services.immich = {
     enable = true;
-    package = pkgs.immich;
+    package = pkgs.unstable.immich;
 
     host = "127.0.0.1";
 
