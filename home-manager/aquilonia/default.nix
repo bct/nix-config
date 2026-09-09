@@ -3,7 +3,6 @@
   imports = [
     ../desktop
     ./code.nix
-    ./lutris.nix
   ];
 
   personal.user = "bct";
