@@ -61,11 +61,6 @@ in
       };
     };
 
-    environment.etc."machine-id" = {
-      mode = "0644";
-      text = "${vmConfig.machineId}\n";
-    };
-
     age.rekey.hostPubkey = config.diffeq.secretsPath + /ssh/host-${vmName}.pub;
 
     # the system activation script depends on the host SSH key, which
@@ -87,6 +82,19 @@ in
     nix.gc.automatic = false;
 
     microvm = {
+      # convert 32 char hex to a UUID
+      machineId =
+        let
+          hs = offset: len: builtins.substring offset len vmConfig.machineId;
+        in
+        builtins.concatStringsSep "-" [
+          (hs 0 8)
+          (hs 8 4)
+          (hs 12 4)
+          (hs 16 4)
+          (hs 20 12)
+        ];
+
       preStart = lib.mkIf (vmConfig.startDelay != null) ''
         echo "executing ${toString vmConfig.startDelay}s start delay..."
         sleep ${toString vmConfig.startDelay}
