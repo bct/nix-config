@@ -11,7 +11,7 @@
 
     ./accounts.nix
     ./hardware-configuration.nix
-    ./microvm-host.nix
+    "${self}/nixos/modules/microvm-host"
     ./nixvirt.nix
     ./samba.nix
     ./zfs.nix
@@ -27,9 +27,11 @@
 
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKmvKCDSnW1IWz/qZAfw8HCdsEEKCNtD4gJXmuKM9pkg";
 
-  mi-go.microvms = {
+  diffeq.microvms = {
+    enable = true;
     waitForZfs = true;
     interfaceToBridge = "enp8s0";
+    guestsDir = ./guests;
 
     # to generate a machineId:
     #

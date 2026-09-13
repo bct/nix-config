@@ -16,7 +16,7 @@
     ./hardware-configuration.nix
     ./disk-config.nix
 
-    ./microvm-host.nix
+    "${self}/nixos/modules/microvm-host"
     ./jellyfin.nix
     #./netbird.nix
     ./nixvirt.nix
@@ -35,8 +35,10 @@
 
   services.prometheus.exporters.node.enabledCollectors = [ "hwmon" ];
 
-  yuggoth.microvms = {
+  diffeq.microvms = {
+    enable = true;
     interfaceToBridge = "enp5s0f0";
+    guestsDir = ./guests;
 
     # to generate a machineId:
     #

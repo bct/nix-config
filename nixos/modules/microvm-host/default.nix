@@ -8,17 +8,30 @@
 }:
 
 let
-  cfg = config.yuggoth.microvms;
+  cfg = config.diffeq.microvms;
 in
 {
   imports = [
     inputs.microvm.nixosModules.host
   ];
 
-  options.yuggoth.microvms = with lib; {
+  options.diffeq.microvms = with lib; {
+    enable = mkEnableOption "microvm host";
+
+    waitForZfs = mkOption {
+      type = types.bool;
+      description = mdDoc "Wait for ZFS mounts before launching guests?";
+      default = false;
+    };
+
     interfaceToBridge = mkOption {
       type = types.str;
       description = "The host interface that should be connected to the br0 bridge.";
+    };
+
+    guestsDir = mkOption {
+      type = types.path;
+      description = "Directory containing a ${name}.nix file for each guest.";
     };
 
     guests = mkOption {
@@ -82,7 +95,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     # https://astro.github.io/microvm.nix/simple-network.html
     systemd.network.enable = true;
 
@@ -146,16 +159,20 @@ in
 
         imports = [
           "${self}/nixos/common/microvm.nix"
-          ./guests/${vmName}.nix
+          (cfg.guestsDir + "/${vmName}.nix")
         ];
       };
     }) cfg.guests;
 
     # microvm@ service dependencies
-    systemd.services = lib.mapAttrs' (vmName: vmConfig: {
-      name = "microvm@${vmName}";
-      value = {
+    systemd.services = lib.concatMapAttrs (vmName: vmConfig: {
+      "microvm@${vmName}" = {
         requires = vmConfig.requires;
+      };
+
+      "microvm-virtiofsd@${vmName}" = lib.mkIf cfg.waitForZfs {
+        requires = lib.mkAfter [ "zfs.target" ];
+        after = lib.mkAfter [ "zfs.target" ];
       };
     }) cfg.guests;
   };
