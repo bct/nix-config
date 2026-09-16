@@ -68,6 +68,7 @@
         "db-password:${config.age.secrets.vikunja-db-password.path}"
         "openid-clientsecret:${config.age.secrets.vikunja-openid-clientsecret.path}"
       ];
+      RestartSec = "30";
     };
     environment.VIKUNJA_DATABASE_PASSWORD_FILE = "/run/credentials/vikunja.service/db-password";
   };
