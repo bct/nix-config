@@ -9,21 +9,16 @@ declare -rA HOST_ALIAS=(
   ["booklore"]="medley"
 )
 
-declare -rA REMOTE_USER_BY_HOST_SHORT=(
-  ["fever-dreams"]="root"
-)
-
 declare -rA REMOTE_DIR_BY_HOST_SHORT=(
   ["booklore"]="/var/lib/booklore/bookdrop"
   ["fever-dreams"]="/userdata"
   ["paperless"]="/var/lib/paperless/consume"
 )
 
-REMOTE_USER="${REMOTE_USER_BY_HOST_SHORT[$HOST_SHORT]:-bct}"
 REMOTE_DIR="${REMOTE_DIR_BY_HOST_SHORT[$HOST_SHORT]:-}"
 TARGET_DIR="$HOME/mnt/$HOST_SHORT"
 
 HOST="${HOST_ALIAS[$HOST_SHORT]:-$HOST}"
 
 mkdir -p $TARGET_DIR
-sshfs $REMOTE_USER@$HOST:$REMOTE_DIR $TARGET_DIR -o reconnect,ServerAliveInterval=30
+sshfs $HOST:$REMOTE_DIR $TARGET_DIR -o reconnect,ServerAliveInterval=30
