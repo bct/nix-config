@@ -34,6 +34,11 @@ in
         hash = "sha256-NcZxx7k2OkaeLtN2Iiu/fbstAIAA0QYRDEt37HAH/mg=";
       };
     };
+
+    # romm's NixOS module (imported from nixpkgs-unstable, since it isn't in
+    # our pinned nixpkgs yet) references pkgs.rahasher directly, which only
+    # exists in nixpkgs-unstable.
+    rahasher = final.unstable.rahasher;
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

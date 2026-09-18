@@ -9,6 +9,7 @@ let
     "immich"
     "miniflux"
     "paperless"
+    "romm"
     "vikunja"
   ];
 in
@@ -27,6 +28,11 @@ in
     db-password-db-postgres-paperless = {
       generator.script = "alnum";
       rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-paperless.age;
+    };
+
+    db-password-db-postgres-romm = {
+      generator.script = "alnum";
+      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-romm.age;
     };
 
     db-password-db-postgres-vikunja = {
@@ -79,6 +85,7 @@ in
       "immich"
       "miniflux"
       "paperless"
+      "romm"
       "vikunja"
     ];
 
@@ -100,17 +107,22 @@ in
       }
 
       {
+        name = "romm";
+        ensureDBOwnership = true;
+      }
+
+      {
         name = "vikunja";
         ensureDBOwnership = true;
       }
     ];
   };
 
-  systemd.services.postgresql.serviceConfig.LoadCredential = builtins.map (
+  systemd.services.postgresql-setup.serviceConfig.LoadCredential = builtins.map (
     userName: "password-${userName}:${config.age.secrets."db-password-db-postgres-${userName}".path}"
   ) usersWithPasswords;
 
-  systemd.services.postgresql.postStart =
+  systemd.services.postgresql-setup.postStart =
     let
       set-all-passwords = pkgs.writeShellScript "psql-set-password" ''
         #!/bin/sh

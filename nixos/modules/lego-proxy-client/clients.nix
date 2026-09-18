@@ -35,6 +35,7 @@
   };
 
   recipes.domain = "recipes.domus.diffeq.com";
+  romm.domain = "romm.domus.diffeq.com";
   rtorrent.domain = "rtorrent.domus.diffeq.com";
 
   seerr.domain = "seerr.domus.diffeq.com";
@@ -50,6 +51,7 @@
     pubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFk2zCBoSRaNUJfUhFNGLI1r+H5EVtWNukvTG6Lq0z+J spectator:lego-proxy-spectator";
   };
 
+  stump.domain = "stump.domus.diffeq.com";
   syncthing.domain = "syncthing.domus.diffeq.com";
   tasks.domain = "tasks.domus.diffeq.com";
   uptime.domain = "uptime.domus.diffeq.com";

@@ -14,6 +14,7 @@
     ./borgmatic.nix
     ./homepage.nix
     ./karakeep.nix
+    ./romm.nix
     ./tandoor.nix
     ./uptime-kuma.nix
     ./vikunja.nix
@@ -41,6 +42,7 @@
       "dav"
       "homepage"
       "recipes"
+      "romm"
       "tasks"
       "uptime"
     ];

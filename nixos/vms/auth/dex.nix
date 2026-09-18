@@ -23,6 +23,11 @@ in
       generator.script = "alnum";
     };
 
+    dex-romm-secret = {
+      rekeyFile = config.diffeq.secretsPath + /dex/romm.age;
+      generator.script = "alnum";
+    };
+
     dex-tandoor-secret = {
       rekeyFile = config.diffeq.secretsPath + /dex/tandoor.age;
       generator.script = "alnum";
@@ -108,6 +113,12 @@ in
           redirectURIs = [
             "https://paperless.domus.diffeq.com/accounts/oidc/oidc.domus.diffeq.com/login/callback/"
           ];
+        }
+        {
+          id = "romm";
+          name = "RomM";
+          secretFile = config.age.secrets.dex-romm-secret.path;
+          redirectURIs = [ "https://romm.domus.diffeq.com/api/oauth/openid" ];
         }
         {
           id = "tandoor";
