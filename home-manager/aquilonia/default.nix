@@ -3,6 +3,7 @@
   imports = [
     ../desktop
     ./code.nix
+    ./mic-toggle.nix
   ];
 
   personal.user = "bct";
