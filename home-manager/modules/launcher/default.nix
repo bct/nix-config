@@ -10,7 +10,7 @@ let
       pkgs.dunst
       pkgs.imv
     ];
-    text = builtins.readFile ./bin/screenshot;
+    text = builtins.readFile ./bin/screenshot.sh;
   };
 in
 {

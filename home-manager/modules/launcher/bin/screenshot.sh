@@ -2,10 +2,6 @@ menu_command="fuzzel"
 
 dir="$HOME/images/screenshots"
 
-# Icons
-icon1="$HOME/.config/dunst/icons/collections.svg"
-icon2="$HOME/.config/dunst/icons/timer.svg"
-
 # Buttons
 screen="󰍹 Capture Desktop"
 area="󰆞 Capture Area"
@@ -13,22 +9,10 @@ window="󰖲 Capture Window"
 infive="󰔝 Take in 3s"
 inten="󰔜 Take in 10s"
 
-# Notify and view screenshot
-notify_view() {
-	file="$1"
-	dunstify -u low --replace=699 -i "$icon1" "Copied to clipboard."
-	if [[ -e "$file" ]]; then
-		imv "$file"
-		dunstify -u low --replace=699 -i "$icon1" "Screenshot Saved."
-	else
-		dunstify -u low --replace=699 -i "$icon1" "Screenshot Deleted."
-	fi
-}
-
 # countdown
 countdown() {
 	for sec in $(seq "$1" -1 1); do
-		dunstify -t 1000 --replace=699 -i "$icon2" "Taking shot in : $sec"
+		dunstify -t 1000 --replace=699 "Taking shot in : $sec"
 		sleep 1
 	done
 }
@@ -40,34 +24,29 @@ filename() {
 # take shots
 shotnow() {
 	file="$(filename)"
-	hyprshot -s -m output -m active -o "$dir" -f "$file"
-	notify_view "$dir/$file"
+	hyprshot -m output -m active -o "$dir" -f "$file" || true
 }
 
 shot5() {
 	countdown '3'
 	file="$(filename)"
-	hyprshot -s -m output -m active -o "$dir" -f "$file"
-	notify_view "$dir/$file"
+	hyprshot -m output -m active -o "$dir" -f "$file" || true
 }
 
 shot10() {
 	countdown '10'
 	file="$(filename)"
-	hyprshot -s -m output -m active -o "$dir" -f "$file"
-	notify_view "$dir/$file"
+	hyprshot -m output -m active -o "$dir" -f "$file" || true
 }
 
 shotwin() {
 	file="$(filename)"
-	hyprshot -s -m window -m active -o "$dir" -f "$file"
-	notify_view "$dir/$file"
+	hyprshot -m window -m active -o "$dir" -f "$file" || true
 }
 
 shotarea() {
 	file="$(filename)"
-	hyprshot -s -m region -o "$dir" -f "$file"
-	notify_view "$dir/$file"
+	hyprshot -m region -o "$dir" -f "$file" || true
 }
 
 if [[ ! -d "$dir" ]]; then
