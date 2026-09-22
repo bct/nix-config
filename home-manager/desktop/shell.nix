@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   ...
 }:
 
@@ -60,6 +61,9 @@
   programs.atuin = {
     enable = true;
     enableBashIntegration = true;
+
+    # TODO(unstable): revert to stable for atuin >= 18.21.0
+    package = pkgs.unstable.atuin;
 
     # https://docs.atuin.sh/configuration/config/
     # Writes ~/.config/atuin/config.toml
