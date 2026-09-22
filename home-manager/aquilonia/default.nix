@@ -31,7 +31,7 @@
     moonlight-qt
 
     obsidian
-    koodo-reader
+    # koodo-reader # electron is currently marked insecure
 
     # games
     steam
