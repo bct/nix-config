@@ -59,10 +59,15 @@
       #VERBOSE=on
       UMASK=007
 
-      ### aliexpress
+      ### aliexpress (sometimes marked spam)
       :0:
       * ^From: .*aliexpress.com
       aliexpress/
+
+      ### school (sometimes marked spam)
+      :0:
+      * ^From: .*@psd.ca
+      school/
 
       ### spam can go to hell
       :0:
@@ -86,11 +91,6 @@
         ^From: .*@mec.ca|\
         ^From: .*@linkedin.com
       flyers/
-
-      ### school
-      :0:
-      * ^From: .*@psd.ca
-      school/
 
       ### mailing list catch-all
       :0:
