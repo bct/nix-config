@@ -74,6 +74,7 @@
     # (you can test these with guvcview or camset)
     ACTION=="add", SUBSYSTEM=="video4linux", ATTR{product}=="Laptop Webcam Module (2nd Gen)", RUN+="${pkgs.v4l-utils}/bin/v4l2-ctl -d $devnode --set-ctrl=backlight_compensation=0"
   '';
+  services.udev.packages = [ pkgs.platformio-core.udev ];
 
   services.syncthing = {
     enable = true;
