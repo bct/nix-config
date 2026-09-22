@@ -70,8 +70,14 @@ in
         };
         clock = {
           tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-          format = "{:%H:%M %b %d}";
+          format = "{:%H:%M %a %d}";
           format-alt = "{:%Y-%m-%d}";
+          calendar = {
+            format = {
+              months = "";
+              today = "<span color='#cc241d'><b>{}</b></span>";
+            };
+          };
         };
         cpu = {
           format = "{usage}% ";
