@@ -2,31 +2,26 @@
 # https://github.com/considerate/home/blob/aca9a752e749fcfd5bab4f2bf694947ade814c0a/rofi/default.nix
 { pkgs, ... }:
 let
-  rofi-screenshot = pkgs.writeShellApplication {
-    name = "rofi-screenshot";
+  screenshot = pkgs.writeShellApplication {
+    name = "screenshot";
     runtimeInputs = [
-      pkgs.maim
-      pkgs.xdotool
+      pkgs.hyprshot
+      pkgs.fuzzel
+      pkgs.dunst
+      pkgs.imv
     ];
     text = builtins.readFile ./bin/screenshot;
   };
 in
 {
   home.packages = [
-    rofi-screenshot
+    screenshot
   ];
 
   programs = {
     rofi = {
-      plugins = [ pkgs.rofi-calc ];
-
       enable = true;
       font = "UbuntuMono Nerd Font 18";
-      extraConfig = {
-        display-combi = "Go";
-        modi = "combi,calc";
-        combi-modi = "window,run,ssh";
-      };
 
       terminal = "${pkgs.alacritty}/bin/alacritty";
       theme = "gruvbox-light";
@@ -73,10 +68,10 @@ in
       terminal = false;
     };
 
-    rofi-calc = {
-      name = "rofi calculator";
-      genericName = "Calculator";
-      exec = "rofi -show calc";
+    screenshot = {
+      name = "screenshot";
+      genericName = "Screenshot";
+      exec = "${screenshot}/bin/screenshot";
       terminal = false;
     };
 
