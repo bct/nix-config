@@ -85,7 +85,9 @@ in
     programs.eza = lib.mkIf cfgPersonal.enableFancyShell {
       enable = true;
       icons = "auto";
-      git = true;
+
+      # I don't use this feature, and it makes `ls -l` slow when there area lot of untracked files.
+      git = false;
     };
 
     programs.z-lua = lib.mkIf cfgPersonal.enableFancyShell {
