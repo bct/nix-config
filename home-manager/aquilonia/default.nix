@@ -66,6 +66,18 @@
     };
   };
 
+  # used by keepassxc
+  xdg.autostart = {
+    enable = true;
+    # do not allow programs to install arbitrary autostart services
+    readOnly = true;
+  };
+
+  programs.keepassxc = {
+    enable = true;
+    autostart = true;
+  };
+
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "25.05";
 }
