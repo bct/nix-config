@@ -190,6 +190,9 @@ in
         enabled = zigbee2MqttFrontendEnabled;
         port = zigbee2MqttPort;
       };
+      advanced = {
+        last_seen = "ISO_8601";
+      };
       homeassistant.enabled = true;
     };
   };
