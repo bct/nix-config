@@ -10,8 +10,8 @@
     "${self}/nixos/common/node-exporter.nix"
 
     ./audiobookshelf.nix
-    ./booklore.nix
     ./borgmatic.nix
+    ./grimmory.nix
     ./homepage.nix
     ./karakeep.nix
     ./romm.nix

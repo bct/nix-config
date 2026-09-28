@@ -22,9 +22,8 @@
     # bug fixes & new packages
     # https://github.com/NixOS/nixpkgs/pull/354032
     schromp-netbird.url = "github:schromp/nixpkgs/fix-netbird";
-    # my clone of jvanbruegge's branch
-    # https://github.com/NixOS/nixpkgs/pull/425872
-    jvanbruegge-booklore.url = "github:bct/nixpkgs/booklore";
+    # https://github.com/NixOS/nixpkgs/pull/540077
+    alvr-grimmory.url = "github:alvr/nixpkgs/grimmory";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-26.05";
