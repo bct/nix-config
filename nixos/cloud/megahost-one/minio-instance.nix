@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -56,13 +61,9 @@ in
       privateNetwork = true;
 
       config =
-        { config, pkgs, ... }:
+        { config, ... }:
         {
           system.stateVersion = "24.05";
-
-          nixpkgs.config.permittedInsecurePackages = [
-            "minio-2025-10-15T17-29-55Z"
-          ];
 
           networking.firewall.allowedTCPPorts = [
             bucketPort
@@ -71,6 +72,7 @@ in
 
           services.minio = {
             enable = true;
+            package = pkgs.unstable.silo;
             rootCredentialsFile = cfgContainerSecrets.${containerName}.minioRootCredentials.containerPath;
           };
           systemd.services.minio.environment.MINIO_DOMAIN = instanceConfig.minioDomain;
