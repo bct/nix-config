@@ -5,11 +5,32 @@
   ...
 }:
 let
+  # disabled until it's secured
   zigbee2MqttFrontendEnabled = false;
   hassPort = 8123;
   mqttPort = 1883;
   zigbee2MqttPort = 8080;
   sslDirectory = "${config.security.acme.certs."spectator.domus.diffeq.com".directory}";
+
+  home-assistant-package = pkgs.unstable.home-assistant;
+  ha-watts-home = pkgs.unstable.buildHomeAssistantComponent rec {
+    owner = "bhamiltoncx";
+    domain = "watts_home";
+    version = "1.1.2";
+
+    src = pkgs.fetchFromGitHub {
+      inherit owner;
+      repo = "ha-watts-home";
+      tag = "v${version}";
+      hash = "sha256-OveJW9Dz5EsIS47kZxyw8wNcz39YJ1e3mZXnUFcmb3o=";
+    };
+
+    postPatch = "";
+
+    dependencies = [
+      home-assistant-package.python3Packages.curl-cffi
+    ];
+  };
   # zha-quirks-src = pkgs.fetchFromGitHub {
   #   owner = "claudegel";
   #   repo = "sinope-zha";
@@ -41,7 +62,7 @@ in
 
   services.home-assistant = {
     enable = true;
-    package = pkgs.unstable.home-assistant;
+    package = home-assistant-package;
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
     extraComponents = [
@@ -66,6 +87,10 @@ in
       # Printer
       "brother"
       "ipp"
+    ];
+
+    customComponents = [
+      ha-watts-home
     ];
 
     extraPackages =
