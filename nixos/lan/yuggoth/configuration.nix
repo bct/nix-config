@@ -1,7 +1,6 @@
 {
   self,
   inputs,
-  pkgs,
   ...
 }:
 {
@@ -95,6 +94,7 @@
       };
 
       minecraft = {
+        enable = false;
         hostName = "minecraft";
         tapInterfaceMac = "02:00:00:00:00:15";
         machineId = "245a511aba02f5dae1266bc69363e7b9";
