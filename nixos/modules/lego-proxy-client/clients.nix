@@ -17,6 +17,8 @@
     domain = "grafana.domus.diffeq.com";
   };
 
+  grimoire.domain = "grimoire.domus.diffeq.com";
+
   homepage.domain = "homepage.domus.diffeq.com";
   immich.domain = "immich.domus.diffeq.com";
   jellyfin.domain = "jellyfin.domus.diffeq.com";

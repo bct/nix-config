@@ -42,6 +42,7 @@
   airsonic-refix = pkgs.callPackage ./airsonic-refix { };
   booklore = pkgs.callPackage ./booklore { };
 
+  grimoire = pkgs.callPackage ./grimoire { };
   profilarr = pkgs.callPackage ./profilarr { };
   rtlamr = pkgs.callPackage ./rtlamr { };
   rtlamr-collect = pkgs.callPackage ./rtlamr-collect { };

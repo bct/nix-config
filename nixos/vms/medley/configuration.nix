@@ -12,6 +12,7 @@
     ./audiobookshelf.nix
     ./borgmatic.nix
     ./grimmory.nix
+    ./grimoire.nix
     ./homepage.nix
     ./karakeep.nix
     ./romm.nix
@@ -40,6 +41,7 @@
       "booklore"
       "bookmarks"
       "dav"
+      "grimoire"
       "homepage"
       "recipes"
       "romm"
