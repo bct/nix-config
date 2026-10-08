@@ -1,6 +1,4 @@
 {
-  inputs,
-  pkgs,
   config,
   ...
 }:
@@ -9,13 +7,8 @@ let
   nginxPort = 9055;
 in
 {
-  imports = [
-    "${inputs.nixpkgs-unstable}/nixos/modules/services/web-apps/romm.nix"
-  ];
-
   services.romm = {
     enable = true;
-    package = pkgs.unstable.romm;
 
     nginx.virtualHost = "romm.domus.diffeq.com";
     database = {
