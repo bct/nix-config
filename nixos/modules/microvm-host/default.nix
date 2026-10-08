@@ -9,6 +9,7 @@
 
 let
   cfg = config.diffeq.microvms;
+  enabledGuests = lib.filterAttrs (_: guest: guest.enable) cfg.guests;
 in
 {
   imports = [
@@ -43,7 +44,7 @@ in
               enable = mkOption {
                 type = types.bool;
                 default = true;
-                description = "Start this microvm when the system boots?";
+                description = "Include this microvm on the host? If false, the guest is not evaluated, built or started.";
               };
 
               hostName = mkOption {
@@ -133,7 +134,7 @@ in
     systemd.tmpfiles.rules = lib.mapAttrsToList (
       vmName: vmConfig:
       "L+ /var/log/journal/${vmConfig.machineId} - - - - /var/lib/microvms/${vmName}/journal/${vmConfig.machineId}"
-    ) cfg.guests;
+    ) enabledGuests;
 
     age.secrets = lib.concatMapAttrs (vmName: vmConfig: {
       "ssh-host-${vmName}" = {
@@ -145,7 +146,7 @@ in
         # that only exists on the host.
         symlink = false;
       };
-    }) cfg.guests;
+    }) enabledGuests;
 
     microvm.vms = lib.mapAttrs (vmName: vmConfig: {
       specialArgs = { inherit self inputs outputs; };
@@ -162,7 +163,7 @@ in
           (cfg.guestsDir + "/${vmName}.nix")
         ];
       };
-    }) cfg.guests;
+    }) enabledGuests;
 
     # microvm@ service dependencies
     systemd.services = lib.concatMapAttrs (vmName: vmConfig: {
@@ -174,6 +175,6 @@ in
         requires = lib.mkAfter [ "zfs.target" ];
         after = lib.mkAfter [ "zfs.target" ];
       };
-    }) cfg.guests;
+    }) enabledGuests;
   };
 }
