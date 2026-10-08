@@ -30,6 +30,7 @@
     alacritty
 
     # tui utilities
+    btop
     htop
     silver-searcher
     ruby

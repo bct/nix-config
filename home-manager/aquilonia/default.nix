@@ -22,8 +22,6 @@
     # https://github.com/NixOS/nixpkgs/pull/447250
     adwaita-icon-theme
 
-    hoon-crib
-
     wine
     winetricks
     vulkan-tools
@@ -32,6 +30,7 @@
 
     obsidian
     # koodo-reader # electron is currently marked insecure
+    unstable.ladybird
 
     # games
     steam

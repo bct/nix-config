@@ -125,5 +125,7 @@ in
 
   home.packages = [
     claude-sandbox
+
+    pkgs.hoon-crib
   ];
 }
