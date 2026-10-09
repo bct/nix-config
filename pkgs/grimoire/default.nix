@@ -7,12 +7,12 @@
   stdenv,
 }:
 let
-  version = "1.7.2";
+  version = "1.8.0";
   src = fetchFromGitHub {
     owner = "hunter-read";
     repo = "grimoire";
     rev = "v${version}";
-    hash = "sha256-GOvgq9BFZd4MONA/mB0XbrgX1fWuXcWbjBiGgp6r0zo=";
+    hash = "sha256-UXuy2NqbveI669wJWEm51m0mbrHQmHvL7nmfTouhjwg=";
   };
 
   frontend = buildNpmPackage {
@@ -20,7 +20,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-nPmgHHMagU3lMXM+xuZFBo+9I/SzCD+aBgPQsrHxtUI=";
+    npmDepsHash = "sha256-p9FkYCQT/7edTxqBIVRhrhbPwPpDfJu2Lf5BEWo8auc=";
 
     installPhase = ''
       runHook preInstall
@@ -74,13 +74,13 @@ stdenv.mkDerivation {
   # hashlib.md5(usedforsecurity=False), so inline that instead of pinning
   # starlette/fastapi to older versions.
   postPatch = ''
-    substituteInPlace backend/file_cache.py \
-      --replace-fail \
-        "from starlette.responses import md5_hexdigest" \
-        "from hashlib import md5 as _md5
+        substituteInPlace backend/file_cache.py \
+          --replace-fail \
+            "from starlette.responses import md5_hexdigest" \
+            "from hashlib import md5 as _md5
 
-def md5_hexdigest(data: bytes, *, usedforsecurity: bool = True) -> str:
-    return _md5(data, usedforsecurity=usedforsecurity).hexdigest()"
+    def md5_hexdigest(data: bytes, *, usedforsecurity: bool = True) -> str:
+        return _md5(data, usedforsecurity=usedforsecurity).hexdigest()"
   '';
 
   installPhase = ''
