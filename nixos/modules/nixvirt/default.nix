@@ -224,6 +224,14 @@ in
         }) guest.mounts;
       in
       {
+        # State to put the domain in (running/stopped), or null to ignore.
+        active = null;
+        # Whether to restart the domain, or null to restart only if its
+        # definition has changed.
+        #
+        # This is a hard power-off. If false, the new definition takes effect
+        # the next time the guest is started.
+        restart = null;
         definition = nixvirt.lib.domain.writeXML (
           baseXML
           // {
@@ -237,6 +245,9 @@ in
               };
             };
             devices = baseXML.devices // {
+              # the template uses a nix store path, which would make the definition
+              # change (and the guest restart) whenever qemu changes.
+              emulator = "/run/libvirt/nix-emulators/qemu-system-x86_64";
               disk = baseXML.devices.disk ++ extraDisks;
               filesystem = (baseXML.devices.filesystem or [ ]) ++ mounts;
             };
