@@ -155,6 +155,7 @@ in
       };
       oauth2 = {
         responseTypes = [ "code" ];
+        skipApprovalScreen = true;
       };
     };
   };
