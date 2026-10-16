@@ -10,7 +10,6 @@ let
   hassPort = 8123;
   mqttPort = 1883;
   zigbee2MqttPort = 8080;
-  sslDirectory = "${config.security.acme.certs."spectator.domus.diffeq.com".directory}";
 
   home-assistant-package = pkgs.unstable.home-assistant;
   ha-watts-home = pkgs.unstable.buildHomeAssistantComponent rec {
@@ -52,11 +51,12 @@ in
   services.lego-proxy-client = {
     enable = true;
     domains = [ "spectator" ];
-    group = "hass";
+    group = "caddy";
   };
 
   networking.firewall.allowedTCPPorts = [
-    hassPort
+    80
+    443
   ]
   ++ lib.optional zigbee2MqttFrontendEnabled zigbee2MqttPort;
 
@@ -107,13 +107,8 @@ in
       homeassistant = {
         time_zone = "America/Edmonton";
         country = "CA";
-        external_url = "https://spectator.domus.diffeq.com:${toString hassPort}";
-        internal_url = "https://spectator.domus.diffeq.com:${toString hassPort}";
-      };
-
-      http = {
-        ssl_certificate = "${sslDirectory}/fullchain.pem";
-        ssl_key = "${sslDirectory}/key.pem";
+        external_url = "https://spectator.domus.diffeq.com";
+        internal_url = "https://spectator.domus.diffeq.com";
       };
 
       recorder = {
@@ -219,6 +214,14 @@ in
         last_seen = "ISO_8601";
       };
       homeassistant.enabled = true;
+    };
+  };
+
+  services.caddy = {
+    enable = true;
+    virtualHosts."spectator.domus.diffeq.com" = {
+      useACMEHost = "spectator.domus.diffeq.com";
+      extraConfig = "reverse_proxy localhost:${toString hassPort}";
     };
   };
 }
