@@ -10,6 +10,7 @@ let
 in
 {
   imports = [
+    ./greeter.nix
     ./packages.nix
   ];
 
@@ -59,17 +60,6 @@ in
     hardware.sane = {
       enable = true;
       extraBackends = [ pkgs.sane-airscan ];
-    };
-
-    services.greetd = {
-      enable = true;
-      useTextGreeter = true;
-      settings = {
-        default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --asterisks --cmd start-hyprland";
-          user = "greeter";
-        };
-      };
     };
 
     fonts = {
