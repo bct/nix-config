@@ -117,6 +117,9 @@
   # TODO: remove this once we're on a fixed kernel (> 6.19.10?)
   boot.kernelParams = [ "amdgpu.cwsr_enable=0" ];
 
+  # enable compressed cache for swap pages, to improve swap performance
+  boot.zswap.enable = true;
+
   # framework explicitly recommends against using TLP, at least for earlier Ryzen chips:
   # https://knowledgebase.frame.work/en_us/optimizing-ubuntu-battery-life-Sye_48Lg3
   services.tlp.enable = false;
