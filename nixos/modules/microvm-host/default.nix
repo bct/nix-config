@@ -4,6 +4,7 @@
   outputs,
   lib,
   config,
+  pkgs,
   ...
 }:
 
@@ -84,10 +85,22 @@ in
                 description = "systemd Requires=";
               };
 
+              wants = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = "systemd Wants=. Like requires, but stopping or restarting the dependency does not stop or restart this guest.";
+              };
+
               startDelay = mkOption {
                 type = types.nullOr types.int;
                 default = null;
-                description = "delay before booting the service, to ensure prerequisites are available and reduce load on system boot.";
+                description = "delay (in seconds) before starting the guest during host boot, to reduce load. not applied when the guest is started or restarted after boot.";
+              };
+
+              readyPorts = mkOption {
+                type = types.listOf types.port;
+                default = [ ];
+                description = "TCP ports on the guest that must accept connections before the microvm@ unit counts as started.";
               };
             };
           }
@@ -169,6 +182,35 @@ in
     systemd.services = lib.concatMapAttrs (vmName: vmConfig: {
       "microvm@${vmName}" = {
         requires = vmConfig.requires;
+        wants = vmConfig.wants;
+        after = vmConfig.requires ++ vmConfig.wants;
+
+        # only delay while the host is booting, so that restarting a guest
+        # (e.g. when redeploying it) doesn't have to wait.
+        serviceConfig.ExecStartPre = lib.mkIf (vmConfig.startDelay != null) [
+          (pkgs.writeShellScript "microvm-${vmName}-start-delay" ''
+            if [ "$(${config.systemd.package}/bin/systemctl is-system-running)" = starting ]; then
+              echo "host is booting; executing ${toString vmConfig.startDelay}s start delay..."
+              sleep ${toString vmConfig.startDelay}
+              echo "start delay complete."
+            fi
+          '')
+        ];
+        # the start timeout includes ExecStartPre, so leave room for the delay.
+        serviceConfig.TimeoutStartSec = lib.mkIf (vmConfig.startDelay != null) (
+          config.microvm.host.startupTimeout + vmConfig.startDelay
+        );
+
+        serviceConfig.ExecStartPost = lib.mkIf (vmConfig.readyPorts != [ ]) [
+          (pkgs.writeShellScript "microvm-${vmName}-wait-ready" ''
+            for port in ${toString vmConfig.readyPorts}; do
+              until ${pkgs.netcat}/bin/nc -z -w 2 ${vmConfig.hostName}.domus.diffeq.com "$port"; do
+                sleep 1
+              done
+              echo "port $port is accepting connections"
+            done
+          '')
+        ];
       };
 
       "microvm-virtiofsd@${vmName}" = lib.mkIf cfg.waitForZfs {

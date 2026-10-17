@@ -95,12 +95,6 @@ in
           (hs 20 12)
         ];
 
-      preStart = lib.mkIf (vmConfig.startDelay != null) ''
-        echo "executing ${toString vmConfig.startDelay}s start delay..."
-        sleep ${toString vmConfig.startDelay}
-        echo "start delay complete."
-      '';
-
       interfaces = [
         {
           type = "tap";

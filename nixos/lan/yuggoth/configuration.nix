@@ -50,7 +50,7 @@
         hostName = "abrado";
         tapInterfaceMac = "02:00:00:00:00:08";
         machineId = "6b044915f8a8c5a6c0e9b5401d9778cf";
-        requires = [ "microvm@db.service" ];
+        wants = [ "microvm@db.service" ];
         startDelay = 60;
       };
 
@@ -58,13 +58,18 @@
         hostName = "db";
         tapInterfaceMac = "02:00:00:00:00:07";
         machineId = "2e9cd72837fcd95c103ac6f4bdeb726a";
+        readyPorts = [
+          3306 # mysql
+          5432 # postgres
+          8086 # influxdb
+        ];
       };
 
       grafana = {
         hostName = "grafana";
         tapInterfaceMac = "02:00:00:00:00:06";
         machineId = "d2bf3078fe2744f57398cc02476228f9";
-        requires = [
+        wants = [
           "microvm@db.service"
           "microvm@lego-proxy.service"
         ];
@@ -75,7 +80,7 @@
         hostName = "immich";
         tapInterfaceMac = "02:00:00:00:00:09";
         machineId = "538b82e19deee1b600027ea47fe3e8dc";
-        requires = [
+        wants = [
           "microvm@db.service"
           "microvm@lego-proxy.service"
         ];
@@ -86,7 +91,7 @@
         hostName = "lubelogger";
         tapInterfaceMac = "02:00:00:00:00:14";
         machineId = "136934c3334f852e7e2a506bc5484a2b";
-        requires = [
+        wants = [
           "microvm@db.service"
           "microvm@lego-proxy.service"
         ];
@@ -106,7 +111,7 @@
         hostName = "paperless";
         tapInterfaceMac = "02:00:00:00:00:10";
         machineId = "4e792125b5445ffd50e474ad64f5d30b";
-        requires = [
+        wants = [
           "microvm@db.service"
           "microvm@lego-proxy.service"
         ];
@@ -132,6 +137,7 @@
         hostName = "spectator";
         tapInterfaceMac = "02:00:00:00:00:04";
         machineId = "08e6532eedca9b41586bd21b881c6bbf";
+        wants = [ "microvm@db.service" ];
         startDelay = 120;
       };
 
@@ -140,7 +146,7 @@
         tapInterfaceName = "vm-torrent-scra"; # <= 15 chars
         tapInterfaceMac = "02:00:00:00:00:02";
         machineId = "e5b7d8199d4a4a34fb6748faef793248";
-        requires = [
+        wants = [
           "microvm@db.service"
           "microvm@lego-proxy.service"
         ];
@@ -151,6 +157,7 @@
         hostName = "lego-proxy";
         tapInterfaceMac = "02:00:00:00:00:05";
         machineId = "0c309b2d738728317e0dbc9725a64dc1";
+        readyPorts = [ 22 ];
       };
 
       # TODO: temporary, for testing
