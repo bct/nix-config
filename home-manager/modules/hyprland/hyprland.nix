@@ -54,7 +54,7 @@ in
     # If you use the Home Manager module, make sure to disable the systemd integration, as it
     # conflicts with uwsm.
     # https://wiki.hypr.land/Useful-Utilities/Systemd-start/
-    #systemd.enable = false;
+    systemd.enable = false;
 
     configType = "lua";
 
@@ -70,5 +70,4 @@ in
       i: ws: "hl.workspace_rule({ workspace = \"${toString i}\", default_name = \"${ws.name}\" })"
     ) workspaces
   );
-
 }

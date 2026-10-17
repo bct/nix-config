@@ -34,6 +34,9 @@ in
       settings = {
         main = {
           terminal = "alacritty";
+          # run each app in its own systemd scope under app.slice, rather than
+          # inside the compositor's unit
+          launch-prefix = "uwsm app --";
         };
 
         colors = {
