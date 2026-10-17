@@ -58,7 +58,7 @@ in
 
     configType = "lua";
 
-    # TODO: use extraLuaFiles once that's available
+    # TODO(unstable): use extraLuaFiles once that's available
     extraConfig = ''
       require("00-workspaces")
     ''

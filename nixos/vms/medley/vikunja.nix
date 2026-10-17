@@ -46,9 +46,6 @@
 
         # (•‿•)
         allowiconchanges = false;
-
-        # TODO: remove this once we're on a module version that sets it
-        publicurl = "https://tasks.domus.diffeq.com/";
       };
     };
 
