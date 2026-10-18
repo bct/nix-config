@@ -33,15 +33,21 @@ Now you can build a VM with your host's config:
 
 ## Building a Raspberry Pi installation image
 
+A generic intaller:
+
     nix build .#headless-image-rpi
+
+Or a specific host:
+
+    nix build .#nixosConfigurations.stereo.config.system.build.sdImage
 
 To uncompress the image:
 
-    nix shell nixpkgs#zstd -c unzstd -o <output>.img <input>.img.zst
+Flash this image to an SD card:
 
-There's a `compressImage` option that might allow us to avoid this step.
+    zstdcat result/sd-image/nixos-image-rpi3-kernel.img.zst | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync
 
-Burn this image to an SD card (using e.g. `cp` or `pv`). Boot it and use `deploy-rs` to deploy your configuration.
+Boot it and use `deploy-rs` to deploy your configuration.
 
 ## Building an ISO
 

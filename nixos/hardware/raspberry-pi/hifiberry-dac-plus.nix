@@ -1,5 +1,8 @@
-{ pkgs, ... }:
+{ ... }:
 
+# Quirks: we need to use the vendor kernel, mainline doesn't have a driver for the HifiBerry DAC+.
+#
+# Requires nixos-raspberrypi's bootloader, which lets the firmware apply the overlay via config.txt.
 {
   hardware.alsa.enablePersistence = true;
   environment.etc."asound.conf".text = ''
@@ -7,17 +10,9 @@
     defaults.ctl.!card 1
   '';
 
-  # We need to use the vendor kernel, mainline doesn't have a driver for the HifiBerry DAC+.
-  boot.kernelPackages = pkgs.linuxPackages_rpi3;
-
-  hardware.deviceTree = {
+  hardware.raspberry-pi.config.all.dt-overlays.hifiberry-dacplus = {
     enable = true;
-    overlays = [
-      {
-        name = "hifiberry-dacplus";
-        dtsFile = ./hifiberry-dacplus-overlay.dts;
-      }
-    ];
+    params = { };
   };
 
   # The vendor kernel won't boot if this module loads:
@@ -25,20 +20,4 @@
   #
   # Fortunately I don't need wifi.
   boot.blacklistedKernelModules = [ "brcmfmac" ];
-
-  nixpkgs = {
-    overlays = [
-      # fdtoverlay does not support the DTS overlay file I'm using above
-      # (it exits with FDT_ERR_NOTFOUND)
-      # https://github.com/raspberrypi/firmware/issues/1718
-      #
-      # we'll use dtmerge instead.
-      # https://github.com/NixOS/nixos-hardware/blob/master/raspberry-pi/4/pkgs-overlays.nix
-      (_final: prev: {
-        deviceTree = prev.deviceTree // {
-          applyOverlays = prev.callPackage ./apply-overlays-dtmerge.nix { };
-        };
-      })
-    ];
-  };
 }

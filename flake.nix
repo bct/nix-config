@@ -7,10 +7,12 @@
     extra-substituters = [
       "https://microvm.cachix.org"
       "https://unmojang.cachix.org"
+      "https://nixos-raspberrypi.cachix.org"
     ];
     extra-trusted-public-keys = [
       "microvm.cachix.org-1:oXnBc6hRE3eX5rSYdRyMYXnfzcCxC7yKPTbZXALsqys="
       "unmojang.cachix.org-1:OfHnbBNduZ6Smx9oNbLFbYyvOWSoxb2uPcnXPj4EDQY="
+      "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
     ];
   };
 
@@ -50,6 +52,10 @@
 
     # nixos-hardware
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    # nixos-raspberrypi
+    # doesn't follow nixpkgs, so that we can take advantage of the cache.
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
 
     # microvm
     # doesn't follow nixpkgs, so that we can take advantage of the cache.
@@ -241,7 +247,9 @@
               ];
             };
 
-            stereo = nixpkgs.lib.nixosSystem {
+            # uses our nixpkgs, but adds nixos-raspberrypi's overlays and binary cache.
+            stereo = inputs.nixos-raspberrypi.lib.nixosSystem {
+              inherit nixpkgs;
               specialArgs = { inherit self inputs outputs; };
               modules = [
                 injectDeps

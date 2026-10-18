@@ -2,6 +2,7 @@
   inputs,
   self,
   pkgs,
+  modulesPath,
   ...
 }:
 {
@@ -12,10 +13,12 @@
     "${self}/nixos/common/headless.nix"
     "${self}/nixos/common/node-exporter.nix"
 
-    inputs.nixos-hardware.nixosModules.raspberry-pi-3
+    inputs.nixos-raspberrypi.nixosModules.raspberry-pi-3.base
     "${self}/nixos/hardware/raspberry-pi/hifiberry-dac-plus.nix"
 
-    ./hardware-configuration.nix
+    # defines the filesystems, and lets us build an SD card image with:
+    #   nix build .#nixosConfigurations.stereo.config.system.build.sdImage
+    inputs.nixos-raspberrypi.nixosModules.sd-image
 
     "${self}/nixos/modules/airsonic-refix"
 
@@ -23,6 +26,20 @@
     ./bluetooth.nix
     ./mpd.nix
   ];
+
+  # the sd-image module imports this installer profile, which adds rescue tools and enables ZFS
+  # (which doesn't support the vendor kernel).
+  disabledModules = [ (modulesPath + "/profiles/base.nix") ];
+
+  # the firmware boots the kernel directly (no u-boot). generations are kept on the
+  # FIRMWARE partition; to boot an older one, edit `os_prefix` in config.txt.
+  boot.loader.raspberry-pi.bootloader = "kernel";
+
+  # headless; this is on by default, but it adds an HDMI sound card, which would renumber the
+  # HifiBerry (see asound.conf in hifiberry-dac-plus.nix).
+  hardware.raspberry-pi.config.all.dt-overlays.vc4-kms-v3d.enable = false;
+
+  powerManagement.cpuFreqGovernor = "ondemand";
 
   networking.hostName = "stereo";
   networking.useNetworkd = true;
