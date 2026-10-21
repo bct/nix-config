@@ -1,6 +1,63 @@
-{ ... }:
+{ pkgs, ... }:
 let
   workspaces = import ./workspaces.nix;
+
+  mouseBatteryScript = pkgs.writeShellApplication {
+    name = "waybar-mouse-battery";
+    runtimeInputs = [
+      pkgs.upower
+      pkgs.gnugrep
+    ];
+    text = ''
+      for device in $(upower -e); do
+        info=$(upower -i "$device")
+
+        # Only consider devices upower classifies as mice (the header line
+        # is the device type, not derivable from the object path or model).
+        if ! echo "$info" | grep -qx '  mouse'; then
+          continue
+        fi
+
+        warning=$(echo "$info" | grep -oP 'warning-level:\s*\K\S+')
+        percentage=$(echo "$info" | grep -oP 'percentage:\s*\K[0-9]+')
+
+        if [ -n "$warning" ] && [ "$warning" != "none" ]; then
+          echo "{\"text\": \"󰍽 $percentage%\", \"class\": \"low\", \"tooltip\": \"Mouse battery $warning: $percentage%\"}"
+          exit 0
+        fi
+      done
+    '';
+  };
+
+  micPortScript = pkgs.writeShellApplication {
+    name = "waybar-mic-port";
+    runtimeInputs = [
+      pkgs.pulseaudio # pactl
+      pkgs.jq
+    ];
+    text = ''
+      default_source=$(pactl get-default-source)
+      source=$(pactl -f json list sources | jq -c --arg name "$default_source" '.[] | select(.name == $name)')
+
+      active_port=$(jq -r '.active_port // ""' <<<"$source")
+
+      # only show something when the default source has a selectable port
+      # (e.g. a combo jack switchable between line-in/mic/headset)
+      if [ -z "$active_port" ] || [ "$active_port" = "null" ]; then
+        exit 0
+      fi
+
+      desc=$(jq -r --arg p "$active_port" '.ports[] | select(.name == $p) | .description' <<<"$source")
+
+      if [ "$desc" = "Headset Microphone" ]; then
+        icon="󰋎"
+      else
+        icon="󰋐"
+      fi
+
+      echo "{\"text\": \"$icon\", \"tooltip\": \"Mic input: $desc\"}"
+    '';
+  };
 in
 {
   programs.waybar = {
@@ -28,11 +85,13 @@ in
 
         modules-right = [
           "pulseaudio"
+          "custom/mic-port"
           "network#wireless"
           "network#wg"
           "cpu"
           "backlight"
           "battery"
+          "custom/mouse-battery"
           "custom/sep-clock-left"
           "clock"
           "tray"
@@ -116,6 +175,21 @@ in
             ""
             ""
           ];
+        };
+        "custom/mouse-battery" = {
+          exec = "${mouseBatteryScript}/bin/waybar-mouse-battery";
+          return-type = "json";
+          interval = 300;
+          format = "{}";
+          tooltip = true;
+        };
+        "custom/mic-port" = {
+          exec = "${micPortScript}/bin/waybar-mic-port";
+          return-type = "json";
+          interval = 5;
+          format = "{}";
+          tooltip = true;
+          on-click = "toggle-mic";
         };
         "network#wireless" = {
           "interface" = "wlp*";
@@ -224,7 +298,9 @@ in
       #network,
       #pulseaudio,
       #tray,
-      #bluetooth {
+      #bluetooth,
+      #custom-mic-port,
+      #custom-mouse-battery {
         padding: 0 10px;
         margin: 0;
       }
@@ -238,6 +314,11 @@ in
       }
 
       #battery.critical:not(.charging) {
+        color: #d65d0e;
+        animation: blink 0.5s linear infinite alternate;
+      }
+
+      #custom-mouse-battery.low {
         color: #d65d0e;
         animation: blink 0.5s linear infinite alternate;
       }
