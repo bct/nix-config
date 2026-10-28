@@ -158,6 +158,7 @@
                 medley
                 megahost-one
                 mi-go
+                octopi
                 ranger
                 stereo
                 yuggoth
@@ -239,6 +240,15 @@
               ];
             };
 
+            octopi = inputs.nixos-raspberrypi.lib.nixosSystem {
+              inherit nixpkgs;
+              specialArgs = { inherit self inputs outputs; };
+              modules = [
+                injectDeps
+                ./nixos/lan/octopi/configuration.nix
+              ];
+            };
+
             ranger = nixpkgs.lib.nixosSystem {
               specialArgs = { inherit self inputs outputs; };
               modules = [
@@ -313,6 +323,12 @@
               hostname = "mi-go.domus.diffeq.com";
               arch = "x86_64-linux";
               config = self.nixosConfigurations.mi-go;
+            };
+
+            nodes.octopi = mkNode {
+              hostname = "octopi.domus.diffeq.com";
+              arch = "aarch64-linux";
+              config = self.nixosConfigurations.octopi;
             };
 
             nodes.ranger = mkNode {
