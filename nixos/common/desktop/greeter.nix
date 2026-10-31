@@ -17,6 +17,15 @@
     };
 
     settings.skip_selection = true;
+
+    # Only show the greeter on the last connected output (e.g. the external
+    # monitor), rather than stretching it across all of them.
+    cageArgs = [
+      "-s"
+      "-d"
+      "-m"
+      "last"
+    ];
   };
 
   # Same as the regreet module's default, but tell cage to use our keyboard layout.
