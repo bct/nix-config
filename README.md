@@ -33,7 +33,7 @@ Now you can build a VM with your host's config:
 
 ## Building a Raspberry Pi installation image
 
-A generic intaller:
+A generic installer:
 
     nix build .#headless-image-rpi
 
