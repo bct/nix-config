@@ -1,6 +1,7 @@
 {
   self,
   inputs,
+  config,
   pkgs,
   ...
 }:
@@ -119,6 +120,16 @@
 
   # enable compressed cache for swap pages, to improve swap performance
   boot.zswap.enable = true;
+
+  # kill the heaviest app scope when memory pressure stays high, rather than
+  # thrashing until the desktop is unresponsive
+  systemd.oomd.enableUserSlices = true;
+
+  # dry-run for now: only log what oomd would kill (journalctl -u systemd-oomd)
+  systemd.services.systemd-oomd.serviceConfig.ExecStart = [
+    "" # clear the upstream ExecStart
+    "${config.systemd.package}/lib/systemd/systemd-oomd --dry-run"
+  ];
 
   # framework explicitly recommends against using TLP, at least for earlier Ryzen chips:
   # https://knowledgebase.frame.work/en_us/optimizing-ubuntu-battery-life-Sye_48Lg3
