@@ -22,8 +22,33 @@
       };
     };
     extraSettings = lib.concatStringsSep "\n" [
+      ''
+
+        ### Include: klipper.ini
+      ''
       (builtins.readFile ./klipper.ini)
+      ''
+
+        ### Include: mainsail.cfg
+      ''
       (builtins.readFile ./mainsail.cfg)
+      # ''
+      #
+      #   ### Macros
+      #   [gcode_macro END_PRINT]
+      #   gcode:
+      #     # Turn off bed, extruder, and fan
+      #     M140 S0
+      #     M104 S0
+      #     M106 S0
+      #     # Move nozzle away from print while retracting
+      #     G91
+      #     G1 Z10 E-5 F300
+      #     G90
+      #     G1 X10 Y300 F3000
+      #     # Disable steppers
+      #     M84
+      # ''
     ];
     firmwares = {
       # nix build .#nixosConfigurations.octopi.config.services.klipper.firmwares.skr-mini-e3-v3.package
@@ -37,6 +62,9 @@
       };
     };
   };
+
+  # klippy logs a "Stats" line every second; drop those before they reach the journal.
+  systemd.services.klipper.serviceConfig.LogFilterPatterns = "~^INFO:root:Stats ";
 
   services.moonraker = {
     enable = true;
@@ -62,11 +90,24 @@
 
       # enable octoprint compatibility
       octoprint_compat = { };
+
+      # push notifications via ntfy.sh (moonraker uses apprise for this)
+      "notifier print_done" = {
+        url = "ntfys://ntfy.sh/doog4maechoh";
+        events = "complete, error, cancelled";
+        title = "Octopi: print {event_name}";
+        body = "{event_args[1].filename}";
+      };
     };
   };
 
   services.mainsail = {
     enable = true;
+
+    # default is 10MB which is easy to exceed.
+    nginx.extraConfig = ''
+      client_max_body_size 100m;
+    '';
   };
 
   networking.firewall.allowedTCPPorts = [
