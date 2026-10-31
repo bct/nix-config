@@ -16,7 +16,7 @@ in
   home.packages = [
     pkgs.unstable.cura-appimage
     pkgs.freecad
-    pkgs.openscad
+    pkgs.unstable.openscad-unstable
 
     orca-slicer
   ];
