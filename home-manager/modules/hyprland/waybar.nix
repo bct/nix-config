@@ -195,7 +195,7 @@ in
           "interface" = "wlp*";
           "format-wifi" = "{signalStrength}% ";
           "format-ethernet" = "{ipaddr}/{cidr} 󰈀";
-          "tooltip-format" = "{ifname} via {gwaddr}";
+          "tooltip-format" = "{essid}";
           "format-linked" = "{ifname} (No IP) 󰲊";
           "format-disconnected" = "Disconnected 󰲛";
           "format-alt" = "{ifname} = {ipaddr}/{cidr}";
