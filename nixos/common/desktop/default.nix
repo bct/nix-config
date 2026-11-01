@@ -33,6 +33,11 @@ in
 
     time.timeZone = "America/Edmonton";
 
+    # some applications (e.g. waybar) look for tzdata in /usr/share/zoneinfo/
+    # and otherwise falls back to the (possibly stale) tzdata baked in at GCC
+    # build time.
+    systemd.tmpfiles.rules = [ "L+ /usr/share/zoneinfo - - - - /etc/zoneinfo" ];
+
     i18n.defaultLocale = "en_CA.UTF-8";
     console.keyMap = "dvorak";
 
