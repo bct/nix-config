@@ -40,7 +40,6 @@
     pkgs.callPackage "${pkg}/default.nix" { };
 
   airsonic-refix = pkgs.callPackage ./airsonic-refix { };
-  booklore = pkgs.callPackage ./booklore { };
 
   grimoire = pkgs.callPackage ./grimoire { };
   profilarr = pkgs.callPackage ./profilarr { };
