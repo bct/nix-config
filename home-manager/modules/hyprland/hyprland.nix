@@ -49,7 +49,6 @@ in
     enable = true; # enable Hyprland
 
     package = pkgs.unstable.hyprland;
-    portalPackage = pkgs.unstable.xdg-desktop-portal-hyprland;
 
     # If you use the Home Manager module, make sure to disable the systemd integration, as it
     # conflicts with uwsm.

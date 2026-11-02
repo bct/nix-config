@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   ...
 }:
@@ -17,7 +16,6 @@
     enable = true;
     extraPortals = [
       pkgs.xdg-desktop-portal-gtk
-      config.wayland.windowManager.hyprland.portalPackage
     ];
     # attempt to fix screensharing on hyprland.
     config.hyprland.default = [

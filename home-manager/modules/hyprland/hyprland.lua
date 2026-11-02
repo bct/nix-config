@@ -392,8 +392,17 @@ hl.bind("SUPER + CTRL + L", hl.dsp.exec_cmd("hyprlock"), { locked = true })
 -- See https://wiki.hypr.land/Configuring/Basics/Window-Rules/
 -- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 
-hl.workspace_rule({ workspace = "special:music", on_created_empty = "uwsm app -- supersonic", gaps_out = 50 })
-hl.workspace_rule({ workspace = "name:notes", on_created_empty = "uwsm app -- obsidian" })
+hl.on("workspace.created", function(ws)
+	if ws.is_empty then
+		if ws.name == "special:music" then
+			hl.exec_cmd("uwsm app -- supersonic")
+		elseif ws.name == "notes" then
+			hl.exec_cmd("uwsm app -- obsidian")
+		end
+	end
+end)
+
+hl.workspace_rule({ workspace = "special:music", gaps_out = 50 })
 hl.workspace_rule({ workspace = "name:web", gaps_out = { 10, 0, 10, 0 } })
 
 local suppressMaximizeRule = hl.window_rule({
