@@ -32,23 +32,11 @@
         ### Include: mainsail.cfg
       ''
       (builtins.readFile ./mainsail.cfg)
-      # ''
-      #
-      #   ### Macros
-      #   [gcode_macro END_PRINT]
-      #   gcode:
-      #     # Turn off bed, extruder, and fan
-      #     M140 S0
-      #     M104 S0
-      #     M106 S0
-      #     # Move nozzle away from print while retracting
-      #     G91
-      #     G1 Z10 E-5 F300
-      #     G90
-      #     G1 X10 Y300 F3000
-      #     # Disable steppers
-      #     M84
-      # ''
+      ''
+
+        ### Include: macros.cfg
+      ''
+      (builtins.readFile ./macros.cfg)
     ];
     firmwares = {
       # nix build .#nixosConfigurations.octopi.config.services.klipper.firmwares.skr-mini-e3-v3.package
