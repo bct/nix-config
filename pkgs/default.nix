@@ -48,5 +48,6 @@
   speedtest_exporter = pkgs.callPackage ./speedtest_exporter { };
   starlink_exporter = pkgs.callPackage ./starlink_exporter { };
   subsonic-action-proxy = pkgs.callPackage ./subsonic-action-proxy { };
+  usbeehive = pkgs.callPackage ./usbeehive { };
   wgsd = pkgs.callPackage ./wgsd { };
 }
