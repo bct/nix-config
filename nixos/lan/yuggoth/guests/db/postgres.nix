@@ -6,6 +6,7 @@
 }:
 let
   usersWithPasswords = [
+    "homebox"
     "immich"
     "miniflux"
     "paperless"
@@ -15,6 +16,11 @@ let
 in
 {
   age.secrets = {
+    db-password-db-postgres-homebox = {
+      generator.script = "alnum";
+      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-homebox.age;
+    };
+
     db-password-db-postgres-immich = {
       generator.script = "alnum";
       rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-immich.age;
@@ -82,6 +88,7 @@ in
     '';
 
     ensureDatabases = [
+      "homebox"
       "immich"
       "miniflux"
       "paperless"
@@ -90,6 +97,11 @@ in
     ];
 
     ensureUsers = [
+      {
+        name = "homebox";
+        ensureDBOwnership = true;
+      }
+
       {
         name = "immich";
         ensureDBOwnership = true;

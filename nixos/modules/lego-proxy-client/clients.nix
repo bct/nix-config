@@ -21,6 +21,7 @@
 
   homepage.domain = "homepage.domus.diffeq.com";
   immich.domain = "immich.domus.diffeq.com";
+  inventory.domain = "inventory.domus.diffeq.com";
   jellyfin.domain = "jellyfin.domus.diffeq.com";
   ldap.domain = "ldap.domus.diffeq.com";
 

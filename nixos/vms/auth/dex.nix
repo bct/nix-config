@@ -13,6 +13,11 @@ in
       generator.script = "alnum";
     };
 
+    dex-homebox-secret = {
+      rekeyFile = config.diffeq.secretsPath + /dex/homebox.age;
+      generator.script = "alnum";
+    };
+
     dex-immich-secret = {
       rekeyFile = config.diffeq.secretsPath + /dex/immich.age;
       generator.script = "alnum";
@@ -94,6 +99,13 @@ in
           name = "Grafana";
           secretFile = config.age.secrets.dex-grafana-secret.path;
           redirectURIs = [ "https://grafana.domus.diffeq.com/login/generic_oauth" ];
+        }
+        # https://homebox.software/en/quick-start/configure/oidc/
+        {
+          id = "homebox";
+          name = "Homebox";
+          secretFile = config.age.secrets.dex-homebox-secret.path;
+          redirectURIs = [ "https://inventory.domus.diffeq.com/api/v1/users/login/oidc/callback" ];
         }
         # https://docs.immich.app/administration/oauth/
         {

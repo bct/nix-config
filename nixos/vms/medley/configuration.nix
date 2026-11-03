@@ -13,6 +13,7 @@
     ./borgmatic.nix
     ./grimmory.nix
     ./grimoire.nix
+    ./homebox.nix
     ./homepage.nix
     ./karakeep.nix
     ./romm.nix
@@ -43,6 +44,7 @@
       "dav"
       "grimoire"
       "homepage"
+      "inventory"
       "recipes"
       "romm"
       "tasks"
