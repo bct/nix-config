@@ -9,8 +9,7 @@ in
       rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-homebox.age;
     };
     homebox-openid-clientsecret = {
-      rekeyFile = config.diffeq.secretsPath + /dex/homebox.age;
-      generator.script = "alnum";
+      rekeyFile = config.diffeq.oidc.serices.homebox.agenixRekeyFile;
     };
   };
 

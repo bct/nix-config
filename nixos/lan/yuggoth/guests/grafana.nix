@@ -31,9 +31,8 @@
       owner = "grafana";
       group = "grafana";
     };
-
     dex-grafana-secret = {
-      rekeyFile = config.diffeq.secretsPath + /dex/grafana.age;
+      rekeyFile = config.diffeq.oidc.services.grafana.agenixRekeyFile;
       owner = "grafana";
       group = "grafana";
       generator.script = "alnum";

@@ -11,8 +11,7 @@
       rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-vikunja.age;
     };
     vikunja-openid-clientsecret = {
-      rekeyFile = config.diffeq.secretsPath + /dex/vikunja.age;
-      generator.script = "alnum";
+      rekeyFile = config.diffeq.oidc.serices.vikunja.agenixRekeyFile;
     };
   };
 

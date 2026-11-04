@@ -82,9 +82,8 @@
     };
 
     dex-paperless-secret = {
-      rekeyFile = config.diffeq.secretsPath + /dex/paperless.age;
+      rekeyFile = config.diffeq.oidc.services.paperless.agenixRekeyFile;
       owner = config.services.paperless.user;
-      generator.script = "alnum";
     };
   };
 

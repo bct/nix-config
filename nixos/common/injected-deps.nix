@@ -1,6 +1,10 @@
 # https://jade.fyi/blog/flakes-arent-real/
-{ lib, ... }:
+{ config, lib, ... }:
 {
+  imports = [
+    ./injected-deps/oidc.nix
+  ];
+
   options.diffeq = {
     secretsPath = lib.mkOption {
       type = lib.types.path;
@@ -17,6 +21,35 @@
 
     accounts.groupIds = lib.mkOption {
       type = lib.types.attrs;
+    };
+
+    oidc.services = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule (
+          { name, ... }: {
+            options = {
+              displayName = lib.mkOption {
+                type = lib.types.str;
+                default = lib.toSentenceCase name;
+              };
+
+              redirectURIs = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+              };
+
+              public = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+              };
+
+              agenixRekeyFile = lib.mkOption {
+                type = lib.types.path;
+                default = config.diffeq.secretsPath + /dex/${name}.age;
+              };
+            };
+          }
+        )
+      );
     };
   };
 
