@@ -5,47 +5,17 @@
   ...
 }:
 let
-  usersWithPasswords = [
-    "homebox"
-    "immich"
-    "miniflux"
-    "paperless"
-    "romm"
-    "vikunja"
-  ];
+  usersWithPasswords = builtins.attrNames config.diffeq.databases.users;
+  databases = usersWithPasswords;
 in
 {
-  age.secrets = {
-    db-password-db-postgres-homebox = {
+  age.secrets = lib.mapAttrs' (id: u: {
+    name = "db-password-db-postgres-${id}";
+    value = {
+      rekeyFile = u.agenixRekeyFile;
       generator.script = "alnum";
-      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-homebox.age;
     };
-
-    db-password-db-postgres-immich = {
-      generator.script = "alnum";
-      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-immich.age;
-    };
-
-    db-password-db-postgres-miniflux = {
-      generator.script = "alnum";
-      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-miniflux.age;
-    };
-
-    db-password-db-postgres-paperless = {
-      generator.script = "alnum";
-      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-paperless.age;
-    };
-
-    db-password-db-postgres-romm = {
-      generator.script = "alnum";
-      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-romm.age;
-    };
-
-    db-password-db-postgres-vikunja = {
-      generator.script = "alnum";
-      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-vikunja.age;
-    };
-  };
+  }) config.diffeq.databases.users;
 
   services.postgresql = {
     enable = true;
@@ -87,50 +57,14 @@ in
       superuser_map         postgres      postgres
     '';
 
-    ensureDatabases = [
-      "homebox"
-      "immich"
-      "miniflux"
-      "paperless"
-      "romm"
-      "vikunja"
-    ];
-
-    ensureUsers = [
-      {
-        name = "homebox";
-        ensureDBOwnership = true;
-      }
-
-      {
-        name = "immich";
-        ensureDBOwnership = true;
-        ensureClauses.login = true; # not sure why this is here.
-      }
-
-      {
-        name = "miniflux";
-        ensureDBOwnership = true;
-      }
-
-      {
-        name = "paperless";
-        ensureDBOwnership = true;
-      }
-
-      {
-        name = "romm";
-        ensureDBOwnership = true;
-      }
-
-      {
-        name = "vikunja";
-        ensureDBOwnership = true;
-      }
-    ];
+    ensureDatabases = databases;
+    ensureUsers = map (name: {
+      inherit name;
+      ensureDBOwnership = true;
+    }) usersWithPasswords;
   };
 
-  systemd.services.postgresql-setup.serviceConfig.LoadCredential = builtins.map (
+  systemd.services.postgresql-setup.serviceConfig.LoadCredential = map (
     userName: "password-${userName}:${config.age.secrets."db-password-db-postgres-${userName}".path}"
   ) usersWithPasswords;
 
@@ -155,7 +89,7 @@ in
             exit 1
           fi
 
-          psql --port=${builtins.toString config.services.postgresql.settings.port} -tA <<EOF
+          psql --port=${toString config.services.postgresql.settings.port} -tA <<EOF
             ALTER USER "$username" WITH PASSWORD '$password';
         EOF
         }

@@ -5,11 +5,10 @@ in
 {
   age.secrets = {
     homebox-db-password = {
-      generator.script = "alnum";
-      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-homebox.age;
+      rekeyFile = config.diffeq.databases.users.homebox.agenixRekeyFile;
     };
     homebox-openid-clientsecret = {
-      rekeyFile = config.diffeq.oidc.serices.homebox.agenixRekeyFile;
+      rekeyFile = config.diffeq.oidc.services.homebox.agenixRekeyFile;
     };
   };
 

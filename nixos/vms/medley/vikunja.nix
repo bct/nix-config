@@ -7,11 +7,10 @@
 {
   age.secrets = {
     vikunja-db-password = {
-      generator.script = "alnum";
-      rekeyFile = config.diffeq.secretsPath + /db/password-db-postgres-vikunja.age;
+      rekeyFile = config.diffeq.databases.users.vikunja.agenixRekeyFile;
     };
     vikunja-openid-clientsecret = {
-      rekeyFile = config.diffeq.oidc.serices.vikunja.agenixRekeyFile;
+      rekeyFile = config.diffeq.oidc.services.vikunja.agenixRekeyFile;
     };
   };
 

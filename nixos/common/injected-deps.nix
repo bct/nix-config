@@ -2,6 +2,7 @@
 { config, lib, ... }:
 {
   imports = [
+    ./injected-deps/databases.nix
     ./injected-deps/oidc.nix
   ];
 
@@ -45,6 +46,21 @@
               agenixRekeyFile = lib.mkOption {
                 type = lib.types.path;
                 default = config.diffeq.secretsPath + /dex/${name}.age;
+              };
+            };
+          }
+        )
+      );
+    };
+
+    databases.users = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule (
+          { name, ... }: {
+            options = {
+              agenixRekeyFile = lib.mkOption {
+                type = lib.types.path;
+                default = config.diffeq.secretsPath + /db/password-db-postgres-${name}.age;
               };
             };
           }
