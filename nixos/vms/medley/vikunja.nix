@@ -45,6 +45,8 @@
         # (•‿•)
         allowiconchanges = false;
       };
+
+      database.sslmode = "verify-full";
     };
 
     database = {

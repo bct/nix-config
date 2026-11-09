@@ -86,6 +86,9 @@
       port = 5432;
       user = "immich";
     };
+
+    # db.domus only accepts TLS connections (hostssl)
+    environment.DB_SSL_MODE = "verify-full";
   };
 
   networking.firewall.allowedTCPPorts = [

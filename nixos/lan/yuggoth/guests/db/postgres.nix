@@ -21,6 +21,8 @@ in
     enable = true;
     enableTCPIP = true;
 
+    package = pkgs.postgresql_17;
+
     extensions =
       ps: with ps; [
         pgvector # immich
@@ -31,7 +33,7 @@ in
       shared_preload_libraries = [
         "vchord.so" # immich
       ];
-      search_path = "\"$user\", public, vectors"; # immich
+      search_path = "\"$user\", public"; # immich
     };
 
     # https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
@@ -45,9 +47,12 @@ in
       # TYPE  DATABASE  USER  AUTH_METHOD [AUTH_OPTIONS]
       local   all       all   peer        map=superuser_map
 
-      # allow "md5" (password) authentication on TCP connections
-      # TYPE  DATABASE        USER            ADDRESS                 METHOD
-      host    all             all             ::/0                    md5
+      # allow "scram-sha-256" (password) authentication on TLS connections.
+      # when operating remotely everyone may only connect to the
+      # database with the same name as their user.
+      # TYPE     DATABASE        USER            ADDRESS                 METHOD
+      hostssl    sameuser        all             ::/0                    scram-sha-256
+      hostssl    sameuser        all             192.168.4.0/24          scram-sha-256
     '';
 
     identMap = ''

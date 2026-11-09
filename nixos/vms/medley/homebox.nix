@@ -30,8 +30,7 @@ in
       HBOX_DATABASE_USERNAME = "homebox";
       HBOX_DATABASE_DATABASE = "homebox";
 
-      # TODO
-      HBOX_DATABASE_SSL_MODE = "disable";
+      HBOX_DATABASE_SSL_MODE = "verify-full";
     };
 
     secrets = {

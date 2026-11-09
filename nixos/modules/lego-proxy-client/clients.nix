@@ -7,6 +7,7 @@
   booklore.domain = "booklore.domus.diffeq.com";
   bookmarks.domain = "bookmarks.domus.diffeq.com";
   dav.domain = "dav.domus.diffeq.com";
+  db.domain = "db.domus.diffeq.com";
 
   flood = {
     domain = "flood.domus.diffeq.com";
