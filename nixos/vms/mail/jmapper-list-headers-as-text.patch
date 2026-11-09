@@ -1,0 +1,17 @@
+diff --git a/crates/jmap-server/src/methods/email_props.rs b/crates/jmap-server/src/methods/email_props.rs
+index 0059100..94b5c3b 100644
+--- a/crates/jmap-server/src/methods/email_props.rs
++++ b/crates/jmap-server/src/methods/email_props.rs
+@@ -155,7 +155,11 @@ fn header_form_is_allowed(name: &str, form: HeaderForm) -> bool {
+    }
+    match form {
+       HeaderForm::Raw => true,
+-      HeaderForm::Text => matches!(name.as_str(), "subject" | "comments" | "keywords"),
++      // Not RFC 8621 compliant: List-* headers are only valid as asRaw/asURLs,
++      // but some clients (gridlink-mail) request header:List-Unsubscribe:asText.
++      HeaderForm::Text => {
++         matches!(name.as_str(), "subject" | "comments" | "keywords") || name.starts_with("list-")
++      },
+       HeaderForm::Addresses | HeaderForm::GroupedAddresses => {
+          matches!(
+             name.as_str(),

@@ -69,6 +69,9 @@
     # https://nixos-mailserver.readthedocs.io/en/latest/index.html
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-26.05";
 
+    # jmapper
+    jmapper.url = "github:amaanq/jmapper";
+
     # acme-dns-by-proxy
     acme-dns-by-proxy.url = "github:bct/acme-dns-by-proxy";
     acme-dns-by-proxy.inputs.nixpkgs.follows = "nixpkgs";

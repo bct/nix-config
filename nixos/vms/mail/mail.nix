@@ -31,7 +31,7 @@ in
 
     #debug.dovecot = true;
 
-    fqdn = "mail.domus.diffeq.com";
+    fqdn = config.diffeq.hostNames.mail;
     domains = [
       "diffeq.com"
       "domus.diffeq.com"
@@ -45,7 +45,7 @@ in
     };
 
     x509 = {
-      useACMEHost = "mail.domus.diffeq.com";
+      useACMEHost = config.diffeq.hostNames.mail;
     };
 
     # testing to see whether this fixes issues with resolving .domus.diffeq.com addresses.

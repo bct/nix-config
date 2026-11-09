@@ -5,6 +5,7 @@
     users = {
       homebox = { };
       immich = { };
+      jmapper = { };
       miniflux = { };
       paperless = { };
       romm = { };

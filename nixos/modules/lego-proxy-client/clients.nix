@@ -23,6 +23,7 @@
   immich.domain = "immich.domus.diffeq.com";
   inventory.domain = "inventory.domus.diffeq.com";
   jellyfin.domain = "jellyfin.domus.diffeq.com";
+  jmap.domain = "jmap.domus.diffeq.com";
   ldap.domain = "ldap.domus.diffeq.com";
 
   lubelogger.domain = "lubelogger.domus.diffeq.com";

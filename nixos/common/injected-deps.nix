@@ -70,12 +70,15 @@
   };
 
   config.diffeq = {
-    hostNames = {
+    hostNames = rec {
       db = "db.domus.diffeq.com";
       oidc = "oidc.domus.diffeq.com"; # dex
       auth = "auth.domus.diffeq.com"; # tinyauth
       ldap = "ldap.domus.diffeq.com"; # lldap
       tasks = "tasks.domus.diffeq.com"; # vikunja
+      mail = "mail.domus.diffeq.com";
+      jmap = "jmap.domus.diffeq.com";
+      postgres = db;
     };
 
     accounts = {

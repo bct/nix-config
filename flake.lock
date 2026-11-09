@@ -480,6 +480,21 @@
         "type": "github"
       }
     },
+    "jmapper": {
+      "locked": {
+        "lastModified": 1793950217,
+        "narHash": "sha256-6eYC+3S01+s05Mja+BiaGfS6grFtEXyB8x6FZYGeEzw=",
+        "owner": "amaanq",
+        "repo": "jmapper",
+        "rev": "17b8840a09fab5b44ddb57c89b8533a7381db388",
+        "type": "github"
+      },
+      "original": {
+        "owner": "amaanq",
+        "repo": "jmapper",
+        "type": "github"
+      }
+    },
     "libnbtplusplus": {
       "flake": false,
       "locked": {
@@ -794,6 +809,7 @@
         "flake-parts": "flake-parts_2",
         "grid-select": "grid-select",
         "home-manager": "home-manager",
+        "jmapper": "jmapper",
         "microvm": "microvm",
         "nix-minecraft": "nix-minecraft",
         "nixos-hardware": "nixos-hardware",

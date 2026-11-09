@@ -11,6 +11,7 @@
 
     ./borgmatic.nix
     ./getmail.nix
+    ./jmapper.nix
     ./mail.nix
     ./mua.nix
 
