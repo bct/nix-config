@@ -15,6 +15,7 @@ in
 {
   imports = [
     inputs.microvm.nixosModules.host
+    ../guest-network
   ];
 
   options.diffeq.microvms = with lib; {
@@ -60,6 +61,11 @@ in
 
               tapInterfaceMac = mkOption {
                 type = types.str;
+              };
+
+              address = mkOption {
+                type = types.str;
+                description = "This guest's IPv4 address on the host's guest network (diffeq.guestNetwork).";
               };
 
               machineId = mkOption {

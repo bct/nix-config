@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.wireguard-via-wgsd;
@@ -16,8 +20,12 @@ let
   dns = "192.168.8.1";
 
   routerPublicKey = "pZ8XBJYx9gWz7emqNDkmBF+BMQ9IW9ESHCfZEj75VHw=";
-  routerAllowedIps = [ "192.168.8.1/32" "192.168.0.0/20" ];
-in {
+  routerAllowedIps = [
+    "192.168.8.1/32"
+    "192.168.0.0/16"
+  ];
+in
+{
   options = {
     services.wireguard-via-wgsd = {
       address = lib.mkOption {
@@ -40,12 +48,12 @@ in {
         commands = [
           {
             command = "/run/current-system/sw/bin/systemctl start wg-quick-${wireguardInterface}.service";
-            options = ["NOPASSWD"];
+            options = [ "NOPASSWD" ];
           }
 
           {
             command = "/run/current-system/sw/bin/systemctl stop wg-quick-${wireguardInterface}.service";
-            options = ["NOPASSWD"];
+            options = [ "NOPASSWD" ];
           }
         ];
       }

@@ -52,7 +52,7 @@ in
       # database with the same name as their user.
       # TYPE     DATABASE        USER            ADDRESS                 METHOD
       hostssl    sameuser        all             ::/0                    scram-sha-256
-      hostssl    sameuser        all             192.168.4.0/24          scram-sha-256
+      hostssl    sameuser        all             192.168.0.0/16          scram-sha-256
     '';
 
     identMap = ''

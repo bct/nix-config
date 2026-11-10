@@ -34,6 +34,9 @@
 
   services.prometheus.exporters.node.enabledCollectors = [ "hwmon" ];
 
+  # addresses for guests (microvms and libvirt VMs); see nixos/modules/guest-network.
+  diffeq.guestNetwork.subnetPrefix = "192.168.200";
+
   diffeq.microvms = {
     enable = true;
     interfaceToBridge = "enp5s0f0";
@@ -49,6 +52,7 @@
       abrado = {
         hostName = "abrado";
         tapInterfaceMac = "02:00:00:00:00:08";
+        address = "192.168.200.8";
         machineId = "6b044915f8a8c5a6c0e9b5401d9778cf";
         wants = [ "microvm@db.service" ];
         startDelay = 60;
@@ -57,6 +61,7 @@
       db = {
         hostName = "db";
         tapInterfaceMac = "02:00:00:00:00:07";
+        address = "192.168.200.7";
         machineId = "2e9cd72837fcd95c103ac6f4bdeb726a";
         readyPorts = [
           3306 # mysql
@@ -68,6 +73,7 @@
       grafana = {
         hostName = "grafana";
         tapInterfaceMac = "02:00:00:00:00:06";
+        address = "192.168.200.6";
         machineId = "d2bf3078fe2744f57398cc02476228f9";
         wants = [
           "microvm@db.service"
@@ -79,6 +85,7 @@
       immich = {
         hostName = "immich";
         tapInterfaceMac = "02:00:00:00:00:09";
+        address = "192.168.200.9";
         machineId = "538b82e19deee1b600027ea47fe3e8dc";
         wants = [
           "microvm@db.service"
@@ -90,6 +97,7 @@
       lubelogger = {
         hostName = "lubelogger";
         tapInterfaceMac = "02:00:00:00:00:14";
+        address = "192.168.200.14";
         machineId = "136934c3334f852e7e2a506bc5484a2b";
         wants = [
           "microvm@db.service"
@@ -102,6 +110,7 @@
         enable = false;
         hostName = "minecraft";
         tapInterfaceMac = "02:00:00:00:00:15";
+        address = "192.168.200.15";
         machineId = "245a511aba02f5dae1266bc69363e7b9";
         requires = [ ];
         startDelay = 60;
@@ -110,6 +119,7 @@
       paperless = {
         hostName = "paperless";
         tapInterfaceMac = "02:00:00:00:00:10";
+        address = "192.168.200.10";
         machineId = "4e792125b5445ffd50e474ad64f5d30b";
         wants = [
           "microvm@db.service"
@@ -121,6 +131,7 @@
       prometheus = {
         hostName = "prometheus";
         tapInterfaceMac = "02:00:00:00:00:03";
+        address = "192.168.200.3";
         machineId = "6621b60f7f7ac43dca44e143eb0578a8";
       };
 
@@ -128,6 +139,7 @@
         hostName = "shell-of-the-old";
         tapInterfaceName = "vm-shell-of-the"; # <= 15 chars
         tapInterfaceMac = "02:00:00:00:00:12";
+        address = "192.168.200.12";
         machineId = "5c5ab3a55d2518c2ab823096462194e4";
         restartIfChanged = false;
         requires = [ "microvm@lego-proxy.service" ];
@@ -136,6 +148,7 @@
       spectator = {
         hostName = "spectator";
         tapInterfaceMac = "02:00:00:00:00:04";
+        address = "192.168.200.4";
         machineId = "08e6532eedca9b41586bd21b881c6bbf";
         wants = [ "microvm@db.service" ];
         startDelay = 120;
@@ -145,6 +158,7 @@
         hostName = "torrent-scraper";
         tapInterfaceName = "vm-torrent-scra"; # <= 15 chars
         tapInterfaceMac = "02:00:00:00:00:02";
+        address = "192.168.200.2";
         machineId = "e5b7d8199d4a4a34fb6748faef793248";
         wants = [
           "microvm@db.service"
@@ -156,6 +170,7 @@
       lego-proxy = {
         hostName = "lego-proxy";
         tapInterfaceMac = "02:00:00:00:00:05";
+        address = "192.168.200.5";
         machineId = "0c309b2d738728317e0dbc9725a64dc1";
         readyPorts = [ 22 ];
       };
@@ -164,6 +179,7 @@
       stump = {
         hostName = "stump";
         tapInterfaceMac = "02:00:00:00:00:16";
+        address = "192.168.200.16";
         machineId = "feac6be8d121e34143240f351a5a85ac";
       };
     };

@@ -14,6 +14,7 @@ in
 {
   imports = [
     nixvirt.nixosModules.default
+    ../guest-network
   ];
 
   options.diffeq.nixvirt = with lib; {
@@ -38,6 +39,28 @@ in
             options = {
               uuid = mkOption {
                 type = types.str;
+              };
+
+              mac = mkOption {
+                type = types.str;
+                description = "MAC address of the guest's network interface.";
+              };
+
+              tapInterfaceName = mkOption {
+                type = types.str;
+                default = "vm-${name}"; # <= 15 chars
+                description = "Name of the host-side tap interface.";
+              };
+
+              address = mkOption {
+                type = types.str;
+                description = "This guest's IPv4 address on the host's guest network (diffeq.guestNetwork).";
+              };
+
+              restartIfChanged = mkOption {
+                type = types.bool;
+                default = true;
+                description = "Hard power-off and restart this guest on activation if its definition changed. If false, the new definition takes effect the next time the guest is started.";
               };
 
               memoryMB = mkOption {
@@ -189,6 +212,7 @@ in
           # br0 is set up in microvm-host.nix
           # TODO
           bridge_name = "br0";
+          net_iface_mac = guest.mac;
 
           # this is undocumented, but it seems to turn on virtio_video while turning off DRM.
           virtio_video = null;
@@ -231,7 +255,7 @@ in
         #
         # This is a hard power-off. If false, the new definition takes effect
         # the next time the guest is started.
-        restart = null;
+        restart = if guest.restartIfChanged then null else false;
         definition = nixvirt.lib.domain.writeXML (
           baseXML
           // {
@@ -248,6 +272,10 @@ in
               # the template uses a nix store path, which would make the definition
               # change (and the guest restart) whenever qemu changes.
               emulator = "/run/libvirt/nix-emulators/qemu-system-x86_64";
+              # a stable tap name, so the host's network config can match it.
+              interface = baseXML.devices.interface // {
+                target.dev = guest.tapInterfaceName;
+              };
               disk = baseXML.devices.disk ++ extraDisks;
               filesystem = (baseXML.devices.filesystem or [ ]) ++ mounts;
             };
