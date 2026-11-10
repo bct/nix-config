@@ -1,6 +1,6 @@
-# Generates a script that replaces every CNAME on the OpenWrt router with the
-# set derived from this repo. The script only *stages* the changes; nothing
-# takes effect until you commit them.
+# Generates a script that replaces every CNAME and hostname ("domain" section)
+# on the OpenWrt router with the set derived from this repo. The script only
+# *stages* the changes; nothing takes effect until you commit them.
 #
 #   ssh root@router sh < "$(nix build --no-link --print-out-paths .#router-dns)"
 #   # review the diff it prints, then either:
@@ -9,6 +9,10 @@
 #
 # A machine gets a CNAME for each name it serves: its
 # services.lego-proxy-client.domains plus diffeq.dnsAliases.
+#
+# Routed guests (see nixos/modules/guest-network) don't use the router's DHCP,
+# so they get a hostname entry with their static address. Bridged guests and
+# other machines are still named by their DHCP lease.
 {
   lib,
   pkgs,
@@ -82,11 +86,38 @@ let
     else
       lib.sort (a: b: a.alias < b.alias) entries;
 
-  uciAdds = lib.concatMapStrings (e: ''
-    add dhcp cname
-    set dhcp.@cname[-1].cname='${e.alias}'
-    set dhcp.@cname[-1].target='${e.target}'
-  '') checked;
+  routedGuests = lib.concatMap (
+    host: lib.filter (g: g.routed && g.enabled) (lib.attrValues host.config.diffeq.guestNetwork.guests)
+  ) (with outputs.nixosConfigurations; [ yuggoth mi-go ]);
+
+  hostRecords = lib.sort (a: b: a.name < b.name) (
+    map (g: {
+      name = "${g.hostName}.${zone}";
+      ip = g.address;
+    }) routedGuests
+  );
+
+  duplicateHostRecords = lib.filterAttrs (_: rs: lib.length rs > 1) (
+    lib.groupBy (r: r.name) hostRecords
+  );
+
+  checkedHostRecords =
+    if duplicateHostRecords != { } then
+      throw "router-dns: hostnames defined more than once: ${lib.concatStringsSep ", " (lib.attrNames duplicateHostRecords)}"
+    else
+      hostRecords;
+
+  uciAdds =
+    lib.concatMapStrings (e: ''
+      add dhcp cname
+      set dhcp.@cname[-1].cname='${e.alias}'
+      set dhcp.@cname[-1].target='${e.target}'
+    '') checked
+    + lib.concatMapStrings (r: ''
+      add dhcp domain
+      set dhcp.@domain[-1].name='${r.name}'
+      set dhcp.@domain[-1].ip='${r.ip}'
+    '') checkedHostRecords;
 in
 pkgs.writeText "router-dns.sh" ''
   set -eu
@@ -98,25 +129,34 @@ pkgs.writeText "router-dns.sh" ''
     exit 1
   fi
 
-  list_cnames() {
+  # list_pairs <section type> <key> <value key>: "key -> value", one per section
+  list_pairs() {
     uci show dhcp \
-      | sed -nE "s/^dhcp\.(@cname\[[0-9]+\])\.(cname|target)='(.*)'$/\1 \2 \3/p" \
-      | awk '$2 == "cname" { c[$1] = $3 } $2 == "target" { t[$1] = $3 }
-             END { for (k in c) print c[k] " -> " t[k] }' \
+      | sed -nE "s/^dhcp\.(@$1\[[0-9]+\])\.($2|$3)='(.*)'$/\1 \2 \3/p" \
+      | awk -v k="$2" -v v="$3" '$2 == k { a[$1] = $3 } $2 == v { b[$1] = $3 }
+             END { for (s in a) print a[s] " -> " b[s] }' \
       | sort
   }
 
-  list_cnames > /tmp/router-dns.before
+  list_all() {
+    list_pairs cname cname target | sed 's/^/CNAME /'
+    list_pairs domain name ip | sed 's/^/host  /'
+  }
+
+  list_all > /tmp/router-dns.before
 
   while uci -q delete dhcp.@cname[0]; do :; done
+  while uci -q delete dhcp.@domain[0]; do :; done
   # `add` prints each new section's name; only errors (stderr) are interesting.
   uci batch > /dev/null <<'EOF'
   ${uciAdds}EOF
 
-  list_cnames > /tmp/router-dns.after
+  list_all > /tmp/router-dns.after
 
-  echo "== $(wc -l < /tmp/router-dns.before) CNAMEs before, $(wc -l < /tmp/router-dns.after) after (expected ${toString (lib.length checked)})"
-  echo "== CNAME changes (staged, not committed):"
+  count() { grep -c "^$1 " "$2" || true; }
+  echo "== CNAMEs: $(count CNAME /tmp/router-dns.before) before, $(count CNAME /tmp/router-dns.after) after (expected ${toString (lib.length checked)})"
+  echo "== hosts:  $(count host /tmp/router-dns.before) before, $(count host /tmp/router-dns.after) after (expected ${toString (lib.length checkedHostRecords)})"
+  echo "== changes (staged, not committed):"
   if cmp -s /tmp/router-dns.before /tmp/router-dns.after; then
     echo "(none)"
   elif command -v diff >/dev/null; then

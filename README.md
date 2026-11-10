@@ -69,12 +69,15 @@ rsync nix-config to the host
 
     nix run github:serokell/deploy-rs .#<target>
 
-## LAN DNS (router CNAMEs)
+## LAN DNS (router CNAMEs and hostnames)
 
-The CNAMEs on the OpenWrt router are generated from this repo
+The CNAMEs and hostnames on the OpenWrt router are generated from this repo
 (`generators/router-dns.nix`). Each machine gets a CNAME for every name in its
-`services.lego-proxy-client.domains` and `diffeq.dnsAliases`. Any CNAME not
-generated here gets deleted, so make DNS changes in Nix, not in LuCI.
+`services.lego-proxy-client.domains` and `diffeq.dnsAliases`. Routed VM guests
+(`routed = true`, see `nixos/modules/guest-network`) get a hostname with their
+static address; everything else is named by its DHCP lease. Any CNAME or
+hostname not generated here gets deleted, so make DNS changes in Nix, not in
+LuCI.
 
 Stage the changes on the router and review the diff it prints:
 

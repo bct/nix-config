@@ -11,6 +11,8 @@ let
   agenixHostMountPoint = "/mnt/agenix-host";
   vmName = config.diffeq.microvmName;
   vmConfig = config.diffeq.microvmConfig;
+  # this guest's network settings, from the host; see nixos/modules/guest-network.
+  net = config.diffeq.guestNetworkClient;
 in
 {
   imports = [
@@ -50,7 +52,9 @@ in
     # as long as we have one network (e.g. "20-lan" below)
     # that sets RequiredForOnline, we should be able to re-enable it.
     systemd.network.wait-online.enable = true;
-    systemd.network.networks."20-lan" = {
+    # bridged guests get their address from the router. routed guests are
+    # configured by nixos/modules/guest-network/client.nix instead.
+    systemd.network.networks."20-lan" = lib.mkIf (!net.routed) {
       matchConfig.Type = "ether";
       networkConfig.DHCP = "yes";
       # by default network-online.target can be reached before DHCP actually completes,
@@ -99,7 +103,7 @@ in
         {
           type = "tap";
           id = vmConfig.tapInterfaceName;
-          mac = vmConfig.tapInterfaceMac;
+          inherit (net) mac;
         }
       ];
 

@@ -36,25 +36,24 @@ in
         types.submodule (
           { config, name, ... }:
           {
+            # address, routed, ipv6
+            imports = [ ../guest-network/guest-options.nix ];
+
             options = {
               uuid = mkOption {
                 type = types.str;
               };
 
               mac = mkOption {
-                type = types.str;
-                description = "MAC address of the guest's network interface.";
+                type = types.nullOr types.str;
+                default = null;
+                description = "MAC address of a bridged guest. Routed guests get one derived from their address.";
               };
 
               tapInterfaceName = mkOption {
                 type = types.str;
                 default = "vm-${name}"; # <= 15 chars
                 description = "Name of the host-side tap interface.";
-              };
-
-              address = mkOption {
-                type = types.str;
-                description = "This guest's IPv4 address on the host's guest network (diffeq.guestNetwork).";
               };
 
               restartIfChanged = mkOption {
@@ -197,6 +196,8 @@ in
     virtualisation.libvirt.connections."qemu:///system".domains = lib.mapAttrsToList (
       name: guest:
       let
+        net = config.diffeq.guestNetwork.guests.${name};
+
         baseXML = nixvirt.lib.domain.templates.linux {
           name = name;
           uuid = guest.uuid;
@@ -212,7 +213,7 @@ in
           # br0 is set up in microvm-host.nix
           # TODO
           bridge_name = "br0";
-          net_iface_mac = guest.mac;
+          net_iface_mac = net.mac;
 
           # this is undocumented, but it seems to turn on virtio_video while turning off DRM.
           virtio_video = null;
@@ -273,9 +274,21 @@ in
               # change (and the guest restart) whenever qemu changes.
               emulator = "/run/libvirt/nix-emulators/qemu-system-x86_64";
               # a stable tap name, so the host's network config can match it.
-              interface = baseXML.devices.interface // {
-                target.dev = guest.tapInterfaceName;
-              };
+              interface =
+                if net.routed then
+                  # a plain tap that libvirt creates but doesn't attach to anything;
+                  # nixos/modules/guest-network configures it as a routed link.
+                  {
+                    type = "ethernet";
+                    inherit (baseXML.devices.interface) model;
+                    mac.address = net.mac;
+                    target.dev = net.tap;
+                  }
+                else
+                  baseXML.devices.interface
+                  // {
+                    target.dev = net.tap;
+                  };
               disk = baseXML.devices.disk ++ extraDisks;
               filesystem = (baseXML.devices.filesystem or [ ]) ++ mounts;
             };

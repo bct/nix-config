@@ -42,6 +42,9 @@ in
         types.submodule (
           { config, name, ... }:
           {
+            # address, routed, ipv6
+            imports = [ ../guest-network/guest-options.nix ];
+
             options = {
               enable = mkOption {
                 type = types.bool;
@@ -60,12 +63,9 @@ in
               };
 
               tapInterfaceMac = mkOption {
-                type = types.str;
-              };
-
-              address = mkOption {
-                type = types.str;
-                description = "This guest's IPv4 address on the host's guest network (diffeq.guestNetwork).";
+                type = types.nullOr types.str;
+                default = null;
+                description = "MAC address of a bridged guest. Routed guests get one derived from their address.";
               };
 
               machineId = mkOption {
@@ -175,9 +175,11 @@ in
       config = {
         diffeq.microvmName = vmName;
         diffeq.microvmConfig = vmConfig;
+        diffeq.guestNetworkClient = config.diffeq.guestNetwork.guests.${vmName};
         diffeq.secretsPath = config.diffeq.secretsPath;
 
         imports = [
+          "${self}/nixos/modules/guest-network/client.nix"
           "${self}/nixos/common/microvm.nix"
           (cfg.guestsDir + "/${vmName}.nix")
         ];
