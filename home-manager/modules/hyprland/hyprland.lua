@@ -222,6 +222,12 @@ hl.window_rule({
 	float = true,
 })
 
+hl.window_rule({
+	name = "keepassxc",
+	match = { class = "^org\\.keepassxc\\.KeePassXC$" },
+	float = true,
+})
+
 -- See https://wiki.hypr.land/Configuring/Layouts/Dwindle-Layout/ for more
 hl.config({
 	dwindle = {
