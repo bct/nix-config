@@ -10,6 +10,11 @@
     lib = nixpkgs.lib;
   };
 
+  lego-proxy-orphans = import ./lego-proxy-orphans.nix {
+    inherit pkgs outputs;
+    lib = nixpkgs.lib;
+  };
+
   headless-image-rpi =
     (nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";

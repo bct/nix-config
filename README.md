@@ -84,3 +84,15 @@ Then apply or discard them:
 
     ssh root@router 'uci commit dhcp && /etc/init.d/dnsmasq reload'
     ssh root@router 'uci revert dhcp'
+
+## lego-proxy secrets
+
+Each name in a machine's `services.lego-proxy-client.domains` has an SSH key in
+`secrets/lego-proxy/`: `<name>.age` (private key) and `<name>.pub` (public key;
+every `.pub` there is whitelisted on the lego-proxy). To find files no machine
+uses, and used names that are missing a file:
+
+    nix run .#lego-proxy-orphans
+
+It only reports; delete orphans yourself with `git rm`, then redeploy the
+lego-proxy microvm so it drops them from its whitelist.

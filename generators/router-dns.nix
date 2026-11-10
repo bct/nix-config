@@ -16,7 +16,6 @@
 }:
 let
   zone = "domus.diffeq.com";
-  clients = import ../nixos/modules/lego-proxy-client/clients.nix;
 
   # CNAMEs that can't be derived from a machine's config.
   extraCnames = {
@@ -50,7 +49,7 @@ let
       target = "${config.networking.hostName}.${zone}";
       # not every machine imports the lego-proxy-client module.
       lego = config.services.lego-proxy-client or { enable = false; };
-      legoNames = lib.optionals lego.enable (map (d: clients.${d}.domain) lego.domains);
+      legoNames = lib.optionals lego.enable (map (d: "${d}.${zone}") lego.domains);
       aliasNames = map (a: "${a}.${zone}") config.diffeq.dnsAliases;
     in
     map (alias: { inherit alias target; }) (

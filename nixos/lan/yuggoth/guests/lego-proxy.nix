@@ -8,7 +8,13 @@
 }:
 
 let
-  clients = import ../../../modules/lego-proxy-client/clients.nix;
+  # the whitelist of clients is every secrets/lego-proxy/<name>.pub
+  clientKeyDir = config.diffeq.secretsPath + /lego-proxy;
+  clients = lib.pipe (builtins.readDir clientKeyDir) [
+    (lib.filterAttrs (file: type: type == "regular" && lib.hasSuffix ".pub" file))
+    lib.attrNames
+    (map (lib.removeSuffix ".pub"))
+  ];
 
   deploy-openwrt = pkgs.writeShellApplication {
     name = "deploy-openwrt";
@@ -99,15 +105,11 @@ in
   services.acme-dns-proxy-host = {
     enable = true;
 
-    domains = lib.mapAttrsToList (name: clientConfig: {
-      domain = clientConfig.domain;
+    domains = map (name: {
+      domain = "${name}.domus.diffeq.com";
       dnsProvider = "dnsimple";
       environmentFile = config.age.secrets.dnsimple.path;
-      pubKey =
-        if clientConfig ? "pubKey" then
-          clientConfig.pubKey
-        else
-          builtins.readFile (config.diffeq.secretsPath + /lego-proxy/${name}.pub);
+      pubKey = builtins.readFile (clientKeyDir + "/${name}.pub");
     }) clients;
   };
 
