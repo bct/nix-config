@@ -4,7 +4,7 @@ let
   # settings as everything else on Wayland. I'm sure there's a better way to do this!
   orca-slicer = pkgs.symlinkJoin {
     name = "orca-slicer-wrapped";
-    paths = [ pkgs.orca-slicer ];
+    paths = [ pkgs.unstable.orca-slicer ];
     buildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/orca-slicer \
