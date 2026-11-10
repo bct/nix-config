@@ -2,8 +2,14 @@
   inputs,
   outputs,
   nixpkgs,
+  pkgs,
 }:
 {
+  router-dns = import ./router-dns.nix {
+    inherit pkgs outputs;
+    lib = nixpkgs.lib;
+  };
+
   headless-image-rpi =
     (nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";

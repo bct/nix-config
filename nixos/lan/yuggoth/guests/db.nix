@@ -46,6 +46,8 @@ in
     domains = [ "db" ];
   };
 
+  diffeq.dnsAliases = [ "influx" ];
+
   # postgres refuses a key file not owned by itself or root, and the ACME files are owned
   # by acme, so hand them over as systemd credentials (copied, owned by postgres, 0400).
   systemd.services.postgresql.serviceConfig.LoadCredential = [

@@ -16,6 +16,16 @@
       type = lib.types.attrs;
     };
 
+    dnsAliases = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = ''
+        Extra names (relative to domus.diffeq.com) that should be CNAMEs for this
+        machine on the router. Names in services.lego-proxy-client.domains are
+        included automatically; see generators/router-dns.nix.
+      '';
+    };
+
     accounts.userIds = lib.mkOption {
       type = lib.types.attrs;
     };

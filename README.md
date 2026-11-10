@@ -68,3 +68,19 @@ rsync nix-config to the host
 ## deploy-rs
 
     nix run github:serokell/deploy-rs .#<target>
+
+## LAN DNS (router CNAMEs)
+
+The CNAMEs on the OpenWrt router are generated from this repo
+(`generators/router-dns.nix`). Each machine gets a CNAME for every name in its
+`services.lego-proxy-client.domains` and `diffeq.dnsAliases`. Any CNAME not
+generated here gets deleted, so make DNS changes in Nix, not in LuCI.
+
+Stage the changes on the router and review the diff it prints:
+
+    ssh root@router sh < "$(nix build --no-link --print-out-paths .#router-dns)"
+
+Then apply or discard them:
+
+    ssh root@router 'uci commit dhcp && /etc/init.d/dnsmasq reload'
+    ssh root@router 'uci revert dhcp'

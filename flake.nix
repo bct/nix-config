@@ -130,6 +130,7 @@
                   inputs
                   outputs
                   nixpkgs
+                  pkgs
                   ;
               };
             in
