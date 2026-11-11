@@ -178,8 +178,8 @@
       # TODO: temporary, for testing
       stump = {
         hostName = "stump";
-        tapInterfaceMac = "02:00:00:00:00:16";
         address = "192.168.200.16";
+        routed = true;
         machineId = "feac6be8d121e34143240f351a5a85ac";
       };
     };

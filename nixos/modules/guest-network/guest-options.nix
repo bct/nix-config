@@ -31,11 +31,19 @@
       token = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "::d5b";
+        example = "machine-id";
         description = ''
           Fixed interface identifier (the last 64 bits) of the guest's IPv6
-          address, so firewall rules can match it by suffix. If null,
-          systemd-networkd picks one.
+          address, so firewall rules can match it by suffix.
+
+          - "machine-id": derived at boot from the guest's machine ID (an
+            app-specific hash, see nixos/modules/guest-network/client.nix).
+            Stable, and private as long as the machine ID isn't in this repo,
+            which is true for libvirt guests but NOT for microvms.
+          - "::a:b:c:d": used as-is. Anything here is public if this repo is,
+            and peers who see the address can find it.
+          - null: systemd-networkd's default (derived from the MAC, which for
+            routed guests is derived from their IPv4 address).
         '';
       };
     };

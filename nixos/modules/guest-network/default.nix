@@ -202,8 +202,13 @@ in
     })
 
     (lib.mkIf anyIPv6 {
-      systemd.network.networks.${cfg.uplinkNetwork}.dhcpV6Config = {
-        PrefixDelegationHint = "::/${toString cfg.delegatedPrefixLength}";
+      systemd.network.networks.${cfg.uplinkNetwork} = {
+        # with IPv6 forwarding on, networkd ignores RAs unless told otherwise,
+        # and without RAs it never starts the DHCPv6 client that requests the
+        # delegated prefix (and the host's own address).
+        networkConfig.IPv6AcceptRA = true;
+
+        dhcpV6Config.PrefixDelegationHint = "::/${toString cfg.delegatedPrefixLength}";
       };
     })
   ];

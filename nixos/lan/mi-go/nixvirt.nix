@@ -17,8 +17,14 @@
     guests = {
       ranger = {
         uuid = "5de23a0d-8545-4b6c-ba0c-f3ba3b138e8c";
-        mac = "52:54:00:99:54:b4";
         address = "192.168.201.20";
+        routed = true;
+        ipv6 = {
+          enable = true;
+          # derived from ranger's machine ID, so it's stable but not in this
+          # repo. the router's inbound rtorrent rule matches it as a suffix.
+          token = "machine-id";
+        };
         memoryMB = 2048;
         mounts = [
           {
