@@ -87,7 +87,7 @@ let
       lib.sort (a: b: a.alias < b.alias) entries;
 
   routedGuests = lib.concatMap (
-    host: lib.filter (g: g.routed && g.enabled) (lib.attrValues host.config.diffeq.guestNetwork.guests)
+    host: lib.filter (g: g.enabled) (lib.attrValues host.config.diffeq.guestNetwork.guests)
   ) (with outputs.nixosConfigurations; [ yuggoth mi-go ]);
 
   hostRecords = lib.sort (a: b: a.name < b.name) (

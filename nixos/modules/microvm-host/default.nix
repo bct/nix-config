@@ -11,14 +11,6 @@
 let
   cfg = config.diffeq.microvms;
   enabledGuests = lib.filterAttrs (_: guest: guest.enable) cfg.guests;
-
-  # where the host probes a guest's readyPorts
-  readyHost =
-    vmName: vmConfig:
-    let
-      net = config.diffeq.guestNetwork.guests.${vmName};
-    in
-    if net.routed then net.address else "${vmConfig.hostName}.domus.diffeq.com";
 in
 {
   imports = [
@@ -35,9 +27,9 @@ in
       default = false;
     };
 
-    interfaceToBridge = mkOption {
+    uplinkInterface = mkOption {
       type = types.str;
-      description = "The host interface that should be connected to the br0 bridge.";
+      description = "The host's LAN interface. It gets the host's address by DHCP; guests are routed through it.";
     };
 
     guestsDir = mkOption {
@@ -50,7 +42,7 @@ in
         types.submodule (
           { config, name, ... }:
           {
-            # address, routed, ipv6
+            # address, ipv6
             imports = [ ../guest-network/guest-options.nix ];
 
             options = {
@@ -70,11 +62,6 @@ in
                 default = "vm-${config.hostName}"; # <= 15 chars
               };
 
-              tapInterfaceMac = mkOption {
-                type = types.nullOr types.str;
-                default = null;
-                description = "MAC address of a bridged guest. Routed guests get one derived from their address.";
-              };
 
               machineId = mkOption {
                 type = types.str;
@@ -127,26 +114,10 @@ in
     # https://astro.github.io/microvm.nix/simple-network.html
     systemd.network.enable = true;
 
-    # bridge ethernet and VM interfaces
+    # the host's LAN address. Guests' taps are routed point-to-point links,
+    # configured by nixos/modules/guest-network.
     systemd.network.networks."10-lan" = {
-      matchConfig.Name = [
-        cfg.interfaceToBridge
-        "vm-*"
-      ];
-      networkConfig = {
-        Bridge = "br0";
-      };
-    };
-
-    systemd.network.netdevs."br0" = {
-      netdevConfig = {
-        Name = "br0";
-        Kind = "bridge";
-      };
-    };
-
-    systemd.network.networks."10-lan-bridge" = {
-      matchConfig.Name = "br0";
+      matchConfig.Name = cfg.uplinkInterface;
       networkConfig.DHCP = "yes";
       linkConfig.RequiredForOnline = "routable";
     };
@@ -217,12 +188,11 @@ in
           config.microvm.host.startupTimeout + vmConfig.startDelay
         );
 
-        # probe a routed guest by address: its DNS record may still point at
-        # its old address (e.g. right after it was moved to the routed network).
+        # probe by address rather than name, so this doesn't depend on DNS.
         serviceConfig.ExecStartPost = lib.mkIf (vmConfig.readyPorts != [ ]) [
           (pkgs.writeShellScript "microvm-${vmName}-wait-ready" ''
             for port in ${toString vmConfig.readyPorts}; do
-              until ${pkgs.netcat}/bin/nc -z -w 2 ${readyHost vmName vmConfig} "$port"; do
+              until ${pkgs.netcat}/bin/nc -z -w 2 ${config.diffeq.guestNetwork.guests.${vmName}.address} "$port"; do
                 sleep 1
               done
               echo "port $port is accepting connections"

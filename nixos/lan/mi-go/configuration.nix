@@ -33,7 +33,7 @@
   diffeq.microvms = {
     enable = true;
     waitForZfs = true;
-    interfaceToBridge = "enp8s0";
+    uplinkInterface = "enp8s0";
     guestsDir = ./guests;
 
     # to generate a machineId:
@@ -44,28 +44,24 @@
       borg = {
         hostName = "borg";
         address = "192.168.201.2";
-        routed = true;
         machineId = "a2717cf46338fdb456749d51d6611e16";
       };
 
       git = {
         hostName = "git";
         address = "192.168.201.4";
-        routed = true;
         machineId = "1e64c3582fc0370de9a282455d58a192";
       };
 
       media = {
         hostName = "media";
         address = "192.168.201.1";
-        routed = true;
         machineId = "8115ded7ebad02ebc1f9541f1fd63312";
       };
 
       syncthing = {
         hostName = "syncthing";
         address = "192.168.201.5";
-        routed = true;
         machineId = "f4132f22d27e1890a42b3c1970e3eaac";
       };
     };

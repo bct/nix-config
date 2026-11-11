@@ -8,15 +8,6 @@
       description = "This guest's IPv4 address on the host's guest network (diffeq.guestNetwork).";
     };
 
-    routed = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Put this guest on the host's routed guest network (its own point-to-point
-        tap, with a static address) instead of bridging it onto the LAN via br0.
-      '';
-    };
-
     ipv6 = {
       enable = mkOption {
         type = types.bool;
@@ -24,7 +15,6 @@
         description = ''
           Give this guest a /64 from the host's delegated IPv6 prefix. The prefix
           is dynamic, so the guest's address changes when the ISP's prefix does.
-          Requires `routed`.
         '';
       };
 
@@ -42,8 +32,8 @@
             which is true for libvirt guests but NOT for microvms.
           - "::a:b:c:d": used as-is. Anything here is public if this repo is,
             and peers who see the address can find it.
-          - null: systemd-networkd's default (derived from the MAC, which for
-            routed guests is derived from their IPv4 address).
+          - null: systemd-networkd's default (derived from the MAC, which is
+            derived from the guest's IPv4 address).
         '';
       };
     };

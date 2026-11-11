@@ -17,13 +17,11 @@
       auth = {
         uuid = "277ae744-e184-46ec-bdfd-93992fa4241b";
         address = "192.168.200.20";
-        routed = true;
         memoryMB = 1024;
       };
       mail = {
         uuid = "6bdbad6f-540c-4114-a063-16fec1995347";
         address = "192.168.200.21";
-        routed = true;
         memoryMB = 1024;
         disks = [
           {
@@ -35,7 +33,6 @@
       medley = {
         uuid = "76a25495-6730-4982-9761-637f57f18e4a";
         address = "192.168.200.22";
-        routed = true;
         memoryMB = 6144;
       };
     };

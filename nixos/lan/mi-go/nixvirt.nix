@@ -18,7 +18,6 @@
       ranger = {
         uuid = "5de23a0d-8545-4b6c-ba0c-f3ba3b138e8c";
         address = "192.168.201.20";
-        routed = true;
         ipv6 = {
           enable = true;
           # derived from ranger's machine ID, so it's stable but not in this

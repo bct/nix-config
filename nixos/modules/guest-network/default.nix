@@ -1,14 +1,11 @@
 # Addressing and routing for a host's guests (microvms and libvirt VMs), shared
 # by nixos/modules/microvm-host and nixos/modules/nixvirt.
 #
-# Each host gets a /24. Guests get static addresses in it. A guest is either:
-#
-# - bridged (the default, being phased out): its tap is in br0 and it gets its
-#   address from the router's DHCP like any LAN device.
-# - routed: its tap is a point-to-point link to the host. The host sits on
-#   `gateway` (the same /32 on every tap) and routes for it; the guest's
-#   side is configured by ./client.nix. With ipv6.enable the host also hands
-#   it a /64 from the prefix the router delegates to the host.
+# Each host gets a /24, and each guest a static address in it. A guest's tap
+# is a point-to-point link to the host: the host sits on `gateway` (the same
+# /32 on every tap) and routes for it; the guest's side is configured by
+# ./client.nix. With ipv6.enable the host also hands it a /64 from the prefix
+# the router delegates to the host.
 #
 # Guest host numbers are limited to 1-31 so they can double as the IPv6 subnet
 # ID within the host's delegated /59.
@@ -23,8 +20,7 @@ let
     enabled = g.enable;
     hostName = g.hostName;
     tap = g.tapInterfaceName;
-    pinnedMac = g.tapInterfaceMac;
-    inherit (g) address routed ipv6;
+    inherit (g) address ipv6;
   }) (config.diffeq.microvms.guests or { });
 
   nixvirtGuests = lib.mapAttrsToList (name: g: {
@@ -33,8 +29,7 @@ let
     enabled = true;
     hostName = name;
     tap = g.tapInterfaceName;
-    pinnedMac = g.mac;
-    inherit (g) address routed ipv6;
+    inherit (g) address ipv6;
   }) (config.diffeq.nixvirt.guests or { });
 
   allGuests = microvmGuests ++ nixvirtGuests;
@@ -47,9 +42,8 @@ let
       hostName
       tap
       address
-      routed
       ;
-    mac = if g.routed then glib.macForAddress g.address else g.pinnedMac;
+    mac = glib.macForAddress g.address;
     inherit (cfg) gateway nameservers;
     ipv6 = g.ipv6 // {
       subnetId = glib.hostNumber cfg.subnetPrefix g.address;
@@ -58,7 +52,7 @@ let
 
   guests = builtins.listToAttrs (map (g: lib.nameValuePair g.name (normalize g)) allGuests);
 
-  routedGuests = lib.filter (g: g.routed && g.enabled) (lib.attrValues guests);
+  routedGuests = lib.filter (g: g.enabled) (lib.attrValues guests);
   anyIPv6 = lib.any (g: g.ipv6.enable) routedGuests;
 
   describe = g: "${g.kind} guest ${g.name} (${g.address})";
@@ -73,8 +67,6 @@ let
     lib.groupBy (g: g.address) allGuests
   );
   duplicateNames = lib.filterAttrs (_: gs: lib.length gs > 1) (lib.groupBy (g: g.name) allGuests);
-  bridgedWithoutMac = lib.filter (g: !g.routed && g.pinnedMac == null) allGuests;
-  ipv6WithoutRouting = lib.filter (g: g.ipv6.enable && !g.routed) allGuests;
   listGuests = gs: lib.concatMapStringsSep ", " describe gs;
 in
 {
@@ -100,7 +92,7 @@ in
 
     uplinkNetwork = mkOption {
       type = types.str;
-      default = "10-lan-bridge";
+      default = "10-lan";
       description = ''
         The systemd-networkd network (in systemd.network.networks) that holds
         the host's LAN address. If any routed guest has IPv6, it requests a
@@ -146,14 +138,6 @@ in
             lib.concatStringsSep "; " (lib.mapAttrsToList (_: listGuests) duplicateNames)
           }";
         }
-        {
-          assertion = bridgedWithoutMac == [ ];
-          message = "bridged guests need a MAC set by hand (only routed guests get one generated): ${listGuests bridgedWithoutMac}";
-        }
-        {
-          assertion = ipv6WithoutRouting == [ ];
-          message = "ipv6.enable requires routed = true: ${listGuests ipv6WithoutRouting}";
-        }
       ];
     })
 
@@ -166,8 +150,7 @@ in
         IPv6Forwarding = anyIPv6;
       };
 
-      # one point-to-point link per routed guest. Sorts before microvm-host's
-      # "10-lan", which would otherwise put the tap in br0.
+      # one point-to-point link per routed guest.
       systemd.network.networks = lib.listToAttrs (
         map (
           g:

@@ -49,22 +49,9 @@ in
 
     # microvm.nix disables wait-online, citing
     # https://github.com/systemd/systemd/issues/29388
-    # as long as we have one network (e.g. "20-lan" below)
+    # as long as we have one network (client.nix's "20-guest")
     # that sets RequiredForOnline, we should be able to re-enable it.
     systemd.network.wait-online.enable = true;
-    # bridged guests get their address from the router. routed guests are
-    # configured by nixos/modules/guest-network/client.nix instead.
-    systemd.network.networks."20-lan" = lib.mkIf (!net.routed) {
-      matchConfig.Type = "ether";
-      networkConfig.DHCP = "yes";
-      # by default network-online.target can be reached before DHCP actually completes,
-      # which causes early DNS lookups (e.g. for CIFS mounts) to fail.
-      # instead, wait for an actual routable address.
-      linkConfig = {
-        RequiredForOnline = "routable";
-      };
-    };
-
     age.rekey.hostPubkey = config.diffeq.secretsPath + /ssh/host-${vmName}.pub;
 
     # the system activation script depends on the host SSH key, which

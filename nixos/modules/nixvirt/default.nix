@@ -36,7 +36,7 @@ in
         types.submodule (
           { config, name, ... }:
           {
-            # address, routed, ipv6
+            # address, ipv6
             imports = [ ../guest-network/guest-options.nix ];
 
             options = {
@@ -44,11 +44,6 @@ in
                 type = types.str;
               };
 
-              mac = mkOption {
-                type = types.nullOr types.str;
-                default = null;
-                description = "MAC address of a bridged guest. Routed guests get one derived from their address.";
-              };
 
               tapInterfaceName = mkOption {
                 type = types.str;
@@ -177,21 +172,10 @@ in
       }
     ];
 
-    # https://libvirt.org/formatnetwork.html#using-an-existing-host-bridge
-    virtualisation.libvirt.connections."qemu:///system".networks = [
-      {
-        definition = nixvirt.lib.network.writeXML {
-          name = "default";
-          uuid = "06328f18-4c1e-4905-a02a-914dd6d13378";
-          forward.mode = "bridge";
-
-          # br0 is set up in microvm-host.nix
-          # TODO
-          bridge.name = "br0";
-        };
-        active = true;
-      }
-    ];
+    # guests use routed taps (nixos/modules/guest-network), not a libvirt
+    # network. An empty list makes NixVirt delete any network that exists,
+    # e.g. the old "default" network that bridged guests onto the LAN.
+    virtualisation.libvirt.connections."qemu:///system".networks = [ ];
 
     virtualisation.libvirt.connections."qemu:///system".domains = lib.mapAttrsToList (
       name: guest:
@@ -209,11 +193,6 @@ in
             pool = storagePool;
             volume = "${name}-root.qcow2";
           };
-
-          # br0 is set up in microvm-host.nix
-          # TODO
-          bridge_name = "br0";
-          net_iface_mac = net.mac;
 
           # this is undocumented, but it seems to turn on virtio_video while turning off DRM.
           virtio_video = null;
@@ -273,22 +252,15 @@ in
               # the template uses a nix store path, which would make the definition
               # change (and the guest restart) whenever qemu changes.
               emulator = "/run/libvirt/nix-emulators/qemu-system-x86_64";
-              # a stable tap name, so the host's network config can match it.
-              interface =
-                if net.routed then
-                  # a plain tap that libvirt creates but doesn't attach to anything;
-                  # nixos/modules/guest-network configures it as a routed link.
-                  {
-                    type = "ethernet";
-                    inherit (baseXML.devices.interface) model;
-                    mac.address = net.mac;
-                    target.dev = net.tap;
-                  }
-                else
-                  baseXML.devices.interface
-                  // {
-                    target.dev = net.tap;
-                  };
+              # a plain tap with a stable name, that libvirt creates but doesn't
+              # attach to anything; nixos/modules/guest-network configures it as a
+              # routed link.
+              interface = {
+                type = "ethernet";
+                inherit (baseXML.devices.interface) model;
+                mac.address = net.mac;
+                target.dev = net.tap;
+              };
               disk = baseXML.devices.disk ++ extraDisks;
               filesystem = (baseXML.devices.filesystem or [ ]) ++ mounts;
 

@@ -5,9 +5,6 @@
 # - libvirt guests: set it from the host's config, e.g.
 #     diffeq.guestNetworkClient =
 #       self.nixosConfigurations.mi-go.config.diffeq.guestNetwork.guests.ranger;
-#
-# Does nothing unless the entry has `routed = true`; bridged guests keep
-# whatever network config they already have (DHCP from the router).
 {
   lib,
   config,
@@ -33,7 +30,7 @@ in
     description = "This guest's entry in its host's diffeq.guestNetwork.guests.";
   };
 
-  config = lib.mkIf (c != null && c.routed) {
+  config = lib.mkIf (c != null) {
     networking.useNetworkd = true;
     networking.useDHCP = false;
     systemd.network.enable = true;
