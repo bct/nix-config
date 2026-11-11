@@ -40,34 +40,32 @@
     #
     #   ruby -r securerandom -e 'puts SecureRandom.hex'
     #
-    # to choose a MAC address:
-    # Locally administered have one of 2/6/A/E in the second nibble.
     guests = {
       borg = {
         hostName = "borg";
-        tapInterfaceMac = "02:00:00:00:01:02";
         address = "192.168.201.2";
+        routed = true;
         machineId = "a2717cf46338fdb456749d51d6611e16";
       };
 
       git = {
         hostName = "git";
-        tapInterfaceMac = "02:00:00:00:01:04";
         address = "192.168.201.4";
+        routed = true;
         machineId = "1e64c3582fc0370de9a282455d58a192";
       };
 
       media = {
         hostName = "media";
-        tapInterfaceMac = "02:00:00:00:01:01";
         address = "192.168.201.1";
+        routed = true;
         machineId = "8115ded7ebad02ebc1f9541f1fd63312";
       };
 
       syncthing = {
         hostName = "syncthing";
-        tapInterfaceMac = "02:00:00:00:01:05";
         address = "192.168.201.5";
+        routed = true;
         machineId = "f4132f22d27e1890a42b3c1970e3eaac";
       };
     };
