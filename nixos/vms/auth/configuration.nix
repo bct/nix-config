@@ -3,6 +3,7 @@
 {
   imports = [
     "${self}/nixos/vms/common/qemu-vm.nix"
+    "${self}/nixos/modules/guest-network/client.nix"
     "${self}/nixos/common/agenix-rekey.nix"
 
     "${self}/nixos/common/nix.nix"
@@ -19,6 +20,9 @@
   time.timeZone = "Etc/UTC";
 
   networking.hostName = "auth";
+
+  # routed guest of yuggoth; address etc. come from yuggoth/nixvirt.nix.
+  diffeq.guestNetworkClient = self.nixosConfigurations.yuggoth.config.diffeq.guestNetwork.guests.auth;
 
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID8MCMkvatrPkoxKMQA/GgjpNJaD1IoMQuOu1XiJVac2";
 

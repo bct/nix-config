@@ -3,6 +3,7 @@
 {
   imports = [
     "${self}/nixos/vms/common/qemu-vm.nix"
+    "${self}/nixos/modules/guest-network/client.nix"
     "${self}/nixos/common/agenix-rekey.nix"
 
     "${self}/nixos/common/nix.nix"
@@ -21,6 +22,9 @@
   time.timeZone = "Etc/UTC";
 
   networking.hostName = "mail";
+
+  # routed guest of yuggoth; address etc. come from yuggoth/nixvirt.nix.
+  diffeq.guestNetworkClient = self.nixosConfigurations.yuggoth.config.diffeq.guestNetwork.guests.mail;
 
   fileSystems."/var" = {
     device = "/dev/vdb";

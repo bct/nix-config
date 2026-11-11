@@ -41,7 +41,10 @@
   # https://github.com/nix-community/nixos-generators/blob/master/formats/qcow.nix
   boot.growPartition = true;
   boot.loader.grub.device = "/dev/vda";
-  boot.loader.timeout = 0;
+  # show the GRUB menu for a few seconds, so a generation that breaks
+  # networking can be skipped from the serial console:
+  #   virsh start <guest> --console     (or virsh console <guest> during a reboot)
+  boot.loader.timeout = 5;
 
   # serial console on ttyS0, for `virsh console <guest>` on the host (the
   # domain side is in nixos/modules/nixvirt). GRUB's menu and the kernel's
