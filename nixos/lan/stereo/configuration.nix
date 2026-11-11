@@ -20,8 +20,6 @@
     #   nix build .#nixosConfigurations.stereo.config.system.build.sdImage
     inputs.nixos-raspberrypi.nixosModules.sd-image
 
-    "${self}/nixos/modules/airsonic-refix"
-
     ./audio.nix
     ./bluetooth.nix
     ./mpd.nix
@@ -132,8 +130,6 @@
   users.groups = {
     gpio = { };
   };
-
-  # services.airsonic-refix.enable = true;
 
   age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+0o3CDs78/NW73QxiZ4gJtXgZ5U+NAu8o9lNhzmLwl";
 

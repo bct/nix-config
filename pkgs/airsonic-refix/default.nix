@@ -1,53 +1,51 @@
-{ stdenv, fetchFromGitHub, fetchYarnDeps, fixup_yarn_lock, nodejs }:
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm,
+  nodejs,
+}:
 
-# I can't use mkYarnPackage here because it calls "yarn install" with
-# "--ignore-scripts". the vue-demi library won't work unless its postinstall
-# script is run.
-#
-# mkYarnModules has an ignoreScripts argument, but it isn't exposed on
-# mkYarnPackage.
-#
-# This approach is cribbed from:
-# https://github.com/NixOS/nixpkgs/blob/25b33e9c7040986ba1b3ae4c8873543f88b57258/pkgs/applications/misc/tandoor-recipes/frontend.nix
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "airsonic-refix";
-  version = "bc4920fa57a20236ad7eef6f4483e50726b845c6";
+
+  # this is an official release, airsonic-refix has a very simple version scheme
+  version = "f5a14e3f95814c13c95deb17c061635c9247401c";
 
   src = fetchFromGitHub {
     owner = "tamland";
     repo = "airsonic-refix";
-    rev = version;
-    sha256 = "sha256-Z0gvjpoWA9EfQP2M6WRn0Avcr4Mydk+mNO5RlJZ6YiE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-rLeapw7VJHywV3PkqNALQMKDFfW7H+a6I9YPspMc0Rg=";
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-RjniI8ZVGv7i1ec6cR1ssm+wcVyO4nXOG7/rNwd6YLY=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-25YoL5Kgjhway3LQn1LKu0mpgAyR4Xb/ZHW/KLB7hBw=";
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
     nodejs
-    nodejs.pkgs.yarn
+    pnpm
+    pnpmConfigHook
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
-    fixup_yarn_lock yarn.lock
-    command -v yarn
-    yarn install --frozen-lockfile --offline --no-progress --non-interactive
-    patchShebangs node_modules/
-
-    runHook postConfigure
+  # pnpmConfigHook installs with --ignore-scripts, but vue-demi won't work
+  # unless its postinstall script is run. ("pnpm rebuild" doesn't do it: pnpm 11
+  # ignores upstream's onlyBuiltDependencies setting.)
+  preBuild = ''
+    for d in node_modules/.pnpm/vue-demi@*/node_modules/vue-demi; do
+      (cd "$d" && node scripts/postinstall.js)
+    done
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    yarn --offline run build
+    pnpm run build
 
     runHook postBuild
   '';
@@ -59,4 +57,4 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-}
+})

@@ -10,6 +10,8 @@ in
 {
   imports = [
     "${self}/nixos/modules/lego-proxy-client"
+
+    "${self}/nixos/modules/airsonic-refix"
   ];
 
   system.stateVersion = "25.11";
@@ -84,6 +86,8 @@ in
 
   networking.firewall.allowedTCPPorts = [
     gonicPort
+    80
+    443
   ];
 
   services.gonic = {
@@ -104,4 +108,10 @@ in
     };
   };
   systemd.services.gonic.serviceConfig.SupplementaryGroups = [ "acme" ];
+
+  services.airsonic-refix = {
+    enable = true;
+    hostname = "media.domus.diffeq.com";
+    serverUrl = "https://media.domus.diffeq.com:${toString gonicPort}";
+  };
 }
