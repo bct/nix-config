@@ -124,6 +124,11 @@ in
     virtualisation.libvirtd = {
       enable = true;
 
+      # shut guests down cleanly with the host, rather than saving their memory
+      # to disk ("suspend", the default): a saved image can't be restored once
+      # the domain definition has changed, e.g. after a deploy.
+      onShutdown = "shutdown";
+
       qemu = {
         # "pkgs.qemu_kvm saves disk space allowing to emulate only host architectures."
         package = pkgs.qemu_kvm;
