@@ -296,9 +296,10 @@
                 hostname,
                 arch,
                 config,
+                fastConnection ? false,
               }:
               {
-                inherit hostname;
+                inherit hostname fastConnection;
                 user = "root";
                 profiles.system.path = deploy-rs.lib."${arch}".activate.nixos config;
               };
@@ -307,48 +308,56 @@
             # -- lan hosts --
             nodes.auth = mkNode {
               hostname = "auth.domus.diffeq.com";
+              fastConnection = true;
               arch = "x86_64-linux";
               config = self.nixosConfigurations.auth;
             };
 
             nodes.mail = mkNode {
               hostname = "mail.domus.diffeq.com";
+              fastConnection = true;
               arch = "x86_64-linux";
               config = self.nixosConfigurations.mail;
             };
 
             nodes.medley = mkNode {
               hostname = "medley.domus.diffeq.com";
+              fastConnection = true;
               arch = "x86_64-linux";
               config = self.nixosConfigurations.medley;
             };
 
             nodes.mi-go = mkNode {
               hostname = "mi-go.domus.diffeq.com";
+              fastConnection = true;
               arch = "x86_64-linux";
               config = self.nixosConfigurations.mi-go;
             };
 
             nodes.octopi = mkNode {
               hostname = "octopi.domus.diffeq.com";
+              fastConnection = true;
               arch = "aarch64-linux";
               config = self.nixosConfigurations.octopi;
             };
 
             nodes.ranger = mkNode {
               hostname = "ranger.domus.diffeq.com";
+              fastConnection = true;
               arch = "x86_64-linux";
               config = self.nixosConfigurations.ranger;
             };
 
             nodes.stereo = mkNode {
               hostname = "stereo.domus.diffeq.com";
+              fastConnection = true;
               arch = "aarch64-linux";
               config = self.nixosConfigurations.stereo;
             };
 
             nodes.yuggoth = mkNode {
               hostname = "yuggoth.domus.diffeq.com";
+              fastConnection = true;
               arch = "x86_64-linux";
               config = self.nixosConfigurations.yuggoth;
             };
