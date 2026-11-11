@@ -291,6 +291,24 @@ in
                   };
               disk = baseXML.devices.disk ++ extraDisks;
               filesystem = (baseXML.devices.filesystem or [ ]) ++ mounts;
+
+              # a serial console, for `virsh console <guest>`. The guest side
+              # (GRUB + kernel on ttyS0) is in nixos/vms/common/qemu-vm.nix.
+              serial = [
+                {
+                  type = "pty";
+                  target.port = 0;
+                }
+              ];
+              console = [
+                {
+                  type = "pty";
+                  target = {
+                    type = "serial";
+                    port = 0;
+                  };
+                }
+              ];
             };
           }
         );

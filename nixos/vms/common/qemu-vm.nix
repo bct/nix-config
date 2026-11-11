@@ -42,4 +42,35 @@
   boot.growPartition = true;
   boot.loader.grub.device = "/dev/vda";
   boot.loader.timeout = 0;
+
+  # serial console on ttyS0, for `virsh console <guest>` on the host (the
+  # domain side is in nixos/modules/nixvirt). GRUB's menu and the kernel's
+  # messages go to both the screen and the serial port; listing ttyS0 last
+  # makes it the primary console, and systemd starts a getty on it.
+  boot.kernelParams = [
+    "console=tty0"
+    "console=ttyS0,115200"
+  ];
+  boot.loader.grub.extraConfig = ''
+    serial --unit=0 --speed=115200
+    terminal_input serial console
+    terminal_output serial console
+  '';
+
+  # log in as root automatically on the consoles (serial, and the SPICE
+  # screen). Only someone with libvirt access on the host can reach them, and
+  # that already amounts to root over the guest.
+  services.getty.autologinUser = "root";
+
+  # leaving `virsh console` doesn't end the session, so don't leave a root
+  # shell sitting open on the console indefinitely.
+  programs.bash.interactiveShellInit = ''
+    case "$(tty)" in
+      /dev/ttyS0|/dev/tty[0-9]*)
+        TMOUT=600
+        readonly TMOUT
+        export TMOUT
+        ;;
+    esac
+  '';
 }

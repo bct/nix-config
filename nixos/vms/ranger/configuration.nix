@@ -1,5 +1,5 @@
 # see mi-go/nixvirt.nix for memory & CPU settings.
-{ self, ... }:
+{ self, lib, ... }:
 {
   imports = [
     "${self}/nixos/vms/common/qemu-vm.nix"
@@ -18,6 +18,11 @@
     ./pyrosimple.nix
     ./rtorrent.nix
   ];
+
+  # show the GRUB menu, so a generation that breaks networking can be skipped
+  # from the serial console. on mi-go:
+  #   virsh start ranger --console     (or virsh console ranger during a reboot)
+  boot.loader.timeout = lib.mkForce 5;
 
   time.timeZone = "Etc/UTC";
 
