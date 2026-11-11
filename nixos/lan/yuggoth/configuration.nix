@@ -1,6 +1,8 @@
 {
   self,
   inputs,
+  config,
+  lib,
   ...
 }:
 {
@@ -34,6 +36,24 @@
 
   services.prometheus.exporters.node.enabledCollectors = [ "hwmon" ];
 
+  # spectator (Home Assistant) is routed, so LAN multicast doesn't reach it.
+  # Reflect mDNS between the LAN and its tap so HA can discover new devices.
+  # Only these interfaces: other guests don't get LAN mDNS, and vice versa.
+  # TODO: replace br0 with enp5s0f0 when br0 goes away.
+  services.avahi = {
+    enable = true;
+    reflector = true;
+    allowInterfaces = [
+      "br0"
+      config.diffeq.guestNetwork.guests.spectator.tap
+    ];
+  };
+  # avahi handles mDNS here; resolved's would also bind 5353 and compete.
+  services.resolved.settings.Resolve.MulticastDNS = false;
+  networking.firewall.interfaces = lib.genAttrs config.services.avahi.allowInterfaces (_: {
+    allowedUDPPorts = [ 5353 ];
+  });
+
   # addresses for guests (microvms and libvirt VMs); see nixos/modules/guest-network.
   diffeq.guestNetwork.subnetPrefix = "192.168.200";
 
@@ -51,8 +71,8 @@
     guests = {
       abrado = {
         hostName = "abrado";
-        tapInterfaceMac = "02:00:00:00:00:08";
         address = "192.168.200.8";
+        routed = true;
         machineId = "6b044915f8a8c5a6c0e9b5401d9778cf";
         wants = [ "microvm@db.service" ];
         startDelay = 60;
@@ -72,8 +92,8 @@
 
       grafana = {
         hostName = "grafana";
-        tapInterfaceMac = "02:00:00:00:00:06";
         address = "192.168.200.6";
+        routed = true;
         machineId = "d2bf3078fe2744f57398cc02476228f9";
         wants = [
           "microvm@db.service"
@@ -84,8 +104,8 @@
 
       immich = {
         hostName = "immich";
-        tapInterfaceMac = "02:00:00:00:00:09";
         address = "192.168.200.9";
+        routed = true;
         machineId = "538b82e19deee1b600027ea47fe3e8dc";
         wants = [
           "microvm@db.service"
@@ -96,8 +116,8 @@
 
       lubelogger = {
         hostName = "lubelogger";
-        tapInterfaceMac = "02:00:00:00:00:14";
         address = "192.168.200.14";
+        routed = true;
         machineId = "136934c3334f852e7e2a506bc5484a2b";
         wants = [
           "microvm@db.service"
@@ -118,8 +138,8 @@
 
       paperless = {
         hostName = "paperless";
-        tapInterfaceMac = "02:00:00:00:00:10";
         address = "192.168.200.10";
+        routed = true;
         machineId = "4e792125b5445ffd50e474ad64f5d30b";
         wants = [
           "microvm@db.service"
@@ -130,8 +150,8 @@
 
       prometheus = {
         hostName = "prometheus";
-        tapInterfaceMac = "02:00:00:00:00:03";
         address = "192.168.200.3";
+        routed = true;
         machineId = "6621b60f7f7ac43dca44e143eb0578a8";
       };
 
@@ -147,8 +167,8 @@
 
       spectator = {
         hostName = "spectator";
-        tapInterfaceMac = "02:00:00:00:00:04";
         address = "192.168.200.4";
+        routed = true;
         machineId = "08e6532eedca9b41586bd21b881c6bbf";
         wants = [ "microvm@db.service" ];
         startDelay = 120;
@@ -157,8 +177,8 @@
       torrent-scraper = {
         hostName = "torrent-scraper";
         tapInterfaceName = "vm-torrent-scra"; # <= 15 chars
-        tapInterfaceMac = "02:00:00:00:00:02";
         address = "192.168.200.2";
+        routed = true;
         machineId = "e5b7d8199d4a4a34fb6748faef793248";
         wants = [
           "microvm@db.service"

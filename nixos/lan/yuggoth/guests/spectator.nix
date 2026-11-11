@@ -11,6 +11,11 @@
 
   system.stateVersion = "24.05";
 
+  # Home Assistant zeroconf discovery: mDNS replies and announcements are
+  # unsolicited as far as conntrack is concerned. yuggoth reflects LAN mDNS
+  # to us (see yuggoth/configuration.nix).
+  networking.firewall.allowedUDPPorts = [ 5353 ];
+
   microvm = {
     vcpu = 1;
     mem = 1536;
