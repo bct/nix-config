@@ -11,6 +11,14 @@
 let
   cfg = config.diffeq.microvms;
   enabledGuests = lib.filterAttrs (_: guest: guest.enable) cfg.guests;
+
+  # where the host probes a guest's readyPorts
+  readyHost =
+    vmName: vmConfig:
+    let
+      net = config.diffeq.guestNetwork.guests.${vmName};
+    in
+    if net.routed then net.address else "${vmConfig.hostName}.domus.diffeq.com";
 in
 {
   imports = [
@@ -209,10 +217,12 @@ in
           config.microvm.host.startupTimeout + vmConfig.startDelay
         );
 
+        # probe a routed guest by address: its DNS record may still point at
+        # its old address (e.g. right after it was moved to the routed network).
         serviceConfig.ExecStartPost = lib.mkIf (vmConfig.readyPorts != [ ]) [
           (pkgs.writeShellScript "microvm-${vmName}-wait-ready" ''
             for port in ${toString vmConfig.readyPorts}; do
-              until ${pkgs.netcat}/bin/nc -z -w 2 ${vmConfig.hostName}.domus.diffeq.com "$port"; do
+              until ${pkgs.netcat}/bin/nc -z -w 2 ${readyHost vmName vmConfig} "$port"; do
                 sleep 1
               done
               echo "port $port is accepting connections"

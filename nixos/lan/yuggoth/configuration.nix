@@ -80,8 +80,8 @@
 
       db = {
         hostName = "db";
-        tapInterfaceMac = "02:00:00:00:00:07";
         address = "192.168.200.7";
+        routed = true;
         machineId = "2e9cd72837fcd95c103ac6f4bdeb726a";
         readyPorts = [
           3306 # mysql
@@ -129,8 +129,8 @@
       minecraft = {
         enable = false;
         hostName = "minecraft";
-        tapInterfaceMac = "02:00:00:00:00:15";
         address = "192.168.200.15";
+        routed = true;
         machineId = "245a511aba02f5dae1266bc69363e7b9";
         requires = [ ];
         startDelay = 60;
@@ -158,8 +158,8 @@
       shell-of-the-old = {
         hostName = "shell-of-the-old";
         tapInterfaceName = "vm-shell-of-the"; # <= 15 chars
-        tapInterfaceMac = "02:00:00:00:00:12";
         address = "192.168.200.12";
+        routed = true;
         machineId = "5c5ab3a55d2518c2ab823096462194e4";
         restartIfChanged = false;
         requires = [ "microvm@lego-proxy.service" ];
@@ -189,8 +189,8 @@
 
       lego-proxy = {
         hostName = "lego-proxy";
-        tapInterfaceMac = "02:00:00:00:00:05";
         address = "192.168.200.5";
+        routed = true;
         machineId = "0c309b2d738728317e0dbc9725a64dc1";
         readyPorts = [ 22 ];
       };
