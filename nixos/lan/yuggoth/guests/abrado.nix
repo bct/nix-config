@@ -4,6 +4,22 @@
   pkgs,
   ...
 }:
+let
+  # Environment for scrapers run via "uv run".
+  uvEnvironment = {
+    # Use nixpkgs' Python rather than letting uv download a generic-Linux one
+    # (which can't run on NixOS). Referencing it here also keeps it in the
+    # system closure, so the venv's interpreter won't get garbage-collected
+    # out from under it; uv recreates the venv when this path changes.
+    UV_PYTHON = "${pkgs.python3}/bin/python3";
+    UV_PYTHON_DOWNLOADS = "never";
+    UV_PYTHON_PREFERENCE = "only-system";
+
+    # Use the system trust store rather than whatever PyPI certifi is locked.
+    SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
+    REQUESTS_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
+  };
+in
 {
   imports = [
     "${self}/nixos/common/agenix-rekey.nix"
@@ -81,6 +97,7 @@
   };
 
   systemd.services.current-temp = {
+    environment = uvEnvironment;
     serviceConfig = {
       Type = "oneshot";
       User = "abrado";
@@ -102,6 +119,7 @@
   };
 
   systemd.services.exchange-rates = {
+    environment = uvEnvironment;
     serviceConfig = {
       Type = "oneshot";
       User = "abrado";
@@ -123,6 +141,7 @@
   };
 
   systemd.services.gas-rates = {
+    environment = uvEnvironment;
     serviceConfig = {
       Type = "oneshot";
       User = "abrado";
