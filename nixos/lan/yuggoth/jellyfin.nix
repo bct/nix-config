@@ -34,6 +34,17 @@ in
       ];
   };
 
+  fileSystems."/mnt/beets" = {
+    device = "//mi-go.domus.diffeq.com/beets";
+    fsType = "cifs";
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},ro,guest" ];
+  };
+
   services.lego-proxy-client = {
     enable = true;
     domains = [ "jellyfin" ];
@@ -80,6 +91,11 @@ in
 
       "/mnt/video" = {
         hostPath = "/mnt/video";
+        isReadOnly = true;
+      };
+
+      "/mnt/beets" = {
+        hostPath = "/mnt/beets";
         isReadOnly = true;
       };
     };
