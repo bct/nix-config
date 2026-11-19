@@ -92,6 +92,8 @@
   services.mainsail = {
     enable = true;
 
+    nginx.http2 = false;
+
     # default is 10MB which is easy to exceed.
     nginx.extraConfig = ''
       client_max_body_size 100m;

@@ -31,6 +31,7 @@ in
     };
   };
 
+  services.nginx.virtualHosts."romm.domus.diffeq.com".http2 = false;
   services.nginx.virtualHosts."romm.domus.diffeq.com".listen = [
     {
       addr = "127.0.0.1";

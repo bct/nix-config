@@ -27,6 +27,7 @@ in
       rtorrent-xml-rpc = {
         useACMEHost = "rtorrent.domus.diffeq.com";
         onlySSL = true;
+        http2 = false;
 
         serverName = "rtorrent.domus.diffeq.com";
         listen = [
