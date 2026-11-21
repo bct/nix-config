@@ -86,22 +86,6 @@
         "type": "github"
       }
     },
-    "alvr-grimmory": {
-      "locked": {
-        "lastModified": 1786099786,
-        "narHash": "sha256-4X30MQd4qHqCY5yDh6rzg0up8oq8SfP2Mw23bwXFu/c=",
-        "owner": "alvr",
-        "repo": "nixpkgs",
-        "rev": "102e5f49377963ba1ca45577889bb1c48451540a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "alvr",
-        "ref": "grimmory",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "argononed": {
       "flake": false,
       "locked": {
@@ -802,7 +786,6 @@
         "agenix": "agenix",
         "agenix-rekey": "agenix-rekey",
         "airsonic-refix-jukebox": "airsonic-refix-jukebox",
-        "alvr-grimmory": "alvr-grimmory",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
         "fjord-launcher": "fjord-launcher",
