@@ -53,9 +53,10 @@
   };
 
   # avoid writing logs to disk, try to save the SD card
-  services.journald.extraConfig = ''
-    Storage=volatile
-  '';
+  # TODO: re-enable when i've figured out why we're failing to boot sometimes
+  # services.journald.extraConfig = ''
+  #   Storage=volatile
+  # '';
 
   time.timeZone = "America/Edmonton";
 
