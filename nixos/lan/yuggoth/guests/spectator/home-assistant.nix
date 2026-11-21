@@ -57,6 +57,8 @@ in
   networking.firewall.allowedTCPPorts = [
     80
     443
+    # octopi (moonraker) publishes here
+    mqttPort
   ]
   ++ lib.optional zigbee2MqttFrontendEnabled zigbee2MqttPort;
 
@@ -180,6 +182,7 @@ in
             acl = [ "readwrite #" ];
             password = "hass";
           };
+          # moonraker on octopi
           octopi = {
             acl = [ "readwrite #" ];
             password = "octopi";

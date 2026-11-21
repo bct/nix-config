@@ -79,6 +79,18 @@
       # enable octoprint compatibility
       octoprint_compat = { };
 
+      # publish to the MQTT broker on spectator (home assistant).
+      # macros can publish with action_call_remote_method("publish_mqtt_topic", ...)
+      mqtt = {
+        address = "spectator.domus.diffeq.com";
+        port = 1883;
+        username = "octopi";
+        password = "octopi";
+        instance_name = "octopi";
+        # don't expose moonraker's API to everything on the broker.
+        enable_moonraker_api = false;
+      };
+
       # push notifications via ntfy.sh (moonraker uses apprise for this)
       "notifier print_done" = {
         url = "ntfys://ntfy.sh/doog4maechoh";
